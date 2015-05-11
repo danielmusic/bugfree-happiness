@@ -1,6 +1,8 @@
-/nbproject/private/
 /DanielMusic-war/nbproject/private/
 /DanielMusic-ejb/nbproject/private/
-/DanielMusic-war/build/
-/DanielMusic-ejb/build/
+/nbproject/private/
 /DanielMusic-ejb/dist/
+/DanielMusic-ejb/build/
+/build/
+/DanielMusic-war/build/
+/DanielMusic-war/dist/
