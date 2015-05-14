@@ -1,11 +1,17 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.criteria.Order;
 
 @Entity
 public class Account implements Serializable {
@@ -22,6 +28,36 @@ public class Account implements Serializable {
     private String name;
     private Boolean isArtist;
     private Boolean isAdmin;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Music> listOfMusics;
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Order> listOfOrders;
+    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Page page;
+
+    public List<Music> getListOfMusics() {
+        return listOfMusics;
+    }
+
+    public void setListOfMusics(List<Music> listOfMusics) {
+        this.listOfMusics = listOfMusics;
+    }
+
+    public List<Order> getListOfOrders() {
+        return listOfOrders;
+    }
+
+    public void setListOfOrders(List<Order> listOfOrders) {
+        this.listOfOrders = listOfOrders;
+    }
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
+    }
 
     public String getEmail() {
         return email;
