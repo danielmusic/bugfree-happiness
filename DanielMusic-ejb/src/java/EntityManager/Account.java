@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package EntityManager;
 
 import java.io.Serializable;
@@ -10,17 +5,71 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
-/**
- *
- * @author -VeRyLuNaTiC
- */
 @Entity
 public class Account implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Lob
+    private String email;
+    private String passwordSalt;
+    private String passwordHash;
+    @Lob
+    private String name;
+    private Boolean isArtist;
+    private Boolean isAdmin;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getIsArtist() {
+        return isArtist;
+    }
+
+    public void setIsArtist(Boolean isArtist) {
+        this.isArtist = isArtist;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
     public Long getId() {
         return id;
@@ -54,5 +103,5 @@ public class Account implements Serializable {
     public String toString() {
         return "EntityManager.Account[ id=" + id + " ]";
     }
-    
+
 }
