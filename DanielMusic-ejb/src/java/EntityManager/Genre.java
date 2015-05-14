@@ -14,6 +14,15 @@ public class Genre implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String genre;
+    private Boolean isDeleted;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public String getGenre() {
         return genre;

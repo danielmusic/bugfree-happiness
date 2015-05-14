@@ -18,6 +18,15 @@ public class Page implements Serializable {
     @Lob
     private String description;
     private String imageURL;
+    private Boolean isDeleted;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public String getName() {
         return name;

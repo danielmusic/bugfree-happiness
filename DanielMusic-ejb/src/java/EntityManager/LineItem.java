@@ -16,6 +16,15 @@ public class LineItem implements Serializable {
     private String trackName;
     private String artistName;
     private double price;
+    private Boolean isDeleted;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public String getTrackName() {
         return trackName;

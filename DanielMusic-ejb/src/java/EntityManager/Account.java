@@ -28,12 +28,21 @@ public class Account implements Serializable {
     private String name;
     private Boolean isArtist;
     private Boolean isAdmin;
+    private Boolean isDeleted;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfMusics;
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Order> listOfOrders;
     @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Page page;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public List<Music> getListOfMusics() {
         return listOfMusics;

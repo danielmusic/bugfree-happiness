@@ -2,11 +2,15 @@ package EntityManager;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,6 +27,35 @@ public class Album implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date publishedDate;
     private String imageURL;
+    private Boolean isDeleted;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Page page;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Music> listOfMusics;
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
+    }
+
+    public List<Music> getListOfMusics() {
+        return listOfMusics;
+    }
+
+    public void setListOfMusics(List<Music> listOfMusics) {
+        this.listOfMusics = listOfMusics;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public String getName() {
         return name;

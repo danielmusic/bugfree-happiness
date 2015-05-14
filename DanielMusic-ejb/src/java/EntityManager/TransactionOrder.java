@@ -19,6 +19,15 @@ public class TransactionOrder implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     private double totalAmountPaid;
+    private Boolean isDeleted;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public Date getOrderDate() {
         return orderDate;

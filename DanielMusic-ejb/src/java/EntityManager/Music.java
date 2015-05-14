@@ -1,4 +1,3 @@
-
 package EntityManager;
 
 import java.io.Serializable;
@@ -9,6 +8,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Music implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +20,15 @@ public class Music implements Serializable {
     private Long numDownloaded;
     private double price;
     private String fileLocation;
+    private Boolean isDeleted;
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public int getTrackNumber() {
         return trackNumber;
@@ -76,7 +85,6 @@ public class Music implements Serializable {
     public void setFileLocation(String fileLocation) {
         this.fileLocation = fileLocation;
     }
-    
 
     public Long getId() {
         return id;
@@ -110,5 +118,5 @@ public class Music implements Serializable {
     public String toString() {
         return "EntityManager.Music[ id=" + id + " ]";
     }
-    
+
 }
