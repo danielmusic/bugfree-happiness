@@ -1,10 +1,14 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Music implements Serializable {
@@ -21,6 +25,26 @@ public class Music implements Serializable {
     private double price;
     private String fileLocation;
     private Boolean isDeleted;
+    @ManyToMany(mappedBy = "listOfMusics", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Genre> listOfGenres;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Album album;
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public List<Genre> getListOfGenres() {
+        return listOfGenres;
+    }
+
+    public void setListOfGenres(List<Genre> listOfGenres) {
+        this.listOfGenres = listOfGenres;
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;

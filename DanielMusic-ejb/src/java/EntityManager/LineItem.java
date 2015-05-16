@@ -1,10 +1,12 @@
 package EntityManager;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class LineItem implements Serializable {
@@ -17,6 +19,16 @@ public class LineItem implements Serializable {
     private String artistName;
     private double price;
     private Boolean isDeleted;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private TransactionOrder transactionOrder;
+
+    public TransactionOrder getTransactionOrder() {
+        return transactionOrder;
+    }
+
+    public void setTransactionOrder(TransactionOrder transactionOrder) {
+        this.transactionOrder = transactionOrder;
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;

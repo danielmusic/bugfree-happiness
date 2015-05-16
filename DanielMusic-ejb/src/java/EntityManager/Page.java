@@ -1,11 +1,15 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Page implements Serializable {
@@ -19,6 +23,26 @@ public class Page implements Serializable {
     private String description;
     private String imageURL;
     private Boolean isDeleted;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Account account;
+    @OneToMany(mappedBy = "page", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Album> listOfAlbums;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public List<Album> getListOfAlbums() {
+        return listOfAlbums;
+    }
+
+    public void setListOfAlbums(List<Album> listOfAlbums) {
+        this.listOfAlbums = listOfAlbums;
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;

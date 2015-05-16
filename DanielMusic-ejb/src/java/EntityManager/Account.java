@@ -11,7 +11,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.criteria.Order;
 
 @Entity
 public class Account implements Serializable {
@@ -32,7 +31,7 @@ public class Account implements Serializable {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfMusics;
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Order> listOfOrders;
+    private List<TransactionOrder> listOfTransactionOrders;
     @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Page page;
 
@@ -52,12 +51,12 @@ public class Account implements Serializable {
         this.listOfMusics = listOfMusics;
     }
 
-    public List<Order> getListOfOrders() {
-        return listOfOrders;
+    public List<TransactionOrder> getListOfTransactionOrders() {
+        return listOfTransactionOrders;
     }
 
-    public void setListOfOrders(List<Order> listOfOrders) {
-        this.listOfOrders = listOfOrders;
+    public void setListOfTransactionOrders(List<TransactionOrder> listOfTransactionOrders) {
+        this.listOfTransactionOrders = listOfTransactionOrders;
     }
 
     public Page getPage() {

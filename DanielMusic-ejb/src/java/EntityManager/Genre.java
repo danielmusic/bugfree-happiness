@@ -1,10 +1,13 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Genre implements Serializable {
@@ -15,6 +18,16 @@ public class Genre implements Serializable {
     private Long id;
     private String genre;
     private Boolean isDeleted;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Music> listOfMusics;
+
+    public List<Music> getListOfMusics() {
+        return listOfMusics;
+    }
+
+    public void setListOfMusics(List<Music> listOfMusics) {
+        this.listOfMusics = listOfMusics;
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;
