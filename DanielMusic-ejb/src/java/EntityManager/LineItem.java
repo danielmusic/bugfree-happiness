@@ -17,10 +17,14 @@ public class LineItem implements Serializable {
     private Long id;
     private String trackName;
     private String artistName;
-    private double price;
+    private Double price;
     private Boolean isDeleted;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private TransactionOrder transactionOrder;
+
+    public LineItem() {
+        isDeleted = false;
+    }
 
     public TransactionOrder getTransactionOrder() {
         return transactionOrder;
@@ -54,11 +58,11 @@ public class LineItem implements Serializable {
         this.artistName = artistName;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

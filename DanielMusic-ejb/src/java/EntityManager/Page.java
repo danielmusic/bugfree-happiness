@@ -28,6 +28,10 @@ public class Page implements Serializable {
     @OneToMany(mappedBy = "page", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
 
+    public Page() {
+        isDeleted = false;
+    }
+
     public Account getAccount() {
         return account;
     }

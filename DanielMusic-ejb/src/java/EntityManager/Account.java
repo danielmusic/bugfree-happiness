@@ -1,6 +1,7 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,6 +35,12 @@ public class Account implements Serializable {
     private List<TransactionOrder> listOfTransactionOrders;
     @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Page page;
+
+    public Account() {
+        isArtist = false;
+        isAdmin = false;
+        isDeleted = false;
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;

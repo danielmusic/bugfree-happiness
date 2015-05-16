@@ -17,18 +17,23 @@ public class Music implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private int trackNumber;
+    private Integer trackNumber;
     private String name;
     private String artistName;
     private String imageURL;
     private Long numDownloaded;
-    private double price;
+    private Double price;
     private String fileLocation;
     private Boolean isDeleted;
     @ManyToMany(mappedBy = "listOfMusics", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Genre> listOfGenres;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Album album;
+
+    public Music() {
+        isDeleted = false;
+        numDownloaded = 0L;
+    }
 
     public Album getAlbum() {
         return album;
@@ -54,11 +59,11 @@ public class Music implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public int getTrackNumber() {
+    public Integer getTrackNumber() {
         return trackNumber;
     }
 
-    public void setTrackNumber(int trackNumber) {
+    public void setTrackNumber(Integer trackNumber) {
         this.trackNumber = trackNumber;
     }
 
@@ -94,11 +99,11 @@ public class Music implements Serializable {
         this.numDownloaded = numDownloaded;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

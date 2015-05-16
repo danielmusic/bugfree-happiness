@@ -21,6 +21,10 @@ public class Genre implements Serializable {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
+    public Genre() {
+        isDeleted = false;
+    }
+
     public List<Music> getListOfMusics() {
         return listOfMusics;
     }

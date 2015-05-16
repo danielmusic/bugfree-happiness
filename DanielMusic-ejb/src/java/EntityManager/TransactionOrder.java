@@ -21,6 +21,11 @@ public class TransactionOrder implements Serializable {
     private double totalAmountPaid;
     private Boolean isDeleted;
 
+    public TransactionOrder() {
+        isDeleted = false;
+        orderDate = new Date();
+    }
+
     public Boolean getIsDeleted() {
         return isDeleted;
     }

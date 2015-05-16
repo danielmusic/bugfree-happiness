@@ -33,6 +33,10 @@ public class Album implements Serializable {
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
+    public Album() {
+        isDeleted = false;
+    }
+
     public Page getPage() {
         return page;
     }
