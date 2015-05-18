@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>AccountManagementController</servlet-name>
-        <servlet-class>Admin.AccountManagement.AccountManagementController</servlet-class>
+        <servlet-name>GenreManagementController</servlet-name>
+        <servlet-class>Admin.GenreManagementController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MusicManagementController</servlet-name>
+        <servlet-class>Client.MusicManagementController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ArtistManagementController</servlet-name>
+        <servlet-class>Admin.ArtistManagementController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminAccountManagementController</servlet-name>
+        <servlet-class>Admin.AdminAccountManagementController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClientAccountManagementController</servlet-name>
+        <servlet-class>Client.ClientAccountManagementController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AccountManagementController</servlet-name>
-        <url-pattern>/AccountManagementController</url-pattern>
+        <servlet-name>GenreManagementController</servlet-name>
+        <url-pattern>/GenreManagementController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MusicManagementController</servlet-name>
+        <url-pattern>/MusicManagementController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ArtistManagementController</servlet-name>
+        <url-pattern>/ArtistManagementController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminAccountManagementController</servlet-name>
+        <url-pattern>/AdminAccountManagementController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClientAccountManagementController</servlet-name>
+        <url-pattern>/ClientAccountManagementController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
