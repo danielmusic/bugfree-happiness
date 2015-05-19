@@ -34,7 +34,7 @@
             <nav id="nav">
                 <ul>
                     <li>
-                        <a href="javascript:;">Home</a>
+                        <a href="index.jsp">Home</a>
                     </li>
 
                     <li class="submenu"> 
@@ -45,65 +45,17 @@
                             </li>
                             <li>
                                 <a href="#!/about2">About us 2</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/gallery">Gallery</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/gallery-single">Gallery Single Album</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/videos">Videos</a>
-                            </li>
-                            <li class="submenu">
-                                <a href="javascript:;">Sub Menu</a>
-                                <ul>
-                                    <li>
-                                        <a href="javascript:;">Level 2.1</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">Level 2.2</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">Level 2.3</a>
-                                    </li>
-                                </ul>
-                            </li>
+                            </li>     
                         </ul>           
                     </li>
-                    <li class="submenu">
-                        <a href="javascript:;">Releases</a>
-                        <ul>
-                            <li>
-                                <a href="#!/pages/releases">Releases 4 Columns</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/releases-3-columns">Releases 3 Columns</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/releases-fullwidth">Releases Fullwidth</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/release-single">Single Release</a>
-                            </li>
-                        </ul>
-                    </li>
 
-                    <li class="submenu">
+                    <li>
                         <a href="javascript:;">Artists</a>
-                        <ul>
-                            <li>
-                                <a href="#!/pages/artists">Artists Grid</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/artist-single">Single Artist</a>
-                            </li>
-                        </ul>
                     </li>
                     <li>
                         <a href="#!/pages/contact">Contact</a>
                     </li>
- 
+
                 </ul>
             </nav>
             <!-- /navigation -->
