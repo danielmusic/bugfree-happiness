@@ -41,7 +41,7 @@
                         <a>Pages</a>
                         <ul>
                             <li>
-                                <a href="#!/pages/about">About us 1</a>
+                                <a href="#!/about">About us 1</a>
                             </li>
                             <li>
                                 <a href="#!/about2">About us 2</a>
