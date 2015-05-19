@@ -33,32 +33,18 @@
             <!-- ############ navigation ############ -->
             <nav id="nav">
                 <ul>
-                    <li class="submenu">
+                    <li>
                         <a href="javascript:;">Home</a>
-                        <ul>
-                            <li>
-                                <a href="#!/pages/home">Home 1 (RevoSlider)</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/home-2">Home 2 (Full Image)</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/home-3">Home 3 (Video)</a>
-                            </li>
-                        </ul>
                     </li>
 
                     <li class="submenu"> 
-                        <a href="javascript:;">Pages</a>
+                        <a>Pages</a>
                         <ul>
                             <li>
-                                <a href="#!/pages/elements">Elements</a>
+                                <a href="#!/pages/about">About us 1</a>
                             </li>
                             <li>
-                                <a href="#!/pages/grid">Grid</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/about">About US</a>
+                                <a href="#!/about2">About us 2</a>
                             </li>
                             <li>
                                 <a href="#!/pages/gallery">Gallery</a>
@@ -102,33 +88,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="submenu">
-                        <a href="javascript:;">Events</a>
-                        <ul>
-                            <li>
-                                <a href="#!/pages/events-grid">Events Grid</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/events-list">Events List</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/events-table">Events Table</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/event-single">Single Event</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/event-single-disqus">Single Event (DISQUS)</a>
 
-                            </li>
-                            <li>
-                                <a href="#!/pages/event-single-past">Past Single Event (DISQUS)</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/event-single-past-2">Past Single Event (DISQUS) 2</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li class="submenu">
                         <a href="javascript:;">Artists</a>
                         <ul>
@@ -143,29 +103,7 @@
                     <li>
                         <a href="#!/pages/contact">Contact</a>
                     </li>
-                    <li class="submenu">
-                        <a href="javascript:;">Blog</a>
-                        <ul>
-                            <li>
-                                <a href="#!/pages/blog-grid">Blog - Grid</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/blog-list-left">Blog List (Sidebar right)</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/blog-list-right">Blog List (Sidebar left)</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/blog-list-wide">Blog List (Wide)</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/blog-single">Blog - Single Post</a>
-                            </li>
-                            <li>
-                                <a href="#!/pages/blog-single-disqus">Blog - Single Post (DISQUS)</a>
-                            </li>
-                        </ul>
-                    </li>
+ 
                 </ul>
             </nav>
             <!-- /navigation -->
