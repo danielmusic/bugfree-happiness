@@ -2,10 +2,14 @@ package EntityManager;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,10 +24,30 @@ public class TransactionOrder implements Serializable {
     private Date orderDate;
     private double totalAmountPaid;
     private Boolean isDeleted;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Account account;
+    @OneToMany(mappedBy = "transactionOrder", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<LineItem> lineItems;
 
     public TransactionOrder() {
         isDeleted = false;
         orderDate = new Date();
+    }
+
+    public List<LineItem> getLineItems() {
+        return lineItems;
+    }
+
+    public void setLineItems(List<LineItem> lineItems) {
+        this.lineItems = lineItems;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Boolean getIsDeleted() {
