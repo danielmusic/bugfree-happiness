@@ -36,19 +36,9 @@
                     <li>
                         <a href="index.jsp">Home</a>
                     </li>
-
-                    <li class="submenu"> 
-                        <a>Pages</a>
-                        <ul>
-                            <li>
-                                <a href="#!/about">About us 1</a>
-                            </li>
-                            <li>
-                                <a href="#!/about2">About us 2</a>
-                            </li>     
-                        </ul>           
+                    <li>
+                        <a href="#!/about">About</a>
                     </li>
-
                     <li>
                         <a href="javascript:;">Artists</a>
                     </li>
