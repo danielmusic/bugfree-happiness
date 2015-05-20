@@ -1,6 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Noisa - About US">
-
+<section id="page" data-title="About Us 2">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">TEST JSP</h1>

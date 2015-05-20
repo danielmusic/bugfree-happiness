@@ -20,7 +20,7 @@ jQuery(document).ready(function ($) {
 
         // Ajax Loader
         animation_content: true, // Shows an animation when the content is loaded
-        homepage: 'pages/home.html', // Real Path to your homepage
+        homepage: 'home.jsp', // Real Path to your homepage
         document_title: document.title // Default document title
 
     };
