@@ -34,16 +34,13 @@
             <nav id="nav">
                 <ul>
                     <li>
-                        <a href="index.jsp">Home</a>
+                        <a href="#!/discover">discover</a>
                     </li>
                     <li>
-                        <a href="#!/about">About</a>
+                        <a href="#!/artist">artist</a>
                     </li>
                     <li>
-                        <a href="javascript:;">Artists</a>
-                    </li>
-                    <li>
-                        <a href="#!/pages/contact">Contact</a>
+                        <a href="#!/fan">fan</a>
                     </li>
 
                 </ul>

@@ -419,13 +419,12 @@ img.border { border: 6px solid #ddd; }
 
 #nav a {
     color: #ddd;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     display: block;
     padding:0 20px;
     position: relative;
     text-align: center;
-    text-transform: uppercase;
     z-index: 98;
     cursor: pointer;
 }
@@ -1942,10 +1941,10 @@ ul.details-list .data {
 #footer-bottom .col-1-2 { margin-bottom: 10px; }
 .footer-logo { }
 .footer-copyrights {
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     text-align: right;
-    color: #666;
+    color: #EEE;
 }
 
 
