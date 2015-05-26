@@ -38,7 +38,7 @@
         <div class="col-1-4">
             <div class="widget widget_recent_tweets">
                 <h3>Latest Tweets</h3>
-                <ul class="tweets" data-tweets-count="2">
+                <ul class="tweets" data-tweets-count="1">
                     <li>Please Wait...</li>
                 </ul>
             </div>

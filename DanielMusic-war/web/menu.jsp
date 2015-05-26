@@ -38,11 +38,16 @@
                     </li>
                     <li>
                         <a href="#!/artist">artist</a>
+                        <ul>
+                            <a href="#!/artist/signup">artist signup</a>
+                        </ul>
                     </li>
                     <li>
                         <a href="#!/fan">fan</a>
+                        <ul>
+                            <a href="#!/member/signup">fan signup</a>
+                        </ul>
                     </li>
-
                 </ul>
             </nav>
             <!-- /navigation -->

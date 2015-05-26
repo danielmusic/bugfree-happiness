@@ -1,11 +1,11 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Artist">
+<section id="page" data-title="Fan Signup">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <div class="container">
 
             <div class="col-1-2" style="text-align: left;">
-                <h1 class="heading-l">Bandcamp for artist</h1>
+                <h1 class="heading-l">Fan signup</h1>
                 <h3>Fans have given artists $109 million USD using Bandcamp, and $3.3 million in the last 30 days alone.</h3>
                 <h3>Why, dear musician friend, are you not yet yourself twirling with arms spread beneath this gentle shower of silver and gold? Read on and be further convinced, or simply...</h3>
             </div>

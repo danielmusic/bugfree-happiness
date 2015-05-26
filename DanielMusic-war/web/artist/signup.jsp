@@ -1,8 +1,8 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="About Us 2">
+<section id="page" data-title="Artist Signup">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Register</h1>
+        <h1 class="heading-l">Artist Signup</h1>
         <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
         <!-- Overlay -->
         <span class="overlay dots"></span>

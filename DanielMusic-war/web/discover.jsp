@@ -4,9 +4,6 @@
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Discover JSP</h1>
         <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
-        <div class="">
-
-        </div>
     </section>
     <!-- /intro -->
 
