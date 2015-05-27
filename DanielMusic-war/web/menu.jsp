@@ -48,6 +48,9 @@
                             <a href="#!/fan/signup">fan signup</a>
                         </ul>
                     </li>
+                    <li>
+                        <a href="#!/login">login</a>
+                    </li>
                 </ul>
             </nav>
             <!-- /navigation -->
