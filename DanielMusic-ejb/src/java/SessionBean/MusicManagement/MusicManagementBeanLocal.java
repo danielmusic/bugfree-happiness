@@ -7,4 +7,5 @@ import javax.ejb.Local;
 @Local
 public interface MusicManagementBeanLocal {
     public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName); 
+    public void testAdaptivePayment();
 }

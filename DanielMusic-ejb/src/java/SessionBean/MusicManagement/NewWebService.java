@@ -10,6 +10,7 @@ import java.io.File;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.ejb.Stateless;
+import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 
@@ -24,9 +25,15 @@ public class NewWebService {
     private MusicManagementBeanLocal ejbRef;// Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Web Service Operation")
 
-    @WebMethod(operationName = "encodeWavToMP3")
-    public ReturnHelper encodeWavToMP3(@WebParam(name = "source") File source, @WebParam(name = "target") File target) {
-        return ejbRef.encodeToMP3(source, target);
+    @WebMethod(operationName = "encodeToMP3")
+    public ReturnHelper encodeToMP3(@WebParam(name = "sourceFileName") File sourceFileName, @WebParam(name = "targetFileName") File targetFileName) {
+        return ejbRef.encodeToMP3(sourceFileName, targetFileName);
+    }
+
+    @WebMethod(operationName = "testAdaptivePayment")
+    @Oneway
+    public void testAdaptivePayment() {
+        ejbRef.testAdaptivePayment();
     }
     
 }
