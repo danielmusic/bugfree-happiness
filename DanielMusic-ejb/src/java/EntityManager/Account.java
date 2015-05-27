@@ -28,7 +28,7 @@ public class Account implements Serializable {
     private String name;
     private Boolean isArtist;
     private Boolean isAdmin;
-    private Boolean isDeleted;
+    private Boolean isDisabled;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfMusics;
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -39,15 +39,15 @@ public class Account implements Serializable {
     public Account() {
         isArtist = false;
         isAdmin = false;
-        isDeleted = false;
+        isDisabled = false;
     }
 
-    public Boolean getIsDeleted() {
-        return isDeleted;
+    public Boolean getIsDisabled() {
+        return isDisabled;
     }
 
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setIsDisabled(Boolean isDisabled) {
+        this.isDisabled = isDisabled;
     }
 
     public List<Music> getListOfMusics() {

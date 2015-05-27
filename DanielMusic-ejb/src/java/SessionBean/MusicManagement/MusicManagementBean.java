@@ -37,14 +37,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             ea.setAudioAttributes(aa);
             encoder.encode(sourceFileName, targetFileName, ea);
             result.setResult(true);
-            result.setResultDescription("mp3 file encoded successfully.");
+            result.setDescription("mp3 file encoded successfully.");
             return result;
         } catch (EncoderException ex) {
             System.out.println("encodeWavToMP3(): Error, " + ex.getMessage());
-            result.setResultDescription("Error in converting the provided wav file to mp3. Please try again.");
+            result.setDescription("Error in converting the provided wav file to mp3. Please try again.");
         } catch (Exception ex) {
             System.out.println("encodeWavToMP3(): Unknown error.");
-            result.setResultDescription("Error in converting the provided wav file to mp3. Please try again.");
+            result.setDescription("Error in converting the provided wav file to mp3. Please try again.");
             ex.printStackTrace();
         }
         return result;

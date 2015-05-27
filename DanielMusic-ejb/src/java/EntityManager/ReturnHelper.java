@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ReturnHelper implements Serializable {
     
     private boolean result;
-    private String resultDescription;
+    private String description;
 
     public boolean getResult() {
         return result;
@@ -15,11 +15,11 @@ public class ReturnHelper implements Serializable {
         this.result = result;
     }
 
-    public String getResultDescription() {
-        return resultDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setResultDescription(String resultDescription) {
-        this.resultDescription = resultDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
