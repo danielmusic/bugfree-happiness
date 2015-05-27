@@ -11,6 +11,8 @@
             <included-library dirs="200">file.reference.adaptivepaymentssdk-2.8.117.jar</included-library>
             <included-library dirs="200">file.reference.jave-1.0.2.jar</included-library>
             <included-library dirs="200">file.reference.java-json.jar</included-library>
+            <included-library dirs="200">file.reference.commons-codec-1.10.jar</included-library>
+            <included-library dirs="200">file.reference.paypal-core-1.6.8.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
