@@ -37,14 +37,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             ea.setAudioAttributes(aa);
             encoder.encode(sourceFileName, targetFileName, ea);
             result.setResult(true);
-            result.setResultDescription("mp3 file encoded successfully.");
+            result.setDescription("mp3 file encoded successfully.");
             return result;
         } catch (EncoderException ex) {
             System.out.println("encodeWavToMP3(): Error, " + ex.getMessage());
-            result.setResultDescription("Error in converting the provided wav file to mp3. Please try again.");
+            result.setDescription("Error in converting the provided wav file to mp3. Please try again.");
         } catch (Exception ex) {
             System.out.println("encodeWavToMP3(): Unknown error.");
-            result.setResultDescription("Error in converting the provided wav file to mp3. Please try again.");
+            result.setDescription("Error in converting the provided wav file to mp3. Please try again.");
             ex.printStackTrace();
         }
         return result;
@@ -58,7 +58,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             List<Receiver> receivers = new ArrayList<Receiver>();
 //Artist (partial of the total)
             Receiver secondaryReceiver = new Receiver();
-            secondaryReceiver.setAmount(0.90);
+            secondaryReceiver.setAmount(0.50);
             secondaryReceiver.setEmail("daniel-artist@hotmail.com");
             receivers.add(secondaryReceiver);
 
@@ -75,6 +75,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
+            payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("https://devtools-paypal.com/guide/ap_chained_payment?cancel=true");//Return if payment cancelled
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
