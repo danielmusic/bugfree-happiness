@@ -22,6 +22,8 @@ public class Account implements Serializable {
     private Long id;
     @Lob
     private String email;
+    @Lob
+    private String newEmail;
     private String passwordSalt;
     private String passwordHash;
     @Lob
@@ -35,11 +37,39 @@ public class Account implements Serializable {
     private List<TransactionOrder> listOfTransactionOrders;
     @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Page page;
+    private Integer isVerifiedEmail; //status types: 0(not verified), 1(verified) 
+    private Boolean isApproved;
 
     public Account() {
         isArtist = false;
         isAdmin = false;
         isDisabled = false;
+        isVerifiedEmail = 0;
+        isApproved = false;
+    }
+
+    public String getNewEmail() {
+        return newEmail;
+    }
+
+    public void setNewEmail(String newEmail) {
+        this.newEmail = newEmail;
+    }
+
+    public Integer getIsVerifiedEmail() {
+        return isVerifiedEmail;
+    }
+
+    public void setIsVerifiedEmail(Integer isVerifiedEmail) {
+        this.isVerifiedEmail = isVerifiedEmail;
+    }
+
+    public Boolean getIsApproved() {
+        return isApproved;
+    }
+
+    public void setIsApproved(Boolean isApproved) {
+        this.isApproved = isApproved;
     }
 
     public Boolean getIsDisabled() {
