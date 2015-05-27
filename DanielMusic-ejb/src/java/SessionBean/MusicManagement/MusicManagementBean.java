@@ -58,7 +58,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             List<Receiver> receivers = new ArrayList<Receiver>();
 //Artist (partial of the total)
             Receiver secondaryReceiver = new Receiver();
-            secondaryReceiver.setAmount(0.90);
+            secondaryReceiver.setAmount(0.50);
             secondaryReceiver.setEmail("daniel-artist@hotmail.com");
             receivers.add(secondaryReceiver);
 
@@ -75,6 +75,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
+            payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("https://devtools-paypal.com/guide/ap_chained_payment?cancel=true");//Return if payment cancelled
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
