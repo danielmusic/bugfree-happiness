@@ -45,7 +45,7 @@
                     <li>
                         <a href="#!/fan">fan</a>
                         <ul>
-                            <a href="#!/member/signup">fan signup</a>
+                            <a href="#!/fan/signup">fan signup</a>
                         </ul>
                     </li>
                 </ul>
