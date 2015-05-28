@@ -8,13 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Account implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,24 +31,24 @@ public class Account implements Serializable {
     private String passwordHash;
     @Lob
     private String name;
-    private Boolean isArtist;
-    private Boolean isAdmin;
+    //private Boolean isArtist;
+    //private Boolean isAdmin;
     private Boolean isDisabled;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Music> listOfMusics;
+    private List<Music> listOfPurchasedMusics;
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransactionOrder> listOfTransactionOrders;
-    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Page page;
+//    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    private Page page;
     private Integer isVerifiedEmail; //status types: 0(not verified), 1(verified) 
-    private Boolean isApproved;
+//    private Boolean isApproved;
 
     public Account() {
-        isArtist = false;
-        isAdmin = false;
+//        isArtist = false;
+//        isAdmin = false;
         isDisabled = false;
         isVerifiedEmail = 0;
-        isApproved = false;
+//        isApproved = false;
     }
 
     public String getNewEmail() {
@@ -64,13 +67,13 @@ public class Account implements Serializable {
         this.isVerifiedEmail = isVerifiedEmail;
     }
 
-    public Boolean getIsApproved() {
-        return isApproved;
-    }
-
-    public void setIsApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
-    }
+//    public Boolean getIsApproved() {
+//        return isApproved;
+//    }
+//
+//    public void setIsApproved(Boolean isApproved) {
+//        this.isApproved = isApproved;
+//    }
 
     public Boolean getIsDisabled() {
         return isDisabled;
@@ -81,11 +84,11 @@ public class Account implements Serializable {
     }
 
     public List<Music> getListOfMusics() {
-        return listOfMusics;
+        return listOfPurchasedMusics;
     }
 
     public void setListOfMusics(List<Music> listOfMusics) {
-        this.listOfMusics = listOfMusics;
+        this.listOfPurchasedMusics = listOfMusics;
     }
 
     public List<TransactionOrder> getListOfTransactionOrders() {
@@ -96,13 +99,13 @@ public class Account implements Serializable {
         this.listOfTransactionOrders = listOfTransactionOrders;
     }
 
-    public Page getPage() {
-        return page;
-    }
-
-    public void setPage(Page page) {
-        this.page = page;
-    }
+//    public Page getPage() {
+//        return page;
+//    }
+//
+//    public void setPage(Page page) {
+//        this.page = page;
+//    }
 
     public String getEmail() {
         return email;
@@ -136,21 +139,21 @@ public class Account implements Serializable {
         this.name = name;
     }
 
-    public Boolean getIsArtist() {
-        return isArtist;
-    }
-
-    public void setIsArtist(Boolean isArtist) {
-        this.isArtist = isArtist;
-    }
-
-    public Boolean getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(Boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
+//    public Boolean getIsArtist() {
+//        return isArtist;
+//    }
+//
+//    public void setIsArtist(Boolean isArtist) {
+//        this.isArtist = isArtist;
+//    }
+//
+//    public Boolean getIsAdmin() {
+//        return isAdmin;
+//    }
+//
+//    public void setIsAdmin(Boolean isAdmin) {
+//        this.isAdmin = isAdmin;
+//    }
 
     public Long getId() {
         return id;
