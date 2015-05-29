@@ -31,16 +31,24 @@ public abstract class Account implements Serializable {
     private String passwordHash;
     @Lob
     private String name;
+    //private Boolean isArtist;
+    //private Boolean isAdmin;
     private Boolean isDisabled;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfPurchasedMusics;
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransactionOrder> listOfTransactionOrders;
+//    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    private Page page;
     private Integer isVerifiedEmail; //status types: 0(not verified), 1(verified) 
+//    private Boolean isApproved;
 
     public Account() {
+//        isArtist = false;
+//        isAdmin = false;
         isDisabled = false;
         isVerifiedEmail = 0;
+//        isApproved = false;
     }
 
     public String getNewEmail() {
@@ -58,6 +66,14 @@ public abstract class Account implements Serializable {
     public void setIsVerifiedEmail(Integer isVerifiedEmail) {
         this.isVerifiedEmail = isVerifiedEmail;
     }
+
+//    public Boolean getIsApproved() {
+//        return isApproved;
+//    }
+//
+//    public void setIsApproved(Boolean isApproved) {
+//        this.isApproved = isApproved;
+//    }
 
     public Boolean getIsDisabled() {
         return isDisabled;
@@ -82,6 +98,14 @@ public abstract class Account implements Serializable {
     public void setListOfTransactionOrders(List<TransactionOrder> listOfTransactionOrders) {
         this.listOfTransactionOrders = listOfTransactionOrders;
     }
+
+//    public Page getPage() {
+//        return page;
+//    }
+//
+//    public void setPage(Page page) {
+//        this.page = page;
+//    }
 
     public String getEmail() {
         return email;
@@ -114,6 +138,22 @@ public abstract class Account implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+//    public Boolean getIsArtist() {
+//        return isArtist;
+//    }
+//
+//    public void setIsArtist(Boolean isArtist) {
+//        this.isArtist = isArtist;
+//    }
+//
+//    public Boolean getIsAdmin() {
+//        return isAdmin;
+//    }
+//
+//    public void setIsAdmin(Boolean isAdmin) {
+//        this.isAdmin = isAdmin;
+//    }
 
     public Long getId() {
         return id;
