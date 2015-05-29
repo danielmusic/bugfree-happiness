@@ -29,7 +29,7 @@ public class Album implements Serializable {
     private String imageURL;
     private Boolean isDeleted;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Page page;
+    private Artist artist;
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
@@ -37,12 +37,12 @@ public class Album implements Serializable {
         isDeleted = false;
     }
 
-    public Page getPage() {
-        return page;
+    public Artist getArtist() {
+        return artist;
     }
 
-    public void setPage(Page page) {
-        this.page = page;
+    public void setArtist(Artist artist) {
+        this.artist = artist;
     }
 
     public List<Music> getListOfMusics() {
