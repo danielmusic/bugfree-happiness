@@ -25,12 +25,22 @@ public class Page implements Serializable {
     private Boolean isDeleted;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Artist artist;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Member member;
 
     public Page() {
         isDeleted = false;
     }
 
-    public Account getArtist() {
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public Artist getArtist() {
         return artist;
     }
 
