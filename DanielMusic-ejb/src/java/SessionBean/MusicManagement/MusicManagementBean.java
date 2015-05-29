@@ -1,5 +1,6 @@
 package SessionBean.MusicManagement;
 
+import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
@@ -102,5 +103,25 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public String generateDownloadLink(Long accountID, Long musicID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Music> searchMusicByGenre(Long genreID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Music> searchMusicByArtist(Long genreID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Music> searchMusic(Long genreID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
