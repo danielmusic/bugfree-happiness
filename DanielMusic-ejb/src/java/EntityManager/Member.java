@@ -1,26 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package EntityManager;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
-/**
- *
- * @author Jason
- */
 @Entity
 public class Member extends Account implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Page page;
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
+    }
 
     public Long getId() {
         return id;
@@ -54,5 +58,5 @@ public class Member extends Account implements Serializable {
     public String toString() {
         return "EntityManager.Member[ id=" + id + " ]";
     }
-    
+
 }

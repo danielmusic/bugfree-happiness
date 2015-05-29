@@ -7,14 +7,14 @@ import javax.ejb.Local;
 
 @Local
 public interface AccountManagementBeanLocal {
-    public ReturnHelper loginAccount(String username, String password);
-    public Account getAccount(String username);
+    public ReturnHelper loginAccount(String email, String password);
+    public Account getAccount(String email);
     
     public ReturnHelper disableAccount(Long accountID);
     public ReturnHelper enableAccount(Long accountID);
     
-    public ReturnHelper registerAccount(String name, String username, String password, boolean isAdmin, boolean isArtist);  
-    public boolean checkIfUsernameExists(String username);
+    public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist);  
+    public boolean checkIfUsernameExists(String email);
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     

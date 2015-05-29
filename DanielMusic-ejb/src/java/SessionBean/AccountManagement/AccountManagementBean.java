@@ -18,12 +18,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     private EntityManager em;
 
     @Override
-    public ReturnHelper loginAccount(String username, String password) {
+    public ReturnHelper loginAccount(String email, String password) {
         System.out.println("AccountManagementBean: loginAccount() called");
         ReturnHelper result = new ReturnHelper();
         try {
-            Query q = em.createQuery("SELECT a FROM Account a where a.username=:username");
-            q.setParameter("username", username);
+            Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
+            q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
             String passwordSalt = account.getPasswordSalt();
             String passwordHash = generatePasswordHash(passwordSalt, password);
@@ -33,7 +33,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                     result.setDescription("Unable to login, account is disabled.");
                     return result;
                 }
-                System.out.println("loginAccount(): Account with username:" + username + " logged in successfully.");
+                System.out.println("loginAccount(): Account with email:" + email + " logged in successfully.");
                 em.detach(account);
                 account.setPasswordHash(null);
                 account.setPasswordSalt(null);
@@ -47,7 +47,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 return result;
             }
         } catch (NoResultException ex) {//cannot find account with that email
-            System.out.println("loginAccount(): Login credentials provided were incorrect, no such username found.");
+            System.out.println("loginAccount(): Login credentials provided were incorrect, no such email found.");
             result.setResult(false);
             result.setDescription("Login credentials provided incorrect.");
             return result;
@@ -61,11 +61,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public Account getAccount(String username) {
+    public Account getAccount(String email) {
         System.out.println("AccountManagementBean: getAccount() called");
         try {
-            Query q = em.createQuery("SELECT a FROM Account a where a.username=:username");
-            q.setParameter("username", username);
+            Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
+            q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
             return account;
         } catch (Exception ex) {
@@ -76,7 +76,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper registerAccount(String name, String username, String password, boolean isAdmin, boolean isArtist) {
+    public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -133,7 +133,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public boolean checkIfUsernameExists(String username) {
+    public boolean checkIfUsernameExists(String email) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
