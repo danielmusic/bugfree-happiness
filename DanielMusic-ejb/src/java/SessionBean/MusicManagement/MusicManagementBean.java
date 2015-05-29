@@ -116,12 +116,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Music> searchMusicByArtist(Long genreID) {
+    public List<Music> searchMusicByArtist(String artistName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Music> searchMusic(Long genreID) {
+    public List<Music> searchMusic(String searchString) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
