@@ -24,7 +24,7 @@ public class Page implements Serializable {
     private String imageURL;
     private Boolean isDeleted;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Account account;
+    private Artist artist;
     @OneToMany(mappedBy = "page", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
 
@@ -32,12 +32,12 @@ public class Page implements Serializable {
         isDeleted = false;
     }
 
-    public Account getAccount() {
-        return account;
+    public Artist getArtist() {
+        return artist;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setArtist(Artist artist) {
+        this.artist = artist;
     }
 
     public List<Album> getListOfAlbums() {

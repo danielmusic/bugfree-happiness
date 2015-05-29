@@ -11,12 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/**
- *
- * @author Jason
- */
 @Entity
 public class Admin extends Account implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,5 +51,5 @@ public class Admin extends Account implements Serializable {
     public String toString() {
         return "EntityManager.Admin[ id=" + id + " ]";
     }
-    
+
 }
