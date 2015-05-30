@@ -1,46 +1,71 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Admin;
 
+import EntityManager.Account;
+import EntityManager.ReturnHelper;
+import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author darius
- */
 public class AdminAccountManagementController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AdminAccountManagementController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AdminAccountManagementController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    @EJB
+    private AccountManagementBeanLocal accountManagementBean;
+
+    String nextPage = "", goodMsg = "", errMsg = "";
+    HttpSession session;
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String target = request.getParameter("target");
+        String email = request.getParameter("email");
+        String password = request.getParameter("pwd");
+
+        session = request.getSession();
+        ReturnHelper returnHelper;
+
+        try {
+            switch (target) {
+                case "Login":
+                    System.out.println("email " + email);
+                    System.out.println("passw " + password);
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("staff", accountManagementBean.getAccount(email));
+                        nextPage = "workspace.jsp";
+                    } else {
+                        nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
+                    }
+                    break;
+            }
+            if (nextPage.equals("")) {
+                response.sendRedirect("login.jsp?errMsg=Session Expired.");
+            } else {
+                response.sendRedirect(nextPage);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("EROOOOOOOOOOOOOOORR");
+            response.sendRedirect("error500.html");
+            ex.printStackTrace();
+        }
+    }
+
+    public boolean checkLogin(HttpServletResponse response) {
+        try {
+            Account staff = (Account) (session.getAttribute("staff"));
+            if (staff == null) {
+                response.sendRedirect("login.jsp?errMsg=Session Expired.");
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
         }
     }
 

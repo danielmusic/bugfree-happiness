@@ -25,11 +25,11 @@
                     <div class="panel-body">
                         <jsp:include page="displayMessageLong.jsp" />
 
-                        <form action="AccountManagementController" >
+                        <form action="../AdminAccountManagementController" >
                             <div class="form-group mb-lg">
-                                <label>Username</label>
+                                <label>Email</label>
                                 <div class="input-group input-group-icon">
-                                    <input name="username" type="text" class="form-control input-lg" />
+                                    <input name="email" type="text" class="form-control input-lg" required />
                                     <span class="input-group-addon">
                                         <span class="icon icon-lg">
                                             <i class="fa fa-user"></i>
@@ -41,10 +41,9 @@
                             <div class="form-group mb-lg">
                                 <div class="clearfix">
                                     <label class="pull-left">Password</label>
-                                    <a href="pages-recover-password.html" class="pull-right">Lost Password?</a>
                                 </div>
                                 <div class="input-group input-group-icon">
-                                    <input name="pwd" type="password" class="form-control input-lg" />
+                                    <input name="pwd" type="password" class="form-control input-lg" required/>
                                     <span class="input-group-addon">
                                         <span class="icon icon-lg">
                                             <i class="fa fa-lock"></i>
@@ -59,7 +58,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" name="target" value="StaffLogin">
+                            <input type="hidden" name="target" value="Login">
 
                         </form>
                     </div>
