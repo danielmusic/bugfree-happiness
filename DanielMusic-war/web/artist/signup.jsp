@@ -3,7 +3,7 @@
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Artist Signup</h1>
-        <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
+        <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
         <!-- Overlay -->
         <span class="overlay dots"></span>
     </section>
@@ -18,46 +18,40 @@
 
             <!-- Article -->
             <article>
+                <h2>Sign up for an artist account</h2>
 
-                <div class="col-1-2">
-                    <img src="placeholders/about-img01.jpg" alt="Noisa image" class="inline">
-                    <br>
-                    <!-- Buttons list -->
-                    <ul class="buttons-list">
-                        <li>
-                            <a class="btn small" href="javascript:;" ><i class="icon icon-download"></i> Download Recents Podcasts</a>
-                        </li>
-                        <li>
-                            <a class="btn small dark" href="javascript:;" ><i class="icon icon-download"></i> Download Our Bio</a>
-                        </li>
+                <form action="#" class="form">
+                    <div class="row clearfix">
+                        <div class="col-1-2">
+                            <label for="name"><strong>Artist/Band Name</strong> *</label>
+                            <input type="text" name="name" value="" id="name" required>
+                        </div>
+                        <div class="col-1-2 last">
+                            <label for="email"><strong>Email</strong> *</label>
+                            <input type="email" name="email" value="" id="email" required>
+                        </div>
+                    </div>
 
-                    </ul>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                </div>
+                    <div class="row clearfix">
+                        <div class="col-1-2">
+                            <label for="password"><strong>Password</strong> *</label>
+                            <input id="password" type="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  name="pwd" required onchange="form.repassword.pattern = this.value;">
+                        </div>
+                        <div class="col-1-2 last">
+                            <label for="repassword"><strong>Re-enter Password</strong> *</label>
+                            <input id="repassword" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="repassword" required>
+                        </div>
+                    </div>
 
-                <div class="col-1-2 last">
-                    <h2>Biography</h2>
-                    <p class="intro-text caps">Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <input type="checkbox" name="chkAgree" required> I have read and agree to the Terms of Use.
+                        </div>
+                    </div>
 
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                    <p>Duis dolor tellus, faucibus non ligula ac, fringilla porttitor eros. Cras sagittis eleifend erat ac fringilla. Proin ac odio et neque vulputate tempus at vel justo. Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
-
-                    <blockquote>
-                        <p>
-                            Sed pellentesque dapibus tellus in semper. Aenean faucibus aliquet turpis, id fermentum sem consectetur id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus euismod nunc scelerisque tincidunt.
-                        </p>
-                    </blockquote>
-                    <br>
-                    <h3>Videos</h3>
-                    <iframe src="//player.vimeo.com/video/66171813?portrait=0&amp;color=ea4233" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-                </div>
-
-
+                    <input type="submit" value="Sign up now!" class="large invert">
+                    <div class="clear"></div>
+                </form>
             </article>
             <!-- /article -->
 

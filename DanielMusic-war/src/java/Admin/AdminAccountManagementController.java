@@ -1,6 +1,7 @@
 package Admin;
 
 import EntityManager.Account;
+import EntityManager.Admin;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import java.io.IOException;
@@ -31,11 +32,9 @@ public class AdminAccountManagementController extends HttpServlet {
         try {
             switch (target) {
                 case "Login":
-                    System.out.println("email " + email);
-                    System.out.println("passw " + password);
                     returnHelper = accountManagementBean.loginAccount(email, password);
                     if (returnHelper.getResult()) {
-                        session.setAttribute("staff", accountManagementBean.getAccount(email));
+                        session.setAttribute("staff", (Admin) accountManagementBean.getAccount(email));
                         nextPage = "workspace.jsp";
                     } else {
                         nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
@@ -49,7 +48,6 @@ public class AdminAccountManagementController extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            System.out.println("EROOOOOOOOOOOOOOORR");
             response.sendRedirect("error500.html");
             ex.printStackTrace();
         }
