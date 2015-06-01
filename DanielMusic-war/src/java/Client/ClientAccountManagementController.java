@@ -20,6 +20,7 @@ public class ClientAccountManagementController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Welcome to client account managment controller");
         String target = request.getParameter("target");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
@@ -34,15 +35,23 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "ArtistSignup":
                     if (chkAgree != null) {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
-                        if (returnHelper.isCompletedSuccesfully()) {
-                            nextPage = "artist/signup/?goodMsg=" + returnHelper.getDescription();
+                        if (returnHelper.getResult()) {
+                            //goodMsg
                         } else {
-                            nextPage = "artist/signup/?errMsg=" + returnHelper.getDescription();
+                            //errMsg
                         }
+                        nextPage = "#!/artist/signup" + returnHelper.getDescription();
                         break;
                     }
-
             }
+
+            if (nextPage.equals("")) {
+                //response.sendRedirect("login.jsp?errMsg=Session Expired.");
+            } else {
+                System.out.println(">>>>>>>>>>>>>>" + nextPage);
+                response.sendRedirect(nextPage);
+            }
+
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();

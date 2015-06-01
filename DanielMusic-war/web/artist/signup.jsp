@@ -13,14 +13,11 @@
     <section class="content section">
         <!-- container -->
         <div class="container">
-
-            <!-- ############################# About US ############################# -->
-
             <!-- Article -->
             <article>
                 <h2>Sign up for an artist account</h2>
 
-                <form action="#" class="form">
+                <form action="ClientAccountManagementController" class="form">
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="name"><strong>Artist/Band Name</strong> *</label>
@@ -31,7 +28,6 @@
                             <input type="email" name="email" value="" id="email" required>
                         </div>
                     </div>
-
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="password"><strong>Password</strong> *</label>
@@ -50,6 +46,7 @@
                     </div>
 
                     <input type="submit" value="Sign up now!" class="large invert">
+                    <input type="hidden" value="ArtistSignup" name="target">
                     <div class="clear"></div>
                 </form>
             </article>
