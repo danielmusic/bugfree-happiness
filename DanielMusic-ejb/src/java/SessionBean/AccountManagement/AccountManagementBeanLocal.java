@@ -2,8 +2,8 @@ package SessionBean.AccountManagement;
 
 import EntityManager.Account;
 import EntityManager.ReturnHelper;
-import java.util.List;
 import javax.ejb.Local;
+import javax.servlet.http.Part;
 
 @Local
 public interface AccountManagementBeanLocal {
@@ -18,7 +18,8 @@ public interface AccountManagementBeanLocal {
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     
-    public ReturnHelper updateAccount(Long staffID, String newName);
-    public ReturnHelper updateAccountPassword(Long staffID, String oldPassword, String newPassword);
+    public ReturnHelper updateAccountProfile(Long accountID, String newName, Part profilePicture, String description);
+    public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);
+    public ReturnHelper updateAccountEmail(Long accountID, String newEmail);
     //public List<Account> listAllAccount();
 }
