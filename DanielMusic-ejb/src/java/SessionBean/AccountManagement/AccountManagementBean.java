@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.Part;
 
 @Stateless
 public class AccountManagementBean implements AccountManagementBeanLocal {
@@ -118,7 +119,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 admin.setPasswordSalt(passwordSalt);
                 admin.setName(name);
                 em.persist(admin);
-            }else if (isArtist) {
+            } else if (isArtist) {
                 Artist artist = new Artist();
                 artist.setEmail(email);
                 artist.setPasswordHash(passwordHash);
@@ -200,7 +201,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     @Override
     public boolean checkIfEmailExists(String email) {
         System.out.println("AccountManagementBean: checkIfEmailExists() called");
-        Query q = em.createQuery("SELECT a FROM Account a WHERE a.email:email");
+        Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
         q.setParameter("email", email);
         try {
             Account account = (Account) q.getSingleResult();
@@ -247,7 +248,34 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateAccountProfile(Long accountID, String newName) {
+    public ReturnHelper updateAccountProfile(Long accountID, String newName, Part profilePicture, String description) {
+//        System.out.println("AccountManagementBean: checkIfUsernameExists() called");
+//        ReturnHelper result = new ReturnHelper();
+//        result.setResult(false);
+//        Query q = em.createQuery("SELECT s FROM Staff s WHERE s.id=:id");
+//        q.setParameter("id", staffID);
+//        try {
+//            Staff staff = (Staff) q.getSingleResult();
+//            if (newName != null) {
+//                staff.setName(newName);
+//            }
+//            if (newStaffPrefix != null) {
+//                staff.setStaffPrefix(newStaffPrefix);
+//            }
+//            em.merge(staff);
+//            result.setResult(true);
+//            result.setDescription("Staff name updated successfully.");
+//        } catch (NoResultException ex) {
+//            result.setDescription("Unable to find staff with the provided ID.");
+//        } catch (Exception ex) {
+//            System.out.println("AccountManagementBean: updateStaffName() failed");
+//            result.setDescription("Unable to update staff's name, internal server error.");
+//            ex.printStackTrace();
+//        }
+//        return result;
+//        if (profilePicture != null) {
+//
+//        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -256,4 +284,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public ReturnHelper updateAccountEmail(Long accountID, String newEmail) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
