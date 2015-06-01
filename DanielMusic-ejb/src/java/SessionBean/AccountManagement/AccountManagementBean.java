@@ -101,7 +101,48 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: registerAccount() called");
+        ReturnHelper result = new ReturnHelper();
+        try {
+            if (checkIfEmailExists(email)) {
+                result.setResult(false);
+                result.setDescription("Unable to register, email already in use.");
+                return result;
+            }
+            String passwordSalt = generatePasswordSalt();
+            String passwordHash = generatePasswordHash(passwordSalt, password);
+            if (isAdmin) {
+                Admin admin = new Admin();
+                admin.setEmail(email);
+                admin.setPasswordHash(passwordHash);
+                admin.setPasswordSalt(passwordSalt);
+                admin.setName(name);
+                em.persist(admin);
+            }else if (isArtist) {
+                Artist artist = new Artist();
+                artist.setEmail(email);
+                artist.setPasswordHash(passwordHash);
+                artist.setPasswordSalt(passwordSalt);
+                artist.setName(name);
+                em.persist(artist);
+            } else {
+                Member member = new Member();
+                member.setEmail(email);
+                member.setPasswordHash(passwordHash);
+                member.setPasswordSalt(passwordSalt);
+                member.setName(name);
+                em.persist(member);
+            }
+            result.setResult(true);
+            result.setDescription("Account registered successfully.");
+            return result;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: registerAccount() failed");
+            ex.printStackTrace();
+            result.setResult(false);
+            result.setDescription("Failed to register account due to internal server error.");
+            return result;
+        }
     }
 
     @Override
@@ -206,7 +247,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateAccount(Long accountID, String newName) {
+    public ReturnHelper updateAccountProfile(Long accountID, String newName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
