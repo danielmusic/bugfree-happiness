@@ -1,6 +1,7 @@
 package SessionBean.MusicManagement;
 
 import EntityManager.Music;
+import static EntityManager.Music_.artistName;
 import EntityManager.ReturnHelper;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
@@ -15,12 +16,20 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
+
+    @PersistenceContext(unitName = "DanielMusic-ejbPU")
+    private EntityManager em;
 
     @Override
     public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName) {
@@ -91,11 +100,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
-            
+
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey="+payKey);
+            System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
             //open link in browser
             //Accounts (all password is 12345678): 
             //daniel-buyer@hotmail.com, daniel-artist@hotmail.com, danielmusic@hotmail.com
@@ -112,16 +121,65 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public List<Music> searchMusicByGenre(Long genreID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("searchMusicByGenre() called with genreID: " + genreID);
+        try {
+            Query q = em.createQuery("SELECT m FROM Music m WHERE m.listOfGenres.id=:genreID AND m.isDeleted=false");
+            q.setParameter("genreID", genreID);
+            List<Music> listOfMusics = q.getResultList();
+            System.out.println("searchMusicByGenre() successful");
+
+            return listOfMusics;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error while calling searchMusicByGenre()");
+            return null;
+        }
     }
 
     @Override
     public List<Music> searchMusicByArtist(String artistName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("searchMusicByArtist() called with artistName: " + artistName);
+        try {
+            Query q = em.createQuery("SELECT m FROM Music m WHERE m.artistName LIKE %:artistName% AND m.isDeleted=false");
+            q.setParameter("artistName", artistName);
+            List<Music> listOfMusics = q.getResultList();
+            System.out.println("searchMusicByArtist() successful");
+
+            return listOfMusics;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error while calling searchMusicByArtist()");
+            return null;
+        }
     }
 
     @Override
     public List<Music> searchMusic(String searchString) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("searchMusic() called with searchString: " + searchString);
+        try {
+            Scanner sc = new Scanner(searchString);
+            ArrayList<String> arrayList = new ArrayList<String>();
+            List<Music> listOfMusics = null;
+            while (sc.hasNext()) {
+                arrayList.add(sc.next());
+            }
+            for (String s : arrayList) {
+                Query q = em.createQuery("SELECT m FROM Music m WHERE (m.artistName LIKE %:s%) OR  AND m.isDeleted=false");
+                q.setParameter("artistName", artistName);
+                listOfMusics = q.getResultList();
+            }
+
+            System.out.println("searchMusic() successful");
+
+            return listOfMusics;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error while calling searchMusic()");
+            return null;
+        }
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
 }
