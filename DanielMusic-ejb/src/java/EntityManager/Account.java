@@ -35,10 +35,37 @@ public abstract class Account implements Serializable {
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransactionOrder> listOfTransactionOrders;
     private Integer isVerifiedEmail; //status types: 0(not verified), 1(verified) 
+    @Lob
+    private String description;
+    private String imageURL;
 
     public Account() {
         isDisabled = false;
         isVerifiedEmail = 0;
+    }
+
+    public List<Music> getListOfPurchasedMusics() {
+        return listOfPurchasedMusics;
+    }
+
+    public void setListOfPurchasedMusics(List<Music> listOfPurchasedMusics) {
+        this.listOfPurchasedMusics = listOfPurchasedMusics;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getNewEmail() {

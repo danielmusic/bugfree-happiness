@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Artist extends Account implements Serializable {
@@ -17,8 +16,6 @@ public class Artist extends Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne(mappedBy = "artist", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Page page;
     private Boolean isApproved;
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
@@ -41,14 +38,6 @@ public class Artist extends Account implements Serializable {
 
     public void setIsApproved(Boolean isApproved) {
         this.isApproved = isApproved;
-    }
-
-    public Page getPage() {
-        return page;
-    }
-
-    public void setPage(Page page) {
-        this.page = page;
     }
 
     public Long getId() {
