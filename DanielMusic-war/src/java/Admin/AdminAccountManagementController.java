@@ -35,12 +35,13 @@ public class AdminAccountManagementController extends HttpServlet {
                     returnHelper = accountManagementBean.loginAccount(email, password);
                     if (returnHelper.getResult()) {
                         session.setAttribute("staff", (Admin) accountManagementBean.getAccount(email));
-                        nextPage = "workspace.jsp";
+                        nextPage = "admin/workspace.jsp";
                     } else {
                         nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
                     }
                     break;
             }
+            
             if (nextPage.equals("")) {
                 response.sendRedirect("login.jsp?errMsg=Session Expired.");
             } else {
