@@ -1,7 +1,14 @@
 package SessionBean.AccountManagement;
 
 import EntityManager.Account;
+import EntityManager.Admin;
+import EntityManager.Artist;
+import EntityManager.Member;
 import EntityManager.ReturnHelper;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -67,7 +74,24 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
             q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
-            return account;
+            if (account instanceof Member) {
+                q = em.createQuery("SELECT a FROM Member m where m.email=:email");
+                q.setParameter("email", email);
+                Member member = (Member) q.getSingleResult();
+                return member;
+            } else if (account instanceof Artist) {
+                q = em.createQuery("SELECT a FROM Artist a where a.email=:email");
+                q.setParameter("email", email);
+                Artist artist = (Artist) q.getSingleResult();
+                return artist;
+            } else if (account instanceof Admin) {
+                q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
+                q.setParameter("email", email);
+                Admin admin = (Admin) q.getSingleResult();
+                return admin;
+            }
+            Member member = new Member();
+            return member;
         } catch (Exception ex) {
             System.out.println("getAccount(): Internal error");
             ex.printStackTrace();
@@ -133,18 +157,52 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public boolean checkIfUsernameExists(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean checkIfEmailExists(String email) {
+        System.out.println("AccountManagementBean: checkIfEmailExists() called");
+        Query q = em.createQuery("SELECT a FROM Account a WHERE a.email:email");
+        q.setParameter("email", email);
+        try {
+            Account account = (Account) q.getSingleResult();
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: checkIfEmailExists() failed");
+            ex.printStackTrace();
+        }
+        return true;
     }
 
     @Override
     public String generatePasswordHash(String salt, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String passwordHash = null;
+        try {
+            password = salt + password;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] bytes = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            passwordHash = sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("AccountManagementBean: generatePasswordHash() failed");
+            ex.printStackTrace();
+        }
+        return passwordHash;
     }
 
     @Override
     public String generatePasswordSalt() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        byte[] salt = new byte[16];
+        try {
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            sr.nextBytes(salt);
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("AccountManagementBean: generatePasswordSalt() failed");
+            ex.printStackTrace();
+        }
+        return Arrays.toString(salt);
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper enableAccount(Long accountID);
     
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist);  
-    public boolean checkIfUsernameExists(String email);
+    public boolean checkIfEmailExists(String email);
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     
