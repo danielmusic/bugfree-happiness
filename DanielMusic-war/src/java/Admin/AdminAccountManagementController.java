@@ -33,7 +33,7 @@ public class AdminAccountManagementController extends HttpServlet {
             switch (target) {
                 case "Login":
                     returnHelper = accountManagementBean.loginAccount(email, password);
-                    if (returnHelper.getResult()) {
+                    if (returnHelper.isCompletedSuccesfully()) {
                         session.setAttribute("staff", (Admin) accountManagementBean.getAccount(email));
                         nextPage = "workspace.jsp";
                     } else {

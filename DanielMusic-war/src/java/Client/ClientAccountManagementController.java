@@ -34,7 +34,7 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "ArtistSignup":
                     if (chkAgree != null) {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
-                        if (returnHelper.getResult()) {
+                        if (returnHelper.isCompletedSuccesfully()) {
                             nextPage = "artist/signup/?goodMsg=" + returnHelper.getDescription();
                         } else {
                             nextPage = "artist/signup/?errMsg=" + returnHelper.getDescription();
