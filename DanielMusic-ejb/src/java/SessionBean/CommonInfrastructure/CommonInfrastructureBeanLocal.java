@@ -1,6 +1,5 @@
 package SessionBean.CommonInfrastructure;
 
-import EntityManager.ReturnHelper;
 import javax.ejb.Local;
 
 @Local

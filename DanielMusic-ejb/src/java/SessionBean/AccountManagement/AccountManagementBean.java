@@ -21,6 +21,9 @@ import javax.servlet.http.Part;
 
 @Stateless
 public class AccountManagementBean implements AccountManagementBeanLocal {
+    
+    @EJB
+    private CommonInfrastructureBeanLocal cibl;
 
     public AccountManagementBean() {
     }
@@ -28,9 +31,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     @PersistenceContext
     private EntityManager em;
     
-    @EJB
-    private CommonInfrastructureBeanLocal cibl;
-
     @Override
     public ReturnHelper loginAccount(String email, String password) {
         System.out.println("AccountManagementBean: loginAccount() called");
@@ -82,7 +82,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
             if (account instanceof Member) {
-                q = em.createQuery("SELECT a FROM Member m where m.email=:email");
+                q = em.createQuery("SELECT m FROM Member m where m.email=:email");
                 q.setParameter("email", email);
                 Member member = (Member) q.getSingleResult();
                 return member;
@@ -172,7 +172,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     public ReturnHelper enableAccount(Long accountID) {
         System.out.println("AccountManagementBean: enableAccount() called");
         ReturnHelper result = new ReturnHelper();
-        Query q = em.createQuery("SELECT s FROM Account s where s.id:id");
+        Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
@@ -231,6 +231,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: checkIfEmailExists() failed");
             ex.printStackTrace();
+            return false;
         }
         return true;
     }
