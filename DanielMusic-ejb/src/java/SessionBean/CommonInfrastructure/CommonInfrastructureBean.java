@@ -45,7 +45,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     @Override
-    public Boolean uploadFileToGoogleCloudStorage(String file, String pathToFile) {
+    public Boolean uploadFileToGoogleCloudStorage(String filename, String pathToFile) {
         System.out.println("AccountManagementBean: uploadFileToGoogleCloudStorage() called");
         try {
             GcsFilename gcsFilename = new GcsFilename(bucketName, filename);
