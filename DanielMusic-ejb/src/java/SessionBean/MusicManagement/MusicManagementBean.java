@@ -192,16 +192,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Query q;
             SearchHelper helper = new SearchHelper();
 
-            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE :searchString AND a.isDeleted=false ORDER BY a.publishedDate DESC");
-            q.setParameter("searchString", "%" + searchString + "%");
+            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false ORDER BY a.publishedDate DESC");
+            q.setParameter("searchString", searchString);
             List<Album> listOfAlbums = q.getResultList();
 
-            q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE :searchString AND a.isDisabled=false AND a.isApproved=true");
-            q.setParameter("searchString", "%" + searchString + "%");
+            q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
+            q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
 
-            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE :searchString AND m.isDeleted=false ORDER BY m.album.publishedDate DESC");
-            q.setParameter("searchString", "%" + searchString + "%");
+            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false ORDER BY m.album.publishedDate DESC");
+            q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
 
             helper.setListOfAlbums(listOfAlbums);
