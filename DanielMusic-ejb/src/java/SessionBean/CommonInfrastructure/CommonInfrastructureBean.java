@@ -52,7 +52,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             GcsOutputChannel outputChannel = gcsService.createOrReplace(gcsFilename, GcsFileOptions.getDefaultInstance());
             @SuppressWarnings("resource")
             ObjectOutputStream oout = new ObjectOutputStream(Channels.newOutputStream(outputChannel));
-            Path path = Paths.get(filepath);
+            Path path = Paths.get(filename);
             byte[] file = Files.readAllBytes(path);
             oout.writeObject(file);
             oout.close();
