@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,7 +28,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     @PersistenceContext
     private EntityManager em;
     
-    CommonInfrastructureBeanLocal cibl;
+    @EJB
+    private CommonInfrastructureBeanLocal cibl;
 
     @Override
     public ReturnHelper loginAccount(String email, String password) {
@@ -124,7 +126,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 admin.setPasswordSalt(passwordSalt);
                 admin.setName(name);
                 em.persist(admin);
-                em.refresh(admin);
+                Query q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
+                q.setParameter("email", email);
+                admin = (Admin) q.getSingleResult();
                 result.setID(admin.getId());
             } else if (isArtist) {
                 Artist artist = new Artist();
@@ -134,7 +138,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 artist.setPasswordSalt(passwordSalt);
                 artist.setName(name);
                 em.persist(artist);
-                em.refresh(artist);
+                Query q = em.createQuery("SELECT a FROM Artist a where a.email=:email");
+                q.setParameter("email", email);
+                artist = (Artist) q.getSingleResult();
                 result.setID(artist.getId());
             } else {
                 Member member = new Member();
@@ -144,7 +150,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 member.setPasswordSalt(passwordSalt);
                 member.setName(name);
                 em.persist(member);
-                em.refresh(member);
+                Query q = em.createQuery("SELECT a FROM Member a where a.email=:email");
+                q.setParameter("email", email);
+                member = (Member) q.getSingleResult();
                 result.setID(member.getId());
             }
             generateAndSendVerificationEmail(email);
@@ -253,7 +261,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(account);
             //Send the verification code
             String verificationInstructions = "Verification instruction";
-            boolean emailSent = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
+            Boolean emailSent = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
             if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
