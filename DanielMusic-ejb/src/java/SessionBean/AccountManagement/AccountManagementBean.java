@@ -253,8 +253,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(account);
             //Send the verification code
             String verificationInstructions = "Verification instruction";
-            ReturnHelper emailSendingResult = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
-            if (emailSendingResult.getResult()) {
+            boolean emailSent = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
+            if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
             } else {
