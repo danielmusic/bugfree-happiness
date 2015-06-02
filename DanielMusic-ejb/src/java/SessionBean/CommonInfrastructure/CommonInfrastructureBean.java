@@ -12,6 +12,7 @@ import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -67,6 +68,12 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     @Override
     public Object getFileFromGoogleCloudStorage(String filename) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String generateUUID() {
+        UUID id = UUID.randomUUID();
+        return id.toString();
     }
 
 }
