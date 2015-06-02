@@ -2,6 +2,7 @@ package SessionBean.MusicManagement;
 
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
+import EntityManager.SearchHelper;
 import java.io.File;
 import java.util.List;
 import javax.ejb.Local;
@@ -20,5 +21,7 @@ public interface MusicManagementBeanLocal {
     public List<Music> searchMusicByArtist(String artistName);
 
     public List<Music> searchMusic(String searchString);
+
+    public SearchHelper search(String searchString);
 
 }

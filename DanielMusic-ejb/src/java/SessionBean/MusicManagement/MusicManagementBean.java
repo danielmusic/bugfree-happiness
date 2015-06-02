@@ -1,8 +1,11 @@
 package SessionBean.MusicManagement;
 
+import EntityManager.Album;
+import EntityManager.Artist;
 import EntityManager.Music;
 import static EntityManager.Music_.artistName;
 import EntityManager.ReturnHelper;
+import EntityManager.SearchHelper;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
 import com.paypal.svcs.types.ap.PayResponse;
@@ -16,7 +19,6 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -123,7 +125,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public List<Music> searchMusicByGenre(Long genreID) {
         System.out.println("searchMusicByGenre() called with genreID: " + genreID);
         try {
-            Query q = em.createQuery("SELECT m FROM Music m WHERE m.listOfGenres.id=:genreID AND m.isDeleted=false");
+            Query q = em.createQuery("SELECT m FROM Music m, Album a WHERE a.listOfMusics.id=m.id and m.listOfGenres.id=:genreID AND m.isDeleted=false ORDER BY a.publishedDate DESC ");
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
             System.out.println("searchMusicByGenre() successful");
@@ -181,5 +183,38 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     public void persist(Object object) {
         em.persist(object);
+    }
+
+    @Override
+    public SearchHelper search(String searchString) {
+        System.out.println("search() called with searchString: " + searchString);
+        try {
+            Query q;
+            SearchHelper helper = new SearchHelper();
+
+            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE :searchString AND a.isDeleted=false ORDER BY a.publishedDate DESC");
+            q.setParameter("searchString", "%" + searchString + "%");
+            List<Album> listOfAlbums = q.getResultList();
+
+            q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE :searchString AND a.isDisabled=false AND a.isApproved=true");
+            q.setParameter("searchString", "%" + searchString + "%");
+            List<Artist> listOfArtists = q.getResultList();
+
+            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE :searchString AND m.isDeleted=false ORDER BY m.album.publishedDate DESC");
+            q.setParameter("searchString", "%" + searchString + "%");
+            List<Music> listOfMusics = q.getResultList();
+
+            helper.setListOfAlbums(listOfAlbums);
+            helper.setListOfArtists(listOfArtists);
+            helper.setListOfMusics(listOfMusics);
+            
+            System.out.println("search() successful");
+
+            return helper;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error while calling search()");
+            return null;
+        }
     }
 }
