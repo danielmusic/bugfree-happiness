@@ -17,7 +17,7 @@ public class StartupBean {
 
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
-    
+
     @EJB
     private AccountManagementBeanLocal ambl;
 
@@ -36,9 +36,29 @@ public class StartupBean {
                 System.out.println("Skipping init of database, already initated.");
                 return;
             }
-            ambl.registerAccount("Admin", "admin@a.a", "admin", true, false);
+            ReturnHelper result;
+            result = ambl.registerAccount("Admin", "admin@a.a", "admin", true, false);
+            Account account = ambl.getAccount("admin@a.a");
+            account.setEmailIsVerified(true);
+            account.setNewEmailIsVerified(true);
+            account.setNewEmail("");
+            em.merge(account);
             ambl.registerAccount("Artist", "artist@a.a", "artist", true, false);
-            ambl.registerAccount("Member", "member@a.a", "member", true, false);
+            account = ambl.getAccount("artist@a.a");
+            account.setEmailIsVerified(true);
+            account.setNewEmailIsVerified(true);
+            account.setNewEmail("");
+            em.merge(account);
+            account.setEmailIsVerified(true);
+            account.setNewEmailIsVerified(true);
+            em.merge(account);
+            ambl.registerAccount("Member", "member@a.a", "member", false, false);
+            account = ambl.getAccount("member@a.a");
+            account.setEmailIsVerified(true);
+            account.setNewEmailIsVerified(true);
+            account.setNewEmail("");
+            em.merge(account);
+            ambl.registerAccount("Member Unverified Email", "member2@a.a", "member", false, false);
         } catch (Exception ex) {
             System.out.println("Error initating database");
             ex.printStackTrace();

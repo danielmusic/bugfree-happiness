@@ -34,14 +34,17 @@ public abstract class Account implements Serializable {
     private List<Music> listOfPurchasedMusics;
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransactionOrder> listOfTransactionOrders;
-    private Integer isVerifiedEmail; //status types: 0(not verified), 1(verified) 
+    private Boolean emailIsVerified; //Initial registered email
+    private String verificationCode;
+    private Boolean newEmailIsVerified; //Subsequent change (will reset to false when the user tries to change email)
     @Lob
     private String description;
     private String imageURL;
 
     public Account() {
         isDisabled = false;
-        isVerifiedEmail = 0;
+        emailIsVerified = false;
+        newEmailIsVerified = false;
     }
 
     public List<Music> getListOfPurchasedMusics() {
@@ -76,12 +79,12 @@ public abstract class Account implements Serializable {
         this.newEmail = newEmail;
     }
 
-    public Integer getIsVerifiedEmail() {
-        return isVerifiedEmail;
+    public Boolean getEmailIsVerified() {
+        return emailIsVerified;
     }
 
-    public void setIsVerifiedEmail(Integer isVerifiedEmail) {
-        this.isVerifiedEmail = isVerifiedEmail;
+    public void setEmailIsVerified(Boolean emailIsVerified) {
+        this.emailIsVerified = emailIsVerified;
     }
 
     public Boolean getIsDisabled() {
@@ -146,6 +149,23 @@ public abstract class Account implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    
+    public Boolean getNewEmailIsVerified() {
+        return newEmailIsVerified;
+    }
+
+    public void setNewEmailIsVerified(Boolean newEmailIsVerified) {
+        this.newEmailIsVerified = newEmailIsVerified;
     }
 
     @Override

@@ -15,6 +15,8 @@ public interface AccountManagementBeanLocal {
     
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist);  
     public boolean checkIfEmailExists(String email);
+    public ReturnHelper generateAndSendVerificationEmail(String emailAddress);
+    public ReturnHelper enterVerificationCode(String emailAddress, String verificationCode);
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     

@@ -5,10 +5,12 @@ import EntityManager.Admin;
 import EntityManager.Artist;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
+import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Random;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -24,6 +26,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+    
+    CommonInfrastructureBeanLocal cibl;
 
     @Override
     public ReturnHelper loginAccount(String email, String password) {
@@ -115,25 +119,35 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (isAdmin) {
                 Admin admin = new Admin();
                 admin.setEmail(email);
+                admin.setNewEmail(email);
                 admin.setPasswordHash(passwordHash);
                 admin.setPasswordSalt(passwordSalt);
                 admin.setName(name);
                 em.persist(admin);
+                em.refresh(admin);
+                result.setID(admin.getId());
             } else if (isArtist) {
                 Artist artist = new Artist();
                 artist.setEmail(email);
+                artist.setNewEmail(email);
                 artist.setPasswordHash(passwordHash);
                 artist.setPasswordSalt(passwordSalt);
                 artist.setName(name);
                 em.persist(artist);
+                em.refresh(artist);
+                result.setID(artist.getId());
             } else {
                 Member member = new Member();
                 member.setEmail(email);
+                member.setNewEmail(email);
                 member.setPasswordHash(passwordHash);
                 member.setPasswordSalt(passwordSalt);
                 member.setName(name);
                 em.persist(member);
+                em.refresh(member);
+                result.setID(member.getId());
             }
+            generateAndSendVerificationEmail(email);
             result.setResult(true);
             result.setDescription("Account registered successfully.");
             return result;
@@ -176,12 +190,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     public ReturnHelper disableAccount(Long accountID) {
         System.out.println("AccountManagementBean: disableAccount() called");
         ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
             if (account.getIsDisabled() == true) {
-                result.setResult(false);
                 result.setDescription("Account is already disabled.");
             } else {
                 account.setIsDisabled(true);
@@ -191,7 +205,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: enableAccount() failed");
-            result.setResult(false);
             result.setDescription("Failed to disable account. Internal server error.");
             ex.printStackTrace();
         }
@@ -212,6 +225,86 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             ex.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public ReturnHelper generateAndSendVerificationEmail(String emailAddress) {
+        System.out.println("AccountManagementBean: sendVerificationEmail() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            //Check if the account exists & if there is any unverified email tag tied to the account, if not 
+            String unauthorizedMsg = "There is no account registered with this email address or the account email has already been verified.";
+            if (!checkIfEmailExists(emailAddress)) {
+                result.setDescription(unauthorizedMsg);
+                return result;
+            }
+            Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
+            q.setParameter("email", emailAddress);
+            Account account = (Account) q.getSingleResult();
+            if (account.getNewEmailIsVerified()) {
+                result.setDescription(unauthorizedMsg);
+                return result;
+            }
+            //Generate the verification code & store it into DB
+            Random r = new Random();
+            int verificationCode = r.nextInt(9999);
+            account.setVerificationCode(verificationCode + "");
+            em.merge(account);
+            //Send the verification code
+            String verificationInstructions = "Verification instruction";
+            ReturnHelper emailSendingResult = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
+            if (emailSendingResult.getResult()) {
+                result.setResult(true);
+                result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
+            } else {
+                result.setDescription("Unable to send verificaiton email due to an internal serverr error. Please try again later.");
+            }
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: sendVerificationEmail() failed");
+            ex.printStackTrace();
+            result.setDescription("Unable to send verification email because of an internal server error, please try again later.");
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper enterVerificationCode(String emailAddress, String verificationCode) {
+        System.out.println("AccountManagementBean: enterVerificationCode() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            //Check if the account exists & if there is any unverified email tag tied to the account, if not 
+            String unauthorizedMsg = "There is no account registered with this email address or the account email has already been verified.";
+            if (!checkIfEmailExists(emailAddress)) {
+                result.setDescription(unauthorizedMsg);
+                return result;
+            }
+            Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
+            q.setParameter("email", emailAddress);
+            Account account = (Account) q.getSingleResult();
+            if (account.getNewEmailIsVerified()) {
+                result.setDescription(unauthorizedMsg);
+                return result;
+            }
+            //Retrieve the verification code, compare and update account
+            if (account.getVerificationCode().equalsIgnoreCase(verificationCode)) {
+                account.setEmail(account.getNewEmail());
+                account.setEmailIsVerified(true);
+                account.setNewEmailIsVerified(true);
+                account.setNewEmail("");
+                em.merge(account);
+                result.setResult(true);
+                result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
+            } else {
+                result.setDescription("Invalid verification code, please try again.");
+            }
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: enterVerificationCode() failed");
+            ex.printStackTrace();
+            result.setDescription("Unable to verify code because of an internal server error, please try again later.");
+        }
+        return result;
     }
 
     @Override
@@ -249,43 +342,89 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateAccountProfile(Long accountID, String newName, Part profilePicture, String description) {
-//        System.out.println("AccountManagementBean: checkIfUsernameExists() called");
-//        ReturnHelper result = new ReturnHelper();
-//        result.setResult(false);
-//        Query q = em.createQuery("SELECT s FROM Staff s WHERE s.id=:id");
-//        q.setParameter("id", staffID);
-//        try {
-//            Staff staff = (Staff) q.getSingleResult();
-//            if (newName != null) {
-//                staff.setName(newName);
-//            }
-//            if (newStaffPrefix != null) {
-//                staff.setStaffPrefix(newStaffPrefix);
-//            }
-//            em.merge(staff);
-//            result.setResult(true);
-//            result.setDescription("Staff name updated successfully.");
-//        } catch (NoResultException ex) {
-//            result.setDescription("Unable to find staff with the provided ID.");
-//        } catch (Exception ex) {
-//            System.out.println("AccountManagementBean: updateStaffName() failed");
-//            result.setDescription("Unable to update staff's name, internal server error.");
-//            ex.printStackTrace();
-//        }
-//        return result;
-//        if (profilePicture != null) {
-//
-//        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateAccountProfile() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
+        q.setParameter("id", accountID);
+        try {
+            Account account = (Account) q.getSingleResult();
+            if (newName != null && !newName.equals("")) {
+                account.setName(newName);
+            }
+            if (profilePicture != null) {
+
+            }
+            if (description != null && !description.equals("")) {
+                account.setDescription(description);
+            }
+            em.merge(account);
+            result.setResult(true);
+            result.setDescription("Account updated successfully.");
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to find account with the provided ID.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateStaffName() failed");
+            result.setDescription("Unable to update account's name, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateAccountPassword() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        Query q = em.createQuery("SELECT a FROM Account a WHERE a.id=:id");
+        q.setParameter("id", accountID);
+        try {
+            Account account = (Account) q.getSingleResult();
+            if (!generatePasswordHash(account.getPasswordSalt(), oldPassword).equals(account.getPasswordHash())) {
+                result.setDescription("Old password provided is invalid, password not updated.");
+            } else {
+                account.setPasswordSalt(generatePasswordSalt());
+                account.setPasswordHash(generatePasswordHash(account.getPasswordSalt(), newPassword));
+                em.merge(account);
+                result.setResult(true);
+                result.setDescription("Password updated successfully.");
+            }
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to find account with the provided ID.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateAccountPassword() failed");
+            result.setDescription("Unable to update account's password due to internal server error. Please try again later.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateAccountEmail() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
+        q.setParameter("id", accountID);
+        try {
+            Account account = (Account) q.getSingleResult();
+            account.setNewEmail(newEmail);
+            account.setNewEmailIsVerified(false);
+            em.merge(account);
+            ReturnHelper verificationCodeResult = generateAndSendVerificationEmail(newEmail);
+            if (verificationCodeResult.getResult()) {
+                result.setResult(true);
+                result.setDescription("Account email verification sent successfully successfully.");
+            } else {
+                result.setDescription(verificationCodeResult.getDescription());
+            }
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to find account with the provided ID.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateAccountEmail() failed");
+            result.setDescription("Unable to update account's email, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 }
