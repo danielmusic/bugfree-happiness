@@ -49,4 +49,10 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         return "Not supported yet.";
     }
 
+    @Override
+    public String generateUUID() {
+        UUID id = UUID.randomUUID();
+        return id.toString();
+    }
+
 }
