@@ -1,6 +1,7 @@
 package SessionBean.CommonInfrastructure;
 
 import com.sendgrid.SendGrid;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
