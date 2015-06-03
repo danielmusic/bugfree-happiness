@@ -37,7 +37,7 @@ public class StartupBean {
             Account account = ambl.getAccount("admin@a.a");
             account.setEmailIsVerified(true);
             account.setNewEmailIsVerified(true);
-            account.setNewEmail("admin@a.a");
+            account.setNewEmail("");
             em.merge(account);
             ambl.registerAccount("Artist", "artist@a.a", "artist", false, true);
             account = ambl.getAccount("artist@a.a");
