@@ -21,10 +21,6 @@ public class StartupBean {
     @EJB
     private AccountManagementBeanLocal ambl;
 
-    public void persist(Object object) {
-        em.persist(object);
-    }
-
     @PostConstruct
     private void startup() {
         try {
@@ -43,7 +39,7 @@ public class StartupBean {
             account.setNewEmailIsVerified(true);
             account.setNewEmail("admin@a.a");
             em.merge(account);
-            ambl.registerAccount("Artist", "artist@a.a", "artist", true, false);
+            ambl.registerAccount("Artist", "artist@a.a", "artist", false, true);
             account = ambl.getAccount("artist@a.a");
             account.setEmailIsVerified(true);
             account.setNewEmailIsVerified(true);

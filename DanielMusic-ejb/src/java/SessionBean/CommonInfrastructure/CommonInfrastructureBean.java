@@ -23,8 +23,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
-    private final GcsService gcsService = GcsServiceFactory.createGcsService(RetryParams.getDefaultInstance());
-    private final String bucketName = "divine-apogee-96116.appspot.com";
+    private String bucketName = "divine-apogee-96116.appspot.com";
 
     @Override
     public Boolean sendEmail(String destinationEmail, String senderEmail, String subject, String message) {
@@ -49,6 +48,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     public Boolean uploadFileToGoogleCloudStorage(String filename, String pathToFile) {
         System.out.println("AccountManagementBean: uploadFileToGoogleCloudStorage() called");
         try {
+            GcsService gcsService = GcsServiceFactory.createGcsService(RetryParams.getDefaultInstance());
             GcsFilename gcsFilename = new GcsFilename(bucketName, filename);
             GcsOutputChannel outputChannel = gcsService.createOrReplace(gcsFilename, GcsFileOptions.getDefaultInstance());
             @SuppressWarnings("resource")
