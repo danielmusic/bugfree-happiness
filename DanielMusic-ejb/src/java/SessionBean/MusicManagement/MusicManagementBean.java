@@ -118,7 +118,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public String generateDownloadLink(Long accountID, Long musicID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("generateDownloadLink() called with accountID: " + accountID + " and musicID: " + musicID);
+        try {
+            
+        } catch (Exception e) {
+            System.out.println("Error. Failed to generateDownloadLink().");
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -207,7 +214,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setListOfAlbums(listOfAlbums);
             helper.setListOfArtists(listOfArtists);
             helper.setListOfMusics(listOfMusics);
-            
+
             System.out.println("search() successful");
 
             return helper;
