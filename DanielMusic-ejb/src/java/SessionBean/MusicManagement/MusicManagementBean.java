@@ -1,11 +1,12 @@
 package SessionBean.MusicManagement;
 
+import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.Music;
-import static EntityManager.Music_.artistName;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
+import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
 import com.paypal.svcs.types.ap.PayResponse;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,6 +30,9 @@ import javax.persistence.Query;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
+
+    @EJB
+    private CommonInfrastructureBeanLocal commonInfrastructureBean;
 
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
@@ -117,12 +121,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public String generateDownloadLink(Long accountID, Long musicID) {
-        System.out.println("generateDownloadLink() called with accountID: " + accountID + " and musicID: " + musicID);
+    public String generateDownloadLink(String email, Long musicID) {
+        System.out.println("generateDownloadLink() called with email: " + email + " and musicID: " + musicID);
         try {
-            
+            Query q = em.createQuery("select a from Account a where a.email=:email and a.isDisabled=false and a.emailIsVerified=true");
+            q.setParameter("email", email);
+            Account account = (Account) q.getSingleResult();
+            Music music = em.getReference(Music.class, musicID);
+            if (account.getListOfPurchasedMusics().contains(music)) {
+                //generate download link for user
+                commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage(music.getFileLocation());
+            } else {
+                
+            }
         } catch (Exception e) {
-            System.out.println("Error. Failed to generateDownloadLink().");
+            System.out.println("Error. Failed to generateDownloadLink()");
             e.printStackTrace();
         }
         return null;
