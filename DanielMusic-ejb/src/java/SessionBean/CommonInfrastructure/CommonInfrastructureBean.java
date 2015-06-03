@@ -55,5 +55,4 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         UUID id = UUID.randomUUID();
         return id.toString();
     }
-
 }
