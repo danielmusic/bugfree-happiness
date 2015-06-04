@@ -1,17 +1,34 @@
-<%-- 
-    Document   : profile
-    Created on : May 18, 2015, 11:35:01 PM
-    Author     : darius
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <jsp:include page="head.html" />
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <jsp:include page="menu.jsp" />
+        <div role="main" class="main">
+            <section class="page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1>Profile Page</h1>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-12">
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <jsp:include page="footer.jsp" />
+        <jsp:include page="foot.html" />
     </body>
 </html>

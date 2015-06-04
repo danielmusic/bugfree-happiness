@@ -21,11 +21,11 @@
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="name"><strong>Artist/Band Name</strong> *</label>
-                            <input type="text" name="name" value="" id="name" required>
+                            <input type="text" name="name" id="name" required>
                         </div>
                         <div class="col-1-2 last">
                             <label for="email"><strong>Email</strong> *</label>
-                            <input type="email" name="email" value="" id="email" required>
+                            <input type="email" name="email" id="email" required>
                         </div>
                     </div>
                     <div class="row clearfix">

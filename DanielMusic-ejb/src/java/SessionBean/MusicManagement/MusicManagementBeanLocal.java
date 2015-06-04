@@ -10,7 +10,7 @@ import javax.ejb.Local;
 @Local
 public interface MusicManagementBeanLocal {
 
-    public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName);
+    public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName); //convert all file formats to mp3. so far tested wav file only
 
     public void testAdaptivePayment();
 

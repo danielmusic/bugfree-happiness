@@ -1,8 +1,8 @@
+<%@page import="EntityManager.Member"%>
+<%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
-
     <!-- main navigation -->
     <div id="main-nav">
-
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
@@ -49,7 +49,16 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#!/login">login</a>
+                        <%
+                            Artist artist = (Artist) (session.getAttribute("artist"));
+                            Member fan = (Member) (session.getAttribute("fan"));
+
+                            if (artist != null) {
+                                out.print("<a href='ClientAccountManagementController?target=AccountLogout'>Logout</a>");
+                            } else {
+                                out.print("<a href='#!/login'>login</a>");
+                            }
+                        %>
                     </li>
                 </ul>
             </nav>

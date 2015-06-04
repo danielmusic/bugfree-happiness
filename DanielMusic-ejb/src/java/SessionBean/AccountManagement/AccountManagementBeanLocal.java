@@ -21,6 +21,7 @@ public interface AccountManagementBeanLocal {
     public String generatePasswordSalt();
     
     public ReturnHelper updateAccountProfile(Long accountID, String newName, Part profilePicture, String description);
+    public ReturnHelper deleteAccountProfilePicture(Long accountID);
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail);
     //public List<Account> listAllAccount();

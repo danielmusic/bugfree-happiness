@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services>
-    <service name="NewWebService">
-      <implementation-class>SessionBean.MusicManagement.NewWebService</implementation-class>
+    <service name="CommonInfrastructureWS">
+      <implementation-class>SessionBean.CommonInfrastructure.CommonInfrastructureWS</implementation-class>
     </service>
-    <service name="NewWebService1">
-      <implementation-class>SessionBean.AccountManagement.NewWebService1</implementation-class>
+    <service name="AccountManagementWS">
+      <implementation-class>SessionBean.AccountManagement.AccountManagementWS</implementation-class>
+    </service>
+    <service name="MusicManagementWS">
+      <implementation-class>SessionBean.MusicManagement.MusicManagementWS</implementation-class>
     </service>
   </services>
   <clients/>

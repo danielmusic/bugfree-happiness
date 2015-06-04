@@ -6,6 +6,9 @@ import EntityManager.Artist;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -99,6 +102,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             Member member = new Member();
             return member;
+        } catch (NoResultException ex) {
+            System.out.println("getAccount(): Could not find account with that email");
+            return null;
         } catch (Exception ex) {
             System.out.println("getAccount(): Internal error");
             ex.printStackTrace();
@@ -262,7 +268,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(account);
             //Send the verification code
             String verificationInstructions = "Verification instruction";
-            Boolean emailSent = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
+            Boolean emailSent = false;//cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
             if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
@@ -362,7 +368,18 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 account.setName(newName);
             }
             if (profilePicture != null) {
-
+                    //Save file to local drive first
+                    InputStream fileInputStream = profilePicture.getInputStream();
+                    OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
+                    int nextByte;
+                    while ((nextByte = fileInputStream.read()) != -1) {
+                        fileOutputStream.write(nextByte);
+                    }
+                    fileOutputStream.close();
+                    fileInputStream.close();
+                    //TODO: Upload file to cloud storage
+                    //Update URL address
+                    account.setImageURL("");
             }
             if (description != null && !description.equals("")) {
                 account.setDescription(description);
@@ -375,6 +392,32 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: updateStaffName() failed");
             result.setDescription("Unable to update account's name, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper deleteAccountProfilePicture(Long accountID) {
+     System.out.println("AccountManagementBean: deleteAccountProfilePicture() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
+        q.setParameter("id", accountID);
+        try {
+            Account account = (Account) q.getSingleResult();
+            if (account.getImageURL() != null || !account.getImageURL().equals("")) {
+                    account.setImageURL("");
+                    result.setResult(true);
+                    result.setDescription("Profile picture removed.");
+            } else {
+                result.setDescription("No profile picture to remove!");
+            }
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to find account with the provided ID.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: deleteAccountProfilePicture() failed");
+            result.setDescription("Unable to remove profile picture, internal server error.");
             ex.printStackTrace();
         }
         return result;

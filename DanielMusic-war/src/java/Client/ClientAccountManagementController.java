@@ -1,9 +1,10 @@
 package Client;
 
+import EntityManager.Artist;
+import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +29,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String chkAgree = request.getParameter("chkAgree");
 
         session = request.getSession();
+        session.removeAttribute("message");
         ReturnHelper returnHelper;
 
         try {
@@ -36,19 +38,50 @@ public class ClientAccountManagementController extends HttpServlet {
                     if (chkAgree != null) {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
                         if (returnHelper.getResult()) {
-                            //goodMsg
+                            nextPage = "#!/artist/signup/";
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
-                            //errMsg
+                            nextPage = "#!/artist/signup/";
+                            session.setAttribute("errMsg", returnHelper.getDescription());
                         }
-                        nextPage = "#!/artist/signup" + returnHelper.getDescription();
                         break;
                     }
+ 
+                case "ArtistLogin":
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
+                        nextPage = "artist/profile.jsp";
+                    } else {
+                        nextPage = "#!/login";
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                    }
+                    break;
+
+                case "FanLogin":
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
+                        nextPage = "#!/artist/profile";
+                    } else {
+                        nextPage = "#!/login";
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                    }
+                    break;
+
+                case "AccountLogout":
+                    session.removeAttribute("errMsg");
+                    session.removeAttribute("artist");
+                    session.removeAttribute("fan");
+                    nextPage = "#!/login";
+                    session.setAttribute("goodMsg", "Logout Successful");
+                    break;
+
             }
 
             if (nextPage.equals("")) {
-                //response.sendRedirect("login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("#!/home");
             } else {
-                System.out.println(">>>>>>>>>>>>>>" + nextPage);
                 response.sendRedirect(nextPage);
             }
 
