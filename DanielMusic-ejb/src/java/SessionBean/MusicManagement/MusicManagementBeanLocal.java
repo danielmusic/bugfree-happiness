@@ -14,7 +14,7 @@ public interface MusicManagementBeanLocal {
 
     public void testAdaptivePayment();
 
-    public String generateDownloadLink(Long accountID, Long musicID);
+    public String generateDownloadLink(String email, Long musicID);
 
     public List<Music> searchMusicByGenre(Long genreID);
 //
