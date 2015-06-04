@@ -5,12 +5,15 @@ import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.validator.constraints.URL;
 
 public class ClientAccountManagementController extends HttpServlet {
 
@@ -27,6 +30,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
         String chkAgree = request.getParameter("chkAgree");
+        String verify = request.getParameter("g-recaptcha-response");
 
         session = request.getSession();
         session.removeAttribute("message");
@@ -35,6 +39,20 @@ public class ClientAccountManagementController extends HttpServlet {
         try {
             switch (target) {
                 case "ArtistSignup":
+//                    StringBuilder sb = new StringBuilder();
+//                    sb.append("Hello there");
+//
+//                    URL url = new URL("theservlet's URL") {};
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                    connection.setDoOutput(true);
+//                    connection.setRequestMethod("POST");
+//                    connection.setRequestProperty("Content-Length", "" + sb.length());
+//
+//                    OutputStreamWriter outputWriter = new OutputStreamWriter(connection.getOutputStream());
+//                    outputWriter.write(sb.toString());
+//                    outputWriter.flush();
+//                    outputWriter.close();
+
                     if (chkAgree != null) {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
                         if (returnHelper.getResult()) {
@@ -46,12 +64,12 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                         break;
                     }
- 
+
                 case "ArtistLogin":
                     returnHelper = accountManagementBean.loginAccount(email, password);
                     if (returnHelper.getResult()) {
                         session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
-                        nextPage = "artist/profile.jsp";
+                        nextPage = "#!/artist/profile";
                     } else {
                         nextPage = "#!/login";
                         session.setAttribute("errMsg", returnHelper.getDescription());
