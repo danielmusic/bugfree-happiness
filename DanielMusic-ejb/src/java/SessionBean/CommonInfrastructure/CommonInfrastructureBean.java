@@ -89,7 +89,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             //InputStream inputStream = part.getInputStream();
             String mimeType = "application/octet-stream";
             if (isImage) {
-                mimeType = "mage/jpeg";
+                mimeType = "image/jpeg";
             }
             InputStreamContent mediaContent = new InputStreamContent(mimeType, inputStream);
             mediaContent.setLength(file.length());
