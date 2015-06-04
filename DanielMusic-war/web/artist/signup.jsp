@@ -45,6 +45,13 @@
                         </div>
                     </div>
 
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <div class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                        </div>
+                    </div>
+
+
                     <input type="submit" value="Sign up now!" class="large invert">
                     <input type="hidden" value="ArtistSignup" name="target">
                     <div class="clear"></div>
@@ -59,3 +66,4 @@
 
 </section>
 <!-- /page -->
+<script src='https://www.google.com/recaptcha/api.js'></script>

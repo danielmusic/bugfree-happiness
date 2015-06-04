@@ -1,2907 +1,2785 @@
 /*
-Name: 			Theme Base
-Written by: 	Okler Themes - (http://www.okler.net)
-Theme Version:	3.8.0
-*/
+ Name: 			Theme Base
+ Written by: 	Okler Themes - (http://www.okler.net)
+ Theme Version:	3.8.0
+ */
 
 // Theme
 window.theme = {};
 
 // Animate
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__animate';
+    var instanceName = '__animate';
 
-	var PluginAnimate = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginAnimate = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginAnimate.defaults = {
-		accX: 0,
-		accY: -150,
-		delay: 1
-	};
+    PluginAnimate.defaults = {
+        accX: 0,
+        accY: -150,
+        delay: 1
+    };
 
-	PluginAnimate.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginAnimate.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginAnimate.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            var self = this,
+                    $el = this.options.wrapper,
+                    delay = 0;
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginAnimate.defaults, opts, {
-				wrapper: this.$el
-			});
+            $el.addClass('appear-animation');
 
-			return this;
-		},
+            if (!$('html').hasClass('no-csstransitions') && $(window).width() > 767) {
 
-		build: function() {
-			var self = this,
-				$el = this.options.wrapper,
-				delay = 0;
+                $el.appear(function () {
 
-			$el.addClass('appear-animation');
+                    delay = ($el.attr('data-appear-animation-delay') ? $el.attr('data-appear-animation-delay') : self.options.delay);
 
-			if (!$('html').hasClass('no-csstransitions') && $(window).width() > 767) {
+                    if (delay > 1) {
+                        $el.css('animation-delay', delay + 'ms');
+                    }
 
-				$el.appear(function() {
+                    $el.addClass($el.attr('data-appear-animation'));
 
-					delay = ($el.attr('data-appear-animation-delay') ? $el.attr('data-appear-animation-delay') : self.options.delay);
+                    setTimeout(function () {
+                        $el.addClass('appear-animation-visible');
+                    }, delay);
 
-					if (delay > 1) {
-						$el.css('animation-delay', delay + 'ms');
-					}
+                }, {
+                    accX: self.options.accX,
+                    accY: self.options.accY
+                });
 
-					$el.addClass($el.attr('data-appear-animation'));
+            } else {
 
-					setTimeout(function() {
-						$el.addClass('appear-animation-visible');
-					}, delay);
+                $el.addClass('appear-animation-visible');
 
-				}, {
-					accX: self.options.accX,
-					accY: self.options.accY
-				});
+            }
 
-			} else {
+            return this;
+        }
+    };
 
-				$el.addClass('appear-animation-visible');
+    // expose to scope
+    $.extend(theme, {
+        PluginAnimate: PluginAnimate
+    });
 
-			}
+    // jquery plugin
+    $.fn.themePluginAnimate = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginAnimate($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginAnimate: PluginAnimate
-	});
-
-	// jquery plugin
-	$.fn.themePluginAnimate = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginAnimate($this, opts);
-			}
-
-		});
-	};
+        });
+    };
 
 }).apply(this, [window.theme, jQuery]);
 
 // Carousel
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__carousel';
+    var instanceName = '__carousel';
 
-	var PluginCarousel = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginCarousel = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginCarousel.defaults = {
-		loop: true,
-		responsive: {
-			0: {
-				items: 1
-			},
-			479: {
-				items: 1
-			},
-			768: {
-				items: 2
-			},
-			979: {
-				items: 3
-			},
-			1199: {
-				items: 4
-			}
-		},
-		navText: []
-	};
+    PluginCarousel.defaults = {
+        loop: true,
+        responsive: {
+            0: {
+                items: 1
+            },
+            479: {
+                items: 1
+            },
+            768: {
+                items: 2
+            },
+            979: {
+                items: 3
+            },
+            1199: {
+                items: 4
+            }
+        },
+        navText: []
+    };
 
-	PluginCarousel.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginCarousel.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginCarousel.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.owlCarousel))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginCarousel.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this,
+                    $el = this.options.wrapper,
+                    activeItemHeight = 0;
 
-			return this;
-		},
+            // Force RTL according to HTML dir attribute
+            if ($('html').attr('dir') == 'rtl') {
+                this.options = $.extend(true, {}, this.options, {
+                    rtl: true
+                });
+            }
 
-		build: function() {
-			if (!($.isFunction($.fn.owlCarousel))) {
-				return this;
-			}
+            if (this.options.items == 1) {
+                this.options.responsive = {}
+            }
 
-			var self = this,
-				$el = this.options.wrapper,
-				activeItemHeight = 0;
+            if (this.options.items > 4) {
+                this.options = $.extend(true, {}, this.options, {
+                    responsive: {
+                        1199: {
+                            items: this.options.items
+                        }
+                    }
+                });
+            }
 
-			// Force RTL according to HTML dir attribute
-			if ($('html').attr('dir') == 'rtl') {
-				this.options = $.extend(true, {}, this.options, {
-					rtl: true
-				});
-			}
+            // Auto Height
+            $(window).afterResize(function () {
+                activeItemHeight = $el.find('.owl-item.active').height();
+                $el.find('.owl-stage-outer').height(activeItemHeight);
+            });
 
-			if (this.options.items == 1) {
-				this.options.responsive = {}
-			}
+            this.options.wrapper.owlCarousel(this.options).addClass("owl-carousel-init");
 
-			if (this.options.items > 4) {
-				this.options = $.extend(true, {}, this.options, {
-					responsive: {
-						1199: {
-							items: this.options.items
-						}
-					}
-				});
-			}
+            return this;
+        }
+    };
 
-			// Auto Height
-			$(window).afterResize(function() {
-				activeItemHeight = $el.find('.owl-item.active').height();
-				$el.find('.owl-stage-outer').height(activeItemHeight);
-			});
+    // expose to scope
+    $.extend(theme, {
+        PluginCarousel: PluginCarousel
+    });
 
-			this.options.wrapper.owlCarousel(this.options).addClass("owl-carousel-init");
+    // jquery plugin
+    $.fn.themePluginCarousel = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginCarousel($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginCarousel: PluginCarousel
-	});
-
-	// jquery plugin
-	$.fn.themePluginCarousel = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginCarousel($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Chart Circular
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__chartCircular';
+    var instanceName = '__chartCircular';
 
-	var PluginChartCircular = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginChartCircular = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginChartCircular.defaults = {
-		accX: 0,
-		accY: -150,
-		delay: 1,
-		barColor: '#0088CC',
-		trackColor: '#f2f2f2',
-		scaleColor: false,
-		scaleLength: 5,
-		lineCap: 'round',
-		lineWidth: 13,
-		size: 175,
-		rotate: 0,
-		animate: ({
-			duration: 2500,
-			enabled: true
-		})
-	};
+    PluginChartCircular.defaults = {
+        accX: 0,
+        accY: -150,
+        delay: 1,
+        barColor: '#0088CC',
+        trackColor: '#f2f2f2',
+        scaleColor: false,
+        scaleLength: 5,
+        lineCap: 'round',
+        lineWidth: 13,
+        size: 175,
+        rotate: 0,
+        animate: ({
+            duration: 2500,
+            enabled: true
+        })
+    };
 
-	PluginChartCircular.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginChartCircular.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginChartCircular.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.appear)) || !($.isFunction($.fn.easyPieChart))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginChartCircular.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this,
+                    $el = this.options.wrapper,
+                    value = ($el.attr('data-percent') ? $el.attr('data-percent') : 0),
+                    percentEl = $el.find('.percent');
 
-			return this;
-		},
+            $.extend(true, self.options, {
+                onStep: function (from, to, currentValue) {
+                    percentEl.html(parseInt(currentValue));
+                }
+            });
 
-		build: function() {
-			if (!($.isFunction($.fn.appear)) || !($.isFunction($.fn.easyPieChart))) {
-				return this;
-			}
+            $el.attr('data-percent', 0);
 
-			var self = this,
-				$el = this.options.wrapper,
-				value = ($el.attr('data-percent') ? $el.attr('data-percent') : 0),
-				percentEl = $el.find('.percent');
+            $el.appear(function () {
 
-			$.extend(true, self.options, {
-				onStep: function(from, to, currentValue) {
-					percentEl.html(parseInt(currentValue));
-				}
-			});
+                $el.easyPieChart(self.options);
 
-			$el.attr('data-percent', 0);
+                setTimeout(function () {
 
-			$el.appear(function() {
+                    $el.data('easyPieChart').update(value);
+                    $el.attr('data-percent', value);
 
-				$el.easyPieChart(self.options);
+                }, self.options.delay);
 
-				setTimeout(function() {
+            }, {
+                accX: self.options.accX,
+                accY: self.options.accY
+            });
 
-					$el.data('easyPieChart').update(value);
-					$el.attr('data-percent', value);
+            return this;
+        }
+    };
 
-				}, self.options.delay);
+    // expose to scope
+    $.extend(theme, {
+        PluginChartCircular: PluginChartCircular
+    });
 
-			}, {
-				accX: self.options.accX,
-				accY: self.options.accY
-			});
+    // jquery plugin
+    $.fn.themePluginChartCircular = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginChartCircular($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginChartCircular: PluginChartCircular
-	});
-
-	// jquery plugin
-	$.fn.themePluginChartCircular = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginChartCircular($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Counter
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__counter';
+    var instanceName = '__counter';
 
-	var PluginCounter = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginCounter = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginCounter.defaults = {
-		accX: 0,
-		accY: 0,
-		speed: 3000,
-		refreshInterval: 100,
-		decimals: 0,
-		onUpdate: null,
-		onComplete: null
-	};
+    PluginCounter.defaults = {
+        accX: 0,
+        accY: 0,
+        speed: 3000,
+        refreshInterval: 100,
+        decimals: 0,
+        onUpdate: null,
+        onComplete: null
+    };
 
-	PluginCounter.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginCounter.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginCounter.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.countTo))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginCounter.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this,
+                    $el = this.options.wrapper;
 
-			return this;
-		},
+            $.extend(self.options, {
+                onComplete: function () {
+                    if ($el.data('append')) {
+                        $el.html($el.html() + $el.data('append'));
+                    }
 
-		build: function() {
-			if (!($.isFunction($.fn.countTo))) {
-				return this;
-			}
+                    if ($el.data('prepend')) {
+                        $el.html($el.data('prepend') + $el.html());
+                    }
+                }
+            });
 
-			var self = this,
-				$el = this.options.wrapper;
+            $el.appear(function () {
 
-			$.extend(self.options, {
-				onComplete: function() {
-					if ($el.data('append')) {
-						$el.html($el.html() + $el.data('append'));
-					}
+                $el.countTo(self.options);
 
-					if ($el.data('prepend')) {
-						$el.html($el.data('prepend') + $el.html());
-					}
-				}
-			});
+            }, {
+                accX: self.options.accX,
+                accY: self.options.accY
+            });
 
-			$el.appear(function() {
+            return this;
+        }
+    };
 
-				$el.countTo(self.options);
+    // expose to scope
+    $.extend(theme, {
+        PluginCounter: PluginCounter
+    });
 
-			}, {
-				accX: self.options.accX,
-				accY: self.options.accY
-			});
+    // jquery plugin
+    $.fn.themePluginCounter = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginCounter($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginCounter: PluginCounter
-	});
-
-	// jquery plugin
-	$.fn.themePluginCounter = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginCounter($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Flickr
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__flickr';
+    var instanceName = '__flickr';
 
-	var PluginFlickr = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginFlickr = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginFlickr.defaults = {
-		flickrbase: 'http://api.flickr.com/services/feeds/',
-		feedapi: 'photos_public.gne',
-		limit: 6,
-		qstrings: {
-			lang: 'en-us',
-			format: 'json',
-			jsoncallback: '?'
-		},
-		cleanDescription: true,
-		useTemplate: true,
-		itemTemplate: '<li><a href="{{image_b}}" title="{{title}}"><span class="thumbnail"><img src="{{image_s}}" /></span></a></li>',
-		itemCallback: function() {}
-	};
+    PluginFlickr.defaults = {
+        flickrbase: 'http://api.flickr.com/services/feeds/',
+        feedapi: 'photos_public.gne',
+        limit: 6,
+        qstrings: {
+            lang: 'en-us',
+            format: 'json',
+            jsoncallback: '?'
+        },
+        cleanDescription: true,
+        useTemplate: true,
+        itemTemplate: '<li><a href="{{image_b}}" title="{{title}}"><span class="thumbnail"><img src="{{image_s}}" /></span></a></li>',
+        itemCallback: function () {
+        }
+    };
 
-	PluginFlickr.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginFlickr.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginFlickr.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.jflickrfeed)) || !($.isFunction($.fn.magnificPopup))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginFlickr.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this;
 
-			return this;
-		},
+            self.options.wrapper.jflickrfeed(this.options, function (data) {
 
-		build: function() {
-			if (!($.isFunction($.fn.jflickrfeed)) || !($.isFunction($.fn.magnificPopup))) {
-				return this;
-			}
+                self.options.wrapper.magnificPopup({
+                    delegate: 'a',
+                    type: 'image',
+                    gallery: {
+                        enabled: true,
+                        navigateByImgClick: true,
+                        preload: [0, 1]
+                    },
+                    zoom: {
+                        enabled: true,
+                        duration: 300,
+                        opener: function (element) {
+                            return element.find('img');
+                        }
+                    }
+                });
 
-			var self = this;
+            });
 
-			self.options.wrapper.jflickrfeed(this.options, function(data) {
+            return this;
+        }
+    };
 
-				self.options.wrapper.magnificPopup({
-					delegate: 'a',
-					type: 'image',
-					gallery: {
-						enabled: true,
-						navigateByImgClick: true,
-						preload: [0, 1]
-					},
-					zoom: {
-						enabled: true,
-						duration: 300,
-						opener: function(element) {
-							return element.find('img');
-						}
-					}
-				});
+    // expose to scope
+    $.extend(theme, {
+        PluginFlickr: PluginFlickr
+    });
 
-			});
+    // jquery plugin
+    $.fn.themePluginFlickr = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginFlickr($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginFlickr: PluginFlickr
-	});
-
-	// jquery plugin
-	$.fn.themePluginFlickr = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginFlickr($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Lightbox
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__lightbox';
+    var instanceName = '__lightbox';
 
-	var PluginLightbox = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginLightbox = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginLightbox.defaults = {
-		tClose: 'Close (Esc)', // Alt text on close button
-		tLoading: 'Loading...', // Text that is displayed during loading. Can contain %curr% and %total% keys
-		gallery: {
-			tPrev: 'Previous (Left arrow key)', // Alt text on left arrow
-			tNext: 'Next (Right arrow key)', // Alt text on right arrow
-			tCounter: '%curr% of %total%' // Markup for "1 of 7" counter
-		},
-		image: {
-			tError: '<a href="%url%">The image</a> could not be loaded.' // Error message when image could not be loaded
-		},
-		ajax: {
-			tError: '<a href="%url%">The content</a> could not be loaded.' // Error message when ajax request failed
-		},
-		callbacks: {
-			open: function() {
-				$('body').addClass('lightbox-opened');
-			},
-			close: function() {
-				$('body').removeClass('lightbox-opened');
-			}
-		}
-	};
+    PluginLightbox.defaults = {
+        tClose: 'Close (Esc)', // Alt text on close button
+        tLoading: 'Loading...', // Text that is displayed during loading. Can contain %curr% and %total% keys
+        gallery: {
+            tPrev: 'Previous (Left arrow key)', // Alt text on left arrow
+            tNext: 'Next (Right arrow key)', // Alt text on right arrow
+            tCounter: '%curr% of %total%' // Markup for "1 of 7" counter
+        },
+        image: {
+            tError: '<a href="%url%">The image</a> could not be loaded.' // Error message when image could not be loaded
+        },
+        ajax: {
+            tError: '<a href="%url%">The content</a> could not be loaded.' // Error message when ajax request failed
+        },
+        callbacks: {
+            open: function () {
+                $('body').addClass('lightbox-opened');
+            },
+            close: function () {
+                $('body').removeClass('lightbox-opened');
+            }
+        }
+    };
 
-	PluginLightbox.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginLightbox.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginLightbox.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.magnificPopup))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginLightbox.defaults, opts, {
-				wrapper: this.$el
-			});
+            this.options.wrapper.magnificPopup(this.options);
 
-			return this;
-		},
+            return this;
+        }
+    };
 
-		build: function() {
-			if (!($.isFunction($.fn.magnificPopup))) {
-				return this;
-			}
+    // expose to scope
+    $.extend(theme, {
+        PluginLightbox: PluginLightbox
+    });
 
-			this.options.wrapper.magnificPopup(this.options);
+    // jquery plugin
+    $.fn.themePluginLightbox = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginLightbox($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginLightbox: PluginLightbox
-	});
-
-	// jquery plugin
-	$.fn.themePluginLightbox = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginLightbox($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Masonry
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__masonry';
+    var instanceName = '__masonry';
 
-	var PluginMasonry = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginMasonry = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginMasonry.defaults = {
-		itemSelector: 'li'
-	};
+    PluginMasonry.defaults = {
+        itemSelector: 'li'
+    };
 
-	PluginMasonry.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginMasonry.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginMasonry.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.isotope))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginMasonry.defaults, opts, {
-				wrapper: this.$el
-			});
+            this.options.wrapper.isotope(this.options);
 
-			return this;
-		},
+            return this;
+        }
+    };
 
-		build: function() {
-			if (!($.isFunction($.fn.isotope))) {
-				return this;
-			}
+    // expose to scope
+    $.extend(theme, {
+        PluginMasonry: PluginMasonry
+    });
 
-			this.options.wrapper.isotope(this.options);
+    // jquery plugin
+    $.fn.themePluginMasonry = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            $this.waitForImages(function () {
+                if ($this.data(instanceName)) {
+                    return $this.data(instanceName);
+                } else {
+                    return new PluginMasonry($this, opts);
+                }
+            });
 
-	// expose to scope
-	$.extend(theme, {
-		PluginMasonry: PluginMasonry
-	});
-
-	// jquery plugin
-	$.fn.themePluginMasonry = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			$this.waitForImages(function() {
-				if ($this.data(instanceName)) {
-					return $this.data(instanceName);
-				} else {
-					return new PluginMasonry($this, opts);
-				}
-			});
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Parallax
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	$.extend(theme, {
+    $.extend(theme, {
+        PluginParallax: {
+            defaults: {
+                itemsSelector: '.parallax',
+                horizontalScrolling: false
+            },
+            initialize: function (opts) {
 
-		PluginParallax: {
+                this
+                        .setOptions(opts)
+                        .build();
 
-			defaults: {
-				itemsSelector: '.parallax',
-				horizontalScrolling: false
-			},
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts);
 
-			initialize: function(opts) {
+                return this;
+            },
+            build: function () {
+                if (!($.isFunction($.fn.stellar)) || typeof (Modernizr.touch) == 'undefined') {
+                    return this;
+                }
 
-				this
-					.setOptions(opts)
-					.build();
+                var self = this;
 
-				return this;
-			},
+                $(window).load(function () {
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts);
+                    if (!Modernizr.touch) {
+                        $.stellar(self.options).addClass('parallax-ready');
+                    } else {
+                        $(self.options.itemsSelector).addClass('parallax-disabled');
+                    }
 
-				return this;
-			},
+                });
 
-			build: function() {
-				if (!($.isFunction($.fn.stellar)) || typeof(Modernizr.touch) == 'undefined') {
-					return this;
-				}
+                return this;
+            }
 
-				var self = this;
+        }
 
-				$(window).load(function() {
-
-					if (!Modernizr.touch) {
-						$.stellar(self.options).addClass('parallax-ready');
-					} else {
-						$(self.options.itemsSelector).addClass('parallax-disabled');
-					}
-
-				});
-
-				return this;
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Progress Bar
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__progressBar';
+    var instanceName = '__progressBar';
 
-	var PluginProgressBar = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginProgressBar = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginProgressBar.defaults = {
-		accX: 0,
-		accY: -50,
-		delay: 1
-	};
+    PluginProgressBar.defaults = {
+        accX: 0,
+        accY: -50,
+        delay: 1
+    };
 
-	PluginProgressBar.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginProgressBar.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginProgressBar.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.appear))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginProgressBar.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this,
+                    $el = this.options.wrapper,
+                    delay = 1;
 
-			return this;
-		},
+            $el.appear(function () {
 
-		build: function() {
-			if (!($.isFunction($.fn.appear))) {
-				return this;
-			}
+                delay = ($el.attr('data-appear-animation-delay') ? $el.attr('data-appear-animation-delay') : self.options.delay);
 
-			var self = this,
-				$el = this.options.wrapper,
-				delay = 1;
+                $el.addClass($el.attr('data-appear-animation'));
 
-			$el.appear(function() {
+                setTimeout(function () {
 
-				delay = ($el.attr('data-appear-animation-delay') ? $el.attr('data-appear-animation-delay') : self.options.delay);
+                    $el.animate({
+                        width: $el.attr('data-appear-progress-animation')
+                    }, 1500, 'easeOutQuad', function () {
+                        $el.find('.progress-bar-tooltip').animate({
+                            opacity: 1
+                        }, 500, 'easeOutQuad');
+                    });
 
-				$el.addClass($el.attr('data-appear-animation'));
+                }, delay);
 
-				setTimeout(function() {
+            }, {
+                accX: self.options.accX,
+                accY: self.options.accY
+            });
 
-					$el.animate({
-						width: $el.attr('data-appear-progress-animation')
-					}, 1500, 'easeOutQuad', function() {
-						$el.find('.progress-bar-tooltip').animate({
-							opacity: 1
-						}, 500, 'easeOutQuad');
-					});
+            return this;
+        }
+    };
 
-				}, delay);
+    // expose to scope
+    $.extend(theme, {
+        PluginProgressBar: PluginProgressBar
+    });
 
-			}, {
-				accX: self.options.accX,
-				accY: self.options.accY
-			});
+    // jquery plugin
+    $.fn.themePluginProgressBar = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginProgressBar($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginProgressBar: PluginProgressBar
-	});
-
-	// jquery plugin
-	$.fn.themePluginProgressBar = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginProgressBar($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Revolution Slider
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__revolution';
+    var instanceName = '__revolution';
 
-	var PluginRevolutionSlider = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginRevolutionSlider = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginRevolutionSlider.defaults = {
-		dottedOverlay: 'none',
-		delay: 9000,
-		startwidth: 1170,
-		startheight: 500,
-		hideThumbs: 200,
+    PluginRevolutionSlider.defaults = {
+        dottedOverlay: 'none',
+        delay: 9000,
+        startwidth: 1170,
+        startheight: 500,
+        hideThumbs: 200,
+        thumbWidth: 100,
+        thumbHeight: 50,
+        thumbAmount: 3,
+        navigationType: 'none',
+        navigationArrows: 'solo',
+        navigationStyle: 'round',
+        touchenabled: 'on',
+        onHoverStop: 'on',
+        swipe_velocity: 0.7,
+        swipe_min_touches: 1,
+        swipe_max_touches: 1,
+        drag_block_vertical: false,
+        keyboardNavigation: 'on',
+        navigationHAlign: 'center',
+        navigationVAlign: 'bottom',
+        navigationHOffset: 0,
+        navigationVOffset: 20,
+        soloArrowLeftHalign: 'left',
+        soloArrowLeftValign: 'center',
+        soloArrowLeftHOffset: 20,
+        soloArrowLeftVOffset: 0,
+        soloArrowRightHalign: 'right',
+        soloArrowRightValign: 'center',
+        soloArrowRightHOffset: 20,
+        soloArrowRightVOffset: 0,
+        shadow: 0,
+        fullWidth: 'on',
+        fullScreen: 'off',
+        spinner: 'spinner0',
+        stopLoop: 'off',
+        stopAfterLoops: -1,
+        stopAtSlide: -1,
+        shuffle: 'off',
+        autoHeight: 'off',
+        forceFullWidth: 'off',
+        hideThumbsOnMobile: 'off',
+        hideNavDelayOnMobile: 1500,
+        hideBulletsOnMobile: 'off',
+        hideArrowsOnMobile: 'off',
+        hideThumbsUnderResolution: 0,
+        hideSliderAtLimit: 0,
+        hideCaptionAtLimit: 0,
+        hideAllCaptionAtLilmit: 0,
+        startWithSlide: 0
+    };
 
-		thumbWidth: 100,
-		thumbHeight: 50,
-		thumbAmount: 3,
+    PluginRevolutionSlider.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-		navigationType: 'none',
-		navigationArrows: 'solo',
-		navigationStyle: 'round',
+            this.$el = $el;
 
-		touchenabled: 'on',
-		onHoverStop: 'on',
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-		swipe_velocity: 0.7,
-		swipe_min_touches: 1,
-		swipe_max_touches: 1,
-		drag_block_vertical: false,
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		keyboardNavigation: 'on',
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginRevolutionSlider.defaults, opts, {
+                wrapper: this.$el
+            });
 
-		navigationHAlign: 'center',
-		navigationVAlign: 'bottom',
-		navigationHOffset: 0,
-		navigationVOffset: 20,
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.revolution))) {
+                return this;
+            }
 
-		soloArrowLeftHalign: 'left',
-		soloArrowLeftValign: 'center',
-		soloArrowLeftHOffset: 20,
-		soloArrowLeftVOffset: 0,
+            this.options.wrapper.revolution(this.options);
 
-		soloArrowRightHalign: 'right',
-		soloArrowRightValign: 'center',
-		soloArrowRightHOffset: 20,
-		soloArrowRightVOffset: 0,
+            return this;
+        }
+    };
 
-		shadow: 0,
-		fullWidth: 'on',
-		fullScreen: 'off',
+    // expose to scope
+    $.extend(theme, {
+        PluginRevolutionSlider: PluginRevolutionSlider
+    });
 
-		spinner: 'spinner0',
+    // jquery plugin
+    $.fn.themePluginRevolutionSlider = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-		stopLoop: 'off',
-		stopAfterLoops: -1,
-		stopAtSlide: -1,
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginRevolutionSlider($this, opts);
+            }
 
-		shuffle: 'off',
-
-		autoHeight: 'off',
-		forceFullWidth: 'off',
-
-		hideThumbsOnMobile: 'off',
-		hideNavDelayOnMobile: 1500,
-		hideBulletsOnMobile: 'off',
-		hideArrowsOnMobile: 'off',
-		hideThumbsUnderResolution: 0,
-
-		hideSliderAtLimit: 0,
-		hideCaptionAtLimit: 0,
-		hideAllCaptionAtLilmit: 0,
-		startWithSlide: 0
-	};
-
-	PluginRevolutionSlider.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
-
-			this.$el = $el;
-
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
-
-			return this;
-		},
-
-		setData: function() {
-			this.$el.data(instanceName, this);
-
-			return this;
-		},
-
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginRevolutionSlider.defaults, opts, {
-				wrapper: this.$el
-			});
-
-			return this;
-		},
-
-		build: function() {
-			if (!($.isFunction($.fn.revolution))) {
-				return this;
-			}
-
-			this.options.wrapper.revolution(this.options);
-
-			return this;
-		}
-	};
-
-	// expose to scope
-	$.extend(theme, {
-		PluginRevolutionSlider: PluginRevolutionSlider
-	});
-
-	// jquery plugin
-	$.fn.themePluginRevolutionSlider = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginRevolutionSlider($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Scroll to Top
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	$.extend(theme, {
+    $.extend(theme, {
+        PluginScrollToTop: {
+            defaults: {
+                wrapper: $('body'),
+                offset: 150,
+                buttonClass: 'scroll-to-top',
+                iconClass: 'fa fa-chevron-up',
+                delay: 500,
+                visibleMobile: false,
+                label: false
+            },
+            initialize: function (opts) {
+                initialized = true;
 
-		PluginScrollToTop: {
+                this
+                        .setOptions(opts)
+                        .build()
+                        .events();
 
-			defaults: {
-				wrapper: $('body'),
-				offset: 150,
-				buttonClass: 'scroll-to-top',
-				iconClass: 'fa fa-chevron-up',
-				delay: 500,
-				visibleMobile: false,
-				label: false
-			},
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts);
 
-			initialize: function(opts) {
-				initialized = true;
+                return this;
+            },
+            build: function () {
+                var self = this,
+                        $el;
 
-				this
-					.setOptions(opts)
-					.build()
-					.events();
+                // Base HTML Markup
+                $el = $('<a />')
+                        .addClass(self.options.buttonClass)
+                        .attr({
+                            'href': '#',
+                        })
+                        .append(
+                                $('<i />')
+                                .addClass(self.options.iconClass)
+                                );
 
-				return this;
-			},
+                // Visible Mobile
+                if (!self.options.visibleMobile) {
+                    $el.addClass('hidden-mobile');
+                }
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts);
+                // Label
+                if (self.options.label) {
+                    $el.append(
+                            $('<span />').html(self.options.label)
+                            );
+                }
 
-				return this;
-			},
+                this.options.wrapper.append($el);
 
-			build: function() {
-				var self = this,
-					$el;
+                this.$el = $el;
 
-				// Base HTML Markup
-				$el = $('<a />')
-					.addClass(self.options.buttonClass)
-					.attr({
-						'href': '#',
-					})
-					.append(
-						$('<i />')
-						.addClass(self.options.iconClass)
-				);
+                return this;
+            },
+            events: function () {
+                var self = this,
+                        _isScrolling = false;
 
-				// Visible Mobile
-				if (!self.options.visibleMobile) {
-					$el.addClass('hidden-mobile');
-				}
+                // Click Element Action
+                self.$el.on('click', function (e) {
+                    e.preventDefault();
+                    $('body, html').animate({
+                        scrollTop: 0
+                    }, self.options.delay);
+                    return false;
+                });
 
-				// Label
-				if (self.options.label) {
-					$el.append(
-						$('<span />').html(self.options.label)
-					);
-				}
+                // Show/Hide Button on Window Scroll event.
+                $(window).scroll(function () {
 
-				this.options.wrapper.append($el);
+                    if (!_isScrolling) {
 
-				this.$el = $el;
+                        _isScrolling = true;
 
-				return this;
-			},
+                        if ($(window).scrollTop() > self.options.offset) {
 
-			events: function() {
-				var self = this,
-					_isScrolling = false;
+                            self.$el.stop(true, true).addClass('visible');
+                            _isScrolling = false;
 
-				// Click Element Action
-				self.$el.on('click', function(e) {
-					e.preventDefault();
-					$('body, html').animate({
-						scrollTop: 0
-					}, self.options.delay);
-					return false;
-				});
+                        } else {
 
-				// Show/Hide Button on Window Scroll event.
-				$(window).scroll(function() {
+                            self.$el.stop(true, true).removeClass('visible');
+                            _isScrolling = false;
 
-					if (!_isScrolling) {
+                        }
 
-						_isScrolling = true;
+                    }
 
-						if ($(window).scrollTop() > self.options.offset) {
+                });
 
-							self.$el.stop(true, true).addClass('visible');
-							_isScrolling = false;
+                return this;
+            }
 
-						} else {
+        }
 
-							self.$el.stop(true, true).removeClass('visible');
-							_isScrolling = false;
-
-						}
-
-					}
-
-				});
-
-				return this;
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Sort
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__sort';
+    var instanceName = '__sort';
 
-	var PluginSort = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginSort = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginSort.defaults = {
-		useHash: true,
-		itemSelector: 'li',
-		layoutMode: 'masonry',
-		filter: '*',
-		isOriginLeft: ($('html').attr('dir') == 'rtl' ? false : true)
-	};
+    PluginSort.defaults = {
+        useHash: true,
+        itemSelector: 'li',
+        layoutMode: 'masonry',
+        filter: '*',
+        isOriginLeft: ($('html').attr('dir') == 'rtl' ? false : true)
+    };
 
-	PluginSort.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginSort.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginSort.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.isotope))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginSort.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this,
+                    $source = this.options.wrapper,
+                    $destination = $('.sort-destination[data-sort-id="' + $source.attr('data-sort-id') + '"]');
 
-			return this;
-		},
+            if ($destination.get(0)) {
 
-		build: function() {
-			if (!($.isFunction($.fn.isotope))) {
-				return this;
-			}
+                self.$source = $source;
+                self.$destination = $destination;
 
-			var self = this,
-				$source = this.options.wrapper,
-				$destination = $('.sort-destination[data-sort-id="' + $source.attr('data-sort-id') + '"]');
+                self.setParagraphHeight($destination);
 
-			if ($destination.get(0)) {
+                $(window).load(function () {
 
-				self.$source = $source;
-				self.$destination = $destination;
+                    $destination.isotope(self.options).isotope('layout');
 
-				self.setParagraphHeight($destination);
+                    self.$destination.isotope('on', 'layoutComplete', function (isoInstance, laidOutItems) {
+                        if (self.options.useHash || typeof (isoInstance.options.filter != 'undefined')) {
+                            if (window.location.hash != '' || isoInstance.options.filter.replace('.', '') != '*') {
+                                window.location.hash = isoInstance.options.filter.replace('.', '');
+                            }
+                        }
+                    });
 
-				$(window).load(function() {
+                    self.events();
 
-					$destination.isotope(self.options).isotope('layout');
+                });
 
-					self.$destination.isotope('on', 'layoutComplete', function(isoInstance, laidOutItems) {
-						if (self.options.useHash || typeof(isoInstance.options.filter != 'undefined')) {
-							if (window.location.hash != '' || isoInstance.options.filter.replace('.', '') != '*') {
-								window.location.hash = isoInstance.options.filter.replace('.', '');
-							}
-						}
-					});
+            }
 
-					self.events();
+            return this;
+        },
+        events: function () {
+            var self = this,
+                    filter = null;
 
-				});
+            self.$source.find('a').click(function (e) {
+                e.preventDefault();
 
-			}
+                filter = $(this).parent().attr('data-option-value');
 
-			return this;
-		},
+                self.setFilter(filter);
 
-		events: function() {
-			var self = this,
-				filter = null;
+                return this;
+            });
 
-			self.$source.find('a').click(function(e) {
-				e.preventDefault();
+            if (self.options.useHash) {
+                self.hashEvents();
+            }
 
-				filter = $(this).parent().attr('data-option-value');
+            return this;
+        },
+        setFilter: function (filter) {
+            var self = this;
 
-				self.setFilter(filter);
+            if (self.filter == filter) {
+                return this;
+            }
 
-				return this;
-			});
+            self.$source.find('li.active').removeClass('active');
+            self.$source.find('li[data-option-value="' + filter + '"]').addClass('active');
 
-			if (self.options.useHash) {
-				self.hashEvents();
-			}
+            self.$destination.isotope({
+                filter: filter
+            });
 
-			return this;
-		},
+            self.filter = filter;
 
-		setFilter: function(filter) {
-			var self = this;
+            return this;
+        },
+        hashEvents: function () {
+            var self = this,
+                    hash = null,
+                    hashFilter = null,
+                    initHashFilter = '.' + location.hash.replace('#', '');
 
-			if (self.filter == filter) {
-				return this;
-			}
+            if (initHashFilter != '.' && initHashFilter != '.*') {
+                self.setFilter(initHashFilter);
+            }
 
-			self.$source.find('li.active').removeClass('active');
-			self.$source.find('li[data-option-value="' + filter + '"]').addClass('active');
+            $(window).bind('hashchange', function (e) {
 
-			self.$destination.isotope({
-				filter: filter
-			});
+                hashFilter = '.' + location.hash.replace('#', '');
+                hash = (hashFilter == '.' || hashFilter == '.*' ? '*' : hashFilter);
 
-			self.filter = filter;
+                self.setFilter(hash);
 
-			return this;
-		},
+            });
 
-		hashEvents: function() {
-			var self = this,
-				hash = null,
-				hashFilter = null,
-				initHashFilter = '.' + location.hash.replace('#', '');
+            return this;
+        },
+        setParagraphHeight: function () {
+            var self = this,
+                    minParagraphHeight = 0,
+                    paragraphs = $('span.thumb-info-caption p', self.$destination);
 
-			if (initHashFilter != '.' && initHashFilter != '.*') {
-				self.setFilter(initHashFilter);
-			}
+            paragraphs.each(function () {
+                if ($(this).height() > minParagraphHeight) {
+                    minParagraphHeight = ($(this).height() + 10);
+                }
+            });
 
-			$(window).bind('hashchange', function(e) {
+            paragraphs.height(minParagraphHeight);
 
-				hashFilter = '.' + location.hash.replace('#', '');
-				hash = (hashFilter == '.' || hashFilter == '.*' ? '*' : hashFilter);
+            return this;
+        }
 
-				self.setFilter(hash);
+    };
 
-			});
+    // expose to scope
+    $.extend(theme, {
+        PluginSort: PluginSort
+    });
 
-			return this;
-		},
+    // jquery plugin
+    $.fn.themePluginSort = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-		setParagraphHeight: function() {
-			var self = this,
-				minParagraphHeight = 0,
-				paragraphs = $('span.thumb-info-caption p', self.$destination);
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginSort($this, opts);
+            }
 
-			paragraphs.each(function() {
-				if ($(this).height() > minParagraphHeight) {
-					minParagraphHeight = ($(this).height() + 10);
-				}
-			});
-
-			paragraphs.height(minParagraphHeight);
-
-			return this;
-		}
-
-	};
-
-	// expose to scope
-	$.extend(theme, {
-		PluginSort: PluginSort
-	});
-
-	// jquery plugin
-	$.fn.themePluginSort = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginSort($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Match Height
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__matchHeight';
+    var instanceName = '__matchHeight';
 
-	var PluginMatchHeight = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginMatchHeight = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginMatchHeight.defaults = {
-		byRow: true,
-		property: 'height',
-		target: null,
-		remove: false
-	};
+    PluginMatchHeight.defaults = {
+        byRow: true,
+        property: 'height',
+        target: null,
+        remove: false
+    };
 
-	PluginMatchHeight.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginMatchHeight.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginMatchHeight.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.matchHeight))) {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginMatchHeight.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this;
 
-			return this;
-		},
+            self.options.wrapper.matchHeight(self.options);
 
-		build: function() {
-			if (!($.isFunction($.fn.matchHeight))) {
-				return this;
-			}
+            return this;
+        }
 
-			var self = this;
+    };
 
-			self.options.wrapper.matchHeight(self.options);
+    // expose to scope
+    $.extend(theme, {
+        PluginMatchHeight: PluginMatchHeight
+    });
 
-			return this;
-		}
+    // jquery plugin
+    $.fn.themePluginMatchHeight = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginMatchHeight($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginMatchHeight: PluginMatchHeight
-	});
-
-	// jquery plugin
-	$.fn.themePluginMatchHeight = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginMatchHeight($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Toggle
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__toggle';
+    var instanceName = '__toggle';
 
-	var PluginToggle = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginToggle = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginToggle.defaults = {
-		duration: 350,
-		isAccordion: false
-	};
+    PluginToggle.defaults = {
+        duration: 350,
+        isAccordion: false
+    };
 
-	PluginToggle.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginToggle.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginToggle.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            var self = this,
+                    $wrapper = this.options.wrapper,
+                    $items = $wrapper.find('.toggle'),
+                    $el = null;
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginToggle.defaults, opts, {
-				wrapper: this.$el
-			});
+            $items.each(function () {
+                $el = $(this);
 
-			return this;
-		},
+                if ($el.hasClass('active')) {
+                    $el.find('> p').addClass('preview-active');
+                    $el.find('> .toggle-content').slideDown(self.options.duration);
+                }
 
-		build: function() {
-			var self = this,
-				$wrapper = this.options.wrapper,
-				$items = $wrapper.find('.toggle'),
-				$el = null;
+                self.events($el);
+            });
 
-			$items.each(function() {
-				$el = $(this);
+            if (self.options.isAccordion) {
+                self.options.duration = self.options.duration / 2;
+            }
 
-				if ($el.hasClass('active')) {
-					$el.find('> p').addClass('preview-active');
-					$el.find('> .toggle-content').slideDown(self.options.duration);
-				}
+            return this;
+        },
+        events: function ($el) {
+            var self = this,
+                    previewParCurrentHeight = 0,
+                    previewParAnimateHeight = 0,
+                    toggleContent = null;
 
-				self.events($el);
-			});
+            $el.find('> label').click(function (e) {
 
-			if (self.options.isAccordion) {
-				self.options.duration = self.options.duration / 2;
-			}
+                var $this = $(this),
+                        parentSection = $this.parent(),
+                        parentWrapper = $this.parents('.toggle'),
+                        previewPar = null,
+                        closeElement = null;
 
-			return this;
-		},
+                if (self.options.isAccordion && typeof (e.originalEvent) != 'undefined') {
+                    closeElement = parentWrapper.find('.toggle.active > label');
 
-		events: function($el) {
-			var self = this,
-				previewParCurrentHeight = 0,
-				previewParAnimateHeight = 0,
-				toggleContent = null;
+                    if (closeElement[0] == $this[0]) {
+                        return;
+                    }
+                }
 
-			$el.find('> label').click(function(e) {
+                parentSection.toggleClass('active');
 
-				var $this = $(this),
-					parentSection = $this.parent(),
-					parentWrapper = $this.parents('.toggle'),
-					previewPar = null,
-					closeElement = null;
+                // Preview Paragraph
+                if (parentSection.find('> p').get(0)) {
 
-				if (self.options.isAccordion && typeof(e.originalEvent) != 'undefined') {
-					closeElement = parentWrapper.find('.toggle.active > label');
+                    previewPar = parentSection.find('> p');
+                    previewParCurrentHeight = previewPar.css('height');
+                    previewPar.css('height', 'auto');
+                    previewParAnimateHeight = previewPar.css('height');
+                    previewPar.css('height', previewParCurrentHeight);
 
-					if (closeElement[0] == $this[0]) {
-						return;
-					}
-				}
+                }
 
-				parentSection.toggleClass('active');
+                // Content
+                toggleContent = parentSection.find('> .toggle-content');
 
-				// Preview Paragraph
-				if (parentSection.find('> p').get(0)) {
+                if (parentSection.hasClass('active')) {
 
-					previewPar = parentSection.find('> p');
-					previewParCurrentHeight = previewPar.css('height');
-					previewPar.css('height', 'auto');
-					previewParAnimateHeight = previewPar.css('height');
-					previewPar.css('height', previewParCurrentHeight);
+                    $(previewPar).animate({
+                        height: previewParAnimateHeight
+                    }, self.options.duration, function () {
+                        $(this).addClass('preview-active');
+                    });
 
-				}
+                    toggleContent.slideDown(self.options.duration, function () {
+                        if (closeElement) {
+                            closeElement.trigger('click');
+                        }
+                    });
 
-				// Content
-				toggleContent = parentSection.find('> .toggle-content');
+                } else {
 
-				if (parentSection.hasClass('active')) {
+                    $(previewPar).animate({
+                        height: 0
+                    }, self.options.duration, function () {
+                        $(this).removeClass('preview-active');
+                    });
 
-					$(previewPar).animate({
-						height: previewParAnimateHeight
-					}, self.options.duration, function() {
-						$(this).addClass('preview-active');
-					});
+                    toggleContent.slideUp(self.options.duration);
 
-					toggleContent.slideDown(self.options.duration, function() {
-						if (closeElement) {
-							closeElement.trigger('click');
-						}
-					});
+                }
 
-				} else {
+            });
+        }
+    };
 
-					$(previewPar).animate({
-						height: 0
-					}, self.options.duration, function() {
-						$(this).removeClass('preview-active');
-					});
+    // expose to scope
+    $.extend(theme, {
+        PluginToggle: PluginToggle
+    });
 
-					toggleContent.slideUp(self.options.duration);
+    // jquery plugin
+    $.fn.themePluginToggle = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-				}
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginToggle($this, opts);
+            }
 
-			});
-		}
-	};
-
-	// expose to scope
-	$.extend(theme, {
-		PluginToggle: PluginToggle
-	});
-
-	// jquery plugin
-	$.fn.themePluginToggle = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginToggle($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Tweets
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__tweets';
+    var instanceName = '__tweets';
 
-	var PluginTweets = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginTweets = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginTweets.defaults = {
-		username: null,
-		count: 2,
-		URL: 'php/twitter-feed.php'
-	};
+    PluginTweets.defaults = {
+        username: null,
+        count: 2,
+        URL: 'php/twitter-feed.php'
+    };
 
-	PluginTweets.prototype = {
-		initialize: function($el, opts) {
-			if ($el.data(instanceName)) {
-				return this;
-			}
+    PluginTweets.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			this.$el = $el;
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginTweets.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (this.options.username == null || this.options.username == '') {
+                return this;
+            }
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginTweets.defaults, opts, {
-				wrapper: this.$el
-			});
+            var self = this,
+                    $wrapper = this.options.wrapper;
 
-			return this;
-		},
+            $.ajax({
+                type: 'GET',
+                data: {
+                    twitter_screen_name: self.options.username,
+                    tweets_to_display: self.options.count
+                },
+                url: self.options.URL,
+            }).done(function (html) {
+                $wrapper.html(html);
+            });
 
-		build: function() {
-			if (this.options.username == null || this.options.username == '') {
-				return this;
-			}
+            return this;
+        }
+    };
 
-			var self = this,
-				$wrapper = this.options.wrapper;
+    // expose to scope
+    $.extend(theme, {
+        PluginTweets: PluginTweets
+    });
 
-			$.ajax({
-				type: 'GET',
-				data: {
-					twitter_screen_name: self.options.username,
-					tweets_to_display: self.options.count
-				},
-				url: self.options.URL,
-			}).done(function(html) {
-				$wrapper.html(html);
-			});
+    // jquery plugin
+    $.fn.themePluginTweets = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginTweets($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginTweets: PluginTweets
-	});
-
-	// jquery plugin
-	$.fn.themePluginTweets = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginTweets($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Validation
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	$.extend(theme, {
+    $.extend(theme, {
+        PluginValidation: {
+            defaults: {
+                validator: {
+                    highlight: function (element) {
+                        $(element)
+                                .parent()
+                                .removeClass('has-success')
+                                .addClass('has-error');
+                    },
+                    success: function (element) {
+                        $(element)
+                                .parent()
+                                .removeClass('has-error')
+                                .addClass('has-success')
+                                .find('label.error')
+                                .remove();
+                    },
+                    errorPlacement: function (error, element) {
+                        if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
+                            error.appendTo(element.parent().parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    }
+                },
+                validateCaptchaURL: 'php/contact-form-verify-captcha.php',
+                refreshCaptchaURL: 'php/contact-form-refresh-captcha.php'
+            },
+            initialize: function (opts) {
+                initialized = true;
 
-		PluginValidation: {
+                this
+                        .setOptions(opts)
+                        .build();
 
-			defaults: {
-				validator: {
-					highlight: function(element) {
-						$(element)
-							.parent()
-							.removeClass('has-success')
-							.addClass('has-error');
-					},
-					success: function(element) {
-						$(element)
-							.parent()
-							.removeClass('has-error')
-							.addClass('has-success')
-							.find('label.error')
-							.remove();
-					},
-					errorPlacement: function(error, element) {
-						if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
-							error.appendTo(element.parent().parent());
-						} else {
-							error.insertAfter(element);
-						}
-					}
-				},
-				validateCaptchaURL: 'php/contact-form-verify-captcha.php',
-				refreshCaptchaURL: 'php/contact-form-refresh-captcha.php'
-			},
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts);
 
-			initialize: function(opts) {
-				initialized = true;
+                return this;
+            },
+            build: function () {
+                var self = this;
 
-				this
-					.setOptions(opts)
-					.build();
+                if (!($.isFunction($.validator))) {
+                    return this;
+                }
 
-				return this;
-			},
+                self.addMethods();
+                self.setMessageGroups();
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts);
+                $.validator.setDefaults(self.options.validator);
 
-				return this;
-			},
+                return this;
+            },
+            addMethods: function () {
+                var self = this;
 
-			build: function() {
-				var self = this;
+                $.validator.addMethod('captcha', function (value, element, params) {
+                    var captchaValid = false;
 
-				if (!($.isFunction($.validator))) {
-					return this;
-				}
+                    $.ajax({
+                        url: self.options.validateCaptchaURL,
+                        type: 'POST',
+                        async: false,
+                        dataType: 'json',
+                        data: {
+                            captcha: $.trim(value)
+                        },
+                        success: function (data) {
+                            if (data.response == 'success') {
+                                captchaValid = true;
+                            }
+                        }
+                    });
 
-				self.addMethods();
-				self.setMessageGroups();
+                    if (captchaValid) {
+                        return true;
+                    }
 
-				$.validator.setDefaults(self.options.validator);
+                }, '');
 
-				return this;
-			},
+                // Refresh Captcha
+                $('#refreshCaptcha').on('click', function (e) {
+                    e.preventDefault();
+                    $.get(self.options.refreshCaptchaURL, function (url) {
+                        $('#captcha-image').attr('src', url);
+                    });
+                });
 
-			addMethods: function() {
-				var self = this;
+            },
+            setMessageGroups: function () {
 
-				$.validator.addMethod('captcha', function(value, element, params) {
-					var captchaValid = false;
+                $('.checkbox-group[data-msg-required], .radio-group[data-msg-required]').each(function () {
+                    var message = $(this).data('msg-required');
+                    $(this).find('input').attr('data-msg-required', message);
+                });
 
-					$.ajax({
-						url: self.options.validateCaptchaURL,
-						type: 'POST',
-						async: false,
-						dataType: 'json',
-						data: {
-							captcha: $.trim(value)
-						},
-						success: function(data) {
-							if (data.response == 'success') {
-								captchaValid = true;
-							}
-						}
-					});
+            }
 
-					if (captchaValid) {
-						return true;
-					}
+        }
 
-				}, '');
-
-				// Refresh Captcha
-				$('#refreshCaptcha').on('click', function(e) {
-					e.preventDefault();
-					$.get(self.options.refreshCaptchaURL, function(url) {
-						$('#captcha-image').attr('src', url);
-					});					
-				});
-
-			},
-
-			setMessageGroups: function() {
-
-				$('.checkbox-group[data-msg-required], .radio-group[data-msg-required]').each(function() {
-					var message = $(this).data('msg-required');
-					$(this).find('input').attr('data-msg-required', message);
-				});
-
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Video Background
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var instanceName = '__videobackground';
+    var instanceName = '__videobackground';
 
-	var PluginVideoBackground = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    var PluginVideoBackground = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-	PluginVideoBackground.defaults = {
-		overlay: true,
-		volume: 1,
-		playbackRate: 1,
-		muted: true,
-		loop: true,
-		autoplay: true,
-		position: '50% 50%',
-		posterType: 'detect'
-	};
+    PluginVideoBackground.defaults = {
+        overlay: true,
+        volume: 1,
+        playbackRate: 1,
+        muted: true,
+        loop: true,
+        autoplay: true,
+        position: '50% 50%',
+        posterType: 'detect'
+    };
 
-	PluginVideoBackground.prototype = {
-		initialize: function($el, opts) {
-			this.$el = $el;
+    PluginVideoBackground.prototype = {
+        initialize: function ($el, opts) {
+            this.$el = $el;
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginVideoBackground.defaults, opts, {
+                path: this.$el.data('video-path'),
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginVideoBackground.defaults, opts, {
-				path: this.$el.data('video-path'),
-				wrapper: this.$el
-			});
+            if (!($.isFunction($.fn.vide)) || (!this.options.path)) {
+                return this;
+            }
 
-			return this;
-		},
+            if (this.options.overlay) {
+                this.options.wrapper.prepend(
+                        $('<div />').addClass('video-overlay')
+                        );
+            }
 
-		build: function() {
+            this.options.wrapper.vide(this.options.path, this.options);
 
-			if (!($.isFunction($.fn.vide)) || (!this.options.path)) {
-				return this;
-			}
+            return this;
+        }
+    };
 
-			if (this.options.overlay) {
-				this.options.wrapper.prepend(
-					$('<div />').addClass('video-overlay')
-				);
-			}
+    // expose to scope
+    $.extend(theme, {
+        PluginVideoBackground: PluginVideoBackground
+    });
 
-			this.options.wrapper.vide(this.options.path, this.options);
+    // jquery plugin
+    $.fn.themePluginVideoBackground = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-			return this;
-		}
-	};
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginVideoBackground($this, opts);
+            }
 
-	// expose to scope
-	$.extend(theme, {
-		PluginVideoBackground: PluginVideoBackground
-	});
-
-	// jquery plugin
-	$.fn.themePluginVideoBackground = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
-
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginVideoBackground($this, opts);
-			}
-
-		});
-	}
+        });
+    }
 
 }).apply(this, [window.theme, jQuery]);
 
 // Sticky
-(function(theme, $) {
-	
-	theme = theme || {};
-	
-	var instanceName = '__sticky';
+(function (theme, $) {
 
-	var PluginSticky = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    theme = theme || {};
 
-	PluginSticky.defaults = {
-		minWidth: 991,
-		activeClass: 'sticky-active'
-	};
+    var instanceName = '__sticky';
 
-	PluginSticky.prototype = {
-		initialize: function($el, opts) {
-			if ( $el.data( instanceName ) ) {
-				return this;
-			}
+    var PluginSticky = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-			this.$el = $el;
+    PluginSticky.defaults = {
+        minWidth: 991,
+        activeClass: 'sticky-active'
+    };
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+    PluginSticky.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			return this;
-		},
+            this.$el = $el;
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginSticky.defaults, opts, {
-				wrapper: this.$el
-			});
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginSticky.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            if (!($.isFunction($.fn.pin))) {
+                return this;
+            }
 
-		build: function() {
-			if (!($.isFunction($.fn.pin))) {
-				return this;
-			}
+            this.options.wrapper.pin(this.options);
 
-			this.options.wrapper.pin(this.options);
+            return this;
+        }
+    };
 
-			return this;
-		}
-	};
+    // expose to scope
+    $.extend(theme, {
+        PluginSticky: PluginSticky
+    });
 
-	// expose to scope
-	$.extend(theme, {
-		PluginSticky: PluginSticky
-	});
+    // jquery plugin
+    $.fn.themePluginSticky = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-	// jquery plugin
-	$.fn.themePluginSticky = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginSticky($this, opts);
+            }
 
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginSticky($this, opts);
-			}
-			
-		});
-	}
+        });
+    }
 
-}).apply(this, [ window.theme, jQuery ]);
+}).apply(this, [window.theme, jQuery]);
 
 // Word Rotate
-(function(theme, $) {
-	
-	theme = theme || {};
-	
-	var instanceName = '__wordRotate';
+(function (theme, $) {
 
-	var PluginWordRotate = function($el, opts) {
-		return this.initialize($el, opts);
-	};
+    theme = theme || {};
 
-	PluginWordRotate.defaults = {
-		delay: 2000,
-		animDelay: 300
-	};
+    var instanceName = '__wordRotate';
 
-	PluginWordRotate.prototype = {
-		initialize: function($el, opts) {
-			if ( $el.data( instanceName ) ) {
-				return this;
-			}
+    var PluginWordRotate = function ($el, opts) {
+        return this.initialize($el, opts);
+    };
 
-			this.$el = $el;
+    PluginWordRotate.defaults = {
+        delay: 2000,
+        animDelay: 300
+    };
 
-			this
-				.setData()
-				.setOptions(opts)
-				.build();
+    PluginWordRotate.prototype = {
+        initialize: function ($el, opts) {
+            if ($el.data(instanceName)) {
+                return this;
+            }
 
-			return this;
-		},
+            this.$el = $el;
 
-		setData: function() {
-			this.$el.data(instanceName, this);
+            this
+                    .setData()
+                    .setOptions(opts)
+                    .build();
 
-			return this;
-		},
+            return this;
+        },
+        setData: function () {
+            this.$el.data(instanceName, this);
 
-		setOptions: function(opts) {
-			this.options = $.extend(true, {}, PluginWordRotate.defaults, opts, {
-				wrapper: this.$el
-			});
+            return this;
+        },
+        setOptions: function (opts) {
+            this.options = $.extend(true, {}, PluginWordRotate.defaults, opts, {
+                wrapper: this.$el
+            });
 
-			return this;
-		},
+            return this;
+        },
+        build: function () {
+            var self = this,
+                    $el = this.options.wrapper,
+                    itemsWrapper = $el.find(".word-rotate-items"),
+                    items = itemsWrapper.find("> span"),
+                    firstItem = items.eq(0),
+                    firstItemClone = firstItem.clone(),
+                    currentItem = 1,
+                    currentTop = 0,
+                    itemWidth = 0;
 
-		build: function() {
-			var self = this,
-				$el = this.options.wrapper,
-				itemsWrapper = $el.find(".word-rotate-items"),
-				items = itemsWrapper.find("> span"),
-				firstItem = items.eq(0),
-				firstItemClone = firstItem.clone(),
-				currentItem = 1,
-				currentTop = 0,
-				itemWidth = 0;
+            itemsWrapper
+                    .width(firstItem.width() + "px")
+                    .append(firstItemClone);
 
-			itemsWrapper
-				.width(firstItem.width() + "px")
-				.append(firstItemClone);
+            $el
+                    .addClass("active");
 
-			$el				
-				.addClass("active");
+            setInterval(function () {
 
-			setInterval(function() {
+                currentTop = (currentItem * $el.height());
+                currentItem++;
 
-				currentTop = (currentItem * $el.height());
-				currentItem++;
+                if (currentItem <= items.length) {
+                    itemWidth = items.eq(currentItem - 1).width();
+                } else {
+                    itemWidth = items.eq(0).width();
+                }
 
-				if(currentItem <= items.length) {
-					itemWidth = items.eq(currentItem-1).width();
-				} else {
-					itemWidth = items.eq(0).width();
-				}
+                itemsWrapper.animate({
+                    top: -(currentTop) + "px",
+                    width: itemWidth + "px"
+                }, self.options.animDelay, "easeOutQuad", function () {
 
-				itemsWrapper.animate({
-					top: -(currentTop) + "px",
-					width: itemWidth + "px"
-				}, self.options.animDelay, "easeOutQuad", function() {
+                    if (currentItem > items.length) {
 
-					if(currentItem > items.length) {
+                        itemsWrapper.css("top", 0);
+                        currentItem = 1;
 
-						itemsWrapper.css("top", 0);
-						currentItem = 1;
+                    }
 
-					}
+                });
 
-				});
+            }, self.options.delay);
 
-			}, self.options.delay);
+            return this;
+        }
+    };
 
-			return this;
-		}
-	};
+    // expose to scope
+    $.extend(theme, {
+        PluginWordRotate: PluginWordRotate
+    });
 
-	// expose to scope
-	$.extend(theme, {
-		PluginWordRotate: PluginWordRotate
-	});
+    // jquery plugin
+    $.fn.themePluginWordRotate = function (opts) {
+        return this.map(function () {
+            var $this = $(this);
 
-	// jquery plugin
-	$.fn.themePluginWordRotate = function(opts) {
-		return this.map(function() {
-			var $this = $(this);
+            if ($this.data(instanceName)) {
+                return $this.data(instanceName);
+            } else {
+                return new PluginWordRotate($this, opts);
+            }
 
-			if ($this.data(instanceName)) {
-				return $this.data(instanceName);
-			} else {
-				return new PluginWordRotate($this, opts);
-			}
-			
-		});
-	}
+        });
+    }
 
-}).apply(this, [ window.theme, jQuery ]);
+}).apply(this, [window.theme, jQuery]);
 
 // Loading Overlay
-(function(theme, $) {
+(function (theme, $) {
 
-	'use strict';
+    'use strict';
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var loadingOverlayTemplate = [
-		'<div class="loading-overlay">',
-			'<div class="loader"></div>',
-		'</div>'
-	].join('');
+    var loadingOverlayTemplate = [
+        '<div class="loading-overlay">',
+        '<div class="loader"></div>',
+        '</div>'
+    ].join('');
 
-	var LoadingOverlay = function( $wrapper, options ) {
-		return this.initialize( $wrapper, options );
-	};
+    var LoadingOverlay = function ($wrapper, options) {
+        return this.initialize($wrapper, options);
+    };
 
-	LoadingOverlay.prototype = {
+    LoadingOverlay.prototype = {
+        options: {
+            css: {}
+        },
+        initialize: function ($wrapper, options) {
+            this.$wrapper = $wrapper;
 
-		options: {
-			css: {}
-		},
+            this
+                    .setVars()
+                    .setOptions(options)
+                    .build()
+                    .events();
 
-		initialize: function( $wrapper, options ) {
-			this.$wrapper = $wrapper;
+            this.$wrapper.data('loadingOverlay', this);
+        },
+        setVars: function () {
+            this.$overlay = this.$wrapper.find('.loading-overlay');
 
-			this
-				.setVars()
-				.setOptions( options )
-				.build()
-				.events();
+            return this;
+        },
+        setOptions: function (options) {
+            if (!this.$overlay.get(0)) {
+                this.matchProperties();
+            }
+            this.options = $.extend(true, {}, this.options, options);
+            this.loaderClass = this.getLoaderClass(this.options.css.backgroundColor);
 
-			this.$wrapper.data( 'loadingOverlay', this );
-		},
+            return this;
+        },
+        build: function () {
+            if (!this.$overlay.closest(document.documentElement).get(0)) {
+                if (!this.$cachedOverlay) {
+                    this.$overlay = $(loadingOverlayTemplate).clone();
 
-		setVars: function() {
-			this.$overlay = this.$wrapper.find('.loading-overlay');
+                    if (this.options.css) {
+                        this.$overlay.css(this.options.css);
+                        this.$overlay.find('.loader').addClass(this.loaderClass);
+                    }
+                } else {
+                    this.$overlay = this.$cachedOverlay.clone();
+                }
 
-			return this;
-		},
+                this.$wrapper.append(this.$overlay);
+            }
 
-		setOptions: function( options ) {
-			if ( !this.$overlay.get(0) ) {
-				this.matchProperties();
-			}
-			this.options     = $.extend( true, {}, this.options, options );
-			this.loaderClass = this.getLoaderClass( this.options.css.backgroundColor );
+            if (!this.$cachedOverlay) {
+                this.$cachedOverlay = this.$overlay.clone();
+            }
 
-			return this;
-		},
+            return this;
+        },
+        events: function () {
+            var _self = this;
 
-		build: function() {
-			if ( !this.$overlay.closest(document.documentElement).get(0) ) {
-				if ( !this.$cachedOverlay ) {
-					this.$overlay = $( loadingOverlayTemplate ).clone();
+            if (this.options.startShowing) {
+                _self.show();
+            }
 
-					if ( this.options.css ) {
-						this.$overlay.css( this.options.css );
-						this.$overlay.find( '.loader' ).addClass( this.loaderClass );
-					}
-				} else {
-					this.$overlay = this.$cachedOverlay.clone();
-				}
+            if (this.$wrapper.is('body') || this.options.hideOnWindowLoad) {
+                $(window).on('load error', function () {
+                    _self.hide();
+                });
+            }
 
-				this.$wrapper.append( this.$overlay );
-			}
+            if (this.options.listenOn) {
+                $(this.options.listenOn)
+                        .on('loading-overlay:show beforeSend.ic', function (e) {
+                            e.stopPropagation();
+                            _self.show();
+                        })
+                        .on('loading-overlay:hide complete.ic', function (e) {
+                            e.stopPropagation();
+                            _self.hide();
+                        });
+            }
 
-			if ( !this.$cachedOverlay ) {
-				this.$cachedOverlay = this.$overlay.clone();
-			}
+            this.$wrapper
+                    .on('loading-overlay:show beforeSend.ic', function (e) {
+                        e.stopPropagation();
+                        _self.show();
+                    })
+                    .on('loading-overlay:hide complete.ic', function (e) {
+                        e.stopPropagation();
+                        _self.hide();
+                    });
 
-			return this;
-		},
+            return this;
+        },
+        show: function () {
+            this.build();
 
-		events: function() {
-			var _self = this;
+            this.position = this.$wrapper.css('position').toLowerCase();
+            if (this.position != 'relative' || this.position != 'absolute' || this.position != 'fixed') {
+                this.$wrapper.css({
+                    position: 'relative'
+                });
+            }
+            this.$wrapper.addClass('loading-overlay-showing');
+        },
+        hide: function () {
+            var _self = this;
 
-			if ( this.options.startShowing ) {
-				_self.show();
-			}
+            this.$wrapper.removeClass('loading-overlay-showing');
+            setTimeout(function () {
+                if (this.position != 'relative' || this.position != 'absolute' || this.position != 'fixed') {
+                    _self.$wrapper.css({position: ''});
+                }
+            }, 500);
+        },
+        matchProperties: function () {
+            var i,
+                    l,
+                    properties;
 
-			if ( this.$wrapper.is('body') || this.options.hideOnWindowLoad ) {
-				$( window ).on( 'load error', function() {
-					_self.hide();
-				});
-			}
+            properties = [
+                'backgroundColor',
+                'borderRadius'
+            ];
 
-			if ( this.options.listenOn ) {
-				$( this.options.listenOn )
-					.on( 'loading-overlay:show beforeSend.ic', function( e ) {
-						e.stopPropagation();
-						_self.show();
-					})
-					.on( 'loading-overlay:hide complete.ic', function( e ) {
-						e.stopPropagation();
-						_self.hide();
-					});
-			}
+            l = properties.length;
 
-			this.$wrapper
-				.on( 'loading-overlay:show beforeSend.ic', function( e ) {
-					e.stopPropagation();
-					_self.show();
-				})
-				.on( 'loading-overlay:hide complete.ic', function( e ) {
-					e.stopPropagation();
-					_self.hide();
-				});
+            for (i = 0; i < l; i++) {
+                var obj = {};
+                obj[ properties[ i ] ] = this.$wrapper.css(properties[ i ]);
 
-			return this;
-		},
+                $.extend(this.options.css, obj);
+            }
+        },
+        getLoaderClass: function (backgroundColor) {
+            if (!backgroundColor || backgroundColor === 'transparent' || backgroundColor === 'inherit') {
+                return 'black';
+            }
 
-		show: function() {
-			this.build();
+            var hexColor,
+                    r,
+                    g,
+                    b,
+                    yiq;
 
-			this.position = this.$wrapper.css( 'position' ).toLowerCase();
-			if ( this.position != 'relative' || this.position != 'absolute' || this.position != 'fixed' ) {
-				this.$wrapper.css({
-					position: 'relative'
-				});
-			}
-			this.$wrapper.addClass( 'loading-overlay-showing' );
-		},
+            var colorToHex = function (color) {
+                var hex,
+                        rgb;
 
-		hide: function() {
-			var _self = this;
+                if (color.indexOf('#') > -1) {
+                    hex = color.replace('#', '');
+                } else {
+                    rgb = color.match(/\d+/g);
+                    hex = ('0' + parseInt(rgb[0], 10).toString(16)).slice(-2) + ('0' + parseInt(rgb[1], 10).toString(16)).slice(-2) + ('0' + parseInt(rgb[2], 10).toString(16)).slice(-2);
+                }
 
-			this.$wrapper.removeClass( 'loading-overlay-showing' );
-			setTimeout(function() {
-				if ( this.position != 'relative' || this.position != 'absolute' || this.position != 'fixed' ) {
-					_self.$wrapper.css({ position: '' });
-				}
-			}, 500);
-		},
+                if (hex.length === 3) {
+                    hex = hex + hex;
+                }
 
-		matchProperties: function() {
-			var i,
-				l,
-				properties;
+                return hex;
+            };
 
-			properties = [
-				'backgroundColor',
-				'borderRadius'
-			];
+            hexColor = colorToHex(backgroundColor);
 
-			l = properties.length;
+            r = parseInt(hexColor.substr(0, 2), 16);
+            g = parseInt(hexColor.substr(2, 2), 16);
+            b = parseInt(hexColor.substr(4, 2), 16);
+            yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
-			for( i = 0; i < l; i++ ) {
-				var obj = {};
-				obj[ properties[ i ] ] = this.$wrapper.css( properties[ i ] );
+            return (yiq >= 128) ? 'black' : 'white';
+        }
 
-				$.extend( this.options.css, obj );
-			}
-		},
+    };
 
-		getLoaderClass: function( backgroundColor ) {
-			if ( !backgroundColor || backgroundColor === 'transparent' || backgroundColor === 'inherit' ) {
-				return 'black';
-			}
+    // expose to scope
+    $.extend(theme, {
+        LoadingOverlay: LoadingOverlay
+    });
 
-			var hexColor,
-				r,
-				g,
-				b,
-				yiq;
+    // expose as a jquery plugin
+    $.fn.loadingOverlay = function (opts) {
+        return this.each(function () {
+            var $this = $(this);
 
-			var colorToHex = function( color ){
-				var hex,
-					rgb;
+            var loadingOverlay = $this.data('loadingOverlay');
+            if (loadingOverlay) {
+                return loadingOverlay;
+            } else {
+                var options = opts || $this.data('loading-overlay-options') || {};
+                return new LoadingOverlay($this, options);
+            }
+        });
+    }
 
-				if( color.indexOf('#') >- 1 ){
-					hex = color.replace('#', '');
-				} else {
-					rgb = color.match(/\d+/g);
-					hex = ('0' + parseInt(rgb[0], 10).toString(16)).slice(-2) + ('0' + parseInt(rgb[1], 10).toString(16)).slice(-2) + ('0' + parseInt(rgb[2], 10).toString(16)).slice(-2);
-				}
-
-				if ( hex.length === 3 ) {
-					hex = hex + hex;
-				}
-
-				return hex;
-			};
-
-			hexColor = colorToHex( backgroundColor );
-
-			r = parseInt( hexColor.substr( 0, 2), 16 );
-			g = parseInt( hexColor.substr( 2, 2), 16 );
-			b = parseInt( hexColor.substr( 4, 2), 16 );
-			yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-
-			return ( yiq >= 128 ) ? 'black' : 'white';
-		}
-
-	};
-
-	// expose to scope
-	$.extend(theme, {
-		LoadingOverlay: LoadingOverlay
-	});
-
-	// expose as a jquery plugin
-	$.fn.loadingOverlay = function( opts ) {
-		return this.each(function() {
-			var $this = $( this );
-
-			var loadingOverlay = $this.data( 'loadingOverlay' );
-			if ( loadingOverlay ) {
-				return loadingOverlay;
-			} else {
-				var options = opts || $this.data( 'loading-overlay-options' ) || {};
-				return new LoadingOverlay( $this, options );
-			}
-		});
-	}
-
-	// auto init
-	$(function() {
-		$('[data-loading-overlay]').loadingOverlay();
-	});
+    // auto init
+    $(function () {
+        $('[data-loading-overlay]').loadingOverlay();
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Account
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var initialized = false;
+    var initialized = false;
 
-	$.extend(theme, {
+    $.extend(theme, {
+        Account: {
+            defaults: {
+                wrapper: $('#headerAccount')
+            },
+            initialize: function ($wrapper, opts) {
+                if (initialized) {
+                    return this;
+                }
 
-		Account: {
+                initialized = true;
+                this.$wrapper = ($wrapper || this.defaults.wrapper);
 
-			defaults: {
-				wrapper: $('#headerAccount')
-			},
+                this
+                        .setOptions(opts)
+                        .events();
 
-			initialize: function($wrapper, opts) {
-				if (initialized) {
-					return this;
-				}
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
 
-				initialized = true;
-				this.$wrapper = ($wrapper || this.defaults.wrapper);
+                return this;
+            },
+            events: function () {
+                var self = this;
 
-				this
-					.setOptions(opts)
-					.events();
+                self.$wrapper.find('input').on('focus', function () {
+                    self.$wrapper.addClass('open');
 
-				return this;
-			},
+                    $(document).mouseup(function (e) {
+                        if (!self.$wrapper.is(e.target) && self.$wrapper.has(e.target).length === 0) {
+                            self.$wrapper.removeClass('open');
+                        }
+                    });
+                });
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
+                $('#headerSignUp').on('click', function (e) {
+                    e.preventDefault();
+                    self.$wrapper.addClass('signup').removeClass('signin').removeClass('recover');
+                    self.$wrapper.find('.signup-form input:first').focus();
+                });
 
-				return this;
-			},
+                $('#headerSignIn').on('click', function (e) {
+                    e.preventDefault();
+                    self.$wrapper.addClass('signin').removeClass('signup').removeClass('recover');
+                    self.$wrapper.find('.signin-form input:first').focus();
+                });
 
-			events: function() {
-				var self = this;
+                $('#headerRecover').on('click', function (e) {
+                    e.preventDefault();
+                    self.$wrapper.addClass('recover').removeClass('signup').removeClass('signin');
+                    self.$wrapper.find('.recover-form input:first').focus();
+                });
 
-				self.$wrapper.find('input').on('focus', function() {
-					self.$wrapper.addClass('open');
+                $('#headerRecoverCancel').on('click', function (e) {
+                    e.preventDefault();
+                    self.$wrapper.addClass('signin').removeClass('signup').removeClass('recover');
+                    self.$wrapper.find('.signin-form input:first').focus();
+                });
+            }
 
-					$(document).mouseup(function(e) {
-						if (!self.$wrapper.is(e.target) && self.$wrapper.has(e.target).length === 0) {
-							self.$wrapper.removeClass('open');
-						}
-					});
-				});
+        }
 
-				$('#headerSignUp').on('click', function(e) {
-					e.preventDefault();
-					self.$wrapper.addClass('signup').removeClass('signin').removeClass('recover');
-					self.$wrapper.find('.signup-form input:first').focus();
-				});
-
-				$('#headerSignIn').on('click', function(e) {
-					e.preventDefault();
-					self.$wrapper.addClass('signin').removeClass('signup').removeClass('recover');
-					self.$wrapper.find('.signin-form input:first').focus();
-				});
-
-				$('#headerRecover').on('click', function(e) {
-					e.preventDefault();
-					self.$wrapper.addClass('recover').removeClass('signup').removeClass('signin');
-					self.$wrapper.find('.recover-form input:first').focus();
-				});
-
-				$('#headerRecoverCancel').on('click', function(e) {
-					e.preventDefault();
-					self.$wrapper.addClass('signin').removeClass('signup').removeClass('recover');
-					self.$wrapper.find('.signin-form input:first').focus();
-				});
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Nav
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var initialized = false;
+    var initialized = false;
 
-	$.extend(theme, {
+    $.extend(theme, {
+        Nav: {
+            defaults: {
+                wrapper: $('#mainMenu'),
+                scrollDelay: 600,
+                scrollAnimation: 'easeOutQuad'
+            },
+            initialize: function ($wrapper, opts) {
+                if (initialized) {
+                    return this;
+                }
 
-		Nav: {
+                initialized = true;
+                this.$wrapper = ($wrapper || this.defaults.wrapper);
 
-			defaults: {
-				wrapper: $('#mainMenu'),
-				scrollDelay: 600,
-				scrollAnimation: 'easeOutQuad'
-			},
+                this
+                        .setOptions(opts)
+                        .build()
+                        .events();
 
-			initialize: function($wrapper, opts) {
-				if (initialized) {
-					return this;
-				}
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
 
-				initialized = true;
-				this.$wrapper = ($wrapper || this.defaults.wrapper);
+                return this;
+            },
+            build: function () {
 
-				this
-					.setOptions(opts)
-					.build()
-					.events();
+                return this;
+            },
+            events: function () {
+                var self = this,
+                        target = "",
+                        delay = 1,
+                        $header = $('#header'),
+                        headerHeight = $header.outerHeight();
 
-				return this;
-			},
+                $header.find('[href=#]').on('click', function (e) {
+                    e.preventDefault();
+                });
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
+                // Add Arrows
+                $header.find('.dropdown-toggle, .dropdown-submenu > a').append($('<i />').addClass('fa fa-caret-down'));
 
-				return this;
-			},
+                // Mobile Arrows
+                $header.find('.dropdown-toggle[href=#], .dropdown-submenu [href=#], .dropdown-toggle[href!=#] .fa-caret-down, .dropdown-submenu a[href!=#] .fa-caret-down').on('click', function (e) {
+                    e.preventDefault();
+                    if ($(window).width() < 992) {
+                        $(this).closest('li').toggleClass('opened');
+                    }
+                });
 
-			build: function() {
+                // Anchors Position
+                $('[data-hash]').on('click', function (e) {
+                    e.preventDefault();
 
-				return this;
-			},
+                    target = $(this).attr('href');
 
-			events: function() {
-				var self = this,
-					target = "",
-					delay = 1,
-					$header = $('#header'),
-					headerHeight = $header.outerHeight();
+                    if ($(window).scrollTop() == 0) {
+                        $('html, body').animate({
+                            scrollTop: headerHeight
+                        }, 200);
 
-				$header.find('[href=#]').on('click', function(e) {
-					e.preventDefault();
-				});
+                        delay = 200;
+                    }
 
-				// Add Arrows
-				$header.find('.dropdown-toggle, .dropdown-submenu > a').append($('<i />').addClass('fa fa-caret-down'));
+                    setTimeout(function () {
+                        self.scrollToTarget(target);
+                    }, delay);
 
-				// Mobile Arrows
-				$header.find('.dropdown-toggle[href=#], .dropdown-submenu [href=#], .dropdown-toggle[href!=#] .fa-caret-down, .dropdown-submenu a[href!=#] .fa-caret-down').on('click', function(e) {
-					e.preventDefault();
-					if ($(window).width() < 992) {
-						$(this).closest('li').toggleClass('opened');
-					}
-				});
+                    return;
+                });
 
-				// Anchors Position
-				$('[data-hash]').on('click', function(e) {
-					e.preventDefault();
+                // Mobile Redirect - (Ignores the Dropdown from Bootstrap)
+                $('.mobile-redirect').on('click', function () {
+                    if ($(window).width() < 991) {
+                        self.location = $(this).attr('href');
+                    }
+                });
 
-					target = $(this).attr('href');
+                return this;
+            },
+            scrollToTarget: function (target) {
 
-					if($(window).scrollTop() == 0) {
-						$('html, body').animate({
-							scrollTop: headerHeight
-						}, 200);
+                $('body').addClass('scrolling');
 
-						delay = 200;
-					}
+                var self = this,
+                        $header = $('#header'),
+                        headerHeight = $header.outerHeight(),
+                        headerTop = $header.offset().top - $(window).scrollTop();
 
-					setTimeout(function() {
-						self.scrollToTarget(target);
-					}, delay);
+                $('html, body').animate({
+                    scrollTop: $(target).offset().top - (headerHeight + headerTop)
+                }, self.options.scrollDelay, self.options.scrollAnimation, function () {
+                    $('body').removeClass('scrolling');
+                });
 
-					return;
-				});
+                return this;
 
-				// Mobile Redirect - (Ignores the Dropdown from Bootstrap)
-				$('.mobile-redirect').on('click', function() {
-					if ($(window).width() < 991) {
-						self.location = $(this).attr('href');
-					}
-				});
+            }
 
-				return this;
-			},
+        }
 
-			scrollToTarget: function(target) {
-
-				$('body').addClass('scrolling');
-
-				var self = this,
-					$header = $('#header'),
-					headerHeight = $header.outerHeight(),
-					headerTop = $header.offset().top - $(window).scrollTop();
-
-				$('html, body').animate({
-					scrollTop: $(target).offset().top - (headerHeight + headerTop)
-				}, self.options.scrollDelay, self.options.scrollAnimation, function() {
-					$('body').removeClass('scrolling');
-				});
-
-				return this;
-
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Newsletter
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var initialized = false;
+    var initialized = false;
 
-	$.extend(theme, {
+    $.extend(theme, {
+        Newsletter: {
+            defaults: {
+                wrapper: $('#newsletterForm')
+            },
+            initialize: function ($wrapper, opts) {
+                if (initialized) {
+                    return this;
+                }
 
-		Newsletter: {
+                initialized = true;
+                this.$wrapper = ($wrapper || this.defaults.wrapper);
 
-			defaults: {
-				wrapper: $('#newsletterForm')
-			},
+                this
+                        .setOptions(opts)
+                        .build();
 
-			initialize: function($wrapper, opts) {
-				if (initialized) {
-					return this;
-				}
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
 
-				initialized = true;
-				this.$wrapper = ($wrapper || this.defaults.wrapper);
+                return this;
+            },
+            build: function () {
+                if (!($.isFunction($.fn.validate))) {
+                    return this;
+                }
 
-				this
-					.setOptions(opts)
-					.build();
+                var self = this,
+                        $email = self.$wrapper.find('#newsletterEmail'),
+                        $success = $('#newsletterSuccess'),
+                        $error = $('#newsletterError');
 
-				return this;
-			},
+                self.$wrapper.validate({
+                    submitHandler: function (form) {
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
+                        $.ajax({
+                            type: 'POST',
+                            url: self.$wrapper.attr('action'),
+                            data: {
+                                'email': $email.val()
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.response == 'success') {
 
-				return this;
-			},
+                                    $success.removeClass('hidden');
+                                    $error.addClass('hidden');
 
-			build: function() {
-				if (!($.isFunction($.fn.validate))) {
-					return this;
-				}
+                                    $email
+                                            .val('')
+                                            .blur()
+                                            .closest('.control-group')
+                                            .removeClass('success')
+                                            .removeClass('error');
 
-				var self = this,
-					$email = self.$wrapper.find('#newsletterEmail'),
-					$success = $('#newsletterSuccess'),
-					$error = $('#newsletterError');
+                                } else {
 
-				self.$wrapper.validate({
-					submitHandler: function(form) {
+                                    $error.html(data.message);
+                                    $error.removeClass('hidden');
+                                    $success.addClass('hidden');
 
-						$.ajax({
-							type: 'POST',
-							url: self.$wrapper.attr('action'),
-							data: {
-								'email': $email.val()
-							},
-							dataType: 'json',
-							success: function(data) {
-								if (data.response == 'success') {
+                                    $email
+                                            .blur()
+                                            .closest('.control-group')
+                                            .removeClass('success')
+                                            .addClass('error');
 
-									$success.removeClass('hidden');
-									$error.addClass('hidden');
+                                }
+                            }
+                        });
 
-									$email
-										.val('')
-										.blur()
-										.closest('.control-group')
-										.removeClass('success')
-										.removeClass('error');
+                    },
+                    rules: {
+                        newsletterEmail: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    errorPlacement: function (error, element) {
 
-								} else {
+                    }
+                });
 
-									$error.html(data.message);
-									$error.removeClass('hidden');
-									$success.addClass('hidden');
+                return this;
+            }
 
-									$email
-										.blur()
-										.closest('.control-group')
-										.removeClass('success')
-										.addClass('error');
+        }
 
-								}
-							}
-						});
-
-					},
-					rules: {
-						newsletterEmail: {
-							required: true,
-							email: true
-						}
-					},
-					errorPlacement: function(error, element) {
-
-					}
-				});
-
-				return this;
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Search
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var initialized = false;
+    var initialized = false;
 
-	$.extend(theme, {
+    $.extend(theme, {
+        Search: {
+            defaults: {
+                wrapper: $('#searchForm')
+            },
+            initialize: function ($wrapper, opts) {
+                if (initialized) {
+                    return this;
+                }
 
-		Search: {
+                initialized = true;
+                this.$wrapper = ($wrapper || this.defaults.wrapper);
 
-			defaults: {
-				wrapper: $('#searchForm')
-			},
+                this
+                        .setOptions(opts)
+                        .build();
 
-			initialize: function($wrapper, opts) {
-				if (initialized) {
-					return this;
-				}
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
 
-				initialized = true;
-				this.$wrapper = ($wrapper || this.defaults.wrapper);
+                return this;
+            },
+            build: function () {
+                if (!($.isFunction($.fn.validate))) {
+                    return this;
+                }
 
-				this
-					.setOptions(opts)
-					.build();
+                this.$wrapper.validate({
+                    errorPlacement: function (error, element) {
+                    }
+                });
 
-				return this;
-			},
+                return this;
+            }
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
+        }
 
-				return this;
-			},
-
-			build: function() {
-				if (!($.isFunction($.fn.validate))) {
-					return this;
-				}
-
-				this.$wrapper.validate({
-					errorPlacement: function(error, element) {}
-				});
-
-				return this;
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
 
 // Sticky Menu
-(function(theme, $) {
+(function (theme, $) {
 
-	theme = theme || {};
+    theme = theme || {};
 
-	var initialized = false;
+    var initialized = false;
 
-	$.extend(theme, {
+    $.extend(theme, {
+        StickyMenu: {
+            defaults: {
+                wrapper: $('#header'),
+                stickyEnabled: true,
+                stickyEnableOnBoxed: true,
+                stickyEnableOnMobile: true,
+                stickyWithGap: true,
+                stickyChangeLogoSize: true,
+                stickyBodyPadding: true,
+                menuAfterHeader: false,
+                alwaysStickyEnabled: false,
+                logoPaddingTop: 28,
+                logoSmallWidth: 82,
+                logoSmallHeight: 40
+            },
+            initialize: function ($wrapper, opts) {
+                if (initialized) {
+                    return this;
+                }
 
-		StickyMenu: {
+                initialized = true;
+                this.$wrapper = ($wrapper || this.defaults.wrapper);
 
-			defaults: {
-				wrapper: $('#header'),
-				stickyEnabled: true,
-				stickyEnableOnBoxed: true,
-				stickyEnableOnMobile: true,
-				stickyWithGap: true,
-				stickyChangeLogoSize: true,
-				stickyBodyPadding: true,
-				menuAfterHeader: false,
-				alwaysStickyEnabled: false,
-				logoPaddingTop: 28,
-				logoSmallWidth: 82,
-				logoSmallHeight: 40
-			},
+                this
+                        .setOptions(opts)
+                        .build()
+                        .events();
 
-			initialize: function($wrapper, opts) {
-				if (initialized) {
-					return this;
-				}
+                return this;
+            },
+            setOptions: function (opts) {
+                this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
 
-				initialized = true;
-				this.$wrapper = ($wrapper || this.defaults.wrapper);
+                return this;
+            },
+            build: function () {
+                if (!this.options.stickyEnableOnBoxed && $('body').hasClass('boxed') || !this.options.stickyEnabled) {
+                    return this;
+                }
 
-				this
-					.setOptions(opts)
-					.build()
-					.events();
+                var self = this,
+                        $window = $(window);
+                $body = $('body'),
+                        $header = self.$wrapper,
+                        $headerContainer = $header.parent(),
+                        $headerNavItems = $header.find('ul.nav-main > li > a'),
+                        $logoWrapper = $header.find('.logo'),
+                        $logo = $logoWrapper.find('img'),
+                        logoWidth = $logo.attr('width'),
+                        logoHeight = $logo.attr('height'),
+                        logoPaddingTop = parseInt($logo.attr('data-sticky-padding') ? $logo.attr('data-sticky-padding') : self.options.logoPaddingTop),
+                        logoSmallWidth = parseInt($logo.attr('data-sticky-width') ? $logo.attr('data-sticky-width') : self.options.logoSmallWidth),
+                        logoSmallHeight = parseInt($logo.attr('data-sticky-height') ? $logo.attr('data-sticky-height') : self.options.logoSmallHeight),
+                        headerHeight = $header.height(),
+                        stickyGap = 0;
 
-				return this;
-			},
+                if (this.options.menuAfterHeader) {
+                    $headerContainer.css('min-height', $header.height());
+                }
 
-			setOptions: function(opts) {
-				this.options = $.extend(true, {}, this.defaults, opts, this.$wrapper.data('plugin-options'));
+                $window.afterResize(function () {
+                    $headerContainer.css('min-height', $header.height());
+                });
 
-				return this;
-			},
+                self.checkStickyMenu = function () {
 
-			build: function() {
-				if (!this.options.stickyEnableOnBoxed && $('body').hasClass('boxed') || !this.options.stickyEnabled) {
-					return this;
-				}
+                    if ((!self.options.stickyEnableOnBoxed && $body.hasClass('boxed')) || ($window.width() < 991 && !self.options.stickyEnableOnMobile)) {
+                        self.stickyMenuDeactivate();
+                        $header.removeClass('fixed')
+                        return false;
+                    }
 
-				var self = this,
-					$window = $(window);
-					$body = $('body'),
-					$header = self.$wrapper,
-					$headerContainer = $header.parent(),
-					$headerNavItems = $header.find('ul.nav-main > li > a'),
-					$logoWrapper = $header.find('.logo'),
-					$logo = $logoWrapper.find('img'),
-					logoWidth = $logo.attr('width'),
-					logoHeight = $logo.attr('height'),
-					logoPaddingTop = parseInt($logo.attr('data-sticky-padding') ? $logo.attr('data-sticky-padding') : self.options.logoPaddingTop),
-					logoSmallWidth = parseInt($logo.attr('data-sticky-width') ? $logo.attr('data-sticky-width') : self.options.logoSmallWidth),
-					logoSmallHeight = parseInt($logo.attr('data-sticky-height') ? $logo.attr('data-sticky-height') : self.options.logoSmallHeight),
-					headerHeight = $header.height(),
-					stickyGap = 0;
+                    if (self.options.stickyWithGap) {
+                        stickyGap = ((headerHeight - 15) - logoSmallHeight);
+                    } else {
+                        stickyGap = 0;
+                    }
 
-				if (this.options.menuAfterHeader) {
-					$headerContainer.css('min-height', $header.height());
-				}
+                    // Menu After Header
+                    if (!this.options.menuAfterHeader) {
 
-				$window.afterResize(function() {
-					$headerContainer.css('min-height', $header.height());
-				});
+                        if ($window.scrollTop() > stickyGap) {
+                            self.stickyMenuActivate();
+                        } else {
+                            self.stickyMenuDeactivate();
+                        }
 
-				self.checkStickyMenu = function() {
+                    } else {
 
-					if ((!self.options.stickyEnableOnBoxed && $body.hasClass('boxed')) || ($window.width() < 991 && !self.options.stickyEnableOnMobile)) {
-						self.stickyMenuDeactivate();
-						$header.removeClass('fixed')
-						return false;
-					}
+                        if ($window.scrollTop() > $headerContainer.offset().top) {
+                            $header.addClass('fixed');
+                        } else {
+                            $header.removeClass('fixed');
+                        }
 
-					if (self.options.stickyWithGap) {
-						stickyGap = ((headerHeight - 15) - logoSmallHeight);
-					} else {
-						stickyGap = 0;
-					}
+                    }
 
-					// Menu After Header
-					if (!this.options.menuAfterHeader) {
+                }
 
-						if ($window.scrollTop() > stickyGap) {
-							self.stickyMenuActivate();
-						} else {
-							self.stickyMenuDeactivate();
-						}
+                self.stickyMenuActivate = function () {
 
-					} else {
+                    if ($body.hasClass('sticky-menu-active')) {
+                        return false;
+                    }
 
-						if ($window.scrollTop() > $headerContainer.offset().top) {
-							$header.addClass('fixed');
-						} else {
-							$header.removeClass('fixed');
-						}
+                    $logo.stop(true, true);
 
-					}
+                    $body.addClass('sticky-menu-active').removeClass('sticky-menu-deactive');
 
-				}
+                    if (self.options.stickyBodyPadding) {
+                        $body.css('padding-top', headerHeight);
+                    }
 
-				self.stickyMenuActivate = function() {
+                    // Flat Menu Items
+                    if ($header.hasClass('flat-menu')) {
+                        $headerNavItems.addClass('sticky-menu-active');
+                    }
 
-					if ($body.hasClass('sticky-menu-active')) {
-						return false;
-					}
+                    if (self.options.stickyChangeLogoSize) {
 
-					$logo.stop(true, true);
+                        $logoWrapper.addClass('logo-sticky-active');
 
-					$body.addClass('sticky-menu-active').removeClass('sticky-menu-deactive');
+                        $logo.animate({
+                            width: logoSmallWidth,
+                            height: logoSmallHeight,
+                            top: logoPaddingTop + 'px'
+                        }, 200, function () {
+                            $.event.trigger({
+                                type: 'stickyMenu.active'
+                            });
+                        });
 
-					if (self.options.stickyBodyPadding) {
-						$body.css('padding-top', headerHeight);
-					}
+                    } else {
+                        $.event.trigger({
+                            type: 'stickyMenu.active'
+                        });
+                    }
 
-					// Flat Menu Items
-					if ($header.hasClass('flat-menu')) {
-						$headerNavItems.addClass('sticky-menu-active');
-					}
+                }
 
-					if (self.options.stickyChangeLogoSize) {
+                self.stickyMenuDeactivate = function () {
 
-						$logoWrapper.addClass('logo-sticky-active');
+                    if ($body.hasClass('sticky-menu-active')) {
 
-						$logo.animate({
-							width: logoSmallWidth,
-							height: logoSmallHeight,
-							top: logoPaddingTop + 'px'
-						}, 200, function() {
-							$.event.trigger({
-								type: 'stickyMenu.active'
-							});
-						});
+                        $body.removeClass('sticky-menu-active').addClass('sticky-menu-deactive');
 
-					} else {
-						$.event.trigger({
-							type: 'stickyMenu.active'
-						});
-					}
+                        if (self.options.stickyBodyPadding) {
+                            $body.css('padding-top', 0);
+                        }
 
-				}
+                        // Flat Menu Items
+                        if ($header.hasClass('flat-menu')) {
+                            $headerNavItems.removeClass('sticky-menu-active');
+                        }
 
-				self.stickyMenuDeactivate = function() {
+                        if (self.options.stickyChangeLogoSize) {
 
-					if ($body.hasClass('sticky-menu-active')) {
+                            $logoWrapper.removeClass('logo-sticky-active');
 
-						$body.removeClass('sticky-menu-active').addClass('sticky-menu-deactive');
+                            $logo.animate({
+                                width: logoWidth,
+                                height: logoHeight,
+                                top: '0px'
+                            }, 200, function () {
+                                $.event.trigger({
+                                    type: 'stickyMenu.deactive'
+                                });
+                                $window.trigger('resize');
+                            });
 
-						if (self.options.stickyBodyPadding) {
-							$body.css('padding-top', 0);
-						}
+                        } else {
+                            $.event.trigger({
+                                type: 'stickyMenu.deactive'
+                            });
+                        }
 
-						// Flat Menu Items
-						if ($header.hasClass('flat-menu')) {
-							$headerNavItems.removeClass('sticky-menu-active');
-						}
+                    }
 
-						if (self.options.stickyChangeLogoSize) {
+                }
 
-							$logoWrapper.removeClass('logo-sticky-active');
+                if (!self.options.alwaysStickyEnabled) {
 
-							$logo.animate({
-								width: logoWidth,
-								height: logoHeight,
-								top: '0px'
-							}, 200, function() {
-								$.event.trigger({
-									type: 'stickyMenu.deactive'
-								});
-								$window.trigger('resize');
-							});
+                    $body.addClass('sticky-menu-deactive');
 
-						} else {
-							$.event.trigger({
-								type: 'stickyMenu.deactive'
-							});
-						}
+                    self.checkStickyMenu();
 
-					}
+                } else {
 
-				}
+                    $body.addClass('sticky-menu-active always-sticky').removeClass('sticky-menu-deactive');
 
-				if (!self.options.alwaysStickyEnabled) {
+                    if (self.options.stickyBodyPadding) {
+                        $body.css('padding-top', $header.height() + ($header.hasClass('narrow') ? 0 : 22));
+                    }
 
-					$body.addClass('sticky-menu-deactive');
+                }
 
-					self.checkStickyMenu();
+                return this;
+            },
+            events: function () {
+                var self = this;
 
-				} else {
+                if (!this.options.stickyEnableOnBoxed && $('body').hasClass('boxed') || !this.options.stickyEnabled) {
+                    return this;
+                }
 
-					$body.addClass('sticky-menu-active always-sticky').removeClass('sticky-menu-deactive');
+                if (!self.options.alwaysStickyEnabled) {
+                    $(window).on('scroll resize', function () {
+                        self.checkStickyMenu();
+                    });
+                }
 
-					if (self.options.stickyBodyPadding) {
-						$body.css('padding-top', $header.height() + ($header.hasClass('narrow') ? 0 : 22));
-					}
+                $('.btn-responsive-nav').on('click', function (e) {
+                    e.preventDefault();
+                });
 
-				}
+                return this;
+            }
 
-				return this;
-			},
+        }
 
-			events: function() {
-				var self = this;
-
-				if (!this.options.stickyEnableOnBoxed && $('body').hasClass('boxed') || !this.options.stickyEnabled) {
-					return this;
-				}
-
-				if (!self.options.alwaysStickyEnabled) {
-					$(window).on('scroll resize', function() {
-						self.checkStickyMenu();
-					});
-				}
-
-				$('.btn-responsive-nav').on('click', function(e) {
-					e.preventDefault();
-				});
-
-				return this;
-			}
-
-		}
-
-	});
+    });
 
 }).apply(this, [window.theme, jQuery]);
