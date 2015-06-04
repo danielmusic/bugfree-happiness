@@ -1,17 +1,25 @@
-<%-- 
-    Document   : profile
-    Created on : May 18, 2015, 11:35:01 PM
-    Author     : darius
---%>
+<%@page import="EntityManager.Artist"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<section id="page" data-title="Artist Profile">
+    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
+        <h1 class="heading-l">Artist Profile Page</h1>
+        <span class="overlay dots"></span>
+    </section>
+    <section class="content section">
+        <div class="container">
+            <article>
+                <%
+                    Artist artist = (Artist) (session.getAttribute("artist"));
+                    System.out.print(">>>>>>>>>>>>" + artist);
+                    if (artist != null) {
+                %>
+                <h1>Hello world</h1>
+                <%} else {%>
+                <h1>Bye world</h1>
+                <%}%>
+            </article>
+        </div>
+    </section>
+</section>
+
+
