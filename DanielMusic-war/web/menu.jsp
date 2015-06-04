@@ -53,7 +53,7 @@
                             Artist artist = (Artist) (session.getAttribute("artist"));
                             Member fan = (Member) (session.getAttribute("fan"));
 
-                            if (artist != null || fan != null) {
+                            if (artist != null) {
                                 out.print("<a href='ClientAccountManagementController?target=AccountLogout'>Logout</a>");
                             } else {
                                 out.print("<a href='#!/login'>login</a>");

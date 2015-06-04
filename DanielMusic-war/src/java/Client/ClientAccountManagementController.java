@@ -44,15 +44,14 @@ public class ClientAccountManagementController extends HttpServlet {
                             nextPage = "#!/artist/signup/";
                             session.setAttribute("errMsg", returnHelper.getDescription());
                         }
-                        nextPage = "#!/artist/signup" + returnHelper.getDescription();
                         break;
                     }
-
+ 
                 case "ArtistLogin":
                     returnHelper = accountManagementBean.loginAccount(email, password);
                     if (returnHelper.getResult()) {
                         session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
-                        nextPage = "#!/artist/profile";
+                        nextPage = "artist/profile.jsp";
                     } else {
                         nextPage = "#!/login";
                         session.setAttribute("errMsg", returnHelper.getDescription());
