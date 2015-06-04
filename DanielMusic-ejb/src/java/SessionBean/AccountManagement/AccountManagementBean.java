@@ -102,6 +102,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             Member member = new Member();
             return member;
+        } catch (NoResultException ex) {
+            System.out.println("getAccount(): Could not find account with that email");
+            return null;
         } catch (Exception ex) {
             System.out.println("getAccount(): Internal error");
             ex.printStackTrace();
@@ -265,7 +268,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(account);
             //Send the verification code
             String verificationInstructions = "Verification instruction";
-            Boolean emailSent = cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
+            Boolean emailSent = false;//cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
             if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
