@@ -1,15 +1,19 @@
 package Client;
 
+import EntityManager.Artist;
+import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.validator.constraints.URL;
 
 public class ClientAccountManagementController extends HttpServlet {
 
@@ -26,29 +30,72 @@ public class ClientAccountManagementController extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
         String chkAgree = request.getParameter("chkAgree");
+        String grecaptcharesponse = request.getParameter("g-recaptcha-response");
 
         session = request.getSession();
+        session.removeAttribute("message");
         ReturnHelper returnHelper;
 
         try {
             switch (target) {
                 case "ArtistSignup":
                     if (chkAgree != null) {
-                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
-                        if (returnHelper.getResult()) {
-                            //goodMsg
+                        if (VerifyRecaptcha.verify(grecaptcharesponse)) {
+                            returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
+                            if (returnHelper.getResult()) {
+                                nextPage = "#!/artist/signup/";
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                nextPage = "#!/login/";
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                            break;
                         } else {
-                            //errMsg
+                            nextPage = "#!/artist/signup";
+                            session.setAttribute("errMsg", "Please verify the captcha again.");
+                            break;
                         }
-                        nextPage = "#!/artist/signup" + returnHelper.getDescription();
+                    } else {
+                        nextPage = "#!/artist/signup";
+                        session.setAttribute("errMsg", "Sorry. You have not agreed to the terms");
                         break;
                     }
+
+                case "ArtistLogin":
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
+                        nextPage = "#!/artist/albums";
+                    } else {
+                        nextPage = "#!/login";
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                    }
+                    break;
+
+                case "FanLogin":
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
+                        nextPage = "#!/artist/profile";
+                    } else {
+                        nextPage = "#!/login";
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                    }
+                    break;
+
+                case "AccountLogout":
+                    session.removeAttribute("errMsg");
+                    session.removeAttribute("artist");
+                    session.removeAttribute("fan");
+                    nextPage = "#!/login";
+                    session.setAttribute("goodMsg", "Logout Successful");
+                    break;
+
             }
 
             if (nextPage.equals("")) {
-                //response.sendRedirect("login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("#!/home");
             } else {
-                System.out.println(">>>>>>>>>>>>>>" + nextPage);
                 response.sendRedirect(nextPage);
             }
 
@@ -56,6 +103,10 @@ public class ClientAccountManagementController extends HttpServlet {
             response.sendRedirect("error500.html");
             ex.printStackTrace();
         }
+    }
+
+    public void sendPostReqeust(String response) {
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

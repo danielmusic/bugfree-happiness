@@ -1,8 +1,7 @@
+<%@page import="EntityManager.Member"%>
+<%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
-
-    <!-- main navigation -->
     <div id="main-nav">
-
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
@@ -11,15 +10,11 @@
             </div>
         </div>
         <!-- /search -->
-
         <!-- navigation container -->
         <div class="container">
-
-            <!-- ############ logo ############ -->
             <a href="#!/home" id="logo">
                 <img src="placeholders/logo.png" alt="Logo">
             </a>
-            <!-- /logo -->
 
             <!-- ############ icon navigation ############ -->
             <nav id="icon-nav">
@@ -33,24 +28,25 @@
             <!-- ############ navigation ############ -->
             <nav id="nav">
                 <ul>
-                    <li>
-                        <a href="#!/discover">discover</a>
-                    </li>
-                    <li>
-                        <a href="#!/artist">artist</a>
-                        <ul>
-                            <a href="#!/artist/signup">artist signup</a>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#!/fan">fan</a>
-                        <ul>
-                            <a href="#!/fan/signup">fan signup</a>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#!/login">login</a>
-                    </li>
+                    <%
+                        Artist artist = (Artist) (session.getAttribute("artist"));
+                        Member fan = (Member) (session.getAttribute("fan"));
+
+                        if (artist != null) {
+                            out.print("<li><a href='#!/artist/albums'>albums</a><li>");
+                            out.print("<li><a href='#!/artist/profile'>profile</a><li>");
+                            out.print("<li><a href='ClientAccountManagementController?target=AccountLogout'>logout</a><li>");
+                        } else if (fan != null) {
+
+                        } else {
+                            out.print("<li><a href='#!/discover'>discover</a><li>");
+                            out.print("<li><a href='#!/artist'>artist</a>");
+                            out.print("<ul><a href='#!/artist/signup'>artist signup</a></ul><li>");
+                            out.print("<li><a href='#!/fan'>fan</a>");
+                            out.print("<ul><a href='#!/fan/signup'>fan signup</a></ul><li>");
+                            out.print("<li><a href='#!/login'>login</a><li>");
+                        }
+                    %>
                 </ul>
             </nav>
             <!-- /navigation -->
@@ -60,9 +56,6 @@
                 <button class="dl-trigger">Open Menu</button>
                 <!-- RESPONSIVE NAVIGATION HERE -->
             </div>
-            <!-- /responsive navigation -->
         </div>
-        <!-- /navigation container -->
     </div>
-    <!-- /main navigation -->
 </section>

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -19,9 +20,39 @@ public class Artist extends Account implements Serializable {
     private Boolean isApproved;
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
+    @Lob
+    private String facebookURL;
+    @Lob
+    private String instagramURL;
+    @Lob
+    private String twitterURL;
 
     public Artist() {
         isApproved = false;
+    }
+
+    public String getFacebookURL() {
+        return facebookURL;
+    }
+
+    public void setFacebookURL(String facebookURL) {
+        this.facebookURL = facebookURL;
+    }
+
+    public String getInstagramURL() {
+        return instagramURL;
+    }
+
+    public void setInstagramURL(String instagramURL) {
+        this.instagramURL = instagramURL;
+    }
+
+    public String getTwitterURL() {
+        return twitterURL;
+    }
+
+    public void setTwitterURL(String twitterURL) {
+        this.twitterURL = twitterURL;
     }
 
     public List<Album> getListOfAlbums() {

@@ -3,12 +3,12 @@
 <html class="fixed">
     <head>
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
-        <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />
-        <link rel="stylesheet" href="assets/stylesheets/theme.css" />
-        <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
-        <link rel="stylesheet" href="assets/vendor/pnotify/pnotify.custom.css" />
-        <script src="assets/vendor/modernizr/modernizr.js"></script>
+        <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="../assets/stylesheets/theme.css" />
+        <link rel="stylesheet" href="../assets/stylesheets/skins/default.css" />
+        <link rel="stylesheet" href="../assets/vendor/pnotify/pnotify.custom.css" />
+        <script src="../assets/vendor/modernizr/modernizr.js"></script>
     </head>
 
     <body>
@@ -25,11 +25,11 @@
                     <div class="panel-body">
                         <jsp:include page="displayMessageLong.jsp" />
 
-                        <form action="../AdminAccountManagementController" >
+                        <form action="../AccountManagementController">
                             <div class="form-group mb-lg">
                                 <label>Email</label>
                                 <div class="input-group input-group-icon">
-                                    <input name="email" type="text" class="form-control input-lg" required />
+                                    <input name="email" type="text" class="form-control input-lg" />
                                     <span class="input-group-addon">
                                         <span class="icon icon-lg">
                                             <i class="fa fa-user"></i>
@@ -43,7 +43,7 @@
                                     <label class="pull-left">Password</label>
                                 </div>
                                 <div class="input-group input-group-icon">
-                                    <input name="pwd" type="password" class="form-control input-lg" required/>
+                                    <input name="pwd" type="password" class="form-control input-lg" />
                                     <span class="input-group-addon">
                                         <span class="icon icon-lg">
                                             <i class="fa fa-lock"></i>
@@ -59,7 +59,6 @@
                             </div>
 
                             <input type="hidden" name="target" value="Login">
-
                         </form>
                     </div>
                 </div>
@@ -68,11 +67,11 @@
             </div>
         </section>
         <!-- end: page -->
-        <script src="assets/vendor/jquery/jquery.js"></script>
-        <script src="assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
-        <script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
-        <script src="assets/javascripts/theme.js"></script>
-        <script src="assets/javascripts/theme.init.js"></script>
-        <script src="assets/vendor/pnotify/pnotify.custom.js"></script>
+        <script src="../assets/vendor/jquery/jquery.js"></script>
+        <script src="../assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
+        <script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+        <script src="../assets/javascripts/theme.js"></script>
+        <script src="../assets/javascripts/theme.init.js"></script>
+        <script src="../assets/vendor/pnotify/pnotify.custom.js"></script>
     </body>
 </html>

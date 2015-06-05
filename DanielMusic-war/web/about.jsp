@@ -1,24 +1,14 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="About |">
-    <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">About JSP</h1>
         <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
-        <!-- Overlay -->
         <span class="overlay dots"></span>
     </section>
-    <!-- /intro -->
 
-    <!-- ############################# Content ############################# -->
     <section class="content section">
-        <!-- container -->
         <div class="container">
-
-            <!-- ############################# About US ############################# -->
-
-            <!-- Article -->
             <article>
-
                 <div class="col-1-2">
                     <img src="placeholders/about-img01.jpg" alt="Noisa image" class="inline">
                     <br>
@@ -53,18 +43,8 @@
                     <br>
                     <h3>Videos</h3>
                     <iframe src="//player.vimeo.com/video/66171813?portrait=0&amp;color=ea4233" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
                 </div>
-
-
             </article>
-            <!-- /article -->
-
         </div>
-        <!-- /container -->
     </section>
-    <!-- /Content -->
-
 </section>
-<!-- /page -->
