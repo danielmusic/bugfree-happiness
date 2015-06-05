@@ -30,13 +30,13 @@ import javax.persistence.Query;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
-
+    
     @EJB
     private CommonInfrastructureBeanLocal commonInfrastructureBean;
-
+    
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
-
+    
     @Override
     public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName) {
         ReturnHelper result = new ReturnHelper();
@@ -65,12 +65,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return result;
     }
-
+    
     @Override
     public void testAdaptivePayment() {
         try {
             PayRequest payRequest = new PayRequest();
-
+            
             List<Receiver> receivers = new ArrayList<Receiver>();
 //Artist (partial of the total)
             Receiver secondaryReceiver = new Receiver();
@@ -84,10 +84,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             primaryReceiver.setEmail("danielmusic@hotmail.com");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
-
+            
             ReceiverList receiverList = new ReceiverList(receivers);
             payRequest.setReceiverList(receiverList);
-
+            
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
@@ -96,17 +96,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
             payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
-
+            
             Map<String, String> sdkConfig = new HashMap<String, String>();
             sdkConfig.put("mode", "sandbox");
             sdkConfig.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
             sdkConfig.put("acct1.Password", "WX4WTU3S8MY44S7F");
             sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
             sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
-
+            
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
-
+            
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
@@ -119,7 +119,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             ex.printStackTrace();
         }
     }
-
+    
     @Override
     public ReturnHelper generateDownloadLink(String email, Long musicID) {
         System.out.println("generateDownloadLink() called with email: " + email + " and musicID: " + musicID);
@@ -129,6 +129,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
             Music music = em.getReference(Music.class, musicID);
+            music.setNumDownloaded(music.getNumDownloaded() + 1);
             if (account.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
                 String downloadLink = commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage("music/" + account.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3");
@@ -144,7 +145,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return null;
     }
-
+    
     @Override
     public List<Music> searchMusicByGenre(Long genreID) {
         System.out.println("searchMusicByGenre() called with genreID: " + genreID);
@@ -153,7 +154,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
             System.out.println("searchMusicByGenre() successful");
-
+            
             return listOfMusics;
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,32 +209,32 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public void persist(Object object) {
         em.persist(object);
     }
-
+    
     @Override
     public SearchHelper search(String searchString) {
         System.out.println("search() called with searchString: " + searchString);
         try {
             Query q;
             SearchHelper helper = new SearchHelper();
-
+            
             q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false ORDER BY a.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Album> listOfAlbums = q.getResultList();
-
+            
             q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
             q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
-
+            
             q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false ORDER BY m.album.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
-
+            
             helper.setListOfAlbums(listOfAlbums);
             helper.setListOfArtists(listOfArtists);
             helper.setListOfMusics(listOfMusics);
-
+            
             System.out.println("search() successful");
-
+            
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
