@@ -125,13 +125,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("generateDownloadLink() called with email: " + email + " and musicID: " + musicID);
         try {
             ReturnHelper helper = new ReturnHelper();
-            Query q = em.createQuery("select a from Account a where a.email=:email and a.isDisabled=false and a.emailIsVerified=true");
+            Query q = em.createQuery("select a from Artist a where a.email=:email and a.isDisabled=false and a.emailIsVerified=true");
             q.setParameter("email", email);
-            Account account = (Account) q.getSingleResult();
+            Artist artist = (Artist) q.getSingleResult();
             Music music = em.getReference(Music.class, musicID);
-            if (account.getListOfPurchasedMusics().contains(music)) {
+
+            if (artist.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
-                String downloadLink = commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage("music/" + account.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3");
+                music.setNumDownloaded(music.getNumDownloaded() + 1);
+                String downloadLink = commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3");
                 helper.setDescription(downloadLink);
                 helper.setResult(true);
             } else {
@@ -149,7 +151,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public List<Music> searchMusicByGenre(Long genreID) {
         System.out.println("searchMusicByGenre() called with genreID: " + genreID);
         try {
-            Query q = em.createQuery("SELECT m FROM Music m, Album a WHERE a.listOfMusics.id=m.id and m.listOfGenres.id=:genreID AND m.isDeleted=false ORDER BY a.publishedDate DESC ");
+            Query q = em.createQuery("SELECT m FROM Music m, Album a WHERE a.listOfMusics.id=m.id and m.listOfGenres.id=:genreID AND m.isDeleted=false AND a.isPublished=true ORDER BY a.publishedDate DESC ");
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
             System.out.println("searchMusicByGenre() successful");
@@ -216,7 +218,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Query q;
             SearchHelper helper = new SearchHelper();
 
-            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false ORDER BY a.publishedDate DESC");
+            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false AND a.isPublished=true ORDER BY a.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Album> listOfAlbums = q.getResultList();
 
@@ -224,7 +226,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
 
-            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false ORDER BY m.album.publishedDate DESC");
+            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
 
