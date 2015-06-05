@@ -25,7 +25,7 @@
                     <div class="panel-body">
                         <jsp:include page="displayMessageLong.jsp" />
 
-                        <form action="../AdminAccountManagementController">
+                        <form action="../AccountManagementController">
                             <div class="form-group mb-lg">
                                 <label>Email</label>
                                 <div class="input-group input-group-icon">

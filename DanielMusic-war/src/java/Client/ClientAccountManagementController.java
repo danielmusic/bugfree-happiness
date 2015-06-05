@@ -39,22 +39,27 @@ public class ClientAccountManagementController extends HttpServlet {
         try {
             switch (target) {
                 case "ArtistSignup":
-                    System.out.println(">>>>>>>>>>>" + VerifyRecaptcha.verify(grecaptcharesponse));
-
-//                    if (chkAgree != null) {
-//                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
-//                        if (returnHelper.getResult()) {
-//                            nextPage = "#!/artist/signup/";
-//                            session.setAttribute("goodMsg", returnHelper.getDescription());
-//                        } else {
-//                            nextPage = "#!/login/";
-//                            session.setAttribute("errMsg", returnHelper.getDescription());
-//                        }
-//                        break;
-//                    }
-                    nextPage = "#!/artist/signup";
-                    session.setAttribute("errMsg", "Sorry. You have not agreed to the terms");
-                    break;
+                    if (chkAgree != null) {
+                        if (VerifyRecaptcha.verify(grecaptcharesponse)) {
+                            returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
+                            if (returnHelper.getResult()) {
+                                nextPage = "#!/artist/signup/";
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                nextPage = "#!/login/";
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                            break;
+                        } else {
+                            nextPage = "#!/artist/signup";
+                            session.setAttribute("errMsg", "Please verify the captcha again.");
+                            break;
+                        }
+                    } else {
+                        nextPage = "#!/artist/signup";
+                        session.setAttribute("errMsg", "Sorry. You have not agreed to the terms");
+                        break;
+                    }
 
                 case "ArtistLogin":
                     returnHelper = accountManagementBean.loginAccount(email, password);

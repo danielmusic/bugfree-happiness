@@ -9,12 +9,8 @@
         <servlet-class>Client.MusicManagementController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ArtistManagementController</servlet-name>
-        <servlet-class>Admin.ArtistManagementController</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminAccountManagementController</servlet-name>
-        <servlet-class>Admin.AdminAccountManagementController</servlet-class>
+        <servlet-name>AccountManagementController</servlet-name>
+        <servlet-class>Admin.AccountManagementController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ClientAccountManagementController</servlet-name>
@@ -29,12 +25,8 @@
         <url-pattern>/MusicManagementController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ArtistManagementController</servlet-name>
-        <url-pattern>/ArtistManagementController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminAccountManagementController</servlet-name>
-        <url-pattern>/AdminAccountManagementController</url-pattern>
+        <servlet-name>AccountManagementController</servlet-name>
+        <url-pattern>/AccountManagementController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ClientAccountManagementController</servlet-name>

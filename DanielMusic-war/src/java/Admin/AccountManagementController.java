@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class AdminAccountManagementController extends HttpServlet {
+public class AccountManagementController extends HttpServlet {
 
     @EJB
     private AccountManagementBeanLocal accountManagementBean;
