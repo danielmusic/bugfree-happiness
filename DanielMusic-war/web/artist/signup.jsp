@@ -15,9 +15,25 @@
         <div class="container">
             <!-- Article -->
             <article>
+                <script>
+                    function signup() {
+                        var v = grecaptcha.getResponse();
+                        if (v.length != 0) {
+                            window.event.returnValue = true;
+                            document.artistSignupForm.action = "ClientAccountManagementController";
+                            document.artistSignupForm.submit();
+                        } else {
+                            document.getElementById('displayMsg').innerHTML = "<p class='error'>You can't leave Captcha Code empty</p>";
+                        }
+                    }
+                </script>
+
+                <span id="displayMsg"></span>
+                <jsp:include page="../displayMessage.jsp" />
+
                 <h2>Sign up for an artist account</h2>
 
-                <form action="ClientAccountManagementController" class="form">
+                <form name="artistSignupForm" class="form">
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="name"><strong>Artist/Band Name</strong> *</label>
@@ -47,12 +63,10 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <div class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                            <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
                         </div>
                     </div>
-
-
-                    <input type="submit" value="Sign up now!" class="large invert">
+                    <button class="large invert" onclick="javascript:signup()">Sign up now!</button>
                     <input type="hidden" value="ArtistSignup" name="target">
                     <div class="clear"></div>
                 </form>

@@ -33,8 +33,8 @@
                         Member fan = (Member) (session.getAttribute("fan"));
 
                         if (artist != null) {
-                            out.print("<li><a href='#!/artist/profile'>profile</a><li>");
                             out.print("<li><a href='#!/artist/albums'>albums</a><li>");
+                            out.print("<li><a href='#!/artist/profile'>profile</a><li>");
                             out.print("<li><a href='ClientAccountManagementController?target=AccountLogout'>logout</a><li>");
                         } else if (fan != null) {
 
