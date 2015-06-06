@@ -1,55 +1,77 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Client;
 
+import EntityManager.ReturnHelper;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
-/**
- *
- * @author darius
- */
 public class MusicManagementController extends HttpServlet {
+
     @EJB
     private MusicManagementBeanLocal musicManagementBean;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    String nextPage = "", goodMsg = "", errMsg = "";
+    HttpSession session;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            //musicManagementBean.
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MusicManagementController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MusicManagementController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
+        System.out.println("Welcome to client account managment controller");
+        String target = request.getParameter("target");
+
+        session = request.getSession();
+        session.removeAttribute("message");
+        ReturnHelper returnHelper;
+        try {
+            switch (target) {
+                case "UploadMusic":
+                    Part part = request.getPart("javafile");
+                    if (part != null) {
+                        String fileName = part.getSubmittedFileName();
+                        String imageURL = request.getServletContext().getRealPath("/images/") + "\\" + fileName;
+                        System.out.println("file name is " + fileName);
+                        String s = part.getHeader("content-disposition");
+                        InputStream fileInputStream = part.getInputStream();
+                        OutputStream fileOutputStream = new FileOutputStream(imageURL);
+                        System.out.println("writing to... " + imageURL);
+                        int nextByte;
+                        while ((nextByte = fileInputStream.read()) != -1) {
+                            fileOutputStream.write(nextByte);
+                        }
+                        fileOutputStream.close();
+                        fileInputStream.close();
+
+                        //AmazonS3FileTransfer transfer = new AmazonS3FileTransfer();
+                        returnHelper = musicManagementBean.uploadMusic(null);
+                        //boolean result = createMusic(SKU, name, description, awsImagePath, Double.parseDouble(price), Long.parseLong(categoryId));
+                        if (returnHelper.getResult()) {
+
+                        } else {
+
+                        }
+                        File f = new File(imageURL);
+                        System.out.println("deleting file... " + f.delete());
+                    }
+            }
+
+        } catch (Exception ex) {
+            response.sendRedirect("error500.html");
+            ex.printStackTrace();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

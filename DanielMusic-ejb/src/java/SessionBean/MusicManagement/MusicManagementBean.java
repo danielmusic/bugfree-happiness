@@ -45,7 +45,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Encoder encoder = new Encoder();
             AudioAttributes aa = new AudioAttributes();
             aa.setCodec("libmp3lame");
-            aa.setBitRate(new Integer(bitrate*000));
+            aa.setBitRate(new Integer(bitrate * 000));
             aa.setChannels(new Integer(2));
             aa.setSamplingRate(new Integer(44100));
             EncodingAttributes ea = new EncodingAttributes();
@@ -163,49 +163,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return null;
         }
     }
-//
-//    @Override
-//    public List<Music> searchMusicByArtist(String artistName) {
-//        System.out.println("searchMusicByArtist() called with artistName: " + artistName);
-//        try {
-//            Query q = em.createQuery("SELECT m FROM Music m WHERE m.artistName LIKE %:artistName% AND m.isDeleted=false");
-//            q.setParameter("artistName", artistName);
-//            List<Music> listOfMusics = q.getResultList();
-//            System.out.println("searchMusicByArtist() successful");
-//
-//            return listOfMusics;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("Error while calling searchMusicByArtist()");
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public List<Music> searchMusic(String searchString) {
-//        System.out.println("searchMusic() called with searchString: " + searchString);
-//        try {
-//            Scanner sc = new Scanner(searchString);
-//            ArrayList<String> arrayList = new ArrayList<String>();
-//            List<Music> listOfMusics = null;
-//            while (sc.hasNext()) {
-//                arrayList.add(sc.next());
-//            }
-//            for (String s : arrayList) {
-//                Query q = em.createQuery("SELECT m FROM Music m WHERE (m.artistName LIKE %:s%) OR  AND m.isDeleted=false");
-//                q.setParameter("artistName", artistName);
-//                listOfMusics = q.getResultList();
-//            }
-//
-//            System.out.println("searchMusic() successful");
-//
-//            return listOfMusics;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("Error while calling searchMusic()");
-//            return null;
-//        }
-//    }
 
     public void persist(Object object) {
         em.persist(object);
@@ -242,5 +199,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("Error while calling search()");
             return null;
         }
+    }
+
+    @Override
+    public ReturnHelper uploadMusic(File sourceFileName) {
+
+        encodeToMP3(sourceFileName, sourceFileName, 0);
+        return null;
     }
 }

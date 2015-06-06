@@ -55,4 +55,5 @@ public interface MusicManagementBeanLocal {
      */
     public SearchHelper search(String searchString);
 
+    public ReturnHelper uploadMusic(File sourceFileName);
 }
