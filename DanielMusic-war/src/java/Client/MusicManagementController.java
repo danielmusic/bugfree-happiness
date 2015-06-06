@@ -53,7 +53,7 @@ public class MusicManagementController extends HttpServlet {
                         fileInputStream.close();
 
                         //AmazonS3FileTransfer transfer = new AmazonS3FileTransfer();
-                        returnHelper = musicManagementBean.uploadMusic(null);
+                        returnHelper = musicManagementBean.createMusic(null);
                         //boolean result = createMusic(SKU, name, description, awsImagePath, Double.parseDouble(price), Long.parseLong(categoryId));
                         if (returnHelper.getResult()) {
 

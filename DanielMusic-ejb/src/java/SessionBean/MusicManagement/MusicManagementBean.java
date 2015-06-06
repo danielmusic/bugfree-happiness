@@ -202,7 +202,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper uploadMusic(File sourceFileName) {
+    public ReturnHelper createMusic(File sourceFileName) {
 
         encodeToMP3(sourceFileName, sourceFileName, 0);
         return null;
