@@ -38,14 +38,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     private EntityManager em;
 
     @Override
-    public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName) {
+    public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName, int bitrate) {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
             Encoder encoder = new Encoder();
             AudioAttributes aa = new AudioAttributes();
             aa.setCodec("libmp3lame");
-            aa.setBitRate(new Integer(320000));
+            aa.setBitRate(new Integer(bitrate*000));
             aa.setChannels(new Integer(2));
             aa.setSamplingRate(new Integer(44100));
             EncodingAttributes ea = new EncodingAttributes();
