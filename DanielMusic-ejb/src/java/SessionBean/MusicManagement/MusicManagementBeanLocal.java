@@ -6,6 +6,7 @@ import EntityManager.SearchHelper;
 import java.io.File;
 import java.util.List;
 import javax.ejb.Local;
+import javax.servlet.http.Part;
 
 @Local
 public interface MusicManagementBeanLocal {
@@ -55,5 +56,5 @@ public interface MusicManagementBeanLocal {
      */
     public SearchHelper search(String searchString);
 
-    public ReturnHelper createMusic(File sourceFileName);
+    public ReturnHelper createMusic(Part musicPart);
 }

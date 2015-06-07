@@ -38,30 +38,12 @@ public class MusicManagementController extends HttpServlet {
                 case "UploadMusic":
                     Part part = request.getPart("javafile");
                     if (part != null) {
-                        String fileName = part.getSubmittedFileName();
-                        String imageURL = request.getServletContext().getRealPath("/images/") + "\\" + fileName;
-                        System.out.println("file name is " + fileName);
-                        String s = part.getHeader("content-disposition");
-                        InputStream fileInputStream = part.getInputStream();
-                        OutputStream fileOutputStream = new FileOutputStream(imageURL);
-                        System.out.println("writing to... " + imageURL);
-                        int nextByte;
-                        while ((nextByte = fileInputStream.read()) != -1) {
-                            fileOutputStream.write(nextByte);
-                        }
-                        fileOutputStream.close();
-                        fileInputStream.close();
-
-                        //AmazonS3FileTransfer transfer = new AmazonS3FileTransfer();
-                        returnHelper = musicManagementBean.createMusic(null);
-                        //boolean result = createMusic(SKU, name, description, awsImagePath, Double.parseDouble(price), Long.parseLong(categoryId));
+                        returnHelper = musicManagementBean.createMusic(part);
                         if (returnHelper.getResult()) {
 
                         } else {
 
                         }
-                        File f = new File(imageURL);
-                        System.out.println("deleting file... " + f.delete());
                     }
             }
 

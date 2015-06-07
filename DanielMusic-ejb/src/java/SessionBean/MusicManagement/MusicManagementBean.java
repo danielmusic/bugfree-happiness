@@ -18,6 +18,9 @@ import java.io.File;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.Part;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
@@ -202,9 +206,56 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createMusic(File sourceFileName) {
+    public ReturnHelper createMusic(Part musicPart) {
+        try {
 
-        encodeToMP3(sourceFileName, sourceFileName, 0);
+            String fileName = musicPart.getSubmittedFileName();
+            String musicURL = "temp/" + fileName;
+            System.out.println("file name is " + fileName);
+            InputStream fileInputStream = musicPart.getInputStream();
+            OutputStream fileOutputStream = new FileOutputStream(musicURL);
+
+            System.out.println("writing to... " + musicURL);
+            int nextByte;
+            while ((nextByte = fileInputStream.read()) != -1) {
+                fileOutputStream.write(nextByte);
+            }
+            fileOutputStream.close();
+            fileInputStream.close();
+
+            File file = new File(musicURL);
+            File newFile128 = new File(musicURL + "128");
+            File newFile320 = new File(musicURL + "320");
+            encodeToMP3(file, newFile128, 128);
+            encodeToMP3(file, newFile320, 320);
+
+            //create music entity
+            Music music = new Music();
+            music.setAlbum(null);
+
+            Boolean result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage("music/" + "" + "/" + "" + "/" + fileName + ".mp3", musicURL + "128", Boolean.FALSE);
+            Boolean result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage("music/" + "" + "/" + "" + "/" + fileName + ".mp3", musicURL + "320", Boolean.FALSE);
+
+            ReturnHelper helper = new ReturnHelper();
+            if (result1 && result2) {
+                helper.setDescription("Music uploaded successfully.");
+                helper.setResult(true);
+
+            } else {
+                helper.setDescription("Error occurred while uploading music... Please check that the music is in the correct format.");
+                helper.setResult(false);
+                //delete music entity
+
+            }
+
+            System.out.println("deleting file... " + file.delete());
+            System.out.println("deleting file newFile128... " + newFile128.delete());
+            System.out.println("deleting file newFile320... " + newFile320.delete());
+
+            return helper;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
