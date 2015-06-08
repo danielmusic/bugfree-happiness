@@ -3,6 +3,7 @@ package SessionBean.MusicManagement;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
+import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
@@ -254,6 +255,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             return helper;
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Genre> listAllGenres() {
+        System.out.println("listAllGenres() called");
+        try {
+            Query q = em.createQuery("select g from Genre g where g.isDeleted=false");
+            List<Genre> listOfGenres = q.getResultList();
+            System.out.println("listAllGenres() called successfully");
+            return listOfGenres;
+        } catch (Exception e) {
+            System.out.println("Error while calling listAllGenres()");
             e.printStackTrace();
         }
         return null;

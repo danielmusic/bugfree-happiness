@@ -13,6 +13,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -24,7 +25,7 @@ import javax.servlet.http.Part;
 
 @Stateless
 public class AccountManagementBean implements AccountManagementBeanLocal {
-    
+
     @EJB
     private CommonInfrastructureBeanLocal cibl;
 
@@ -33,7 +34,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     @Override
     public ReturnHelper loginAccount(String email, String password) {
         System.out.println("AccountManagementBean: loginAccount() called");
@@ -368,18 +369,18 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 account.setName(newName);
             }
             if (profilePicture != null) {
-                    //Save file to local drive first
-                    InputStream fileInputStream = profilePicture.getInputStream();
-                    OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
-                    int nextByte;
-                    while ((nextByte = fileInputStream.read()) != -1) {
-                        fileOutputStream.write(nextByte);
-                    }
-                    fileOutputStream.close();
-                    fileInputStream.close();
-                    //TODO: Upload file to cloud storage
-                    //Update URL address
-                    account.setImageURL("");
+                //Save file to local drive first
+                InputStream fileInputStream = profilePicture.getInputStream();
+                OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
+                int nextByte;
+                while ((nextByte = fileInputStream.read()) != -1) {
+                    fileOutputStream.write(nextByte);
+                }
+                fileOutputStream.close();
+                fileInputStream.close();
+                //TODO: Upload file to cloud storage
+                //Update URL address
+                account.setImageURL("");
             }
             if (description != null && !description.equals("")) {
                 account.setDescription(description);
@@ -399,7 +400,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper deleteAccountProfilePicture(Long accountID) {
-     System.out.println("AccountManagementBean: deleteAccountProfilePicture() called");
+        System.out.println("AccountManagementBean: deleteAccountProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
@@ -407,9 +408,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         try {
             Account account = (Account) q.getSingleResult();
             if (account.getImageURL() != null || !account.getImageURL().equals("")) {
-                    account.setImageURL("");
-                    result.setResult(true);
-                    result.setDescription("Profile picture removed.");
+                account.setImageURL("");
+                result.setResult(true);
+                result.setDescription("Profile picture removed.");
             } else {
                 result.setDescription("No profile picture to remove!");
             }
@@ -478,5 +479,25 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public List<Artist> listAllArtists(Boolean isAdmin) {
+        System.out.println("listAllArtists() called");
+        try {
+            Query q;
+            if (isAdmin) {
+                q = em.createQuery("select a from Artist a where a.isDisabled=false ");
+            } else {
+                q = em.createQuery("select a from Artist a where a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
+            }
+            List<Artist> listOfArtists = q.getResultList();
+            System.out.println("listAllArtists() called successfully");
+            return listOfArtists;
+        } catch (Exception e) {
+            System.out.println("Error while calling listAllArtists()");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

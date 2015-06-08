@@ -38,12 +38,12 @@ public class MusicManagementController extends HttpServlet {
                 case "UploadMusic":
                     Part part = request.getPart("javafile");
                     if (part != null) {
-                        returnHelper = musicManagementBean.createMusic(part);
-                        if (returnHelper.getResult()) {
-
-                        } else {
-
-                        }
+                        //returnHelper = musicManagementBean.createMusic(part);
+//                        if (returnHelper.getResult()) {
+//
+//                        } else {
+//
+//                        }
                     }
             }
 

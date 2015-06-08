@@ -1,5 +1,6 @@
 package SessionBean.MusicManagement;
 
+import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
@@ -58,4 +59,6 @@ public interface MusicManagementBeanLocal {
     public SearchHelper search(String searchString);
 
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, Double price, List<Long> listOfGenreIDs);
+
+    public List<Genre> listAllGenres();
 }

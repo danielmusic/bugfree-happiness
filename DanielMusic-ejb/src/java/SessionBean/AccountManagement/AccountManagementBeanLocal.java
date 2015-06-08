@@ -1,7 +1,9 @@
 package SessionBean.AccountManagement;
 
 import EntityManager.Account;
+import EntityManager.Artist;
 import EntityManager.ReturnHelper;
+import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
 
@@ -25,4 +27,5 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail);
     //public List<Account> listAllAccount();
+    public List<Artist> listAllArtists(Boolean isAdmim);
 }
