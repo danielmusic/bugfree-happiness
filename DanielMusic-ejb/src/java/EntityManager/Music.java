@@ -20,7 +20,6 @@ public class Music implements Serializable {
     private Integer trackNumber;
     private String name;
     private String artistName;
-    private String imageURL;
     private Long numDownloaded;
     private Double price;
     private String fileLocation;
@@ -81,14 +80,6 @@ public class Music implements Serializable {
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
     }
 
     public Long getNumDownloaded() {

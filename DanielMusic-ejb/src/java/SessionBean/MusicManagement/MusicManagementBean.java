@@ -206,7 +206,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, String imageURL, Double price, List<Long> listOfGenreIDs) {
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, Double price, List<Long> listOfGenreIDs) {
         try {
 
             String fileName = musicPart.getSubmittedFileName();

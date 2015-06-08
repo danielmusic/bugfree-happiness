@@ -32,7 +32,8 @@ public interface MusicManagementBeanLocal {
     /**
      * {@inheritDoc}
      * <p>
-     * For the discovery of music by genre arranged in reverse chronological order.
+     * For the discovery of music by genre arranged in reverse chronological
+     * order.
      * </p>
      *
      * @param genreID The ID of the genre that you wish to discover by.
@@ -56,5 +57,5 @@ public interface MusicManagementBeanLocal {
      */
     public SearchHelper search(String searchString);
 
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, String imageURL, Double price, List<Long> listOfGenreIDs);
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, Double price, List<Long> listOfGenreIDs);
 }
