@@ -40,8 +40,18 @@ public class AccountManagementController extends HttpServlet {
                         nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
                     }
                     break;
+
+                case "ListAllArtist":
+                    break;
+
+                case "ListAllFan":
+                    break;
+
+                case "ListAllGenre":
+                    break;
+
             }
-            
+
             if (nextPage.equals("")) {
                 response.sendRedirect("login.jsp?errMsg=Session Expired.");
             } else {
@@ -56,7 +66,7 @@ public class AccountManagementController extends HttpServlet {
 
     public boolean checkLogin(HttpServletResponse response) {
         try {
-            Account staff = (Account) (session.getAttribute("staff"));
+            Admin staff = (Admin) (session.getAttribute("staff"));
             if (staff == null) {
                 response.sendRedirect("login.jsp?errMsg=Session Expired.");
                 return false;

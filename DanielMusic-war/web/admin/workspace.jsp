@@ -1,11 +1,45 @@
+<%@page import="EntityManager.Admin"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
+<%
+    Admin staff = (Admin) (session.getAttribute("staff"));
+    if (session.isNew()) {
+        response.sendRedirect("login.jsp?errMsg=Invalid Request. Please login.");
+    } else if (staff == null) {
+        response.sendRedirect("login.jsp?errMsg=Session Expired.");
+    } else {
+%>
+<!doctype html>
+<html class="fixed">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <jsp:include page="head.html" />
     </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+    <body onload="alertFunc()">
+        <jsp:include page="displayNotification.jsp" />
+        <jsp:include page="header.jsp" />
+        <div class="inner-wrapper">
+            <jsp:include page="sidebar.jsp" />
+            <section role="main" class="content-body">
+                <header class="page-header">
+                    <h2>Workspace</h2>
+                    <div class="right-wrapper pull-right">
+                        <ol class="breadcrumbs">
+                            <li><i class="fa fa-home"></i></li>
+                            <li><span>Workspace &nbsp;&nbsp</span></li>
+                        </ol>
+                    </div>
+                </header>
+
+                <!-- start: page -->
+
+                <!-- end: page -->
+            </section>
+        </div>
+
+        <jsp:include page="foot.html" />
+    </section>
+
+</body>
 </html>
+<%
+    }
+%>

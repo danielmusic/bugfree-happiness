@@ -5,15 +5,12 @@ import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.hibernate.validator.constraints.URL;
 
 public class ClientAccountManagementController extends HttpServlet {
 
@@ -28,6 +25,8 @@ public class ClientAccountManagementController extends HttpServlet {
         String target = request.getParameter("target");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
+        String bio = request.getParameter("bio");
+        String profilePicURL = request.getParameter("profilePicURL");
         String password = request.getParameter("pwd");
         String chkAgree = request.getParameter("chkAgree");
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
@@ -43,10 +42,10 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (VerifyRecaptcha.verify(grecaptcharesponse)) {
                             returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
                             if (returnHelper.getResult()) {
-                                nextPage = "#!/artist/signup/";
+                                nextPage = "#!/login";
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
-                                nextPage = "#!/login/";
+                                nextPage = "#!/login";
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
                             break;
@@ -69,6 +68,13 @@ public class ClientAccountManagementController extends HttpServlet {
                     } else {
                         nextPage = "#!/login";
                         session.setAttribute("errMsg", returnHelper.getDescription());
+                    }
+                    break;
+
+                case "ArtistUpdateProfile":
+                    Artist artist = (Artist) (session.getAttribute("artist"));
+                    if (artist != null) {
+                       // returnHelper = accountManagementBean.updateAccountProfile(artist.getId(), name, profilePicURL, bio);
                     }
                     break;
 
@@ -103,10 +109,6 @@ public class ClientAccountManagementController extends HttpServlet {
             response.sendRedirect("error500.html");
             ex.printStackTrace();
         }
-    }
-
-    public void sendPostReqeust(String response) {
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

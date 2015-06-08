@@ -1,17 +1,44 @@
-<%-- 
-    Document   : sidebar
-    Created on : Jun 5, 2015, 5:21:15 PM
-    Author     : darius
---%>
+<aside id="sidebar-left" class="sidebar-left">
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+    <div class="sidebar-header">
+        <div class="sidebar-title">
+            Navigation
+        </div>
+        <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
+            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+    </div>
+
+    <div class="nano">
+        <div class="nano-content">
+            <nav id="menu" class="nav-main" role="navigation">
+                <ul class="nav nav-main">
+                    <li>
+                        <a href="../AccountManagement/workspace.jsp">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../AccountManagementController?target=ListAllStaff">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <span>Artists</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../AccountManagementController?target=ListAllStaff">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <span>Fans</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../AccountManagementController?target=ListAllStaff">
+                            <i class="fa fa-music" aria-hidden="true"></i>
+                            <span>Genre</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</aside>
