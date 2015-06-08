@@ -56,5 +56,5 @@ public interface MusicManagementBeanLocal {
      */
     public SearchHelper search(String searchString);
 
-    public ReturnHelper createMusic(Part musicPart);
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, String imageURL, Double price, List<Long> listOfGenreIDs);
 }
