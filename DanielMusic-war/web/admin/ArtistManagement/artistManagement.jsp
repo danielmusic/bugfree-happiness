@@ -55,7 +55,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Status</th>
+                                            <th style="width: 300px;">Status</th>
                                             <th style="width: 300px;">Action</th>
                                         </tr>
                                     </thead>
@@ -71,6 +71,17 @@
                                                 <%
                                                     if (!artists.get(i).getIsDisabled()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                    } else {
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                    }
+                                                    if (!artists.get(i).getIsApproved()) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approved</span>");
+                                                    } else {
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                    }
+
+                                                    if (artists.get(i).getEmailIsVerified()) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
                                                         out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
                                                     }

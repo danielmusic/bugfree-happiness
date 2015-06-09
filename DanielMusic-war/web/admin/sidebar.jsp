@@ -13,25 +13,25 @@
             <nav id="menu" class="nav-main" role="navigation">
                 <ul class="nav nav-main">
                     <li>
-                        <a href="../AccountManagement/workspace.jsp">
+                        <a href="../workspace.jsp">
                             <i class="fa fa-home" aria-hidden="true"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="../AccountManagementController?target=ListAllArtist">
+                        <a href="../../AccountManagementController?target=ListAllArtist">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <span>Artists</span>
                         </a>
                     </li>
                     <li>
-                        <a href="../AccountManagementController?target=ListAllStaff">
+                        <a href="../../AccountManagementController?target=ListAllFan">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <span>Fans</span>
                         </a>
                     </li>
                     <li>
-                        <a href="../AccountManagementController?target=ListAllStaff">
+                        <a href="../../AccountManagementController?target=ListAllGenre">
                             <i class="fa fa-music" aria-hidden="true"></i>
                             <span>Genre</span>
                         </a>

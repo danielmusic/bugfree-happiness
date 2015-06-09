@@ -1,8 +1,8 @@
 <%@page import="EntityManager.Admin"%>
 <header class="header">
     <div class="logo-container">
-        <a href="../admin/workspace.jsp" class="logo">
-            <img src="assets/images/logo.png" height="35" />
+        <a href="../workspace.jsp" class="logo">
+            <img src="../assets/images/logo.png" height="35" />
         </a>
         <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
             <i class="fa fa-bars" aria-label="Toggle sidebar"></i>

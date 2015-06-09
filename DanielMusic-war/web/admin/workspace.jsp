@@ -42,9 +42,94 @@
     </head>
     <body onload="alertFunc()">
         <jsp:include page="displayNotification.jsp" />
-        <jsp:include page="header.jsp" />
+        <header class="header">
+            <div class="logo-container">
+                <a href="../admin/workspace.jsp" class="logo">
+                    <img src="assets/images/logo.png" height="35" />
+                </a>
+                <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+                    <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                </div>
+            </div>
+
+            <!-- start: search & user box -->
+            <div class="header-right">
+                <span class="separator"></span>
+                <div id="userbox" class="userbox">
+                    <a href="#" data-toggle="dropdown">
+                        <figure class="profile-picture">
+                            <img src="assets/images/!logged-user.jpg" alt="Joseph Doe" class="img-circle" data-lock-picture="assets/images/!logged-user.jpg" />
+                        </figure>
+                        <div class="profile-info">
+                            <span class="name"><%=admin.getName()%></span>
+                            <span class="role"><%=admin.getEmail()%></span>
+                        </div>
+
+                        <i class="fa custom-caret"></i>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <ul class="list-unstyled">
+                            <li class="divider"></li>
+                            <li>
+                                <a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="fa fa-user"></i> My Profile</a>
+                            </li>
+                            <li>
+                                <a role="menuitem" tabindex="-1" href="../AccountManagementController?target=Logout"><i class="fa fa-power-off"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- end: search & user box -->
+        </header>
+
         <div class="inner-wrapper">
-            <jsp:include page="sidebar.jsp" />
+
+            <aside id="sidebar-left" class="sidebar-left">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+                        Navigation
+                    </div>
+                    <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
+                        <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                    </div>
+                </div>
+
+                <div class="nano">
+                    <div class="nano-content">
+                        <nav id="menu" class="nav-main" role="navigation">
+                            <ul class="nav nav-main">
+                                <li>
+                                    <a href="workspace.jsp">
+                                        <i class="fa fa-home" aria-hidden="true"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../AccountManagementController?target=ListAllArtist">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        <span>Artists</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../AccountManagementController?target=ListAllStaff">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        <span>Fans</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../AccountManagementController?target=ListAllStaff">
+                                        <i class="fa fa-music" aria-hidden="true"></i>
+                                        <span>Genre</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </aside>
+
             <section role="main" class="content-body">
                 <header class="page-header">
                     <h2>Workspace</h2>
