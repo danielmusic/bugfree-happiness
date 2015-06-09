@@ -27,5 +27,5 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail);
     //public List<Account> listAllAccount();
-    public List<Artist> listAllArtists(Boolean isAdmim);
+    
 }

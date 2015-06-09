@@ -7,5 +7,4 @@ import javax.ejb.Local;
 @Local
 public interface ClientManagementBeanLocal {
 
-    public List<Member> listAllMembers(Boolean isAdmin);
 }

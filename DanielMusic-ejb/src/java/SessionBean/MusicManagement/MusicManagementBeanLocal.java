@@ -60,5 +60,4 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, Double price, List<Long> listOfGenreIDs);
 
-    public List<Genre> listAllGenres();
 }

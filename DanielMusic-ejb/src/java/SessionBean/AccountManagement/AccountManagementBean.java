@@ -481,23 +481,5 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         return result;
     }
 
-    @Override
-    public List<Artist> listAllArtists(Boolean isAdmin) {
-        System.out.println("listAllArtists() called");
-        try {
-            Query q;
-            if (isAdmin) {
-                q = em.createQuery("select a from Artist a where a.isDisabled=false ");
-            } else {
-                q = em.createQuery("select a from Artist a where a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
-            }
-            List<Artist> listOfArtists = q.getResultList();
-            System.out.println("listAllArtists() called successfully");
-            return listOfArtists;
-        } catch (Exception e) {
-            System.out.println("Error while calling listAllArtists()");
-            e.printStackTrace();
-        }
-        return null;
-    }
+   
 }
