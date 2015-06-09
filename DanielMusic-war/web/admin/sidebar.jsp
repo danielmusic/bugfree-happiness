@@ -1,5 +1,4 @@
 <aside id="sidebar-left" class="sidebar-left">
-
     <div class="sidebar-header">
         <div class="sidebar-title">
             Navigation
@@ -20,7 +19,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="../AccountManagementController?target=ListAllStaff">
+                        <a href="../AccountManagementController?target=ListAllArtist">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <span>Artists</span>
                         </a>

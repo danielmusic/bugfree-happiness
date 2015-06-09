@@ -1,10 +1,12 @@
 package Admin;
 
-import EntityManager.Account;
 import EntityManager.Admin;
+import EntityManager.Artist;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
+import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,13 +17,15 @@ import javax.servlet.http.HttpSession;
 public class AccountManagementController extends HttpServlet {
 
     @EJB
+    private AdminManagementBeanLocal adminManagementBean;
+
+    @EJB
     private AccountManagementBeanLocal accountManagementBean;
 
     String nextPage = "", goodMsg = "", errMsg = "";
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         String target = request.getParameter("target");
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
@@ -34,14 +38,28 @@ public class AccountManagementController extends HttpServlet {
                 case "Login":
                     returnHelper = accountManagementBean.loginAccount(email, password);
                     if (returnHelper.getResult()) {
-                        session.setAttribute("staff", (Admin) accountManagementBean.getAccount(email));
+                        session.setAttribute("admin", (Admin) accountManagementBean.getAccount(email));
                         nextPage = "admin/workspace.jsp";
                     } else {
                         nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
                     }
                     break;
 
+                case "Logout":
+                    session.invalidate();
+                    nextPage = "admin/login.jsp?goodMsg=Logout Successful";
+                    break;
+
                 case "ListAllArtist":
+                    if (checkLogin(response)) {
+                        List<Artist> artists = adminManagementBean.listAllArtists(true);
+                        if (artists == null) {
+                            nextPage = "admin/error500.html";
+                        } else {
+                            session.setAttribute("artists", artists);
+                            nextPage = "admin/ArtistManagement/artistManagement.jsp";
+                        }
+                    }
                     break;
 
                 case "ListAllFan":
@@ -53,22 +71,23 @@ public class AccountManagementController extends HttpServlet {
             }
 
             if (nextPage.equals("")) {
-                response.sendRedirect("login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                return;
             } else {
                 response.sendRedirect(nextPage);
+                return;
             }
 
         } catch (Exception ex) {
-            response.sendRedirect("error500.html");
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }
 
     public boolean checkLogin(HttpServletResponse response) {
         try {
-            Admin staff = (Admin) (session.getAttribute("staff"));
-            if (staff == null) {
-                response.sendRedirect("login.jsp?errMsg=Session Expired.");
+            Admin admin = (Admin) (session.getAttribute("admin"));
+            if (admin == null) {
+                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
                 return false;
             } else {
                 return true;
