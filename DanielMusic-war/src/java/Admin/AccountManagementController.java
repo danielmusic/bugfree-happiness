@@ -2,6 +2,8 @@ package Admin;
 
 import EntityManager.Admin;
 import EntityManager.Artist;
+import EntityManager.Genre;
+import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
@@ -63,9 +65,27 @@ public class AccountManagementController extends HttpServlet {
                     break;
 
                 case "ListAllFan":
+                    if (checkLogin(response)) {
+                        List<Member> fans = adminManagementBean.listAllMembers(true);
+                        if (fans == null) {
+                            nextPage = "admin/error500.html";
+                        } else {
+                            session.setAttribute("fans", fans);
+                            nextPage = "admin/FanManagement/fanManagement.jsp";
+                        }
+                    }
                     break;
 
                 case "ListAllGenre":
+                    if (checkLogin(response)) {
+                        List<Genre> genres = adminManagementBean.listAllGenres();
+                        if (genres == null) {
+                            nextPage = "admin/error500.html";
+                        } else {
+                            session.setAttribute("genres", genres);
+                            nextPage = "admin/GenreManagement/GenreManagement.jsp";
+                        }
+                    }
                     break;
 
             }

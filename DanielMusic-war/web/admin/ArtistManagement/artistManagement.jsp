@@ -56,7 +56,7 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th style="width: 300px;">Status</th>
-                                            <th style="width: 300px;">Action</th>
+                                            <th style="width: 300px; text-align: center;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,19 +77,19 @@
                                                     if (!artists.get(i).getIsApproved()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Approved</span>");
                                                     } else {
-                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
                                                     }
 
                                                     if (artists.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
-                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
                                                     }
                                                 %>
                                             </td>
                                             <td>
                                                 <% if (!artists.get(i).getIsDisabled()) {%>
-                                                <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove">Disable</button>
+                                                <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
                                                 <%}%>
                                             </td>
                                         </tr>
@@ -97,10 +97,8 @@
                                                 }
                                             }
                                         %>
-
                                     </tbody>
                                 </table>
-
                                 <input type="hidden" name="id" value="">
                                 <input type="hidden" name="target" value="">    
                             </form>

@@ -1,4 +1,5 @@
-<%@page import="EntityManager.Genre"%>
+<%@page import="EntityManager.Member"%>
+<%@page import="EntityManager.Artist"%>
 <%@page import="EntityManager.Admin"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,7 +10,7 @@
     } else if (admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
-        List<Genre> genres = (List<Genre>) (session.getAttribute("genre"));
+        List<Member> fans = (List<Member>) (session.getAttribute("fans"));
 %>
 <!doctype html>
 <html class="fixed">
@@ -19,9 +20,7 @@
     <body onload="alertFunc()">
         <jsp:include page="../displayNotification.jsp" />
         <script>
-            function addGenre() {
-                window.location.href = "addGenre.jsp";
-            }
+
         </script>
 
         <section class="body">
@@ -31,7 +30,7 @@
                 <jsp:include page="../sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2>Genre Management</h2>
+                        <h2>Fan Management</h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li>
@@ -39,7 +38,7 @@
                                         <i class="fa fa-home"></i>
                                     </a>
                                 </li>
-                                <li><span>Genre Management &nbsp;&nbsp</span></li>
+                                <li><span>Fan Management &nbsp;&nbsp</span></li>
                             </ol>
                         </div>
                     </header>
@@ -48,36 +47,46 @@
 
                     <section class="panel">
                         <header class="panel-heading">
-                            <h2 class="panel-title">Genre Management</h2>
+                            <h2 class="panel-title">Fan Management</h2>
                         </header>
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12"> 
-                                    <button class="btn btn-primary" onclick="addGenre()">Add Genre</button>
-                                </div>
-                            </div>
-                            <br/>
-
-
-                            <form name="GenreManagement">
+                            <form name="fanManagement">
                                 <table class="table table-bordered table-striped mb-none" id="datatable-default">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Total Records</th>
+                                            <th>Email</th>
+                                            <th style="width: 300px;">Status</th>
                                             <th style="width: 300px; text-align: center;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (genres != null && genres.size() > 0) {
-                                                for (int i = 0; i < genres.size(); i++) {
+                                            if (fans != null && fans.size() > 0) {
+                                                for (int i = 0; i < fans.size(); i++) {
                                         %>
                                         <tr>        
-                                            <td><%=genres.get(i).getGenre()%></td>
-                                            <td><%=genres.get(i).getListOfMusics().size()%></td>
+                                            <td><%=fans.get(i).getName()%></td>
+                                            <td><%=fans.get(i).getEmail()%></td>
                                             <td>
+                                                <%
+                                                    if (!fans.get(i).getIsDisabled()) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                    } else {
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                    }
+
+                                                    if (fans.get(i).getEmailIsVerified()) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
+                                                    } else {
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
+                                                    }
+                                                %>
+                                            </td>
+                                            <td>
+                                                <% if (!fans.get(i).getIsDisabled()) {%>
                                                 <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
+                                                <%}%>
                                             </td>
                                         </tr>
                                         <%
