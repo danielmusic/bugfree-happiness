@@ -18,8 +18,11 @@
     </head>
     <body onload="alertFunc()">
         <jsp:include page="../displayNotification.jsp" />
-        <script>
 
+        <script>
+            function refresh() {
+                window.location.href = "../../AccountManagementController?target=ListAllArtist";
+            }
         </script>
 
         <section class="body">
@@ -49,6 +52,12 @@
                             <h2 class="panel-title">Artist Management</h2>
                         </header>
                         <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12"> 
+                                    <button type="button" class="btn btn-default" onclick="javascript:refresh()"><i class="fa fa-refresh"></i> Refresh</button>
+                                </div>
+                            </div>
+                            <br/>
                             <form name="artistManagement">
                                 <table class="table table-bordered table-striped mb-none" id="datatable-default">
                                     <thead>
@@ -74,8 +83,12 @@
                                                     } else {
                                                         out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
                                                     }
-                                                    if (!artists.get(i).getIsApproved()) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approved</span>");
+                                                    if (artists.get(i).getIsApproved() == 0) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
+                                                    } else if (artists.get(i).getIsApproved() == 1) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approve</span>");
+                                                    } else if (artists.get(i).getIsApproved() == -2) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
                                                         out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
                                                     }
@@ -99,6 +112,8 @@
                                         %>
                                     </tbody>
                                 </table>
+
+
                                 <input type="hidden" name="id" value="">
                                 <input type="hidden" name="target" value="">    
                             </form>
