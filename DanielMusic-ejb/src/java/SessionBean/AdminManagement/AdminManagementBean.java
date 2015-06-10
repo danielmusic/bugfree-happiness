@@ -44,7 +44,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
                 q.setParameter("id", artistID);
                 Artist artist = (Artist) q.getSingleResult();
-                artist.setIsApproved(true);
+                artist.setIsApproved(1);
                 em.merge(artist);
                 result.setResult(true);
                 result.setDescription("Artist has been approved.");
@@ -77,7 +77,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
                 q.setParameter("id", artistID);
                 Artist artist = (Artist) q.getSingleResult();
-                artist.setIsApproved(true);
+                artist.setIsApproved(1);
                 em.merge(artist);
                 result.setResult(true);
                 result.setDescription("Artist has been rejected.");

@@ -17,7 +17,7 @@ public class Artist extends Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Boolean isApproved;
+    private Integer isApproved; //{new: 0, pending: -2, approve: 1, not approve: -1}
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
     @Lob
@@ -28,7 +28,7 @@ public class Artist extends Account implements Serializable {
     private String twitterURL;
 
     public Artist() {
-        isApproved = false;
+        isApproved = 0;
     }
 
     public String getFacebookURL() {
@@ -63,11 +63,31 @@ public class Artist extends Account implements Serializable {
         this.listOfAlbums = listOfAlbums;
     }
 
-    public Boolean getIsApproved() {
+    /**
+     * {@inheritDoc}
+     * <p>
+     * newly created: 0 
+     * pending: -2
+     * approve: 1
+     * not approved: -1
+     * </p>
+     */
+    public Integer getIsApproved() {
         return isApproved;
     }
 
-    public void setIsApproved(Boolean isApproved) {
+    /**
+     * {@inheritDoc}
+     * <p>
+     * newly created: 0 
+     * pending: -2
+     * approve: 1
+     * not approved: -1
+     * </p>
+     *
+     * {@param isApproved Integer for the status.}
+     */
+    public void setIsApproved(Integer isApproved) {
         this.isApproved = isApproved;
     }
 
