@@ -22,7 +22,8 @@ public class Music implements Serializable {
     private String artistName;
     private Long numDownloaded;
     private Double price;
-    private String fileLocation;
+    private String fileLocation128;
+    private String fileLocation320;
     private Boolean isDeleted;
     @ManyToMany(mappedBy = "listOfMusics", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Genre> listOfGenres;
@@ -98,12 +99,20 @@ public class Music implements Serializable {
         this.price = price;
     }
 
-    public String getFileLocation() {
-        return fileLocation;
+    public String getFileLocation128() {
+        return fileLocation128;
     }
 
-    public void setFileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
+    public void setFileLocation128(String fileLocation128) {
+        this.fileLocation128 = fileLocation128;
+    }
+
+    public String getFileLocation320() {
+        return fileLocation320;
+    }
+
+    public void setFileLocation320(String fileLocation320) {
+        this.fileLocation320 = fileLocation320;
     }
 
     public Long getId() {

@@ -27,7 +27,7 @@ public class Album implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date publishedDate;
     private Boolean isPublished;
-    private String imageURL;
+    private String imageLocation;
     private Boolean isDeleted;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Artist artist;
@@ -37,6 +37,7 @@ public class Album implements Serializable {
     public Album() {
         isDeleted = false;
         isPublished = false;
+        publishedDate = null;
     }
 
     public Boolean getIsPublished() {
@@ -95,12 +96,12 @@ public class Album implements Serializable {
         this.publishedDate = publishedDate;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageLocation() {
+        return imageLocation;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
     }
 
     public Long getId() {

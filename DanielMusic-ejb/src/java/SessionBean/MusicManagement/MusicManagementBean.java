@@ -207,7 +207,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
     
     @Override
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, Double price, List<Long> listOfGenreIDs) {
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs) {
         try {
             ReturnHelper helper = new ReturnHelper();
             Album a = null;
@@ -226,6 +226,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             fileInputStream.close();
             
             File file = new File(tempMusicURL);
+            
+            //check if the music >10mins, if more than 10mins return ReturnHelper
+            
             File newFile128 = new File(tempMusicURL + "128");
             File newFile320 = new File(tempMusicURL + "320");
             encodeToMP3(file, newFile128, 128);
@@ -241,9 +244,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 a = em.getReference(Album.class, albumID);
             }
             music.setAlbum(a);
-            music.setArtistName(artistName);
-            String musicURL = "music/" + a.getArtist().getId() + "/" + a.getId() + "/" + fileName;
-            music.setFileLocation(musicURL);
+            music.setArtistName(a.getArtist().getName());
+            String musicURL128 = "music/" + a.getArtist().getId() + "/" + a.getId() + "/128/" + fileName;
+            String musicURL320 = "music/" + a.getArtist().getId() + "/" + a.getId() + "/320/" + fileName;
+            music.setFileLocation128(musicURL128);
+            music.setFileLocation320(musicURL320);
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
             for (Long genreID : listOfGenreIDs) {
                 listOfGenres.add(em.getReference(Genre.class, genreID));
@@ -255,8 +260,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             em.persist(music);
             //end create music
 
-            Boolean result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL + "128", tempMusicURL + "128", Boolean.FALSE);
-            Boolean result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL + "320", tempMusicURL + "320", Boolean.FALSE);
+            Boolean result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
+            Boolean result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
             
             if (result1 && result2) {
                 helper.setDescription("Music uploaded successfully.");
@@ -277,6 +282,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper getAlbum(Long albumID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 

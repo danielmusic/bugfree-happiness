@@ -58,6 +58,26 @@ public interface MusicManagementBeanLocal {
      */
     public SearchHelper search(String searchString);
 
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, String artistName, Double price, List<Long> listOfGenreIDs);
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This is the function for creating music, two copies (128kbps and 320kbps)
+     * of the music will be generated and uploaded to cloud storage.
+     * </p>
+     *
+     * @param musicPart The part file.
+     * @param albumID The albumID of the music.
+     * @param trackNumber The music track number.
+     * @param name The name of the music.
+     * @param price The price of the music.
+     * @param listOfGenreIDs The list of genres this music belongs to.
+     * @return @param ReturnHelper
+     */
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs);
 
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistID);
+
+    public ReturnHelper getAlbum(Long albumID);
+
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description);
 }
