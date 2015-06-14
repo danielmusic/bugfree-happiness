@@ -73,6 +73,7 @@ public interface MusicManagementBeanLocal {
      * @param listOfGenreIDs The list of genres this music belongs to.
      * @return @param ReturnHelper
      */
+    //still need to handle checking of music length < 10mins
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs);
 
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistID);

@@ -35,13 +35,13 @@ import javax.servlet.http.Part;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
-    
+
     @EJB
     private CommonInfrastructureBeanLocal commonInfrastructureBean;
-    
+
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
-    
+
     @Override
     public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName, int bitrate) {
         ReturnHelper result = new ReturnHelper();
@@ -70,12 +70,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return result;
     }
-    
+
     @Override
     public void testAdaptivePayment() {
         try {
             PayRequest payRequest = new PayRequest();
-            
+
             List<Receiver> receivers = new ArrayList<Receiver>();
 //Artist (partial of the total)
             Receiver secondaryReceiver = new Receiver();
@@ -89,10 +89,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             primaryReceiver.setEmail("danielmusic@hotmail.com");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
-            
+
             ReceiverList receiverList = new ReceiverList(receivers);
             payRequest.setReceiverList(receiverList);
-            
+
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
@@ -101,17 +101,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
             payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
-            
+
             Map<String, String> sdkConfig = new HashMap<String, String>();
             sdkConfig.put("mode", "sandbox");
             sdkConfig.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
             sdkConfig.put("acct1.Password", "WX4WTU3S8MY44S7F");
             sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
             sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
-            
+
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
-            
+
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
@@ -124,7 +124,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             ex.printStackTrace();
         }
     }
-    
+
     @Override
     public ReturnHelper generateDownloadLink(String email, Long musicID) {
         System.out.println("generateDownloadLink() called with email: " + email + " and musicID: " + musicID);
@@ -134,7 +134,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("email", email);
             Artist artist = (Artist) q.getSingleResult();
             Music music = em.getReference(Music.class, musicID);
-            
+
             if (artist.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
                 music.setNumDownloaded(music.getNumDownloaded() + 1);
@@ -151,7 +151,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return null;
     }
-    
+
     @Override
     public List<Music> searchMusicByGenre(Long genreID) {
         System.out.println("searchMusicByGenre() called with genreID: " + genreID);
@@ -160,7 +160,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
             System.out.println("searchMusicByGenre() successful");
-            
+
             return listOfMusics;
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,36 +168,36 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return null;
         }
     }
-    
+
     public void persist(Object object) {
         em.persist(object);
     }
-    
+
     @Override
     public SearchHelper search(String searchString) {
         System.out.println("search() called with searchString: " + searchString);
         try {
             Query q;
             SearchHelper helper = new SearchHelper();
-            
+
             q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false AND a.isPublished=true ORDER BY a.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Album> listOfAlbums = q.getResultList();
-            
+
             q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
             q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
-            
+
             q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
-            
+
             helper.setListOfAlbums(listOfAlbums);
             helper.setListOfArtists(listOfArtists);
             helper.setListOfMusics(listOfMusics);
-            
+
             System.out.println("search() successful");
-            
+
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,18 +205,18 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return null;
         }
     }
-    
+
     @Override
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs) {
         try {
             ReturnHelper helper = new ReturnHelper();
-            Album a = null;
+            Album album = null;
             String fileName = musicPart.getSubmittedFileName();
             String tempMusicURL = "temp/" + fileName;
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
-            
+
             System.out.println("writing to... " + tempMusicURL);
             int nextByte;
             while ((nextByte = fileInputStream.read()) != -1) {
@@ -224,11 +224,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
             fileOutputStream.close();
             fileInputStream.close();
-            
+
             File file = new File(tempMusicURL);
-            
+
             //check if the music >10mins, if more than 10mins return ReturnHelper
-            
             File newFile128 = new File(tempMusicURL + "128");
             File newFile320 = new File(tempMusicURL + "320");
             encodeToMP3(file, newFile128, 128);
@@ -241,12 +240,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             } else {
-                a = em.getReference(Album.class, albumID);
+                album = em.getReference(Album.class, albumID);
             }
-            music.setAlbum(a);
-            music.setArtistName(a.getArtist().getName());
-            String musicURL128 = "music/" + a.getArtist().getId() + "/" + a.getId() + "/128/" + fileName;
-            String musicURL320 = "music/" + a.getArtist().getId() + "/" + a.getId() + "/320/" + fileName;
+            music.setAlbum(album);
+            music.setArtistName(album.getArtist().getName());
+            String musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/128/" + fileName;
+            String musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/320/" + fileName;
             music.setFileLocation128(musicURL128);
             music.setFileLocation320(musicURL320);
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
@@ -262,7 +261,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             Boolean result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
             Boolean result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
-            
+
             if (result1 && result2) {
                 helper.setDescription("Music uploaded successfully.");
                 helper.setResult(true);
@@ -272,11 +271,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 //delete music entity
                 em.remove(music);
             }
-            
+
             System.out.println("deleting file... " + file.delete());
             System.out.println("deleting file newFile128... " + newFile128.delete());
             System.out.println("deleting file newFile320... " + newFile320.delete());
-            
+
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -286,7 +285,57 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("createAlbum() called");
+        try {
+            ReturnHelper helper = new ReturnHelper();
+            Boolean result = null;
+            Artist artist = em.getReference(Artist.class, artistID);
+            if (imagePart == null) {
+                String fileName = imagePart.getSubmittedFileName();
+                String tempImageURL = "temp/" + fileName;
+                System.out.println("file name is " + fileName);
+                InputStream fileInputStream = imagePart.getInputStream();
+                OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
+
+                System.out.println("writing to... " + tempImageURL);
+                int nextByte;
+                while ((nextByte = fileInputStream.read()) != -1) {
+                    fileOutputStream.write(nextByte);
+                }
+                fileOutputStream.close();
+                fileInputStream.close();
+
+                result = commonInfrastructureBean.uploadFileToGoogleCloudStorage("image/" + artist.getId() + "/" + name, tempImageURL, true);
+            }
+
+            if ((result == null) | result) {
+                Album album = new Album();
+
+                if (result != null) {
+                    if (result) {
+                        album.setImageLocation("");
+                    }
+                }
+                album.setArtist(artist);
+                album.setDescription(description);
+                album.setName(name);
+                em.persist(album);
+                em.flush();
+                System.out.println("Album has been persisted.");
+                em.refresh(album);
+                System.out.println("Album ID: " + album.getId());
+                helper.setID(album.getId());
+                helper.setDescription("Album has been created successfully.");
+                helper.setResult(true);
+                return helper;
+            } else {
+                helper.setDescription("Failed to create album, upload album image unsuccessful.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -298,6 +347,5 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 
 }
