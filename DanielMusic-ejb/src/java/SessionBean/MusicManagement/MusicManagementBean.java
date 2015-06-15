@@ -289,10 +289,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         try {
             ReturnHelper helper = new ReturnHelper();
             Boolean result = null;
+            String imageLocation = null;
+            String tempImageURL = null;
             Artist artist = em.getReference(Artist.class, artistID);
-            if (imagePart == null) {
+            if (imagePart != null) {
                 String fileName = imagePart.getSubmittedFileName();
-                String tempImageURL = "temp/" + fileName;
+                tempImageURL = "temp/" + fileName;
                 System.out.println("file name is " + fileName);
                 InputStream fileInputStream = imagePart.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
@@ -304,33 +306,37 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
-
-                result = commonInfrastructureBean.uploadFileToGoogleCloudStorage("image/" + artist.getId() + "/" + name, tempImageURL, true);
+                imageLocation = "image/" + artist.getId() + "/" + name;
+                result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
             }
 
-            if ((result == null) | result) {
-                Album album = new Album();
+            Album album = new Album();
+            if ((result != null)) {
+                if (result) {
+                    System.out.println("Image location set... " + imageLocation);
+                    album.setImageLocation(imageLocation);
 
-                if (result != null) {
-                    if (result) {
-                        album.setImageLocation("");
-                    }
+                } else {
+                    helper.setDescription("Image failed to upload, please try again.");
+                    helper.setResult(false);
+                    return helper;
                 }
-                album.setArtist(artist);
-                album.setDescription(description);
-                album.setName(name);
-                em.persist(album);
-                em.flush();
-                System.out.println("Album has been persisted.");
-                em.refresh(album);
-                System.out.println("Album ID: " + album.getId());
-                helper.setID(album.getId());
-                helper.setDescription("Album has been created successfully.");
-                helper.setResult(true);
-                return helper;
-            } else {
-                helper.setDescription("Failed to create album, upload album image unsuccessful.");
+                File file = new File(tempImageURL);
+                System.out.println("deleting file... " + file.delete());
             }
+            
+            album.setArtist(artist);
+            album.setDescription(description);
+            album.setName(name);
+            em.persist(album);
+            em.flush();
+            System.out.println("Album has been persisted.");
+            em.refresh(album);
+            System.out.println("Album ID: " + album.getId());
+            helper.setID(album.getId());
+            helper.setDescription("Album has been created successfully.");
+            helper.setResult(true);
+            return helper;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -345,6 +351,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper publishAlbum(Long albumID, Boolean isPublished) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
