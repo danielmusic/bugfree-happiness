@@ -138,6 +138,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 admin = (Admin) q.getSingleResult();
                 result.setID(admin.getId());
             } else if (isArtist) {
+                //Only allow registration if artist name is unique
+                if (checkIfAritstNameExists(name)) {
+                    result.setDescription("Artist name cannot be registered as it has already been taken.");
+                    return result;
+                }
                 Artist artist = new Artist();
                 artist.setEmail(email);
                 artist.setNewEmail(email);
@@ -233,6 +238,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         q.setParameter("email", email);
         try {
             Account account = (Account) q.getSingleResult();
+            return true;
         } catch (NoResultException ex) {
             return false;
         } catch (Exception ex) {
@@ -240,7 +246,23 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             ex.printStackTrace();
             return false;
         }
-        return true;
+    }
+
+    @Override
+    public boolean checkIfAritstNameExists(String name) {
+        System.out.println("AccountManagementBean: checkIfAritstNameExists() called");
+        Query q = em.createQuery("SELECT a FROM Artist a WHERE a.name=:name");
+        q.setParameter("name", name);
+        try {
+            Artist artist = (Artist) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: checkIfAritstNameExists() failed");
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -481,5 +503,4 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         return result;
     }
 
-   
 }
