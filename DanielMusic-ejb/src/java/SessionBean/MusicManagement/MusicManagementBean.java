@@ -156,7 +156,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public List<Music> searchMusicByGenre(Long genreID) {
         System.out.println("searchMusicByGenre() called with genreID: " + genreID);
         try {
-            Query q = em.createQuery("SELECT m FROM Music m, Album a WHERE a.listOfMusics.id=m.id and m.listOfGenres.id=:genreID AND m.isDeleted=false AND a.isPublished=true ORDER BY a.publishedDate DESC ");
+            Query q = em.createQuery("SELECT m FROM Music m, Album a WHERE a.listOfMusics.id=m.id and m.listOfGenres.id=:genreID AND m.isDeleted=false AND a.isDeleted=FALSE AND a.isPublished=true ORDER BY a.publishedDate DESC ");
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
             System.out.println("searchMusicByGenre() successful");
