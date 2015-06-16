@@ -14,19 +14,21 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class Artist extends Account implements Serializable {
+public class Band extends Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer isApproved; //{new: 0, pending: -2, approve: 1, not approve: -1}
-    @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "band", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
 
     @Temporal(TemporalType.DATE)
     private Date dateFormed;
     private String genre;
+    @Lob
+    private String members;
     @Lob
     private String biography;
     @Lob
@@ -40,8 +42,16 @@ public class Artist extends Account implements Serializable {
     @Lob
     private String twitterURL;
 
-    public Artist() {
+    public Band() {
         isApproved = 0;
+    }
+
+    public String getMembers() {
+        return members;
+    }
+
+    public void setMembers(String members) {
+        this.members = members;
     }
 
     public Date getDateFormed() {
@@ -166,10 +176,10 @@ public class Artist extends Account implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Artist)) {
+        if (!(object instanceof Band)) {
             return false;
         }
-        Artist other = (Artist) object;
+        Band other = (Band) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -178,7 +188,7 @@ public class Artist extends Account implements Serializable {
 
     @Override
     public String toString() {
-        return "EntityManager.Artist[ id=" + id + " ]";
+        return "EntityManager.Band[ id=" + id + " ]";
     }
 
 }

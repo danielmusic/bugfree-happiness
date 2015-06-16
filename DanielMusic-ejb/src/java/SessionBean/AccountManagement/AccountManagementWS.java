@@ -45,8 +45,8 @@ public class AccountManagementWS {
     }
 
     @WebMethod(operationName = "registerAccount")
-    public ReturnHelper registerAccount(@WebParam(name = "name") String name, @WebParam(name = "email") String email, @WebParam(name = "password") String password, @WebParam(name = "isAdmin") boolean isAdmin, @WebParam(name = "isArtist") boolean isArtist) {
-        return ejbRef.registerAccount(name, email, password, isAdmin, isArtist);
+    public ReturnHelper registerAccount(@WebParam(name = "name") String name, @WebParam(name = "email") String email, @WebParam(name = "password") String password, @WebParam(name = "isAdmin") boolean isAdmin, @WebParam(name = "isArtist") boolean isArtist, @WebParam(name = "isBand") boolean isBand) {
+        return ejbRef.registerAccount(name, email, password, isAdmin, isArtist, isBand);
     }
 
     @WebMethod(operationName = "checkIfEmailExists")

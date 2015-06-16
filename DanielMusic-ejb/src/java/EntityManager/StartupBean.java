@@ -33,13 +33,13 @@ public class StartupBean {
                 return;
             }
             ReturnHelper result;
-            result = ambl.registerAccount("Admin", "admin@a.a", "admin", true, false);
+            result = ambl.registerAccount("Admin", "admin@a.a", "admin", true, false, false);
             Account account = ambl.getAccount("admin@a.a");
             account.setEmailIsVerified(true);
             account.setNewEmailIsVerified(true);
             account.setNewEmail("");
             em.merge(account);
-            ambl.registerAccount("Artist", "artist@a.a", "artist", false, true);
+            ambl.registerAccount("Artist", "artist@a.a", "artist", false, true, false);
             account = ambl.getAccount("artist@a.a");
             account.setEmailIsVerified(true);
             account.setNewEmailIsVerified(true);
@@ -48,13 +48,13 @@ public class StartupBean {
             account.setEmailIsVerified(true);
             account.setNewEmailIsVerified(true);
             em.merge(account);
-            ambl.registerAccount("Member", "member@a.a", "member", false, false);
+            ambl.registerAccount("Member", "member@a.a", "member", false, false, false);
             account = ambl.getAccount("member@a.a");
             account.setEmailIsVerified(true);
             account.setNewEmailIsVerified(true);
             account.setNewEmail("");
             em.merge(account);
-            ambl.registerAccount("Member Unverified Email", "member2@a.a", "member", false, false);
+            ambl.registerAccount("Member Unverified Email", "member2@a.a", "member", false, false, false);
         } catch (Exception ex) {
             System.out.println("Error initating database");
             ex.printStackTrace();

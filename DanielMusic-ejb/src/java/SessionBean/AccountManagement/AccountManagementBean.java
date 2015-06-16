@@ -3,6 +3,7 @@ package SessionBean.AccountManagement;
 import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
+import EntityManager.Band;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
@@ -13,7 +14,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -114,7 +114,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist) {
+    public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand) {
         System.out.println("AccountManagementBean: registerAccount() called");
         ReturnHelper result = new ReturnHelper();
         try {
@@ -139,7 +139,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setID(admin.getId());
             } else if (isArtist) {
                 //Only allow registration if artist name is unique
-                if (checkIfAritstNameExists(name)) {
+                if (checkIfArtistNameExists(name)) {
                     result.setDescription("Artist name cannot be registered as it has already been taken.");
                     return result;
                 }
@@ -154,6 +154,23 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 artist = (Artist) q.getSingleResult();
                 result.setID(artist.getId());
+            } else if (isBand) {
+                //Only allow registration if artist name is unique
+                if (checkIfBandNameExists(name)) {
+                    result.setDescription("Band name cannot be registered as it has already been taken.");
+                    return result;
+                }
+                Band band = new Band();
+                band.setEmail(email);
+                band.setNewEmail(email);
+                band.setPasswordHash(passwordHash);
+                band.setPasswordSalt(passwordSalt);
+                band.setName(name);
+                em.persist(band);
+                Query q = em.createQuery("SELECT a FROM Band a where a.email=:email");
+                q.setParameter("email", email);
+                band = (Band) q.getSingleResult();
+                result.setID(band.getId());
             } else {
                 Member member = new Member();
                 member.setEmail(email);
@@ -249,7 +266,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public boolean checkIfAritstNameExists(String name) {
+    public boolean checkIfArtistNameExists(String name) {
         System.out.println("AccountManagementBean: checkIfAritstNameExists() called");
         Query q = em.createQuery("SELECT a FROM Artist a WHERE a.name=:name");
         q.setParameter("name", name);
@@ -260,6 +277,23 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             return false;
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: checkIfAritstNameExists() failed");
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    @Override
+    public boolean checkIfBandNameExists(String name) {
+        System.out.println("AccountManagementBean: checkIfBandNameExists() called");
+        Query q = em.createQuery("SELECT a FROM Band a WHERE a.name=:name");
+        q.setParameter("name", name);
+        try {
+            Band band = (Band) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: checkIfBandNameExists() failed");
             ex.printStackTrace();
             return false;
         }

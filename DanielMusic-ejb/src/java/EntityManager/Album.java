@@ -31,6 +31,8 @@ public class Album implements Serializable {
     private Boolean isDeleted;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Artist artist;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Band band;
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
@@ -42,6 +44,14 @@ public class Album implements Serializable {
 
     public Boolean getIsPublished() {
         return isPublished;
+    }
+
+    public Band getBand() {
+        return band;
+    }
+
+    public void setBand(Band band) {
+        this.band = band;
     }
 
     public void setIsPublished(Boolean isPublished) {

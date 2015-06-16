@@ -15,9 +15,10 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper disableAccount(Long accountID);
     public ReturnHelper enableAccount(Long accountID);
     
-    public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist);  
+    public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand);  
     public boolean checkIfEmailExists(String email);
-    public boolean checkIfAritstNameExists(String name);
+    public boolean checkIfArtistNameExists(String name);
+    public boolean checkIfBandNameExists(String name);
     public ReturnHelper generateAndSendVerificationEmail(String emailAddress);
     public ReturnHelper enterVerificationCode(String emailAddress, String verificationCode);
     public String generatePasswordHash(String salt, String password);
