@@ -34,6 +34,15 @@
                 <h2>Sign up for an artist account</h2>
 
                 <form name="artistSignupForm" class="form">
+
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label for="name"><strong>I am signing up as a </strong></label>
+                            <input type="radio" name="source" value="ArtistSignup">Artist &nbsp;&nbsp;
+                            <input type="radio" name="source" value="BandSignup">Band
+                        </div>
+                    </div>
+
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="name"><strong>Artist/Band Name</strong> *</label>

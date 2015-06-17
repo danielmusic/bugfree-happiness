@@ -23,6 +23,7 @@ public class ClientAccountManagementController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Welcome to client account managment controller");
         String target = request.getParameter("target");
+        String source = request.getParameter("source");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String bio = request.getParameter("bio");
@@ -40,7 +41,12 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "ArtistSignup":
                     if (chkAgree != null) {
                         if (VerifyRecaptcha.verify(grecaptcharesponse)) {
-                            returnHelper = accountManagementBean.registerAccount(name, email, password, false, true);
+                            if (source.equals("BandSignup")) {
+                                returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
+                            } else {
+                                returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, true);
+                            }
+
                             if (returnHelper.getResult()) {
                                 nextPage = "#!/login";
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
@@ -74,7 +80,7 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "ArtistUpdateProfile":
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
-                       // returnHelper = accountManagementBean.updateAccountProfile(artist.getId(), name, profilePicURL, bio);
+                        // returnHelper = accountManagementBean.updateAccountProfile(artist.getId(), name, profilePicURL, bio);
                     }
                     break;
 

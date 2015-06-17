@@ -169,6 +169,12 @@ select, option {
     display: inline-block;
 }
 
+.form input[type="radio"] {
+    margin: 0;
+    margin-right: 10px;
+    width: auto;
+    display: inline-block;
+}
 /* Helper Classes
  ---------------------------------------------------------------------- */
 .hidden { display: none; }

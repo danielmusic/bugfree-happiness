@@ -81,7 +81,7 @@
                                                     if (!artists.get(i).getIsDisabled()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
                                                     } else {
-                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
                                                     if (artists.get(i).getIsApproved() == 0) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
@@ -90,13 +90,13 @@
                                                     } else if (artists.get(i).getIsApproved() == -2) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
-                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
                                                     }
 
                                                     if (artists.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
-                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
                                                     }
                                                 %>
                                             </td>
