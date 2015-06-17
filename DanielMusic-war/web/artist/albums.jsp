@@ -6,12 +6,9 @@
                 <%@page import="EntityManager.Artist"%>
                 <script>
                     function addAlbum() {
-                        window.event.returnValue = true;
-                        document.albumManagement.action = "#!/artist/add_album";
-                        document.albumManagement.submit();
+                        window.location.href = "#!/artist/add_album";
                     }
                 </script>
-
 
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));

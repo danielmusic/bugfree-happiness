@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
@@ -24,6 +25,8 @@ public class Music implements Serializable {
     private Double price;
     private String fileLocation128;
     private String fileLocation320;
+    @Lob
+    private String lyrics;
     private Boolean isDeleted;
     @ManyToMany(mappedBy = "listOfMusics", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Genre> listOfGenres;
@@ -121,6 +124,14 @@ public class Music implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
     }
 
     @Override

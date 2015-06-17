@@ -1,12 +1,9 @@
 package Client;
 
+import EntityManager.Artist;
 import EntityManager.ReturnHelper;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,33 +20,68 @@ public class MusicManagementController extends HttpServlet {
     String nextPage = "", goodMsg = "", errMsg = "";
     HttpSession session;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        System.out.println("Welcome to client account managment controller");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String target = request.getParameter("target");
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
 
         session = request.getSession();
         session.removeAttribute("message");
         ReturnHelper returnHelper;
+
         try {
-            switch (target) {
-                case "UploadMusic":
-                    Part part = request.getPart("javafile");
-                    if (part != null) {
-                        //returnHelper = musicManagementBean.createMusic(part);
+            if (checkLogin(response)) {
+                Artist artist = (Artist) (session.getAttribute("artist"));
+
+                switch (target) {
+                    case "UploadMusic":
+                        Part part = request.getPart("javafile");
+                        if (part != null) {
+                            //returnHelper = musicManagementBean.createMusic(part);
 //                        if (returnHelper.getResult()) {
 //
 //                        } else {
 //
 //                        }
-                    }
+                        }
+
+                    case "AddAlbum":
+//                        returnHelper = musicManagementBean.createAlbum(part, target, target, artist.getId());
+//                        if (returnHelper.getResult()) {
+//                            nextPage = "#!/artist/albums";
+//                        } else {
+//                            nextPage = "#!/login";
+//                            session.setAttribute("errMsg", returnHelper.getDescription());
+//                        }
+//                        break;
+                }
+            }
+
+            if (nextPage.equals("")) {
+                response.sendRedirect("#!/home");
+                return;
+            } else {
+                response.sendRedirect(nextPage);
+                return;
             }
 
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();
+            return;
+        }
+    }
+
+    public boolean checkLogin(HttpServletResponse response) {
+        try {
+            Artist artist = (Artist) (session.getAttribute("artist"));
+            if (artist == null) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
         }
     }
 
