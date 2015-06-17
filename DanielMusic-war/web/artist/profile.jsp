@@ -23,8 +23,8 @@
                         </div>
 
                         <div class="col-1-3 last">
-                            <label class="tip"><strong>PayPay email address <a href="#!/artist" class="thumb thumb-slide mediabox tip">(?)</a></strong></label>
-                            <input type="text" value="<%=artist.getEmail()%>" disabled>
+                            <label class="tip"><strong>PayPay email address:</strong></label>
+                            <input type="text" value="<%=artist.getEmail()%>">
                         </div>
                     </div>
 
@@ -45,7 +45,7 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="bio"><strong>Biography</strong> </label>
-                            <textarea name="bio" id="bio" cols="88" rows="6" required><%=artist.getDescription()%></textarea>
+                            <textarea name="bio" id="bio" cols="88" rows="6" required><%if(artist.getDescription()!=null){out.print(artist.getDescription());} %></textarea>
                         </div>
                     </div>
 

@@ -42,15 +42,19 @@ public class ClientAccountManagementController extends HttpServlet {
                     if (chkAgree != null) {
                         if (VerifyRecaptcha.verify(grecaptcharesponse)) {
                             if (source.equals("BandSignup")) {
+                                returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, true);
+                            } else {//normal artist
                                 returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
-                            } else {
-                                returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, true);
                             }
+                            
+                            System.out.println("0");
 
                             if (returnHelper.getResult()) {
+                                System.out.println("1");
                                 nextPage = "#!/login";
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
+                                System.out.println("2");
                                 nextPage = "#!/login";
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
@@ -107,13 +111,16 @@ public class ClientAccountManagementController extends HttpServlet {
 
             if (nextPage.equals("")) {
                 response.sendRedirect("#!/home");
+                return;
             } else {
                 response.sendRedirect(nextPage);
+                return;
             }
 
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();
+            return;
         }
     }
 
