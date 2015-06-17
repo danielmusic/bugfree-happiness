@@ -1,6 +1,6 @@
 package SessionBean.MusicManagement;
 
-import EntityManager.Genre;
+import EntityManager.Album;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
@@ -78,9 +78,9 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistID);
 
-    public ReturnHelper getAlbum(Long albumID);
+    public Album getAlbum(Long albumID);
 
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description);
 
-    public ReturnHelper publishAlbum(Long albumID, Boolean isPublished);
+    public ReturnHelper publishAlbum(Long albumID);
 }
