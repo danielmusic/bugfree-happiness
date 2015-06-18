@@ -177,32 +177,78 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
 
     @Override
     public ReturnHelper createGenre(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Music> listMusicInGenre(Long genreID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AdminManagementBean: createGenre() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Genre genre = new Genre();
+            genre.setName(name);
+            em.persist(genre);
+            result.setID(genre.getId());
+            result.setResult(true);
+            result.setDescription("Genre created.");
+            return result;
+        } catch (Exception ex) {
+            System.out.println("AdminManagementBean: createGenre() failed");
+            result.setResult(false);
+            result.setDescription("Failed to create genre. Internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public ReturnHelper updateGenre(Long genreID, String newName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        System.out.println("AdminManagementBean: updateGenre() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Genre e where e.id=:id");
+            q.setParameter("id", genreID);
+            Genre genre = (Genre) q.getSingleResult();
 
-    @Override
-    public ReturnHelper addMusicToGenre(Long genreID, Long musicID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ReturnHelper removeMusicFromGenre(Long genreID, Long musicID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            genre.setName(newName);
+            em.merge(genre);
+            result.setResult(true);
+            result.setDescription("Genre updated.");
+            return result;
+        } catch (Exception ex) {
+            System.out.println("AdminManagementBean: updateGenre() failed");
+            result.setResult(false);
+            result.setDescription("Failed to update genre. Internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public ReturnHelper deleteGenre(Long genreID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AdminManagementBean: deleteGenre() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Genre e where e.id=:id");
+            q.setParameter("id", genreID);
+            Genre genre = (Genre) q.getSingleResult();
+            //Remove genre from the genre list stored in the musics beloning to this genre
+            List<Music> musics = genre.getListOfMusics();
+            for (Music music : musics) {
+                List<Genre> genres = music.getListOfGenres();
+                genres.remove(genre);
+                music.setListOfGenres(genres);
+                em.merge(music);
+            }
+            em.remove(genre);
+            result.setResult(true);
+            result.setDescription("Genre deleted.");
+            return result;
+        } catch (Exception ex) {
+            System.out.println("AdminManagementBean: deleteGenre() failed");
+            result.setResult(false);
+            result.setDescription("Failed to delete genre. Internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
 }

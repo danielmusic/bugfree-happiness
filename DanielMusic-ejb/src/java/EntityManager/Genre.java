@@ -16,13 +16,11 @@ public class Genre implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String genre;
-    private Boolean isDeleted;
+    private String name;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
     public Genre() {
-        isDeleted = false;
     }
 
     public List<Music> getListOfMusics() {
@@ -33,20 +31,12 @@ public class Genre implements Serializable {
         this.listOfMusics = listOfMusics;
     }
 
-    public Boolean getIsDeleted() {
-        return isDeleted;
+    public String getName() {
+        return name;
     }
 
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
