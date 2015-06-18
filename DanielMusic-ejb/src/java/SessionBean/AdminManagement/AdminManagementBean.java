@@ -94,19 +94,19 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
 
     @Override
     public List<Artist> listAllArtists(Boolean isAdmin) {
-        System.out.println("listAllArtists() called");
+        System.out.println("AdminManagementBean: listAllArtists() called");
         try {
             Query q;
             if (isAdmin) {
-                q = em.createQuery("select a from Artist a where a.isDisabled=false ");
+                q = em.createQuery("select a from Artist a");
             } else {
                 q = em.createQuery("select a from Artist a where a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
             }
             List<Artist> listOfArtists = q.getResultList();
-            System.out.println("listAllArtists() called successfully");
+            System.out.println("AdminManagementBean: listAllArtists() called successfully");
             return listOfArtists;
         } catch (Exception e) {
-            System.out.println("Error while calling listAllArtists()");
+            System.out.println("AdminManagementBean: Error while calling listAllArtists()");
             e.printStackTrace();
         }
         return null;
@@ -114,34 +114,40 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
 
     @Override
     public List<Member> listAllMembers(Boolean isAdmin) {
-        System.out.println("listAllMembers() called");
+        System.out.println("AdminManagementBean: listAllMembers() called");
         try {
             Query q;
             if (isAdmin) {
-                q = em.createQuery("select m from Member m where m.isDisabled=false");
+                q = em.createQuery("select m from Member m");
             } else {
                 q = em.createQuery("select m from Member m where m.isDisabled=false and m.emailIsVerified=true");
             }
             List<Member> listOfMembers = q.getResultList();
-            System.out.println("listAllMembers() called successfully");
+            System.out.println("AdminManagementBean: listAllMembers() called successfully");
             return listOfMembers;
         } catch (Exception e) {
-            System.out.println("Error while calling listAllMembers()");
+            System.out.println("AdminManagementBean: Error while calling listAllMembers()");
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public List<Genre> listAllGenres() {
-        System.out.println("listAllGenres() called");
+    public List<Genre> listAllGenres(Boolean isAdmin) {
+        System.out.println("AdminManagementBean: listAllGenres() called");
         try {
-            Query q = em.createQuery("select g from Genre g where g.isDeleted=false");
+             Query q;
+            if (isAdmin) {
+                q = em.createQuery("select g from Genre g");
+            } else {
+                q = em.createQuery("select g from Genre g where g.isDeleted=false");
+            }
+            
             List<Genre> listOfGenres = q.getResultList();
-            System.out.println("listAllGenres() called successfully");
+            System.out.println("AdminManagementBean: listAllGenres() called successfully");
             return listOfGenres;
         } catch (Exception e) {
-            System.out.println("Error while calling listAllGenres()");
+            System.out.println("AdminManagementBean: Error while calling listAllGenres()");
             e.printStackTrace();
         }
         return null;

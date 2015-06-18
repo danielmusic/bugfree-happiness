@@ -36,11 +36,11 @@ public interface AdminManagementBeanLocal {
     /**
      * {@inheritDoc}
      * <p>
-     * This method returns you a list of genres
+     * This method returns you a list of genres, if isAdmin is false then it will return those not deleted genres
      * </p>
      *
      * @return List{Genre} otherwise return null if error
      */
-    public List<Genre> listAllGenres();
+    public List<Genre> listAllGenres(Boolean isAdmin);
 
 }
