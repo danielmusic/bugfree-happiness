@@ -1,3 +1,4 @@
+<%@page import="EntityManager.Band"%>
 <%@page import="EntityManager.Member"%>
 <%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
@@ -30,11 +31,16 @@
                 <ul>
                     <%
                         Artist artist = (Artist) (session.getAttribute("artist"));
+                        Band band = (Band) (session.getAttribute("band"));
                         Member fan = (Member) (session.getAttribute("fan"));
 
                         if (artist != null) {
                             out.print("<li><a href='#!/artist/albums'>albums</a><li>");
                             out.print("<li><a href='#!/artist/profile'>profile</a><li>");
+                            out.print("<li><a href='ClientAccountManagementController?target=AccountLogout'>logout</a><li>");
+                        } else if (band != null) {
+                            out.print("<li><a href='#!/band/albums'>albums</a><li>");
+                            out.print("<li><a href='#!/band/profile'>profile</a><li>");
                             out.print("<li><a href='ClientAccountManagementController?target=AccountLogout'>logout</a><li>");
                         } else if (fan != null) {
 
