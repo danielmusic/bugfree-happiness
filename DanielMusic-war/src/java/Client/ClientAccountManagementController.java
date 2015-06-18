@@ -1,6 +1,8 @@
 package Client;
 
+import EntityManager.Account;
 import EntityManager.Artist;
+import EntityManager.Band;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
@@ -39,44 +41,31 @@ public class ClientAccountManagementController extends HttpServlet {
         try {
             switch (target) {
                 case "ArtistSignup":
-                    if (chkAgree != null) {
-                        if (VerifyRecaptcha.verify(grecaptcharesponse)) {
-                            if (source.equals("BandSignup")) {
-                                returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, true);
-                            } else {//normal artist
-                                returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
-                            }
-                            
-                            System.out.println("0");
-
-                            if (returnHelper.getResult()) {
-                                System.out.println("1");
-                                nextPage = "#!/login";
-                                session.setAttribute("goodMsg", returnHelper.getDescription());
-                            } else {
-                                System.out.println("2");
-                                nextPage = "#!/login";
-                                session.setAttribute("errMsg", returnHelper.getDescription());
-                            }
-                            break;
-                        } else {
-                            nextPage = "#!/artist/signup";
-                            session.setAttribute("errMsg", "Please verify the captcha again.");
-                            break;
-                        }
-                    } else {
+                    if (chkAgree == null) {
                         nextPage = "#!/artist/signup";
                         session.setAttribute("errMsg", "Sorry. You have not agreed to the terms");
                         break;
+                    } else if (grecaptcharesponse == null) {
+                        nextPage = "#!/artist/signup";
+                        session.setAttribute("errMsg", "Please verify the captcha again.");
+                        break;
+                    } else if (!VerifyRecaptcha.verify(grecaptcharesponse)) {
+                        nextPage = "#!/artist/signup";
+                        session.setAttribute("errMsg", "Please verify the captcha again.");
+                        break;
                     }
 
-                case "ArtistLogin":
-                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (source.equals("BandSignup")) {
+                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, true);
+                    } else {//normal artist
+                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
+                    }
+
                     if (returnHelper.getResult()) {
-                        session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
-                        nextPage = "#!/artist/albums";
-                    } else {
                         nextPage = "#!/login";
+                        session.setAttribute("goodMsg", returnHelper.getDescription());
+                    } else {
+                        nextPage = "#!/artist/signup";
                         session.setAttribute("errMsg", returnHelper.getDescription());
                     }
                     break;
@@ -85,6 +74,23 @@ public class ClientAccountManagementController extends HttpServlet {
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                         // returnHelper = accountManagementBean.updateAccountProfile(artist.getId(), name, profilePicURL, bio);
+                    }
+                    break;
+
+                case "ArtistLogin":
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+                    if (returnHelper.getResult()) {
+                        Account account = accountManagementBean.getAccount(email);
+                        if (account instanceof Artist) {
+                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
+                        } else if (account instanceof Band) {
+                            session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
+                        }
+
+                        nextPage = "#!/artist/albums";
+                    } else {
+                        nextPage = "#!/login";
+                        session.setAttribute("errMsg", returnHelper.getDescription());
                     }
                     break;
 
@@ -102,6 +108,7 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "AccountLogout":
                     session.removeAttribute("errMsg");
                     session.removeAttribute("artist");
+                    session.removeAttribute("band");
                     session.removeAttribute("fan");
                     nextPage = "#!/login";
                     session.setAttribute("goodMsg", "Logout Successful");
@@ -124,7 +131,7 @@ public class ClientAccountManagementController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

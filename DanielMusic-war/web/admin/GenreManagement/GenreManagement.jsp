@@ -4,9 +4,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Admin admin = (Admin) (session.getAttribute("admin"));
-    if (session.isNew()) {
-        response.sendRedirect("../login.jsp?errMsg=Invalid Request. Please login.");
-    } else if (admin == null) {
+    if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
         List<Genre> genres = (List<Genre>) (session.getAttribute("genre"));

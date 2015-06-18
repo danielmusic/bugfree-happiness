@@ -2,6 +2,7 @@
 <!doctype html>
 <html class="fixed">
     <head>
+        <title>Daniel Music System</title>
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.css" />

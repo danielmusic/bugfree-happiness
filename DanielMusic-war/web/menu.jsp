@@ -40,10 +40,10 @@
 
                         } else {
                             out.print("<li><a href='#!/discover'>discover</a><li>");
-                            out.print("<li><a href='#!/artist'>artist</a>");
-                            out.print("<ul><a href='#!/artist/signup'>artist signup</a></ul><li>");
-                            out.print("<li><a href='#!/fan'>fan</a>");
-                            out.print("<ul><a href='#!/fan/signup'>fan signup</a></ul><li>");
+                            out.print("<li class='submenu'><a href='#!/artist'>artist</a>");
+                            out.print("<ul><li><a href='#!/artist/signup'>artist signup</a></li></ul></li>");
+                            out.print("<li class='submenu'><a href='#!/fan'>fan</a>");
+                            out.print("<ul><li><a href='#!/fan/signup'>fan signup</a></li></ul></li>");
                             out.print("<li><a href='#!/login'>login</a><li>");
                         }
                     %>

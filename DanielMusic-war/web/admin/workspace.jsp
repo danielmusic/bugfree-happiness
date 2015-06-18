@@ -2,9 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Admin admin = (Admin) (session.getAttribute("admin"));
-    if (session.isNew()) {
-        response.sendRedirect("login.jsp?errMsg=Invalid Request. Please login.");
-    } else if (admin == null) {
+    if (session.isNew() || admin == null) {
         response.sendRedirect("login.jsp?errMsg=Session Expired.");
     } else {
 %>
@@ -113,13 +111,19 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../AccountManagementController?target=ListAllStaff">
+                                    <a href="../AccountManagementController?target=ListAllBand">
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        <span>Bands</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../AccountManagementController?target=ListAllFan">
                                         <i class="fa fa-users" aria-hidden="true"></i>
                                         <span>Fans</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../AccountManagementController?target=ListAllStaff">
+                                    <a href="../AccountManagementController?target=ListAllGenre">
                                         <i class="fa fa-music" aria-hidden="true"></i>
                                         <span>Genre</span>
                                     </a>
