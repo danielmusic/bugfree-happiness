@@ -19,6 +19,7 @@ public interface AccountManagementBeanLocal {
     public boolean checkIfEmailExists(String email);
     public boolean checkIfArtistNameExists(String name);
     public boolean checkIfBandNameExists(String name);
+    public boolean checkIfArtistOrBandNameExists(String name);
     public ReturnHelper generateAndSendVerificationEmail(String emailAddress);
     public ReturnHelper enterVerificationCode(String emailAddress, String verificationCode);
     public String generatePasswordHash(String salt, String password);

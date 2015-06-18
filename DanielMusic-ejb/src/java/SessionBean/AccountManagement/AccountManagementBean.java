@@ -139,7 +139,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setID(admin.getId());
             } else if (isArtist) {
                 //Only allow registration if artist name is unique
-                if (checkIfArtistNameExists(name)) {
+                if (checkIfArtistOrBandNameExists(name)) {
                     result.setDescription("Artist name cannot be registered as it has already been taken.");
                     return result;
                 }
@@ -156,7 +156,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setID(artist.getId());
             } else if (isBand) {
                 //Only allow registration if artist name is unique
-                if (checkIfBandNameExists(name)) {
+                if (checkIfArtistOrBandNameExists(name)) {
                     result.setDescription("Band name cannot be registered as it has already been taken.");
                     return result;
                 }
@@ -281,7 +281,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             return false;
         }
     }
-    
+
     @Override
     public boolean checkIfBandNameExists(String name) {
         System.out.println("AccountManagementBean: checkIfBandNameExists() called");
@@ -294,6 +294,26 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             return false;
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: checkIfBandNameExists() failed");
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean checkIfArtistOrBandNameExists(String name) {
+        System.out.println("AccountManagementBean: checkIfArtistOrBandNameExists() called");
+        Query q = em.createQuery("SELECT a FROM Artist a WHERE a.name=:name and a.isDisabled=false");
+        Query qq = em.createQuery("SELECT b FROM Band b WHERE b.name=:name and b.isDisabled=false");
+        q.setParameter("name", name);
+        qq.setParameter("name", name);
+        try {
+            Artist artist = (Artist) q.getSingleResult();
+            Band band = (Band) qq.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: checkIfArtistOrBandNameExists() failed");
             ex.printStackTrace();
             return false;
         }
