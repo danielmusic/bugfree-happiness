@@ -2,6 +2,7 @@ package SessionBean.AdminManagement;
 
 import EntityManager.Account;
 import EntityManager.Artist;
+import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.Music;
@@ -114,6 +115,26 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     }
 
     @Override
+    public List<Band> listAllBands(Boolean isAdmin) {
+        System.out.println("AdminManagementBean: listAllBands() called");
+        try {
+            Query q;
+            if (isAdmin) {
+                q = em.createQuery("select b from Band b");
+            } else {
+                q = em.createQuery("select b from Band b where b.isDisabled=false and b.emailIsVerified=true and b.isApproved=true");
+            }
+            List<Band> listOfBands = q.getResultList();
+            System.out.println("AdminManagementBean: listAllBands() called successfully");
+            return listOfBands;
+        } catch (Exception e) {
+            System.out.println("AdminManagementBean: Error while calling listAllBands()");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<Member> listAllMembers(Boolean isAdmin) {
         System.out.println("AdminManagementBean: listAllMembers() called");
         try {
@@ -137,13 +158,13 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     public List<Genre> listAllGenres(Boolean isAdmin) {
         System.out.println("AdminManagementBean: listAllGenres() called");
         try {
-             Query q;
+            Query q;
             if (isAdmin) {
                 q = em.createQuery("select g from Genre g");
             } else {
                 q = em.createQuery("select g from Genre g where g.isDeleted=false");
             }
-            
+
             List<Genre> listOfGenres = q.getResultList();
             System.out.println("AdminManagementBean: listAllGenres() called successfully");
             return listOfGenres;
@@ -183,6 +204,5 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     public ReturnHelper deleteGenre(Long genreID) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
 }

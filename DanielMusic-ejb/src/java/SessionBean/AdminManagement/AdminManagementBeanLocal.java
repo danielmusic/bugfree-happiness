@@ -1,6 +1,7 @@
 package SessionBean.AdminManagement;
 
 import EntityManager.Artist;
+import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.Music;
@@ -44,7 +45,16 @@ public interface AdminManagementBeanLocal {
      * @return List{Genre} otherwise return null if error
      */
     public List<Genre> listAllGenres(Boolean isAdmin);
-    
+     /**
+     * {@inheritDoc}
+     * <p>
+     * This method returns you a list of bands
+     * </p>
+     *
+     * @param isAdmin Set this to 'true' if it is an admin function
+     * @return List{Band} otherwise return null if error
+     */
+    public List<Band> listAllBands(Boolean isAdmin);
     
     public ReturnHelper createGenre(String name);
     public List<Music> listMusicInGenre(Long genreID);
