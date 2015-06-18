@@ -40,9 +40,10 @@ public interface AdminManagementBeanLocal {
      * This method returns you a list of genres, if isAdmin is false then it will return those not deleted genres
      * </p>
      *
+     * @param isAdmin Set this to 'true' if it is an admin function
      * @return List{Genre} otherwise return null if error
      */
-    public List<Genre> listAllGenres();
+    public List<Genre> listAllGenres(Boolean isAdmin);
     
     
     public ReturnHelper createGenre(String name);
