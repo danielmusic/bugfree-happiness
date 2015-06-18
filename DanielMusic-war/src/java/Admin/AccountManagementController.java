@@ -1,7 +1,9 @@
 package Admin;
 
+import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
+import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
@@ -29,6 +31,7 @@ public class AccountManagementController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String target = request.getParameter("target");
+        String id = request.getParameter("id");
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
 
@@ -40,8 +43,13 @@ public class AccountManagementController extends HttpServlet {
                 case "Login":
                     returnHelper = accountManagementBean.loginAccount(email, password);
                     if (returnHelper.getResult()) {
-                        session.setAttribute("admin", (Admin) accountManagementBean.getAccount(email));
-                        nextPage = "admin/workspace.jsp";
+                        Account account = accountManagementBean.getAccount(email);
+                        if (account instanceof Admin) {
+                            session.setAttribute("admin", (Admin) accountManagementBean.getAccount(email));
+                            nextPage = "admin/workspace.jsp";
+                        } else {
+                            nextPage = "admin/login.jsp?errMsg=Access Denied";
+                        }
                     } else {
                         nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
                     }
@@ -59,7 +67,7 @@ public class AccountManagementController extends HttpServlet {
                             nextPage = "admin/error500.html";
                         } else {
                             session.setAttribute("artists", artists);
-                            nextPage = "admin/ArtistManagement/artistManagement.jsp";
+                            nextPage = "admin/AccountManagement/artistManagement.jsp";
                         }
                     }
                     break;
@@ -71,14 +79,26 @@ public class AccountManagementController extends HttpServlet {
                             nextPage = "admin/error500.html";
                         } else {
                             session.setAttribute("fans", fans);
-                            nextPage = "admin/FanManagement/fanManagement.jsp";
+                            nextPage = "admin/AccountManagement/fanManagement.jsp";
                         }
                     }
                     break;
 
+                case "ListAllBand":
+//                    if (checkLogin(response)) {
+//                        List<Band> bands = adminManagementBean.listAllBandss(true);
+//                        if (bands == null) {
+//                            nextPage = "admin/error500.html";
+//                        } else {
+//                            session.setAttribute("bands", bands);
+//                            nextPage = "admin/AccountManagement/bandManagement.jsp";
+//                        }
+//                    }
+                    break;
+
                 case "ListAllGenre":
                     if (checkLogin(response)) {
-                        List<Genre> genres = adminManagementBean.listAllGenres();
+                        List<Genre> genres = adminManagementBean.listAllGenres(true);
                         if (genres == null) {
                             nextPage = "admin/error500.html";
                         } else {
@@ -88,6 +108,20 @@ public class AccountManagementController extends HttpServlet {
                     }
                     break;
 
+                case "DisableArtist":
+                    if (checkLogin(response)) {
+                        returnHelper = accountManagementBean.disableAccount(Long.parseLong(id));
+                        if (returnHelper.getResult()) {
+                            List<Artist> artists = adminManagementBean.listAllArtists(true);
+                            if (artists == null) {
+                                nextPage = "admin/error500.html";
+                            } else {
+                                session.setAttribute("artists", artists);
+                                nextPage = "admin/ArtistManagement/artistManagement.jsp";
+                            }
+                        }
+                    }
+                    break;
             }
 
             if (nextPage.equals("")) {

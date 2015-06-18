@@ -25,6 +25,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="../../AccountManagementController?target=ListAllBand">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <span>Bands</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="../../AccountManagementController?target=ListAllFan">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <span>Fans</span>

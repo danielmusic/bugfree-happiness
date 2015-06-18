@@ -1,15 +1,14 @@
+<%@page import="EntityManager.Member"%>
 <%@page import="EntityManager.Artist"%>
 <%@page import="EntityManager.Admin"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Admin admin = (Admin) (session.getAttribute("admin"));
-    if (session.isNew()) {
-        response.sendRedirect("../login.jsp?errMsg=Invalid Request. Please login.");
-    } else if (admin == null) {
+    if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
-        List<Artist> artists = (List<Artist>) (session.getAttribute("artists"));
+        List<Member> fans = (List<Member>) (session.getAttribute("fans"));
 %>
 <!doctype html>
 <html class="fixed">
@@ -18,11 +17,8 @@
     </head>
     <body onload="alertFunc()">
         <jsp:include page="../displayNotification.jsp" />
-
         <script>
-            function refresh() {
-                window.location.href = "../../AccountManagementController?target=ListAllArtist";
-            }
+
         </script>
 
         <section class="body">
@@ -32,7 +28,7 @@
                 <jsp:include page="../sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2>Artist Management</h2>
+                        <h2>Fan Management</h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li>
@@ -40,7 +36,7 @@
                                         <i class="fa fa-home"></i>
                                     </a>
                                 </li>
-                                <li><span>Artist Management &nbsp;&nbsp</span></li>
+                                <li><span>Fan Management &nbsp;&nbsp</span></li>
                             </ol>
                         </div>
                     </header>
@@ -49,16 +45,10 @@
 
                     <section class="panel">
                         <header class="panel-heading">
-                            <h2 class="panel-title">Artist Management</h2>
+                            <h2 class="panel-title">Fan Management</h2>
                         </header>
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12"> 
-                                    <button type="button" class="btn btn-default" onclick="javascript:refresh()"><i class="fa fa-refresh"></i> Refresh</button>
-                                </div>
-                            </div>
-                            <br/>
-                            <form name="artistManagement">
+                            <form name="fanManagement">
                                 <table class="table table-bordered table-striped mb-none" id="datatable-default">
                                     <thead>
                                         <tr>
@@ -70,38 +60,29 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (artists != null && artists.size() > 0) {
-                                                for (int i = 0; i < artists.size(); i++) {
+                                            if (fans != null && fans.size() > 0) {
+                                                for (int i = 0; i < fans.size(); i++) {
                                         %>
                                         <tr>        
-                                            <td><%=artists.get(i).getName()%></td>
-                                            <td><%=artists.get(i).getEmail()%></td>
+                                            <td><%=fans.get(i).getName()%></td>
+                                            <td><%=fans.get(i).getEmail()%></td>
                                             <td>
                                                 <%
-                                                    if (!artists.get(i).getIsDisabled()) {
+                                                    if (!fans.get(i).getIsDisabled()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
                                                     } else {
-                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
-                                                    }
-                                                    if (artists.get(i).getIsApproved() == 0) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
-                                                    } else if (artists.get(i).getIsApproved() == 1) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approve</span>");
-                                                    } else if (artists.get(i).getIsApproved() == -2) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
-                                                    } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
                                                     }
 
-                                                    if (artists.get(i).getEmailIsVerified()) {
+                                                    if (fans.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
+                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
                                                     }
                                                 %>
                                             </td>
                                             <td>
-                                                <% if (!artists.get(i).getIsDisabled()) {%>
+                                                <% if (!fans.get(i).getIsDisabled()) {%>
                                                 <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
                                                 <%}%>
                                             </td>
@@ -110,10 +91,9 @@
                                                 }
                                             }
                                         %>
+
                                     </tbody>
                                 </table>
-
-
                                 <input type="hidden" name="id" value="">
                                 <input type="hidden" name="target" value="">    
                             </form>
