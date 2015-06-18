@@ -1,9 +1,8 @@
 package SessionBean.AccountManagement;
 
 import EntityManager.Account;
-import EntityManager.Artist;
 import EntityManager.ReturnHelper;
-import java.util.List;
+import java.util.Date;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
 
@@ -25,7 +24,17 @@ public interface AccountManagementBeanLocal {
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     
-    public ReturnHelper updateAccountProfile(Long accountID, String newName, Part profilePicture, String description);
+    public ReturnHelper updateMemberProfile(Long memberID, String newName, String description);
+    public ReturnHelper updateMemberProfilePicture(Long accountID, Part profilePicture);
+    
+    public ReturnHelper updateArtistProfile(Long artistID, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
+    public ReturnHelper updateArtistName(Long artistID, String newName);
+    public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture);
+    
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
+    public ReturnHelper updateBandName(Long bandID, String newName);
+    public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture);
+    
     public ReturnHelper deleteAccountProfilePicture(Long accountID);
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail);

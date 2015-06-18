@@ -160,10 +160,10 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     private String getSigningURL(String verb, String filename, PrivateKey privateKey) throws Exception {
-        String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis()/1000+expiration) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
+        String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expiration) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
                 + "?GoogleAccessId=" + SERVICE_ACCOUNT_EMAIL
-                + "&Expires=" + (System.currentTimeMillis()/1000+expiration)
+                + "&Expires=" + (System.currentTimeMillis() / 1000 + expiration)
                 + "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
         return signed_url;
     }
@@ -188,6 +188,19 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
 
     @Override
     public Boolean deleteFileFromGoogleCloudStorage(String remoteDestinationFile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("CommonInfrastructureBean: deleteFileFromGoogleCloudStorage() called");
+        try {
+
+            httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+            dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
+            Credential credential = authorize();
+            client = new Storage.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
+            Storage.Objects.Delete deleteObject = client.objects().delete(BUCKET_NAME, remoteDestinationFile);
+            deleteObject.execute();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("CommonInfrastructureBean: deleteFileFromGoogleCloudStorage() failed");
+            return null;
+        }
     }
 }

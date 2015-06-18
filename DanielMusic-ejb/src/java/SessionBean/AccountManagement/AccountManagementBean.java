@@ -14,6 +14,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -438,7 +439,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateAccountProfile(Long accountID, String newName, Part profilePicture, String description) {
+    public ReturnHelper updateMemberProfile(Long accountID, String newName, String description) {
         System.out.println("AccountManagementBean: updateAccountProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -449,20 +450,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (newName != null && !newName.equals("")) {
                 account.setName(newName);
             }
-            if (profilePicture != null) {
-                //Save file to local drive first
-                InputStream fileInputStream = profilePicture.getInputStream();
-                OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
-                int nextByte;
-                while ((nextByte = fileInputStream.read()) != -1) {
-                    fileOutputStream.write(nextByte);
-                }
-                fileOutputStream.close();
-                fileInputStream.close();
-                //TODO: Upload file to cloud storage
-                //Update URL address
-                account.setImageURL("");
-            }
+            
             if (description != null && !description.equals("")) {
                 account.setDescription(description);
             }
@@ -477,6 +465,65 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public ReturnHelper updateMemberProfilePicture(Long accountID, Part profilePicture) {
+        //TODO
+        System.out.println("AccountManagementBean: updateMemberProfilePicture() called");
+        ReturnHelper result = new ReturnHelper();
+        try {
+            Account account = new Admin();//todo
+        if (profilePicture != null) {
+                //Save file to local drive first
+                InputStream fileInputStream = profilePicture.getInputStream();
+                OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
+                int nextByte;
+                while ((nextByte = fileInputStream.read()) != -1) {
+                    fileOutputStream.write(nextByte);
+                }
+                fileOutputStream.close();
+                fileInputStream.close();
+                //TODO: Upload file to cloud storage
+                //Update URL address
+                //account.setImageURL("");
+            }
+        }catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateStaffName() failed");
+            result.setDescription("Unable to update account's name, internal server error.");
+            ex.printStackTrace();
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateArtistProfile(Long artistID, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateArtistName(Long artistID, String newName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateBandName(Long bandID, String newName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -15,7 +15,7 @@ import javax.jws.WebParam;
  *
  * @author -VeRyLuNaTiC
  */
-@WebService(serviceName = "NewWebService2")
+@WebService(serviceName = "CommonInfrastructureWS")
 @Stateless()
 public class CommonInfrastructureWS {
     @EJB
@@ -30,6 +30,11 @@ public class CommonInfrastructureWS {
     @WebMethod(operationName = "uploadFileToGoogleCloudStorage")
     public Boolean uploadFileToGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile, @WebParam(name = "localSourceFile") String localSourceFile, @WebParam(name = "isImage") Boolean isImage) {
         return ejbRef.uploadFileToGoogleCloudStorage(remoteDestinationFile, localSourceFile, isImage);
+    }
+
+    @WebMethod(operationName = "deleteFileFromGoogleCloudStorage")
+    public Boolean deleteFileFromGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile) {
+        return ejbRef.deleteFileFromGoogleCloudStorage(remoteDestinationFile);
     }
 
     @WebMethod(operationName = "getMusicFileURLFromGoogleCloudStorage")

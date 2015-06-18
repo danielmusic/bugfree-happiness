@@ -222,6 +222,10 @@ public class sampleStorageSample {
                 }
                 listObjects.setPageToken(objects.getNextPageToken());
             } while (null != objects.getNextPageToken());
+            
+            //Delete
+            //Storage.Objects.Delete deleteObject = client.objects().delete(BUCKET_NAME, objectName)
+            //https://developers.google.com/resources/api-libraries/documentation/storage/v1/java/latest/com/google/api/services/storage/Storage.Objects.Delete.html#Storage.Objects.Delete(java.lang.String,%20java.lang.String)
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (Throwable t) {
