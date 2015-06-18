@@ -73,7 +73,7 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "ArtistUpdateProfile":
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
-                        // returnHelper = accountManagementBean.updateAccountProfile(artist.getId(), name, profilePicURL, bio);
+                        // returnHelper = accountManagementBean.updateMemberProfile(artist.getId(), name, profilePicURL, bio);
                     }
                     break;
 
