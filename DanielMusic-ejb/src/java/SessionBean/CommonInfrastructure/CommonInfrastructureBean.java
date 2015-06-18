@@ -185,4 +185,9 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         byte[] rawSignature = signer.sign();
         return new String(Base64.encodeBase64(rawSignature, false), "UTF-8");
     }
+
+    @Override
+    public Boolean deleteFileFromGoogleCloudStorage(String remoteDestinationFile) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
