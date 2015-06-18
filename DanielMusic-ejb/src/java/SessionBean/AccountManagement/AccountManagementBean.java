@@ -95,6 +95,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 Artist artist = (Artist) q.getSingleResult();
                 return artist;
+            } else if (account instanceof Band) {
+                q = em.createQuery("SELECT a FROM Band a where a.email=:email");
+                q.setParameter("email", email);
+                Band band = (Band) q.getSingleResult();
+                return band;
             } else if (account instanceof Admin) {
                 q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
                 q.setParameter("email", email);
