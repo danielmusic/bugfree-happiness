@@ -3,6 +3,7 @@ package SessionBean.AdminManagement;
 import EntityManager.Artist;
 import EntityManager.Genre;
 import EntityManager.Member;
+import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import java.util.List;
 import javax.ejb.Local;
@@ -42,5 +43,14 @@ public interface AdminManagementBeanLocal {
      * @return List{Genre} otherwise return null if error
      */
     public List<Genre> listAllGenres();
+    
+    
+    public ReturnHelper createGenre(String name);
+    public List<Music> listMusicInGenre(Long genreID);
+    public ReturnHelper updateGenre(Long genreID, String newName);
+    public ReturnHelper addMusicToGenre(Long genreID, Long musicID);
+    public ReturnHelper removeMusicFromGenre(Long genreID, Long musicID);
+    public ReturnHelper deleteGenre(Long genreID);
+    
 
 }
