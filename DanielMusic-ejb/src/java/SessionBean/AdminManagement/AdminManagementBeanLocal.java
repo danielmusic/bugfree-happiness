@@ -41,6 +41,6 @@ public interface AdminManagementBeanLocal {
      *
      * @return List{Genre} otherwise return null if error
      */
-    public List<Genre> listAllGenres(Boolean isAdmin);
+    public List<Genre> listAllGenres();
 
 }
