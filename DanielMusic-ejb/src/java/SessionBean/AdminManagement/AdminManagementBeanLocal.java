@@ -47,10 +47,10 @@ public interface AdminManagementBeanLocal {
     
     
     public ReturnHelper createGenre(String name);
-    public List<Music> listMusicInGenre(Long genreID);
+    //public List<Music> listMusicInGenre(Long genreID);
     public ReturnHelper updateGenre(Long genreID, String newName);
-    public ReturnHelper addMusicToGenre(Long genreID, Long musicID);
-    public ReturnHelper removeMusicFromGenre(Long genreID, Long musicID);
+    //public ReturnHelper addMusicToGenre(Long genreID, Long musicID);
+    //public ReturnHelper removeMusicFromGenre(Long genreID, Long musicID);
     public ReturnHelper deleteGenre(Long genreID);
     
 
