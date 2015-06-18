@@ -30,6 +30,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String email = request.getParameter("email");
         String bio = request.getParameter("bio");
         String profilePicURL = request.getParameter("profilePicURL");
+        String oldpassword = request.getParameter("oldpassword");
         String password = request.getParameter("pwd");
         String chkAgree = request.getParameter("chkAgree");
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
@@ -70,10 +71,16 @@ public class ClientAccountManagementController extends HttpServlet {
                     }
                     break;
 
-                case "ArtistUpdateProfile":
+                case "ArtistProfileUpdate":
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
-                        // returnHelper = accountManagementBean.updateAccountProfile(artist.getId(), name, profilePicURL, bio);
+                        if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty()) {
+                            returnHelper = accountManagementBean.updateAccountPassword(artist.getId(), oldpassword, password);
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            }
+                        }
+                        nextPage = "#!/artist/profile";
                     }
                     break;
 
@@ -83,11 +90,11 @@ public class ClientAccountManagementController extends HttpServlet {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
+                            nextPage = "#!/artist/albums";
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
+                            nextPage = "#!/band/albums";
                         }
-
-                        nextPage = "#!/artist/albums";
                     } else {
                         nextPage = "#!/login";
                         session.setAttribute("errMsg", returnHelper.getDescription());
@@ -113,7 +120,6 @@ public class ClientAccountManagementController extends HttpServlet {
                     nextPage = "#!/login";
                     session.setAttribute("goodMsg", "Logout Successful");
                     break;
-
             }
 
             if (nextPage.equals("")) {
