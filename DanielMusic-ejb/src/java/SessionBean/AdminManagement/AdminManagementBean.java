@@ -4,6 +4,7 @@ import EntityManager.Account;
 import EntityManager.Artist;
 import EntityManager.Genre;
 import EntityManager.Member;
+import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import java.util.List;
@@ -146,4 +147,36 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
         }
         return null;
     }
+
+    @Override
+    public ReturnHelper createGenre(String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Music> listMusicInGenre(Long genreID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper updateGenre(Long genreID, String newName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper addMusicToGenre(Long genreID, Long musicID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper removeMusicFromGenre(Long genreID, Long musicID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper deleteGenre(Long genreID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }
