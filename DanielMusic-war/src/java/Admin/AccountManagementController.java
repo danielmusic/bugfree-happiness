@@ -31,6 +31,7 @@ public class AccountManagementController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String target = request.getParameter("target");
+        String source = request.getParameter("source");
         String id = request.getParameter("id");
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
@@ -85,39 +86,45 @@ public class AccountManagementController extends HttpServlet {
                     break;
 
                 case "ListAllBand":
-//                    if (checkLogin(response)) {
-//                        List<Band> bands = adminManagementBean.listAllBandss(true);
-//                        if (bands == null) {
-//                            nextPage = "admin/error500.html";
-//                        } else {
-//                            session.setAttribute("bands", bands);
-//                            nextPage = "admin/AccountManagement/bandManagement.jsp";
-//                        }
-//                    }
-                    break;
-
-                case "ListAllGenre":
                     if (checkLogin(response)) {
-                        List<Genre> genres = adminManagementBean.listAllGenres(true);
-                        if (genres == null) {
+                        List<Band> bands = adminManagementBean.listAllBands(true);
+                        if (bands == null) {
                             nextPage = "admin/error500.html";
                         } else {
-                            session.setAttribute("genres", genres);
-                            nextPage = "admin/GenreManagement/GenreManagement.jsp";
+                            session.setAttribute("bands", bands);
+                            nextPage = "admin/AccountManagement/bandManagement.jsp";
                         }
                     }
                     break;
 
-                case "DisableArtist":
+                case "DisableAccount":
                     if (checkLogin(response)) {
                         returnHelper = accountManagementBean.disableAccount(Long.parseLong(id));
                         if (returnHelper.getResult()) {
-                            List<Artist> artists = adminManagementBean.listAllArtists(true);
-                            if (artists == null) {
-                                nextPage = "admin/error500.html";
-                            } else {
-                                session.setAttribute("artists", artists);
-                                nextPage = "admin/ArtistManagement/artistManagement.jsp";
+                            if (source != null && source.equals("artistManagement")) {
+                                List<Artist> artists = adminManagementBean.listAllArtists(true);
+                                if (artists == null) {
+                                    nextPage = "admin/error500.html";
+                                } else {
+                                    session.setAttribute("artists", artists);
+                                    nextPage = "admin/ArtistManagement/artistManagement.jsp";
+                                }
+                            } else if (source != null && source.equals("bandManagement")) {
+                                List<Band> bands = adminManagementBean.listAllBands(true);
+                                if (bands == null) {
+                                    nextPage = "admin/error500.html";
+                                } else {
+                                    session.setAttribute("bands", bands);
+                                    nextPage = "admin/AccountManagement/bandManagement.jsp";
+                                }
+                            } else if (source != null && source.equals("fanManagement")) {
+                                List<Member> fans = adminManagementBean.listAllMembers(true);
+                                if (fans == null) {
+                                    nextPage = "admin/error500.html";
+                                } else {
+                                    session.setAttribute("fans", fans);
+                                    nextPage = "admin/AccountManagement/fanManagement.jsp";
+                                }
                             }
                         }
                     }
@@ -133,7 +140,9 @@ public class AccountManagementController extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            //ex.printStackTrace();
+            response.sendRedirect("admin/error500.html");
+            ex.printStackTrace();
+            return;
         }
     }
 

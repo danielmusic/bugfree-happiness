@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="../../AccountManagementController?target=ListAllGenre">
+                        <a href="../../GenreManagementController?target=ListAllGenre">
                             <i class="fa fa-music" aria-hidden="true"></i>
                             <span>Genre</span>
                         </a>

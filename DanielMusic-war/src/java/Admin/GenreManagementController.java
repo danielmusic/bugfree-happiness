@@ -1,28 +1,102 @@
 package Admin;
 
+import EntityManager.Admin;
+import EntityManager.Genre;
+import EntityManager.ReturnHelper;
+import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class GenreManagementController extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GenreManagementController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GenreManagementController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    @EJB
+    private AdminManagementBeanLocal adminManagementBean;
+
+    String nextPage = "", goodMsg = "", errMsg = "";
+    HttpSession session;
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String target = request.getParameter("target");
+        String name = request.getParameter("name");
+        String id = request.getParameter("id");
+
+        session = request.getSession();
+        ReturnHelper returnHelper;
+        List<Genre> genres = null;
+
+        try {
+            if (checkLogin(response)) {
+                switch (target) {
+                    case "AddGenre":
+                        returnHelper = adminManagementBean.createGenre(name);
+                        if (returnHelper.getResult()) {
+                            genres = adminManagementBean.listAllGenres(true);
+                            if (genres == null) {
+                                nextPage = "admin/error500.html";
+                            } else {
+                                session.setAttribute("genres", genres);
+                                nextPage = "admin/GenreManagement/GenreManagement.jsp?goodMsg=" + returnHelper.getDescription();
+                            }
+                        }
+                        break;
+
+                    case "ListAllGenre":
+                        genres = adminManagementBean.listAllGenres(true);
+                        if (genres == null) {
+                            nextPage = "admin/error500.html";
+                        } else {
+                            session.setAttribute("genres", genres);
+                            nextPage = "admin/GenreManagement/GenreManagement.jsp";
+                        }
+                        break;
+
+                    case "DeleteGenre":
+                        returnHelper = adminManagementBean.deleteGenre(Long.parseLong(id));
+                        if (returnHelper.getResult()) {
+                            genres = adminManagementBean.listAllGenres(true);
+                            if (genres == null) {
+                                nextPage = "admin/error500.html";
+                            } else {
+                                session.setAttribute("genres", genres);
+                                nextPage = "admin/GenreManagement/GenreManagement.jsp?goodMsg=" + returnHelper.getDescription();
+                            }
+                        }
+                        break;
+                }
+            }
+
+            if (nextPage.equals("")) {
+                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                return;
+            } else {
+                response.sendRedirect(nextPage);
+                return;
+            }
+
+        } catch (Exception ex) {
+            response.sendRedirect("admin/error500.html");
+            ex.printStackTrace();
+            return;
+        }
+    }
+
+    public boolean checkLogin(HttpServletResponse response) {
+        try {
+            Admin admin = (Admin) (session.getAttribute("admin"));
+            if (admin == null) {
+                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
         }
     }
 

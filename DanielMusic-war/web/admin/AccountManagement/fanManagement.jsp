@@ -18,7 +18,15 @@
     <body onload="alertFunc()">
         <jsp:include page="../displayNotification.jsp" />
         <script>
-
+            function refresh() {
+                window.location.href = "../../AccountManagementController?target=ListAllFan";
+            }
+            function disableAccount(id) {
+                fanManagement.id.value = id;
+                fanManagement.target.value = "DisableAccount";
+                document.fanManagement.action = "../../AccountManagementController";
+                document.fanManagement.submit();
+            }
         </script>
 
         <section class="body">
@@ -48,6 +56,12 @@
                             <h2 class="panel-title">Fan Management</h2>
                         </header>
                         <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12"> 
+                                    <button type="button" class="btn btn-default" onclick="javascript:refresh()"><i class="fa fa-refresh"></i> Refresh</button>
+                                </div>
+                            </div>
+                            <br/>
                             <form name="fanManagement">
                                 <table class="table table-bordered table-striped mb-none" id="datatable-default">
                                     <thead>
@@ -71,7 +85,7 @@
                                                     if (!fans.get(i).getIsDisabled()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
                                                     } else {
-                                                        out.print("<span class='label label-warning' style='font-size: 100%; background-color:#B8B8B8;'>Disabled</span>");
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
 
                                                     if (fans.get(i).getEmailIsVerified()) {
@@ -84,6 +98,31 @@
                                             <td>
                                                 <% if (!fans.get(i).getIsDisabled()) {%>
                                                 <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
+                                                <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                                                    <section class="panel">
+                                                        <header class="panel-heading">
+                                                            <h2 class="panel-title">Are you sure?</h2>
+                                                        </header>
+                                                        <div class="panel-body">
+                                                            <div class="modal-wrapper">
+                                                                <div class="modal-icon">
+                                                                    <i class="fa fa-question-circle"></i>
+                                                                </div>
+                                                                <div class="modal-text">
+                                                                    <p>Are you sure that you want to disable this account?</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <footer class="panel-footer">
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=fans.get(i).getId()%>)"  />
+                                                                    <button class="btn btn-default modal-dismiss">Cancel</button>
+                                                                </div>
+                                                            </div>
+                                                        </footer>
+                                                    </section>
+                                                </div>
                                                 <%}%>
                                             </td>
                                         </tr>
@@ -96,6 +135,7 @@
                                 </table>
                                 <input type="hidden" name="id" value="">
                                 <input type="hidden" name="target" value="">    
+                                <input type="hidden" name="source" value="fanManagement">    
                             </form>
                         </div>
 

@@ -18,13 +18,13 @@
         <jsp:include page="../displayNotification.jsp" />
         <script>
             function refresh() {
-                window.location.href = "../../AccountManagementController?target=ListAllArtist";
+                window.location.href = "../../AccountManagementController?target=ListAllBand";
             }
             function disableAccount(id) {
-                artistManagement.id.value = id;
-                artistManagement.target.value = "DisableArtist";
-                document.artistManagement.action = "../../AccountManagementController";
-                document.artistManagement.submit();
+                bandManagement.id.value = id;
+                bandManagement.target.value = "DisableAccount";
+                document.bandManagement.action = "../../AccountManagementController";
+                document.bandManagement.submit();
             }
         </script>
 
@@ -49,7 +49,6 @@
                     </header>
 
                     <!-- start: page -->
-
                     <section class="panel">
                         <header class="panel-heading">
                             <h2 class="panel-title">Band Management</h2>
@@ -62,7 +61,7 @@
                             </div>
                             <br/>
 
-                            <form name="fanManagement">
+                            <form name="bandManagement">
                                 <table class="table table-bordered table-striped mb-none" id="datatable-default">
                                     <thead>
                                         <tr>
@@ -94,13 +93,13 @@
                                                     } else if (bands.get(i).getIsApproved() == -2) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Not approved</span>");
                                                     }
 
                                                     if (bands.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not verified</span>");
                                                     }
                                                 %>
                                             </td>
@@ -144,6 +143,7 @@
                                 </table>
                                 <input type="hidden" name="id" value="">
                                 <input type="hidden" name="target" value="">    
+                                <input type="hidden" name="source" value="bandManagement"> 
                             </form>
                         </div>
 

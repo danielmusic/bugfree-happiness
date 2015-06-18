@@ -23,7 +23,7 @@
             }
             function disableAccount(id) {
                 artistManagement.id.value = id;
-                artistManagement.target.value = "DisableArtist";
+                artistManagement.target.value = "DisableAccount";
                 document.artistManagement.action = "../../AccountManagementController";
                 document.artistManagement.submit();
             }
@@ -94,13 +94,13 @@
                                                     } else if (artists.get(i).getIsApproved() == -2) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not approved</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Not approved</span>");
                                                     }
 
                                                     if (artists.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Unverified</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not verified</span>");
                                                     }
                                                 %>
                                             </td>
@@ -143,6 +143,7 @@
                                 </table>
                                 <input type="hidden" name="id" value="">
                                 <input type="hidden" name="target" value="">    
+                                <input type="hidden" name="source" value="artistManagement"> 
                             </form>
                         </div>
 
