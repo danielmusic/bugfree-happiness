@@ -11,7 +11,7 @@
                 %>
                 <jsp:include page="../displayMessage.jsp" />
 
-                <form action="../ClientAccountManagementController" class="form">
+                <form action="../ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
                     <h2>Account Details</h2>
 
                     <div class="row clearfix">
@@ -25,8 +25,8 @@
                         </div>
 
                         <div class="col-1-3 last">
-                            <label class="tip"><strong>PayPay email address:</strong></label>
-                            <input type="text" value="<%=artist.getEmail()%>">
+                            <label for="ppEmail"><strong>PayPay email address:</strong></label>
+                            <input type="text" value="<%=artist.getEmail()%>" name="paypalEmail" id="ppEmail">
                         </div>
                     </div>
 
@@ -51,33 +51,43 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="bio"><strong>Biography</strong> </label>
-                            <textarea name="bio" id="bio" required><%if (artist.getDescription() != null) {
-                                    out.print(artist.getDescription());
+                            <textarea name="bio" id="bio" required><%if (artist.getBiography() != null) {
+                                    out.print(artist.getBiography());
                                 } %></textarea>
                             <label><strong>200 words max</strong> </label>
                         </div>
                     </div>
 
                     <div class="row clearfix">
-                        <div class="col-1-1">
+                        <div class="col-1-2">
                             <label for="influences"><strong>Influences</strong> </label>
-                            <textarea name="influences" id="influences" required style="min-height:100px;"><%if (artist.getDescription() != null) {
+                            <textarea name="influences" id="influences" required style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getInfluences());
                                 } %></textarea>
+                        </div>
+                        <div class="col-1-2 last">
+                            <label for="genre"><strong>Genre</strong></label>
+                            <select name="genre" id="genre">
+                                <option value="">Select</option>
+                                <option value="volvo">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="fb"><strong>Facebook URL</strong></label>
-                            <input type="url" id="fb" name="fb" placeholder="http://" value="<%if (artist.getFacebookURL() != null) {
+                            <input type="url" id="fb" name="facebookURL" placeholder="http://" value="<%if (artist.getFacebookURL() != null) {
                                     out.print(artist.getFacebookURL());
                                 }%>">
                         </div>
 
                         <div class="col-1-2 last">
-                            <label for="fb"><strong>Twitter URL</strong></label>
-                            <input type="url" id="fb" name="fb" placeholder="http://" value="<%if (artist.getTwitterURL() != null) {
+                            <label for="twitter"><strong>Twitter URL</strong></label>
+                            <input type="url" id="twitter" name="twitterURL" placeholder="http://" value="<%if (artist.getTwitterURL() != null) {
                                     out.print(artist.getTwitterURL());
                                 }%>">
                         </div>
@@ -86,7 +96,7 @@
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="ig"><strong>Instagram URL</strong></label>
-                            <input type="url" id="ig" name="ig" placeholder="http://" value="<%if (artist.getInstagramURL() != null) {
+                            <input type="url" id="ig" name="instagramURL" placeholder="http://" value="<%if (artist.getInstagramURL() != null) {
                                     out.print(artist.getInstagramURL());
                                 }%>">
                         </div>
@@ -100,7 +110,7 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="pic"><strong>Profile Picture</strong></label>
-                            <input type="file" id="pic" name="profilePicURL">
+                            <input type="file" id="pic" name="picture">
                         </div>
                     </div>
 

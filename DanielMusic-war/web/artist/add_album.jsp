@@ -9,17 +9,19 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
-                <h2>Add Album</h2>
-                <form action="../ClientAccountManagementController" class="form">
+                <h2>Album Information</h2>
+                <form action="../ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
                     <div class="row clearfix">
-                        <div class="col-1-2">
+                        <div class="col-1-1">
                             <label for="name"><strong>Album Name</strong> </label>
-                            <input type="text" id="name" name="name" disabled>
+                            <input type="text" id="name" name="name">
                         </div>
+                    </div>
 
-                        <div class="col-1-2 last">
-                            <label for="image"><strong>Album Image:</strong> </label>
-                            <input type="file" id="image" name="image">
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label for="picture"><strong>Album Art</strong> </label>
+                            <input type="file" id="picture" name="picture">
                         </div>
                     </div>
 

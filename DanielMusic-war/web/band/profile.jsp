@@ -22,8 +22,8 @@
                             <input type="email" id="email" name="email" value="<%=band.getEmail()%>">
                         </div>
                         <div class="col-1-3 last">
-                            <label class="tip"><strong>PayPay email address:</strong></label>
-                            <input type="text" value="<%=band.getEmail()%>">
+                            <label for="ppEmail"><strong>PayPay email address:</strong></label>
+                            <input type="text" value="<%=band.getEmail()%>" name="paypalEmail" id="ppEmail">
                         </div>
                     </div>
                     <div class="row clearfix">
@@ -51,8 +51,8 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="bio"><strong>Biography</strong> </label>
-                            <textarea name="bio" id="bio" required><%if (band.getDescription() != null) {
-                                    out.print(band.getDescription());
+                            <textarea name="bio" id="bio" required><%if (band.getBiography() != null) {
+                                    out.print(band.getBiography());
                                 }%></textarea>
                             <label><strong>200 words max</strong> </label>
                         </div>
@@ -77,14 +77,14 @@
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="fb"><strong>Facebook URL</strong></label>
-                            <input type="url" id="fb" name="fb" placeholder="http://" value="<%if (band.getFacebookURL() != null) {
+                            <input type="url" id="fb" name="facebookURL" placeholder="http://" value="<%if (band.getFacebookURL() != null) {
                                     out.print(band.getFacebookURL());
                                 }%>">
                         </div>
 
                         <div class="col-1-2 last">
-                            <label for="fb"><strong>Twitter URL</strong></label>
-                            <input type="url" id="fb" name="fb" placeholder="http://" value="<%if (band.getTwitterURL() != null) {
+                            <label for="twitter"><strong>Twitter URL</strong></label>
+                            <input type="url" id="twitter" name="twitterURL" placeholder="http://" value="<%if (band.getTwitterURL() != null) {
                                     out.print(band.getTwitterURL());
                                 }%>">
                         </div>
@@ -93,7 +93,7 @@
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="ig"><strong>Instagram URL</strong></label>
-                            <input type="url" id="ig" name="ig" placeholder="http://" value="<%if (band.getInstagramURL() != null) {
+                            <input type="url" id="ig" name="instagramURL" placeholder="http://" value="<%if (band.getInstagramURL() != null) {
                                     out.print(band.getInstagramURL());
                                 }%>">
                         </div>

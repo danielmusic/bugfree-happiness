@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 public class ClientAccountManagementController extends HttpServlet {
 
@@ -26,12 +27,23 @@ public class ClientAccountManagementController extends HttpServlet {
         System.out.println("Welcome to client account managment controller");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
+        String id = request.getParameter("id");
+        
+        //profile parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
+        String paypalEmail = request.getParameter("paypalEmail");
+        String genreID = request.getParameter("genre");
         String bio = request.getParameter("bio");
-        String profilePicURL = request.getParameter("profilePicURL");
+        String influences = request.getParameter("influences");
+        String facebookURL = request.getParameter("facebookURL");
+        String instagramURL = request.getParameter("instagramURL");
+        String twitterURL = request.getParameter("twitterURL");
+
         String oldpassword = request.getParameter("oldpassword");
         String password = request.getParameter("pwd");
+
+        //signup parameters
         String chkAgree = request.getParameter("chkAgree");
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
 
@@ -74,12 +86,27 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "ArtistProfileUpdate":
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
+                        //check need to update password
                         if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty()) {
                             returnHelper = accountManagementBean.updateAccountPassword(artist.getId(), oldpassword, password);
                             if (returnHelper.getResult()) {
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             }
                         }
+
+                        Part picture = request.getPart("picture");
+                        if (picture != null) {
+                            returnHelper = accountManagementBean.updateArtistProfilePicture(Long.parseLong(id), picture);
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            }
+                        }
+
+                        returnHelper = accountManagementBean.updateArtistProfile(Long.parseLong(id), Long.parseLong(genreID), bio, influences, email, paypalEmail, facebookURL, instagramURL, twitterURL);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                        }
+
                         nextPage = "#!/artist/profile";
                     }
                     break;

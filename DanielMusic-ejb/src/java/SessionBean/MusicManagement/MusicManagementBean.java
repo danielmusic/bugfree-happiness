@@ -34,6 +34,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.servlet.http.Part;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
@@ -210,8 +213,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs) {
+        ReturnHelper helper = new ReturnHelper();
         try {
-            ReturnHelper helper = new ReturnHelper();
+
             Album album = null;
             String fileName = musicPart.getSubmittedFileName();
             String tempMusicURL = "temp/" + fileName;
@@ -230,6 +234,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             File file = new File(tempMusicURL);
 
             //check if the music >10mins, if more than 10mins return ReturnHelper
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat format = audioInputStream.getFormat();
+            long frames = audioInputStream.getFrameLength();
+            double durationInSeconds = (frames + 0.0) / format.getFrameRate();
+            if (durationInSeconds > 600) {
+                helper.setDescription("The track duration cannot be more than 10mins, please upload a shorter duration.");
+                helper.setResult(false);
+                return helper;
+            }
+
             File newFile128 = new File(tempMusicURL + "128");
             File newFile320 = new File(tempMusicURL + "320");
             encodeToMP3(file, newFile128, 128);
@@ -277,10 +291,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Boolean result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
 
             if (result1 && result2) {
-                helper.setDescription("Music uploaded successfully.");
+                helper.setDescription("Track has been uploaded successfully.");
                 helper.setResult(true);
             } else {
-                helper.setDescription("Error occurred while uploading music... Please check that the music is in the correct format.");
+                helper.setDescription("Error occurred while uploading track... Please check that the track is in the correct format.");
                 helper.setResult(false);
                 //delete music entity
                 em.refresh(music);
@@ -294,8 +308,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
+            helper.setDescription("Error occurred while creating track, please try again.");
+            helper.setResult(false);
+            return helper;
         }
-        return null;
     }
 
     @Override
