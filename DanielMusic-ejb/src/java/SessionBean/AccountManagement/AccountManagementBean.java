@@ -496,7 +496,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateArtistProfile(Long artistID, List<Long> genreIDs, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -511,7 +511,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, List<Long> genreIDs, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
