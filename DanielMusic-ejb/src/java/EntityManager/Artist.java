@@ -23,9 +23,7 @@ public class Artist extends Account implements Serializable {
     private Integer isApproved; //{new: 0, pending: -2, approve: 1, not approve: -1}
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
-
-    @Temporal(TemporalType.DATE)
-    private Date dateFormed;
+    
     private String genre;
     @Lob
     private String biography;
@@ -42,14 +40,6 @@ public class Artist extends Account implements Serializable {
 
     public Artist() {
         isApproved = 0;
-    }
-
-    public Date getDateFormed() {
-        return dateFormed;
-    }
-
-    public void setDateFormed(Date dateFormed) {
-        this.dateFormed = dateFormed;
     }
 
     public String getGenre() {

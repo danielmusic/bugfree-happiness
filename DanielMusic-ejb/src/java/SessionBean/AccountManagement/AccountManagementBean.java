@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -439,7 +440,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateMemberProfile(Long accountID, String newName, String description) {
+    public ReturnHelper updateMemberProfile(Long accountID, String newName) {
         System.out.println("AccountManagementBean: updateAccountProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -449,10 +450,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Account account = (Account) q.getSingleResult();
             if (newName != null && !newName.equals("")) {
                 account.setName(newName);
-            }
-            
-            if (description != null && !description.equals("")) {
-                account.setDescription(description);
+            } else {
+                result.setDescription("Name cannot be empty.");
             }
             em.merge(account);
             result.setResult(true);
@@ -474,7 +473,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         try {
             Account account = new Admin();//todo
-        if (profilePicture != null) {
+            if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
@@ -488,7 +487,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 //Update URL address
                 //account.setImageURL("");
             }
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("AccountManagementBean: updateStaffName() failed");
             result.setDescription("Unable to update account's name, internal server error.");
             ex.printStackTrace();
@@ -497,7 +496,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateArtistProfile(Long artistID, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+    public ReturnHelper updateArtistProfile(Long artistID, List<Long> genreIDs, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -512,7 +511,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, List<Long> genreIDs, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

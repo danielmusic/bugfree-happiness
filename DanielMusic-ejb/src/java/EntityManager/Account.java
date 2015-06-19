@@ -38,7 +38,6 @@ public abstract class Account implements Serializable {
     private String verificationCode;
     private Boolean newEmailIsVerified; //Subsequent change (will reset to false when the user tries to change email)
     @Lob
-    private String description;
     private String imageURL;
 
     public Account() {
@@ -53,14 +52,6 @@ public abstract class Account implements Serializable {
 
     public void setListOfPurchasedMusics(List<Music> listOfPurchasedMusics) {
         this.listOfPurchasedMusics = listOfPurchasedMusics;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getImageURL() {
