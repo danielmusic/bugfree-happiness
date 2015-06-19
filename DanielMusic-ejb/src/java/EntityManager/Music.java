@@ -32,10 +32,20 @@ public class Music implements Serializable {
     private List<Genre> listOfGenres;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Album album;
+    private Long numPurchase;
 
     public Music() {
         isDeleted = false;
         numDownloaded = 0L;
+        numPurchase = 0L;
+    }
+
+    public Long getNumPurchase() {
+        return numPurchase;
+    }
+
+    public void setNumPurchase(Long numPurchase) {
+        this.numPurchase = numPurchase;
     }
 
     public Album getAlbum() {

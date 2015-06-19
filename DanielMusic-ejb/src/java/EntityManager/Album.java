@@ -35,11 +35,21 @@ public class Album implements Serializable {
     private Band band;
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
+    private Long numPurchase;
 
     public Album() {
         isDeleted = false;
         isPublished = false;
         publishedDate = null;
+        numPurchase = 0L;
+    }
+
+    public Long getNumPurchase() {
+        return numPurchase;
+    }
+
+    public void setNumPurchase(Long numPurchase) {
+        this.numPurchase = numPurchase;
     }
 
     public Boolean getIsPublished() {

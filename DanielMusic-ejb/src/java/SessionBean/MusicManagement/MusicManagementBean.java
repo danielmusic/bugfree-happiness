@@ -246,21 +246,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
-
-            String musicURL128;
-            String musicURL320;
-            Artist artist = album.getArtist();
-
-            if (artist != null) {
-                musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/128/" + fileName;
-                musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/320/" + fileName;
-            } else {
-                musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/128/" + fileName;
-                musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/320/" + fileName;
-            }
-
-            music.setFileLocation128(musicURL128);
-            music.setFileLocation320(musicURL320);
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
             for (Long genreID : listOfGenreIDs) {
                 listOfGenres.add(em.getReference(Genre.class, genreID));
@@ -271,6 +256,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setTrackNumber(trackNumber);
             em.persist(music);
             em.flush();
+
+            String musicURL128;
+            String musicURL320;
+            Artist artist = album.getArtist();
+
+            if (artist != null) {
+                musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
+                musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
+            } else {
+                musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
+                musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
+            }
+
+            music.setFileLocation128(musicURL128);
+            music.setFileLocation320(musicURL320);
 
             //end create music
             Boolean result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
@@ -333,7 +333,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
-                imageLocation = "image/" + account.getId() + "/" + name;
+                imageLocation = "image/" + account.getId() + "/" + name + commonInfrastructureBean.generateUUID();
                 result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
 
                 File file = new File(tempImageURL);
@@ -440,9 +440,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     }
                     //check whether album belongs to artist/band
                     if (album.getArtist() != null) {
-                        imageLocation = "image/" + album.getArtist().getId() + "/" + name;
+                        imageLocation = "image/" + album.getArtist().getId() + "/" + name + commonInfrastructureBean.generateUUID();
                     } else {
-                        imageLocation = "image/" + album.getBand().getId() + "/" + name;
+                        imageLocation = "image/" + album.getBand().getId() + "/" + name + commonInfrastructureBean.generateUUID();
                     }
 
                     result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
@@ -457,7 +457,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         return helper;
                     }
                 }
-                
+
                 helper.setDescription("Album details have been updated successfully.");
                 helper.setResult(true);
                 return helper;
@@ -507,7 +507,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper deleteAlbum(Long albumID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //if album is not published do hard delete
+        //if album is published, check whether album/music is purchased
+        //if purchased cannot delete
+        //if not purchased do hard delete
+        return null;
     }
 
 }
