@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,7 +27,8 @@ public class Band extends Account implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private Date dateFormed;
-    private String genre;
+    @ManyToOne
+    private Genre genre;
     @Lob
     private String members;
     @Lob
@@ -62,11 +64,11 @@ public class Band extends Account implements Serializable {
         this.dateFormed = dateFormed;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

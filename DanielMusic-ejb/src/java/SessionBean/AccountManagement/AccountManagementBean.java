@@ -4,6 +4,7 @@ import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
 import EntityManager.Band;
+import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
@@ -455,12 +456,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             em.merge(account);
             result.setResult(true);
-            result.setDescription("Account updated successfully.");
+            result.setDescription("Profile updated.");
         } catch (NoResultException ex) {
-            result.setDescription("Unable to find account with the provided ID.");
+            result.setDescription("Account no longer exists.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateStaffName() failed");
-            result.setDescription("Unable to update account's name, internal server error.");
+            System.out.println("AccountManagementBean: updateMemberProfile() failed");
+            result.setDescription("Update profile failed, internal server error.");
             ex.printStackTrace();
         }
         return result;
@@ -488,8 +489,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 //account.setImageURL("");
             }
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateStaffName() failed");
-            result.setDescription("Unable to update account's name, internal server error.");
+            System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");
+            result.setDescription("Update profille failed, internal server error.");
             ex.printStackTrace();
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -497,12 +498,65 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateArtistProfile() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:id");
+            q.setParameter("id", artistID);
+            Artist artist = (Artist) q.getSingleResult();
+            //Update old genre list
+            Genre oldGenre = artist.getGenre();
+            if (oldGenre != null) {
+                List<Artist> genreArtists = oldGenre.getListOfArtists();
+                genreArtists.remove(artist);
+                oldGenre.setListOfArtists(genreArtists);
+                em.merge(oldGenre);
+            }
+            //Update new genre list
+            q = em.createQuery("SELECT e FROM Genre e WHERE e.id=:id");
+            q.setParameter("id", genreID);
+            Genre newGenre = (Genre) q.getSingleResult();
+            List<Artist> genreArtists = newGenre.getListOfArtists();
+            genreArtists.add(artist);
+            em.merge(newGenre);
+            //Update artist genre
+            artist.setGenre(newGenre);
+            em.merge(artist);
+            result.setResult(true);
+            result.setDescription("Profile updated.");
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to update profile. Genre selected may have been deleted. Please try again.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateArtistProfile() failed");
+            result.setDescription("Update profile failed, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public ReturnHelper updateArtistName(Long artistID, String newName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateArtistName() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:id");
+            q.setParameter("id", artistID);
+            Artist artist = (Artist) q.getSingleResult();
+            artist.setIsApproved(-2);//Pending
+            artist.setName(newName);
+            em.merge(artist);
+            result.setResult(true);
+            result.setDescription("Name updated and is now pending approval.");
+        } catch (NoResultException ex) {
+            result.setDescription("Artist no longer exists.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateArtistName() failed");
+            result.setDescription("Name change failed, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
@@ -512,12 +566,65 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateBandProfile() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Band e WHERE e.id=:id");
+            q.setParameter("id", bandID);
+            Band band = (Band) q.getSingleResult();
+            //Update old genre list
+            Genre oldGenre = band.getGenre();
+            if (oldGenre != null) {
+                List<Band> genreBand = oldGenre.getListOfBands();
+                genreBand.remove(band);
+                oldGenre.setListOfBands(genreBand);
+                em.merge(oldGenre);
+            }
+            //Update new genre list
+            q = em.createQuery("SELECT e FROM Genre e WHERE e.id=:id");
+            q.setParameter("id", genreID);
+            Genre newGenre = (Genre) q.getSingleResult();
+            List<Band> genreBands = newGenre.getListOfBands();
+            genreBands.add(band);
+            em.merge(newGenre);
+            //Update band genre
+            band.setGenre(newGenre);
+            em.merge(band);
+            result.setResult(true);
+            result.setDescription("Profile updated.");
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to update profile. Genre selected may have been deleted. Please try again.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateBandProfile() failed");
+            result.setDescription("Update profile failed, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public ReturnHelper updateBandName(Long bandID, String newName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                System.out.println("AccountManagementBean: updateBandName() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Band e WHERE e.id=:id");
+            q.setParameter("id", bandID);
+            Band band = (Band) q.getSingleResult();
+            band.setIsApproved(-2);//Pending
+            band.setName(newName);
+            em.merge(band);
+            result.setResult(true);
+            result.setDescription("Name updated and is now pending approval.");
+        } catch (NoResultException ex) {
+            result.setDescription("Band no longer exists.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateBandName() failed");
+            result.setDescription("Name change failed, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
