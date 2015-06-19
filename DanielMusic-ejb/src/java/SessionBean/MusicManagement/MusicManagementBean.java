@@ -215,7 +215,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs) {
         ReturnHelper helper = new ReturnHelper();
         try {
-
             Album album = null;
             String fileName = musicPart.getSubmittedFileName();
             String tempMusicURL = "temp/" + fileName;
@@ -523,11 +522,34 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper deleteAlbum(Long albumID) {
-        //if album is not published do hard delete
-        //if album is published, check whether album/music is purchased
-        //if purchased cannot delete
-        //if not purchased do hard delete
-        return null;
+        System.out.println("MusicManagementBean: deleteAlbum() called.");
+        ReturnHelper helper = new ReturnHelper();
+        try {
+            Album album = em.getReference(Album.class, albumID);
+            //if album is published, check whether album/music is purchased 
+            //if purchased cannot delete
+            if (album.getIsPublished()) {
+                
+            } else {
+                //if album is not published do hard delete
+                
+                //if not purchased do hard delete
+                Boolean result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                for (Music m : album.getListOfMusics()) {
+                    Boolean result1 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                    Boolean result2 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                }
+                em.remove(album);
+            }
+
+            return helper;
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: deleteAlbum() failed.");
+            e.printStackTrace();
+            helper.setDescription("Error occurred while trying to delete album, please try again.");
+            helper.setResult(false);
+            return helper;
+        }
     }
 
 }

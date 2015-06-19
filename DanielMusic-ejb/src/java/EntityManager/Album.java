@@ -33,7 +33,7 @@ public class Album implements Serializable {
     private Artist artist;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Band band;
-    @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Music> listOfMusics;
     private Long numPurchase;
 
