@@ -1,7 +1,6 @@
 package EntityManager;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,9 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Artist extends Account implements Serializable {
@@ -23,10 +21,9 @@ public class Artist extends Account implements Serializable {
     private Integer isApproved; //{new: 0, pending: -2, approve: 1, not approve: -1}
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
-
-    @Temporal(TemporalType.DATE)
-    private Date dateFormed;
-    private String genre;
+    
+    @ManyToOne
+    private Genre genre;
     @Lob
     private String biography;
     @Lob
@@ -44,19 +41,11 @@ public class Artist extends Account implements Serializable {
         isApproved = 0;
     }
 
-    public Date getDateFormed() {
-        return dateFormed;
-    }
-
-    public void setDateFormed(Date dateFormed) {
-        this.dateFormed = dateFormed;
-    }
-
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

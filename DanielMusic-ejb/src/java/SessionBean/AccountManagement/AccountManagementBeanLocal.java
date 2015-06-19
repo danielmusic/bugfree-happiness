@@ -3,6 +3,7 @@ package SessionBean.AccountManagement;
 import EntityManager.Account;
 import EntityManager.ReturnHelper;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
 
@@ -24,14 +25,14 @@ public interface AccountManagementBeanLocal {
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     
-    public ReturnHelper updateMemberProfile(Long memberID, String newName, String description);
+    public ReturnHelper updateMemberProfile(Long memberID, String newName);
     public ReturnHelper updateMemberProfilePicture(Long accountID, Part profilePicture);
     
-    public ReturnHelper updateArtistProfile(Long artistID, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
+    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
     public ReturnHelper updateArtistName(Long artistID, String newName);
     public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture);
     
-    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, String genre, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
     public ReturnHelper updateBandName(Long bandID, String newName);
     public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture);
     
