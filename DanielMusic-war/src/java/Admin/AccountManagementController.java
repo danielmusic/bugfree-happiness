@@ -4,7 +4,6 @@ import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
 import EntityManager.Band;
-import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;

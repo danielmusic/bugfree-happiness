@@ -1,6 +1,7 @@
 package Client;
 
 import EntityManager.Artist;
+import EntityManager.Band;
 import EntityManager.ReturnHelper;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
@@ -27,34 +28,28 @@ public class MusicManagementController extends HttpServlet {
 
         session = request.getSession();
         session.removeAttribute("message");
+
+        Artist artist = (Artist) (session.getAttribute("artist"));
+        Band band = (Band) (session.getAttribute("band"));
         ReturnHelper returnHelper;
 
         try {
-            if (checkLogin(response)) {
-                Artist artist = (Artist) (session.getAttribute("artist"));
+            switch (target) {
+                case "ArtistAddAlbum":
+                    if (checkArtistLogin(response)) {
+                        Part picture = request.getPart("picture");
 
-                switch (target) {
-                    case "UploadMusic":
-                        Part part = request.getPart("javafile");
-                        if (part != null) {
-                            //returnHelper = musicManagementBean.createMusic(part);
-//                        if (returnHelper.getResult()) {
-//
-//                        } else {
-//
-//                        }
+                        if (picture != null) {
+                            returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId());
+                            if (returnHelper.getResult()) {
+                                nextPage = "#!/artist/albums";
+                            } else {
+                                nextPage = "#!/login";
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
                         }
-
-                    case "AddAlbum":
-//                        returnHelper = musicManagementBean.createAlbum(part, target, target, artist.getId());
-//                        if (returnHelper.getResult()) {
-//                            nextPage = "#!/artist/albums";
-//                        } else {
-//                            nextPage = "#!/login";
-//                            session.setAttribute("errMsg", returnHelper.getDescription());
-//                        }
-//                        break;
-                }
+                        break;
+                    }
             }
 
             if (nextPage.equals("")) {
@@ -72,10 +67,23 @@ public class MusicManagementController extends HttpServlet {
         }
     }
 
-    public boolean checkLogin(HttpServletResponse response) {
+    public boolean checkArtistLogin(HttpServletResponse response) {
         try {
             Artist artist = (Artist) (session.getAttribute("artist"));
             if (artist == null) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean checkBandLogin(HttpServletResponse response) {
+        try {
+            Band band = (Band) (session.getAttribute("band"));
+            if (band == null) {
                 return false;
             } else {
                 return true;
