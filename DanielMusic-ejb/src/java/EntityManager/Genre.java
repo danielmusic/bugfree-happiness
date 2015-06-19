@@ -1,6 +1,7 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -19,18 +20,22 @@ public class Genre implements Serializable {
     private Long id;
     private String name;
     @OneToMany(mappedBy = "genre", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Music> listOfArtists;
+    private List<Artist> listOfArtists;
+    @OneToMany(mappedBy = "genre", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Band> listOfBands;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
     public Genre() {
+        this.listOfArtists = new ArrayList();
+        this.listOfMusics = new ArrayList();
     }
 
-    public List<Music> getListOfArtists() {
+    public List<Artist> getListOfArtists() {
         return listOfArtists;
     }
 
-    public void setListOfArtists(List<Music> listOfArtists) {
+    public void setListOfArtists(List<Artist> listOfArtists) {
         this.listOfArtists = listOfArtists;
     }
 
@@ -56,6 +61,14 @@ public class Genre implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Band> getListOfBands() {
+        return listOfBands;
+    }
+
+    public void setListOfBands(List<Band> listOfBands) {
+        this.listOfBands = listOfBands;
     }
 
     @Override
