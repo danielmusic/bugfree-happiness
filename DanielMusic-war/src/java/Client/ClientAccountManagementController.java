@@ -42,7 +42,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String twitterURL = request.getParameter("twitterURL");
 
         String oldpassword = request.getParameter("oldpassword");
-        String password = request.getParameter("pwd");
+        String password = request.getParameter("password");
 
         //signup parameters
         String chkAgree = request.getParameter("chkAgree");
@@ -52,18 +52,18 @@ public class ClientAccountManagementController extends HttpServlet {
         session.removeAttribute("message");
         ReturnHelper returnHelper;
 
+        JSONObject jsObj = new JSONObject();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         try {
             switch (target) {
-                case "ArtistSignup":
+                case "AccountSignup":
                     if (chkAgree == null) {
                         nextPage = "#!/artist/signup";
                         session.setAttribute("errMsg", "Sorry. You have not agreed to the terms");
                         break;
-                    } else if (grecaptcharesponse == null) {
-                        nextPage = "#!/artist/signup";
-                        session.setAttribute("errMsg", "Please verify the captcha again.");
-                        break;
-                    } else if (!VerifyRecaptcha.verify(grecaptcharesponse)) {
+                    } else if (grecaptcharesponse == null || !VerifyRecaptcha.verify(grecaptcharesponse)) {
                         nextPage = "#!/artist/signup";
                         session.setAttribute("errMsg", "Please verify the captcha again.");
                         break;
@@ -112,64 +112,43 @@ public class ClientAccountManagementController extends HttpServlet {
                     }
                     break;
 
-                case "ArtistLogin":
+                case "AccountLogin":
                     returnHelper = accountManagementBean.loginAccount(email, password);
+
+                    jsObj.put("result", returnHelper.getResult());
+                    jsObj.put("message", returnHelper.getDescription());
+
                     if (returnHelper.getResult()) {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
-
-                            //nextPage = "#!/artist/albums";
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
-                            nextPage = "#!/band/albums";
+                        } else if (account instanceof Member) {
+                            session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
                         }
-                    } else {
-                        session.setAttribute("errMsg", returnHelper.getDescription());
                     }
-                    JSONObject jsObj = new JSONObject();
-                    jsObj.put("id", "1");
-                    jsObj.put("result", true);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
+
                     response.getWriter().write(jsObj.toString());
                     return;
-
-                case "FanLogin":
-                    returnHelper = accountManagementBean.loginAccount(email, password);
-                    if (returnHelper.getResult()) {
-                        session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
-                        nextPage = "#!/artist/profile";
-                    } else {
-                        nextPage = "#!/login";
-                        session.setAttribute("errMsg", returnHelper.getDescription());
-                    }
-                    break;
 
                 case "AccountLogout":
                     session.removeAttribute("errMsg");
                     session.removeAttribute("artist");
                     session.removeAttribute("band");
                     session.removeAttribute("fan");
-                    //nextPage = "#!/login";
-                    
-                    
                     session.setAttribute("goodMsg", "Logout Successful");
-                    break;
-
-                case "Redirect":
                     nextPage = "#!/login";
                     break;
             }
 
             if (nextPage.equals("")) {
-                response.sendRedirect("#!/home");
+                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
                 return;
             } else {
                 response.sendRedirect(nextPage);
                 return;
             }
-
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();

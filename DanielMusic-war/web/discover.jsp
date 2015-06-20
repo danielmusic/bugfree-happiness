@@ -66,3 +66,9 @@
 
 </section>
 <!-- /page -->
+
+<script>
+    //var new_url = $('#url').val();
+    //window.history.pushState("object or string", "Title", "" + new_url);
+    window.history.replaceState("object or string", "Title", "Discover");
+</script>

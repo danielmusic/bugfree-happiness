@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <button class="large invert" onclick="javascript:signup()">Sign up now!</button>
-                    <input type="hidden" value="ArtistSignup" name="target">
+                    <input type="hidden" value="AccountSignup" name="target">
                     <div class="clear"></div>
                 </form>
             </article>

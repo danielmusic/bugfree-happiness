@@ -9,29 +9,25 @@
             function loadAjax() {
                 var email = $('#email').val();
                 var password = $('#password').val();
-                url = "./ClientAccountManagementController?target=ArtistLogin";
+                url = "./ClientAccountManagementController?target=AccountLogin";
                 $.ajax({
                     type: "GET",
                     async: false,
                     url: url,
-                    data: {'email': email, 'pwd': password},
+                    data: {'email': email, 'password': password},
                     dataType: "text",
                     success: function (val) {
-                        alert("hello");
-                        alert(val);
                         var json = JSON.parse(val);
-                        alert(json.id);
-                        alert(json.result);
-
                         if (json.result) {
                             window.location.href = "#!/artist/profile";
                         } else {
-                            alert("failed");
-                            window.location.href = "#!/login";
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = json.message;
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert("Error: " + error);
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
                         hideLoader();
                         ajaxResultsError(xhr, status, error);
                     }
@@ -40,9 +36,12 @@
         </script>
         <div class="container">
             <article>
-                <jsp:include page="displayMessage.jsp" />
 
-                <form action="ClientAccountManagementController" class="form">
+                <jsp:include page="displayMessage.jsp" />
+                <p class="error" id="errMsg" style="display:none;"></p>
+                <p class="success" id="goodMsg"  style="display:none;"></p>
+
+                <form class="form">
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="email"><strong>Email</strong> *</label>
@@ -52,12 +51,11 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="password"><strong>Password</strong> *</label>
-                            <input id="password" type="password" name="pwd" required>
+                            <input id="password" type="password" name="password" required>
                             <a href="">Forget password?</a>
                         </div>
                     </div>
-                    <input type="button" onclick="loadAjax()" value="Login" class="large invert">
-                    <input type="hidden" value="ArtistLogin" name="target">
+                    <button type="button" onclick="loadAjax()"  class="large invert">Login</button>
                     <div class="clear"></div>
                 </form>
             </article>

@@ -9,7 +9,6 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
-                <jsp:include page="../displayMessage.jsp" />
 
                 <form action="../ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
                     <h2>Account Details</h2>
