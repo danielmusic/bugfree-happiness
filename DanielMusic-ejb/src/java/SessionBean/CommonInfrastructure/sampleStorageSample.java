@@ -60,7 +60,8 @@ public class sampleStorageSample {
      */
     private static final String APPLICATION_NAME = "divine-apogee-96116";
     private static final String BUCKET_NAME = "danielmusictest";
-    private static final String CLIENT_SECRET_FILENAME = "Credentials/client_secret_905886242502-22rdr9lsk2d0k15n193ajssf6fpctlrc.apps.googleusercontent.com.json";
+    //private static final String CLIENT_SECRET_FILENAME = "Credentials/client_secret_905886242502-22rdr9lsk2d0k15n193ajssf6fpctlrc.apps.googleusercontent.com.json";
+    private static final String CLIENT_SECRET_FILENAME = "client_secrets.json";
     private static final boolean AUTH_LOCAL_WEBSERVER = false;
 
     /**
@@ -94,7 +95,8 @@ public class sampleStorageSample {
         GoogleClientSecrets clientSecrets = null;
         try {
             clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
-                    new InputStreamReader(sampleStorageSample.class.getResourceAsStream(String.format("/%s", CLIENT_SECRET_FILENAME))));
+                    //new InputStreamReader(sampleStorageSample.class.getResourceAsStream(String.format("/%s", CLIENT_SECRET_FILENAME))));
+                    new InputStreamReader(sampleStorageSample.class.getResourceAsStream(CLIENT_SECRET_FILENAME)));
             if (clientSecrets.getDetails().getClientId() == null
                     || clientSecrets.getDetails().getClientSecret() == null) {
                 throw new Exception("client_secrets not well formed.");

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.json.JSONObject;
 
 public class ClientAccountManagementController extends HttpServlet {
 
@@ -28,7 +29,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String target = request.getParameter("target");
         String source = request.getParameter("source");
         String id = request.getParameter("id");
-        
+
         //profile parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
@@ -117,16 +118,22 @@ public class ClientAccountManagementController extends HttpServlet {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
-                            nextPage = "#!/artist/albums";
+
+                            //nextPage = "#!/artist/albums";
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
                             nextPage = "#!/band/albums";
                         }
                     } else {
-                        nextPage = "#!/login";
                         session.setAttribute("errMsg", returnHelper.getDescription());
                     }
-                    break;
+                    JSONObject jsObj = new JSONObject();
+                    jsObj.put("id", "1");
+                    jsObj.put("result", true);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(jsObj.toString());
+                    return;
 
                 case "FanLogin":
                     returnHelper = accountManagementBean.loginAccount(email, password);
@@ -144,8 +151,14 @@ public class ClientAccountManagementController extends HttpServlet {
                     session.removeAttribute("artist");
                     session.removeAttribute("band");
                     session.removeAttribute("fan");
-                    nextPage = "#!/login";
+                    //nextPage = "#!/login";
+                    
+                    
                     session.setAttribute("goodMsg", "Logout Successful");
+                    break;
+
+                case "Redirect":
+                    nextPage = "#!/login";
                     break;
             }
 

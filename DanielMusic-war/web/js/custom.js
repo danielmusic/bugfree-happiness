@@ -856,7 +856,6 @@ jQuery(document).ready(function ($) {
                     load_content();
                     return;
                 }
-
             } else {
                 if (hash.indexOf('#!') === -1)
                     return false;
@@ -866,6 +865,7 @@ jQuery(document).ready(function ($) {
                 url = temp_url;
 
                 load_content();
+
                 return;
             }
 

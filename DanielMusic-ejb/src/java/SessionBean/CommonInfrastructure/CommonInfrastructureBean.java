@@ -44,8 +44,9 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     //GCS Upload
     private static final String APPLICATION_NAME = "divine-apogee-96116";
     private static final String BUCKET_NAME = "danielmusictest";
-    private static final String CLIENT_SECRET_FILENAME = "C:\\Credentials\\client_secret_905886242502-22rdr9lsk2d0k15n193ajssf6fpctlrc.apps.googleusercontent.com.json";
-    private static final boolean AUTH_LOCAL_WEBSERVER = false;
+    //private static final String CLIENT_SECRET_FILENAME = "C:\\Credentials\\client_secret_905886242502-22rdr9lsk2d0k15n193ajssf6fpctlrc.apps.googleusercontent.com.json";
+    private static final String CLIENT_SECRET_FILENAME = "client_secrets.json";
+    private static final boolean AUTH_LOCAL_WEBSERVER = true;
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"), ".store/storage_sample");
     private static FileDataStoreFactory dataStoreFactory;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -136,7 +137,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         GoogleClientSecrets clientSecrets = null;
         try {
             clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
-                    new InputStreamReader(sampleStorageSample.class.getResourceAsStream(String.format("/%s", CLIENT_SECRET_FILENAME))));
+                    new InputStreamReader(sampleStorageSample.class.getResourceAsStream(CLIENT_SECRET_FILENAME)));
             if (clientSecrets.getDetails().getClientId() == null || clientSecrets.getDetails().getClientSecret() == null) {
                 throw new Exception("client_secrets not well formed.");
             }

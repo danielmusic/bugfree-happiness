@@ -1,5 +1,6 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Artist">
+    <input type="hidden" value="asdasdasd" name="url" id="url">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <div class="container">
@@ -73,3 +74,8 @@
 
 </section>
 <!-- /page -->
+<script>
+    var new_url = $('#url').val();
+    alert(new_url);
+    window.history.pushState("object or string", "Title", "" + new_url);
+</script>
