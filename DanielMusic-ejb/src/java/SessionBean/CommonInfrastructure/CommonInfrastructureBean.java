@@ -1,5 +1,6 @@
 package SessionBean.CommonInfrastructure;
 
+import EntityManager.ReturnHelper;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
@@ -8,6 +9,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.extensions.java6.auth.oauth2.GooglePromptReceiver;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.json.JsonFactory;
@@ -77,7 +79,9 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     @Override
-    public Boolean uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage) {
+    public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage) {
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
         System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() called");
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -102,11 +106,18 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 insertObject.getMediaHttpUploader().setDirectUploadEnabled(true);
             }
             insertObject.execute();
-            return true;
+            result.setResult(true);
+            result.setDescription("File uploaded.");
+            return result;
+        } catch (GoogleJsonResponseException ex)  {
+            System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() failed");
+            result.setDescription("Unable to communicate with remote file server, please try again later.");
+            return result;
         } catch (Exception ex) {
             System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() failed");
+            result.setDescription("Internal server error.");
             ex.printStackTrace();
-            return false;
+            return result;
         }
     }
 
@@ -188,20 +199,33 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     @Override
-    public Boolean deleteFileFromGoogleCloudStorage(String remoteDestinationFile) {
+    public ReturnHelper deleteFileFromGoogleCloudStorage(String remoteDestinationFile) {
         System.out.println("CommonInfrastructureBean: deleteFileFromGoogleCloudStorage() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
         try {
-
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
             Credential credential = authorize();
             client = new Storage.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
             Storage.Objects.Delete deleteObject = client.objects().delete(BUCKET_NAME, remoteDestinationFile);
             deleteObject.execute();
-            return true;
+            result.setDescription("File deleted.");
+            result.setResult(true);
+            return result;
+        } catch (GoogleJsonResponseException ex) {
+            if (ex.getDetails().getCode() == 404) {
+                result.setDescription("Remote file not found.");
+                return result;
+            } else {
+                result.setDescription("Unable to communicate with remote file server, please try again later.");
+                return result;
+            }
         } catch (Exception ex) {
             System.out.println("CommonInfrastructureBean: deleteFileFromGoogleCloudStorage() failed");
-            return null;
+            result.setDescription("Internal server error.");
+            ex.printStackTrace();
+            return result;
         }
     }
 }

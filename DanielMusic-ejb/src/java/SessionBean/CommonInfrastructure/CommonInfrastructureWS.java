@@ -5,6 +5,7 @@
  */
 package SessionBean.CommonInfrastructure;
 
+import EntityManager.ReturnHelper;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.ejb.Stateless;
@@ -28,12 +29,12 @@ public class CommonInfrastructureWS {
     }
 
     @WebMethod(operationName = "uploadFileToGoogleCloudStorage")
-    public Boolean uploadFileToGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile, @WebParam(name = "localSourceFile") String localSourceFile, @WebParam(name = "isImage") Boolean isImage) {
+    public ReturnHelper uploadFileToGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile, @WebParam(name = "localSourceFile") String localSourceFile, @WebParam(name = "isImage") Boolean isImage) {
         return ejbRef.uploadFileToGoogleCloudStorage(remoteDestinationFile, localSourceFile, isImage);
     }
 
     @WebMethod(operationName = "deleteFileFromGoogleCloudStorage")
-    public Boolean deleteFileFromGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile) {
+    public ReturnHelper deleteFileFromGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile) {
         return ejbRef.deleteFileFromGoogleCloudStorage(remoteDestinationFile);
     }
 

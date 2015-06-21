@@ -286,10 +286,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocation320(musicURL320);
 
             //end create music
-            Boolean result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
-            Boolean result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
+            ReturnHelper result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
+            ReturnHelper result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
 
-            if (result1 && result2) {
+            if (result1.getResult() && result2.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
                 helper.setResult(true);
             } else {
@@ -318,7 +318,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
-            Boolean result = null;
+            ReturnHelper result = null;
             String imageLocation = null;
             String tempImageURL = null;
             Boolean isArtist = null;
@@ -357,7 +357,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             Album album = new Album();
             if ((result != null)) {
-                if (result) {
+                if (result.getResult()) {
                     System.out.println("Image location set... " + imageLocation);
                     album.setImageLocation(imageLocation);
 
@@ -441,18 +441,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     }
                     fileOutputStream.close();
                     fileInputStream.close();
-                    Boolean result = false;
+                    ReturnHelper result = new ReturnHelper();
 
                     //check whether there is previous image
-                    if (album.getImageLocation() != null) {
-                        result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
-                        if (!result) {
-                            album.setImageLocation(null);
-                            helper.setDescription("Error while editing album, please try again.");
-                            helper.setResult(false);
-                            return helper;
-                        }
-                    }
+                    //YG- no need to delete before upload
+//                    if (album.getImageLocation() != null) {
+//                        result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+//                        if (!result.getResult()) {
+//                            album.setImageLocation(null);
+//                            helper.setDescription("Error while editing album, please try again.");
+//                            helper.setResult(false);
+//                            return helper;
+//                        }
+//                    }
                     //check whether album belongs to artist/band
                     if (album.getArtist() != null) {
                         imageLocation = "image/" + album.getArtist().getId() + "/" + name + commonInfrastructureBean.generateUUID();
@@ -464,7 +465,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     File file = new File(tempImageURL);
                     System.out.println("deleting file... " + file.delete());
 
-                    if (result) {
+                    if (result.getResult()) {
                         album.setImageLocation(imageLocation);
                     } else {
                         helper.setDescription("Error while editing album, please try again.");
@@ -534,10 +535,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 //if album is not published do hard delete
                 
                 //if not purchased do hard delete
-                Boolean result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                ReturnHelper result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
                 for (Music m : album.getListOfMusics()) {
-                    Boolean result1 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
-                    Boolean result2 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                    ReturnHelper result1 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                    ReturnHelper result2 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
                 }
                 em.remove(album);
             }
