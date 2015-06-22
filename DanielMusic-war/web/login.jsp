@@ -37,11 +37,12 @@
         <div class="container">
             <article>
 
-                <jsp:include page="displayMessage.jsp" />
-                <p class="error" id="errMsg" style="display:none;"></p>
-                <p class="success" id="goodMsg"  style="display:none;"></p>
-
                 <form class="form" name="loginForm">
+                    <jsp:include page="displayMessage.jsp" />
+                    <p class="error" id="errMsg" style="display:none;"></p>
+                    <p class="success" id="goodMsg"  style="display:none;"></p>
+
+
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="email"><strong>Email</strong> *</label>

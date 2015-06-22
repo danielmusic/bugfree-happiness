@@ -42,16 +42,14 @@
                                     window.event.returnValue = true;
                                     var json = JSON.parse(val);
                                     if (json.result) {
-                                        alert("json.result " + json.result);
                                         window.event.returnValue = false;
                                         window.location.href = "#!/login";
-                                        document.loginForm.getElementById("errMsg").style.display = "block";
-                                        document.loginForm.getElementById('errMsg').innerHTML = json.message;
+                                        document.loginForm.getElementById("goodMsg").style.display = "block";
+                                        document.loginForm.getElementById('goodMsg').innerHTML = json.message;
                                     } else {
-                                        alert("json.result " + json.result);
                                         window.event.returnValue = false;
                                         window.location.href = "#!/artist/signup";
-                                        document.getElementById("chkAgree").reset();
+                                        document.getElementById("chkAgree").checked = false;
                                         document.getElementById("grecaptcha").reset();
                                         document.getElementById("errMsg").style.display = "block";
                                         document.getElementById('errMsg').innerHTML = json.message;
@@ -71,13 +69,11 @@
                     }
                 </script>
 
-                <span id="displayMsg"></span>
-                <p class="error" id="errMsg" style="display:none;"></p>
-                <p class="success" id="goodMsg"  style="display:none;"></p>
-
-                <h2>Sign up for an artist account</h2>
-
                 <form name="AccountSignupForm" class="form">
+                    <p class="error" id="errMsg" style="display:none;"></p>
+                    <p class="success" id="goodMsg"  style="display:none;"></p>
+
+                    <h2>Sign up for an artist account</h2>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
@@ -118,7 +114,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
                         </div>
                     </div>
                     <button class="large invert" onclick="loadAjax()">Sign up now!</button>

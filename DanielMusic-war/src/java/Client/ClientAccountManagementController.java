@@ -1,12 +1,15 @@
 package Client;
 
 import EntityManager.Account;
+import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.Band;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
+import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +23,9 @@ public class ClientAccountManagementController extends HttpServlet {
 
     @EJB
     private AccountManagementBeanLocal accountManagementBean;
+
+    @EJB
+    private MusicManagementBeanLocal musicManagementBean;
 
     String nextPage = "", goodMsg = "", errMsg = "";
     HttpSession session;
@@ -67,11 +73,13 @@ public class ClientAccountManagementController extends HttpServlet {
                     if (returnHelper.getResult()) {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
-                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
+                            session.setAttribute("artist", (Artist) account);
+                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
                         } else if (account instanceof Band) {
-                            session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
+                            session.setAttribute("band", (Band) account);
+                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
                         } else if (account instanceof Member) {
-                            session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
+                            session.setAttribute("fan", (Member) account);
                         }
                     }
                     response.getWriter().write(jsObj.toString());
@@ -101,7 +109,7 @@ public class ClientAccountManagementController extends HttpServlet {
                     } else {//normal artist
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
                     }
- 
+
                     if (returnHelper.getResult()) {
                         session.setAttribute("goodMsg", returnHelper.getDescription());
                     }

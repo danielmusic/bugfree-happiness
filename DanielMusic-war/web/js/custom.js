@@ -682,7 +682,7 @@ jQuery(document).ready(function ($) {
 
         scamp_player = new $.ScampPlayer($('#scamp_player'), {
             // Default Scamp Player options
-            volume: 40, // Start volume level
+            volume: 100, // Start volume level
             autoplay: false, // Autoplay track
             no_track_image: 'js/scamp_player/img/no-track-image.png', // Placeholder image for track cover
             loop: false, // Loop tracklist
