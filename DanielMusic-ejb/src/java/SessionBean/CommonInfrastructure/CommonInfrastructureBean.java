@@ -17,6 +17,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.StorageScopes;
+import com.google.api.services.storage.model.ObjectAccessControl;
 import com.google.api.services.storage.model.StorageObject;
 import com.sendgrid.SendGrid;
 import java.io.File;
@@ -29,7 +30,9 @@ import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Signature;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.ejb.Stateless;
@@ -79,7 +82,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     @Override
-    public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage) {
+    public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage, Boolean publiclyReadable) {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() called");
@@ -100,6 +103,14 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             mediaContent.setLength(file.length());
             StorageObject objectMetadata = new StorageObject();
             objectMetadata.setBucket(BUCKET_NAME);
+            if (publiclyReadable) {
+                List<ObjectAccessControl> accessControls = new ArrayList();
+                ObjectAccessControl accessControl = new ObjectAccessControl();
+                accessControl.setEntity("allUsers");
+                accessControl.setRole("READER");
+                accessControls.add(accessControl);
+                objectMetadata.setAcl(accessControls);
+            }
             Storage.Objects.Insert insertObject = client.objects().insert(BUCKET_NAME, objectMetadata, mediaContent);
             insertObject.setName(remoteDestinationFile);
             if (mediaContent.getLength() > 0 && mediaContent.getLength() <= 2 * 1000 * 1000 /* 2MB */) {
@@ -109,7 +120,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             result.setResult(true);
             result.setDescription("File uploaded.");
             return result;
-        } catch (GoogleJsonResponseException ex)  {
+        } catch (GoogleJsonResponseException ex) {
             System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() failed");
             result.setDescription("Unable to communicate with remote file server, please try again later.");
             return result;
