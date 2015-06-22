@@ -10,7 +10,7 @@
 -->
 <urlrewrite>
     <rule>
-        <from>/login</from>
+        <from>^/login$</from>
         <to type="redirect">%{context-path}/#!/login</to>
     </rule>
     <rule match-type="regex">
