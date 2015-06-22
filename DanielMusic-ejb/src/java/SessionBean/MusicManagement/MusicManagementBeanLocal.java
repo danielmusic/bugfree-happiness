@@ -5,6 +5,7 @@ import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
@@ -82,7 +83,7 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description);
 
-    public ReturnHelper publishAlbum(Long albumID);
+    public ReturnHelper publishAlbum(Long albumID, Date publishDate);
 
     public ReturnHelper deleteAlbum(Long albumID);
 }

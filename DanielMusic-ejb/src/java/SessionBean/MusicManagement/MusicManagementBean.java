@@ -488,19 +488,22 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper publishAlbum(Long albumID) {
+    public ReturnHelper publishAlbum(Long albumID, Date publishDate) {
         System.out.println("publishAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
             Album album = em.getReference(Album.class, albumID);
-
+            Boolean isArtist = false;
+            Boolean isBand = false;
             if (album.getArtist() != null) {
+                isArtist = true;
                 if (!album.getArtist().getEmailIsVerified()) {
                     helper.setDescription("Sorry your email is not verified, please verify your email first.");
                     helper.setResult(false);
                     return helper;
                 }
             } else {
+                isBand = true;
                 if (!album.getBand().getEmailIsVerified()) {
                     helper.setDescription("Sorry your email is not verified, please verify your email first.");
                     helper.setResult(false);
@@ -508,11 +511,28 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
 
-            album.setIsPublished(true);
-            album.setPublishedDate(new Date());
-            helper.setDescription("Album has been published successfully.");
-            helper.setResult(true);
-            return helper;
+            if (publishDate != null) {
+                if (isArtist) {
+                    if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
+                        album.getArtist().setIsApproved(-2);
+                    }
+                } else if (isBand) {
+                    if (album.getBand().getIsApproved() == 0 || album.getBand().getIsApproved() == -1) {
+                        album.getBand().setIsApproved(-2);
+                    }
+                }
+
+                album.setPublishedDate(publishDate);
+                album.setIsPublished(true);
+                helper.setDescription("Album has been published successfully.");
+                helper.setResult(true);
+                return helper;
+            } else {
+                helper.setDescription("Publish date is not selected, please try again.");
+                helper.setResult(false);
+                return helper;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             helper.setDescription("Error occurred while trying to publish album, please try again.");
@@ -528,21 +548,53 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         try {
             Album album = em.getReference(Album.class, albumID);
             //if album is published, check whether album/music is purchased 
-            //if purchased cannot delete
+            //if purchased do soft delete
             if (album.getIsPublished()) {
-                
+                //no album purchase yet
+                if (album.getNumPurchase() == 0) {
+                    Boolean trackPurchase = false;
+                    //check for track purchase
+                    List<Music> listOfMusics = album.getListOfMusics();
+                    for (int i = 0; i < listOfMusics.size(); i++) {
+                        Music m = listOfMusics.get(i);
+                        //no track download
+                        if (m.getNumPurchase() == 0) {
+                            commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                            commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                            em.remove(m);
+                        } else {
+                            trackPurchase = true;
+                        }
+                    }
+                    //if no track purchase, delete whole album
+                    if (!trackPurchase) {
+                        em.remove(album);
+                    }
+                    if (album.getImageLocation() != null) {
+                        commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                    }
+                }
             } else {
                 //if album is not published do hard delete
-                
-                //if not purchased do hard delete
-                ReturnHelper result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                if (album.getImageLocation() != null) {
+                    commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                }
                 for (Music m : album.getListOfMusics()) {
-                    ReturnHelper result1 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
-                    ReturnHelper result2 = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                    commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                    commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
                 }
                 em.remove(album);
             }
+            
+            em.flush();
 
+            album.setIsDeleted(true);
+            for (Music m : album.getListOfMusics()) {
+                m.setIsDeleted(true);
+            }
+            
+            helper.setDescription("Album has been deleted successfully");
+            helper.setResult(true);
             return helper;
         } catch (Exception e) {
             System.out.println("MusicManagementBean: deleteAlbum() failed.");
