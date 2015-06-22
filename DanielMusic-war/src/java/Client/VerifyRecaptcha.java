@@ -42,7 +42,7 @@ public class VerifyRecaptcha {
             wr.close();
 
             int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + url);
+            System.out.println("\nreCaptcha Sending 'POST' request to URL : " + url);
             System.out.println("Post parameters : " + postParams);
             System.out.println("Response Code : " + responseCode);
 

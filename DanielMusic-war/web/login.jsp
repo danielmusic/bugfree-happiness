@@ -41,7 +41,7 @@
                 <p class="error" id="errMsg" style="display:none;"></p>
                 <p class="success" id="goodMsg"  style="display:none;"></p>
 
-                <form class="form">
+                <form class="form" name="loginForm">
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="email"><strong>Email</strong> *</label>
@@ -51,7 +51,7 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="password"><strong>Password</strong> *</label>
-                            <input id="password" type="password" name="password" required>
+                            <input type="password" name="password" id="password" required>
                             <a href="">Forget password?</a>
                         </div>
                     </div>

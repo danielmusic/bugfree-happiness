@@ -58,15 +58,42 @@ public class ClientAccountManagementController extends HttpServlet {
 
         try {
             switch (target) {
+                case "AccountLogin":
+                    returnHelper = accountManagementBean.loginAccount(email, password);
+
+                    jsObj.put("result", returnHelper.getResult());
+                    jsObj.put("message", returnHelper.getDescription());
+
+                    if (returnHelper.getResult()) {
+                        Account account = accountManagementBean.getAccount(email);
+                        if (account instanceof Artist) {
+                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
+                        } else if (account instanceof Band) {
+                            session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
+                        } else if (account instanceof Member) {
+                            session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
+                        }
+                    }
+                    response.getWriter().write(jsObj.toString());
+                    return;
+
                 case "AccountSignup":
+                    System.out.println("AccountSignup");
                     if (chkAgree == null) {
-                        nextPage = "#!/artist/signup";
-                        session.setAttribute("errMsg", "Sorry. You have not agreed to the terms");
-                        break;
+                        jsObj.put("result", false);
+                        jsObj.put("message", "Sorry. You have not agreed to the terms");
+                        response.getWriter().write(jsObj.toString());
+                        return;
                     } else if (grecaptcharesponse == null || !VerifyRecaptcha.verify(grecaptcharesponse)) {
-                        nextPage = "#!/artist/signup";
-                        session.setAttribute("errMsg", "Please verify the captcha again.");
-                        break;
+                        jsObj.put("result", false);
+                        jsObj.put("message", "Please verify the captcha again.");
+                        response.getWriter().write(jsObj.toString());
+                        return;
+                    } else if (source == null) {
+                        jsObj.put("result", false);
+                        jsObj.put("message", "Please indicate if you are signing up as an artist or band.");
+                        response.getWriter().write(jsObj.toString());
+                        return;
                     }
 
                     if (source.equals("BandSignup")) {
@@ -74,15 +101,15 @@ public class ClientAccountManagementController extends HttpServlet {
                     } else {//normal artist
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
                     }
-
+ 
                     if (returnHelper.getResult()) {
-                        nextPage = "#!/login";
                         session.setAttribute("goodMsg", returnHelper.getDescription());
-                    } else {
-                        nextPage = "#!/artist/signup";
-                        session.setAttribute("errMsg", returnHelper.getDescription());
                     }
-                    break;
+
+                    jsObj.put("result", returnHelper.getResult());
+                    jsObj.put("message", returnHelper.getDescription());
+                    response.getWriter().write(jsObj.toString());
+                    return;
 
                 case "ArtistProfileUpdate":
                     Artist artist = (Artist) (session.getAttribute("artist"));
@@ -108,29 +135,9 @@ public class ClientAccountManagementController extends HttpServlet {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         }
 
-                        nextPage = "#!/artist/profile";
+                        //nextPage = "#!/artist/profile";
                     }
                     break;
-
-                case "AccountLogin":
-                    returnHelper = accountManagementBean.loginAccount(email, password);
-
-                    jsObj.put("result", returnHelper.getResult());
-                    jsObj.put("message", returnHelper.getDescription());
-
-                    if (returnHelper.getResult()) {
-                        Account account = accountManagementBean.getAccount(email);
-                        if (account instanceof Artist) {
-                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(email));
-                        } else if (account instanceof Band) {
-                            session.setAttribute("band", (Band) accountManagementBean.getAccount(email));
-                        } else if (account instanceof Member) {
-                            session.setAttribute("fan", (Member) accountManagementBean.getAccount(email));
-                        }
-                    }
-
-                    response.getWriter().write(jsObj.toString());
-                    return;
 
                 case "AccountLogout":
                     session.removeAttribute("errMsg");
@@ -138,17 +145,17 @@ public class ClientAccountManagementController extends HttpServlet {
                     session.removeAttribute("band");
                     session.removeAttribute("fan");
                     session.setAttribute("goodMsg", "Logout Successful");
-                    nextPage = "#!/login";
+                    response.sendRedirect("#!/login");
                     break;
             }
 
-            if (nextPage.equals("")) {
-                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
-                return;
-            } else {
-                response.sendRedirect(nextPage);
-                return;
-            }
+//            if (nextPage.equals("")) {
+//                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+//                return;
+//            } else {
+//                response.sendRedirect(nextPage);
+//                return;
+//            }
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();
