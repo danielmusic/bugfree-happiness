@@ -410,6 +410,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
+    public List<Album> getAlbumByArtists(Long accountID, Boolean showUnpublished, Boolean showUnapproved) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
