@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.json.JSONObject;
 
 public class MusicManagementController extends HttpServlet {
 
@@ -22,42 +23,43 @@ public class MusicManagementController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
+        String source = request.getParameter("source");
+
         String name = request.getParameter("name");
         String description = request.getParameter("description");
+        String yearReleased = request.getParameter("yearReleased");
 
         session = request.getSession();
-        session.removeAttribute("message");
-
         Artist artist = (Artist) (session.getAttribute("artist"));
         Band band = (Band) (session.getAttribute("band"));
+
+        JSONObject jsObj = new JSONObject();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         ReturnHelper returnHelper;
 
         try {
             switch (target) {
-                case "ArtistAddAlbum":
+                case "AddAlbum":
+                    System.out.println("Adding albums");
                     if (checkArtistLogin(response)) {
                         Part picture = request.getPart("picture");
 
-                        if (picture != null) {
-                            returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId());
-                            if (returnHelper.getResult()) {
-                                nextPage = "#!/artist/albums";
-                            } else {
-                                nextPage = "#!/login";
-                                session.setAttribute("errMsg", returnHelper.getDescription());
-                            }
-                        }
-                        break;
-                    }
-            }
+                        returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId());
 
-            if (nextPage.equals("")) {
-                response.sendRedirect("#!/home");
-                return;
-            } else {
-                response.sendRedirect(nextPage);
-                return;
+                        jsObj.put("result", returnHelper.getResult());
+                        jsObj.put("message", returnHelper.getDescription());
+
+                        response.getWriter().write(jsObj.toString());
+                        return;
+
+                    } else {
+                        session.setAttribute("errMsg", "Session expired. Please login again.");
+                        response.sendRedirect("#!/login");
+                    }
             }
 
         } catch (Exception ex) {
