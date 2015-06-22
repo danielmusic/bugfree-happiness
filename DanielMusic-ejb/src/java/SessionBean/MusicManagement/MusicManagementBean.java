@@ -410,7 +410,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Album> getAlbumByArtists(Long accountID, Boolean showUnpublished, Boolean showUnapproved) {
+    public List<Album> getAlbumByArtists(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

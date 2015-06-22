@@ -473,11 +473,20 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         System.out.println("AccountManagementBean: updateMemberProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
         try {
+            Query q = em.createQuery("SELECT a FROM Account a where a.id=:accountID");
+            q.setParameter("accountID", accountID);
+            Account account = (Account) q.getSingleResult();
+            if (account instanceof Member) {
+                q = em.createQuery("SELECT m FROM Member m where m.email=:email");
+                q.setParameter("email", email);
+                Member member = (Member) q.getSingleResult();
+                return member;
             Account account = new Admin();//todo
+            String tempMusicURL = "temp/profilePicture/" + account.getId();
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
-                OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
+                OutputStream fileOutputStream = new FileOutputStream(tempMusicURL+".jpg");
                 int nextByte;
                 while ((nextByte = fileInputStream.read()) != -1) {
                     fileOutputStream.write(nextByte);
