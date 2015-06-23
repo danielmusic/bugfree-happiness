@@ -17,8 +17,8 @@
         <![endif]-->
 
         <!-- ############################# navigation section ############################# -->
-        <jsp:include page="menu.jsp" />
 
+        <jsp:include page="menu.jsp" />
 
         <!-- ############################# Ajax Page Container ############################# -->
         <section id="ajax-container" class="index-page">

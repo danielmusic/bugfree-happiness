@@ -19,6 +19,7 @@ import javax.jws.WebParam;
 @WebService(serviceName = "CommonInfrastructureWS")
 @Stateless()
 public class CommonInfrastructureWS {
+
     @EJB
     private CommonInfrastructureBeanLocal ejbRef;// Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Web Service Operation")
@@ -29,8 +30,8 @@ public class CommonInfrastructureWS {
     }
 
     @WebMethod(operationName = "uploadFileToGoogleCloudStorage")
-    public ReturnHelper uploadFileToGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile, @WebParam(name = "localSourceFile") String localSourceFile, @WebParam(name = "isImage") Boolean isImage) {
-        return ejbRef.uploadFileToGoogleCloudStorage(remoteDestinationFile, localSourceFile, isImage);
+    public ReturnHelper uploadFileToGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile, @WebParam(name = "localSourceFile") String localSourceFile, @WebParam(name = "isImage") Boolean isImage, @WebParam(name = "publiclyReadable") Boolean publiclyReadable) {
+        return ejbRef.uploadFileToGoogleCloudStorage(remoteDestinationFile, localSourceFile, isImage, publiclyReadable);
     }
 
     @WebMethod(operationName = "deleteFileFromGoogleCloudStorage")
@@ -47,5 +48,5 @@ public class CommonInfrastructureWS {
     public String generateUUID() {
         return ejbRef.generateUUID();
     }
-    
+
 }

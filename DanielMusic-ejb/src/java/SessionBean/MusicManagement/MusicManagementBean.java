@@ -414,6 +414,24 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
     
     @Override
+    public List<Album> getAlbumByArtists(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
+        System.out.println("getAlbumByArtists() called");
+        try {
+            Query q = em.createQuery("select a from Album a where ((a.artist.id=:artistID AND a.artist.isApproved<>:showUnapproved) OR (a.band.id=:bandID AND a.band.isApproved<>:showUnapproved)) and a.isDeleted=false and a.isPublished<>:showUnpublished");
+            q.setParameter("artistID", artistOrBandAccountID);
+            q.setParameter("bandID", artistOrBandAccountID);
+            q.setParameter("showUnapproved", showUnapproved);
+            q.setParameter("showUnpublished", showUnpublished);
+            List<Album> albums = q.getResultList();
+            return albums;
+        } catch (Exception ex) {
+            System.out.println("getAlbumByArtists() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    @Override
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();

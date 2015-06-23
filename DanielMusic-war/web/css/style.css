@@ -167,13 +167,15 @@ select, option {
     margin-right: 10px;
     width: auto;
     display: inline-block;
+    cursor:pointer;
 }
 
-.form input[type="radio"] {
+.form input[type="radio"]{
     margin: 0;
     margin-right: 10px;
     width: auto;
     display: inline-block;
+    cursor:pointer;
 }
 /* Helper Classes
  ---------------------------------------------------------------------- */

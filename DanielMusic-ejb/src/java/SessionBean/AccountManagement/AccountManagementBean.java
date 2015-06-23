@@ -472,22 +472,41 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         //TODO
         System.out.println("AccountManagementBean: updateMemberProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
         try {
-            Account account = new Admin();//todo
+            Query q = em.createQuery("SELECT a FROM Account a where a.id=:accountID");
+            q.setParameter("accountID", accountID);
+            Account account = (Account) q.getSingleResult();
+            Member member = null;
+            if (account instanceof Member) {
+                q = em.createQuery("SELECT m FROM Member m where m.id=:accountID");
+                q.setParameter("accountID", accountID);
+                member = (Member) q.getSingleResult();
+            } else {
+                result.setDescription("Internal server error, invalid account type.");
+                return result;
+            }
+            String tempMusicURL = "temp/profilePicture/" + account.getId();
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
-                OutputStream fileOutputStream = new FileOutputStream("/img/profile/" + account.getId() + ".jpg");
+                OutputStream fileOutputStream = new FileOutputStream(tempMusicURL+".jpg");
                 int nextByte;
                 while ((nextByte = fileInputStream.read()) != -1) {
                     fileOutputStream.write(nextByte);
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
+                //String imageLocation = "image/member/profile/profilepictures" + account.getId() + "/" + name + commonInfrastructureBean.generateUUID();
+                //result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
                 //TODO: Upload file to cloud storage
                 //Update URL address
                 //account.setImageURL("");
             }
+        } catch (NoResultException ex) {
+            System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");
+            result.setDescription("Account not found.");
+            return result;
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");
             result.setDescription("Update profille failed, internal server error.");

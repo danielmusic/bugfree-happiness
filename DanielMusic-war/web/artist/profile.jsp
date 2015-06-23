@@ -15,8 +15,8 @@
 
                     <div class="row clearfix">
                         <div class="col-1-3">
-                            <label for="name"><strong>Name</strong> </label>
-                            <input type="text" id="name" name="name" value="<%=artist.getName()%>" disabled>
+                            <label for="name"><strong>Name</strong> (?)</label>
+                            <input type="text" id="name" name="name" value="<%=artist.getName()%>">
                         </div>
                         <div class="col-1-3">
                             <label for="email"><strong>Email address</strong> </label>
@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="col-1-3 last">
-                            <label for="ppEmail"><strong>PayPay email address:</strong></label>
+                            <label for="ppEmail"><strong>PayPay email address:</strong> (?)</label>
                             <input type="text" value="<%=artist.getEmail()%>" name="paypalEmail" id="ppEmail">
                         </div>
                     </div>
@@ -58,13 +58,7 @@
                     </div>
 
                     <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="influences"><strong>Influences</strong> </label>
-                            <textarea name="influences" id="influences" required style="min-height:120px;"><%if (artist.getBiography() != null) {
-                                    out.print(artist.getInfluences());
-                                } %></textarea>
-                        </div>
-                        <div class="col-1-2 last">
+                        <div class="col-1-1">
                             <label for="genre"><strong>Genre</strong></label>
                             <select name="genre" id="genre">
                                 <option value="">Select</option>
@@ -73,6 +67,16 @@
                                 <option value="opel">Opel</option>
                                 <option value="audi">Audi</option>
                             </select>
+                        </div>
+                    </div>
+
+
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label for="influences"><strong>Influences</strong> </label>
+                            <textarea name="influences" id="influences" required style="min-height:120px;"><%if (artist.getBiography() != null) {
+                                    out.print(artist.getInfluences());
+                                } %></textarea>
                         </div>
                     </div>
 

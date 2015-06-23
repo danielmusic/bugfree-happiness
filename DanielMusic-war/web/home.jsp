@@ -11,7 +11,7 @@
 
                     <img src="placeholders/revoslider/video-cover.jpg" alt="" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat" />
                     <div class="tp-caption fullscreen-video iframe-fullscreen-video" data-x="0" data-y="0" data-speed="0" data-start="50">
-                        <iframe src="//player.vimeo.com/video/66171813?portrait=0&enablejsapi=1&html5=1&hd=1&wmode=opaque&controls=0&showinfo=0&rel=0&autoplay=1&loop=1" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <iframe src="//player.vimeo.com/video/66171813?portrait=0&enablejsapi=1&html5=1&hd=1&wmode=opaque&controls=0&showinfo=0&rel=0&autoplay=0&loop=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                     </div>
 
                     <div class="tp-caption lfb very-large-text customin ltl tp-resizeme" 
@@ -579,3 +579,4 @@
 
 </section>
 <!-- /page -->
+
