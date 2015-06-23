@@ -286,8 +286,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocation320(musicURL320);
 
             //end create music
-            ReturnHelper result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
-            ReturnHelper result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
+            ReturnHelper result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", false, false);
+            ReturnHelper result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", false, false);
             
             if (result1.getResult() && result2.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
@@ -366,7 +366,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
-                result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
+                result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
                 
                 File file = new File(tempImageURL);
                 System.out.println("deleting file... " + file.delete());
@@ -483,7 +483,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     }
                     
-                    result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
+                    result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
                     File file = new File(tempImageURL);
                     System.out.println("deleting file... " + file.delete());
                     
