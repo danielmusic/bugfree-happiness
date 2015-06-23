@@ -19,21 +19,14 @@
                         formData.append("yearReleased", yearReleased);
                         formData.append("picture", picture);
                         formData.append("description", description);
+                        alert(picture);
                         $.ajax({
                             type: "POST",
-                            async: false,
                             url: url,
                             enctype: 'multipart/form-data',
                             data: formData,
                             //data: {'name': name, 'yearReleased': yearReleased, 'picture': picture, 'description': description},
-                            dataType: "text",
-                            xhr: function () {  // Custom XMLHttpRequest
-                                var myXhr = $.ajaxSettings.xhr();
-                                if (myXhr.upload) { // Check if upload property exists
-                                    myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
-                                }
-                                return myXhr;
-                            },
+
                             success: function (val) {
                                 alert("4");
                                 window.event.returnValue = true;
@@ -60,11 +53,6 @@
                         });
                     }
 
-                    function progressHandlingFunction(e) {
-                        if (e.lengthComputable) {
-                            $('progress').attr({value: e.loaded, max: e.total});
-                        }
-                    }
                 </script>
 
                 <%@page import="EntityManager.Artist"%>
@@ -104,7 +92,7 @@
                         </div>
                     </div>
 
-                    <button class="large invert" onclick="loadAjax()">Add</button>
+                    <button type="button" class="large invert" onclick="loadAjax()">Add</button>
                     <div class="clear"></div>
                 </form>
                 <%} else {%>
