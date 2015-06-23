@@ -486,22 +486,22 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Internal server error, invalid account type.");
                 return result;
             }
-            String tempMusicURL = "temp/profilePicture/" + account.getId();
+            String tempFileLocation = "temp/profilePicture/" + account.getId()+".jpg";
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
-                OutputStream fileOutputStream = new FileOutputStream(tempMusicURL+".jpg");
+                OutputStream fileOutputStream = new FileOutputStream(tempFileLocation);
                 int nextByte;
                 while ((nextByte = fileInputStream.read()) != -1) {
                     fileOutputStream.write(nextByte);
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
-                //String imageLocation = "image/member/profile/profilepictures" + account.getId() + "/" + name + commonInfrastructureBean.generateUUID();
-                //result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
-                //TODO: Upload file to cloud storage
-                //Update URL address
-                //account.setImageURL("");
+                String imageLocation = "/images/member/profile/profilepictures" + account.getId() + "/" + new Date() + ".jpg";
+                System.out.println(imageLocation + "WUBWUBWUBWUWBUB");
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
+                member.setImageURL(imageLocation);
+                em.merge(member);
             }
         } catch (NoResultException ex) {
             System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");

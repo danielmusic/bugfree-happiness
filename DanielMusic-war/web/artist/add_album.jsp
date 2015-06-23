@@ -12,13 +12,20 @@
                         var description = $('#description').val();
 
                         url = "./MusicManagementController?target=AddAlbum";
-
+                        //var formData = new FormData($('add_albumForm')[2]);
+                        //formData.append("albumArt", )
+                        var formData = new FormData();
+                        formData.append("name", name);
+                        formData.append("yearReleased", yearReleased);
+                        formData.append("picture", picture);
+                        formData.append("description", description);
                         $.ajax({
                             type: "POST",
                             async: false,
                             url: url,
                             enctype: 'multipart/form-data',
-                            data: {'name': name, 'yearReleased': yearReleased, 'picture': picture, 'description': description},
+                            data: formData,
+                            //data: {'name': name, 'yearReleased': yearReleased, 'picture': picture, 'description': description},
                             dataType: "text",
                             xhr: function () {  // Custom XMLHttpRequest
                                 var myXhr = $.ajaxSettings.xhr();

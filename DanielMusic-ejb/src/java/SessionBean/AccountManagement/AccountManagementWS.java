@@ -7,17 +7,19 @@ package SessionBean.AccountManagement;
 
 import EntityManager.Account;
 import EntityManager.ReturnHelper;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author -VeRyLuNaTiC
  */
-@WebService(serviceName = "NewWebService1")
+@WebService(serviceName = "AccountManagementWS")
 @Stateless()
 public class AccountManagementWS {
     @EJB
@@ -54,6 +56,21 @@ public class AccountManagementWS {
         return ejbRef.checkIfEmailExists(email);
     }
 
+    @WebMethod(operationName = "checkIfArtistNameExists")
+    public boolean checkIfArtistNameExists(@WebParam(name = "name") String name) {
+        return ejbRef.checkIfArtistNameExists(name);
+    }
+
+    @WebMethod(operationName = "checkIfBandNameExists")
+    public boolean checkIfBandNameExists(@WebParam(name = "name") String name) {
+        return ejbRef.checkIfBandNameExists(name);
+    }
+
+    @WebMethod(operationName = "checkIfArtistOrBandNameExists")
+    public boolean checkIfArtistOrBandNameExists(@WebParam(name = "name") String name) {
+        return ejbRef.checkIfArtistOrBandNameExists(name);
+    }
+
     @WebMethod(operationName = "generateAndSendVerificationEmail")
     public ReturnHelper generateAndSendVerificationEmail(@WebParam(name = "emailAddress") String emailAddress) {
         return ejbRef.generateAndSendVerificationEmail(emailAddress);
@@ -74,6 +91,50 @@ public class AccountManagementWS {
         return ejbRef.generatePasswordSalt();
     }
 
+    @WebMethod(operationName = "updateMemberProfile")
+    public ReturnHelper updateMemberProfile(@WebParam(name = "memberID") Long memberID, @WebParam(name = "newName") String newName) {
+        return ejbRef.updateMemberProfile(memberID, newName);
+    }
+
+    @WebMethod(operationName = "updateMemberProfilePicture")
+    public ReturnHelper updateMemberProfilePicture(@WebParam(name = "accountID") Long accountID, @WebParam(name = "profilePicture") Part profilePicture) {
+        return ejbRef.updateMemberProfilePicture(accountID, profilePicture);
+    }
+
+    @WebMethod(operationName = "updateArtistProfile")
+    public ReturnHelper updateArtistProfile(@WebParam(name = "artistID") Long artistID, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL) {
+        return ejbRef.updateArtistProfile(artistID, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL);
+    }
+
+    @WebMethod(operationName = "updateArtistName")
+    public ReturnHelper updateArtistName(@WebParam(name = "artistID") Long artistID, @WebParam(name = "newName") String newName) {
+        return ejbRef.updateArtistName(artistID, newName);
+    }
+
+    @WebMethod(operationName = "updateArtistProfilePicture")
+    public ReturnHelper updateArtistProfilePicture(@WebParam(name = "artistID") Long artistID, @WebParam(name = "profilePicture") Part profilePicture) {
+        return ejbRef.updateArtistProfilePicture(artistID, profilePicture);
+    }
+
+    @WebMethod(operationName = "updateBandProfile")
+    public ReturnHelper updateBandProfile(@WebParam(name = "bandID") Long bandID, @WebParam(name = "members") String members, @WebParam(name = "dateFormed") Date dateFormed, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL) {
+        return ejbRef.updateBandProfile(bandID, members, dateFormed, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL);
+    }
+
+    @WebMethod(operationName = "updateBandName")
+    public ReturnHelper updateBandName(@WebParam(name = "bandID") Long bandID, @WebParam(name = "newName") String newName) {
+        return ejbRef.updateBandName(bandID, newName);
+    }
+
+    @WebMethod(operationName = "updateBandProfilePicture")
+    public ReturnHelper updateBandProfilePicture(@WebParam(name = "bandID") Long bandID, @WebParam(name = "profilePicture") Part profilePicture) {
+        return ejbRef.updateBandProfilePicture(bandID, profilePicture);
+    }
+
+    @WebMethod(operationName = "deleteAccountProfilePicture")
+    public ReturnHelper deleteAccountProfilePicture(@WebParam(name = "accountID") Long accountID) {
+        return ejbRef.deleteAccountProfilePicture(accountID);
+    }
 
     @WebMethod(operationName = "updateAccountPassword")
     public ReturnHelper updateAccountPassword(@WebParam(name = "accountID") Long accountID, @WebParam(name = "oldPassword") String oldPassword, @WebParam(name = "newPassword") String newPassword) {

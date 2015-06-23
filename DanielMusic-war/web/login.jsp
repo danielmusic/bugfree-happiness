@@ -18,9 +18,12 @@
                     dataType: "text",
                     success: function (val) {
                         var json = JSON.parse(val);
+
                         if (json.result) {
+                            alert(json.result);
                             window.location.href = "#!/artist/profile";
                         } else {
+                            alert(json.result);
                             document.getElementById("errMsg").style.display = "block";
                             document.getElementById('errMsg').innerHTML = json.message;
                         }
