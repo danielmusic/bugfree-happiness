@@ -40,13 +40,13 @@ import javax.sound.sampled.AudioSystem;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
-
+    
     @EJB
     private CommonInfrastructureBeanLocal commonInfrastructureBean;
-
+    
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
-
+    
     @Override
     public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName, int bitrate) {
         ReturnHelper result = new ReturnHelper();
@@ -75,12 +75,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return result;
     }
-
+    
     @Override
     public void testAdaptivePayment() {
         try {
             PayRequest payRequest = new PayRequest();
-
+            
             List<Receiver> receivers = new ArrayList<Receiver>();
 //Artist (partial of the total)
             Receiver secondaryReceiver = new Receiver();
@@ -94,10 +94,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             primaryReceiver.setEmail("danielmusic@hotmail.com");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
-
+            
             ReceiverList receiverList = new ReceiverList(receivers);
             payRequest.setReceiverList(receiverList);
-
+            
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
@@ -106,17 +106,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
             payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
-
+            
             Map<String, String> sdkConfig = new HashMap<String, String>();
             sdkConfig.put("mode", "sandbox");
             sdkConfig.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
             sdkConfig.put("acct1.Password", "WX4WTU3S8MY44S7F");
             sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
             sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
-
+            
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
-
+            
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
@@ -129,7 +129,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             ex.printStackTrace();
         }
     }
-
+    
     @Override
     public ReturnHelper generateDownloadLink(String email, Long musicID) {
         System.out.println("generateDownloadLink() called with email: " + email + " and musicID: " + musicID);
@@ -139,7 +139,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("email", email);
             Artist artist = (Artist) q.getSingleResult();
             Music music = em.getReference(Music.class, musicID);
-
+            
             if (artist.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
                 music.setNumDownloaded(music.getNumDownloaded() + 1);
@@ -156,7 +156,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return null;
     }
-
+    
     @Override
     public List<Music> searchMusicByGenre(Long genreID) {
         System.out.println("searchMusicByGenre() called with genreID: " + genreID);
@@ -165,7 +165,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
             System.out.println("searchMusicByGenre() successful");
-
+            
             return listOfMusics;
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,36 +173,36 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return null;
         }
     }
-
+    
     public void persist(Object object) {
         em.persist(object);
     }
-
+    
     @Override
     public SearchHelper search(String searchString) {
         System.out.println("search() called with searchString: " + searchString);
         try {
             Query q;
             SearchHelper helper = new SearchHelper();
-
+            
             q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false AND a.isPublished=true ORDER BY a.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Album> listOfAlbums = q.getResultList();
-
+            
             q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
             q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
-
+            
             q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
-
+            
             helper.setListOfAlbums(listOfAlbums);
             helper.setListOfArtists(listOfArtists);
             helper.setListOfMusics(listOfMusics);
-
+            
             System.out.println("search() successful");
-
+            
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +210,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return null;
         }
     }
-
+    
     @Override
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs) {
         ReturnHelper helper = new ReturnHelper();
@@ -221,7 +221,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
-
+            
             System.out.println("writing to... " + tempMusicURL);
             int nextByte;
             while ((nextByte = fileInputStream.read()) != -1) {
@@ -229,7 +229,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
             fileOutputStream.close();
             fileInputStream.close();
-
+            
             File file = new File(tempMusicURL);
 
             //check if the music >10mins, if more than 10mins return ReturnHelper
@@ -242,7 +242,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             }
-
+            
             File newFile128 = new File(tempMusicURL + "128");
             File newFile320 = new File(tempMusicURL + "320");
             encodeToMP3(file, newFile128, 128);
@@ -269,11 +269,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setTrackNumber(trackNumber);
             em.persist(music);
             em.flush();
-
+            
             String musicURL128;
             String musicURL320;
             Artist artist = album.getArtist();
-
+            
             if (artist != null) {
                 musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
                 musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
@@ -281,14 +281,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
                 musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
             }
-
+            
             music.setFileLocation128(musicURL128);
             music.setFileLocation320(musicURL320);
 
             //end create music
             ReturnHelper result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", Boolean.FALSE);
             ReturnHelper result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", Boolean.FALSE);
-
+            
             if (result1.getResult() && result2.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
                 helper.setResult(true);
@@ -299,11 +299,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 em.refresh(music);
                 em.remove(music);
             }
-
+            
             System.out.println("deleting file... " + file.delete());
             System.out.println("deleting file newFile128... " + newFile128.delete());
             System.out.println("deleting file newFile320... " + newFile320.delete());
-
+            
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -312,7 +312,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         }
     }
-
+    
     @Override
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID) {
         System.out.println("createAlbum() called");
@@ -322,7 +322,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String imageLocation = null;
             String tempImageURL = null;
             Boolean isArtist = null;
-
+            
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
             Band band = null;
@@ -333,14 +333,31 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 band = (Band) account;
                 isArtist = false;
             }
+            
+            Album album = new Album();
+            
+            if (isArtist) {
+                album.setArtist(artist);
+            } else {
+                album.setBand(band);
+            }
+            
+            album.setDescription(description);
+            album.setName(name);
+            em.persist(album);
+            em.flush();
+            System.out.println("MusicManagementBean: em.flush(). Album has been persisted.");
+            em.refresh(album);
+            System.out.println("MusicManagementBean: em.refresh(). Album ID: " + album.getId());
 
+            //check whether user uploads an image
             if (imagePart != null) {
                 String fileName = imagePart.getSubmittedFileName();
                 tempImageURL = "temp/" + fileName;
                 System.out.println("file name is " + fileName);
                 InputStream fileInputStream = imagePart.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
-
+                
                 System.out.println("writing to... " + tempImageURL);
                 int nextByte;
                 while ((nextByte = fileInputStream.read()) != -1) {
@@ -348,53 +365,40 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
-                imageLocation = "image/" + account.getId() + "/" + name + commonInfrastructureBean.generateUUID();
+                imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                 result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
-
+                
                 File file = new File(tempImageURL);
                 System.out.println("deleting file... " + file.delete());
-            }
-
-            Album album = new Album();
-            if ((result != null)) {
-                if (result.getResult()) {
-                    System.out.println("Image location set... " + imageLocation);
-                    album.setImageLocation(imageLocation);
-
-                } else {
-                    helper.setDescription("Image failed to upload, please try again.");
-                    helper.setResult(false);
-                    return helper;
+                
+                if ((result != null)) {
+                    if (result.getResult()) {
+                        System.out.println("Image location set... " + imageLocation);
+                        album.setImageLocation(imageLocation);
+                    } else {
+                        em.remove(album);
+                        helper.setDescription("Image failed to upload, please check the file uploaded is an image and create album again.");
+                        helper.setResult(false);
+                        return helper;
+                    }
                 }
             }
-
-            if (isArtist) {
-                album.setArtist(artist);
-            } else {
-                album.setBand(band);
-            }
-
-            album.setDescription(description);
-            album.setName(name);
-            em.persist(album);
-            em.flush();
-            System.out.println("Album has been persisted.");
-            em.refresh(album);
-            System.out.println("Album ID: " + album.getId());
+            
+            System.out.println("Album created successfully.");
             helper.setID(album.getId());
             helper.setDescription("Album has been created successfully.");
             helper.setResult(true);
             return helper;
-
+            
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("MusicManagementBean: Error occurred while calling createAlbum()");
             helper.setDescription("Error occurred while trying to create album, please try again.");
             helper.setResult(false);
             return helper;
         }
-
     }
-
+    
     @Override
     public Album getAlbum(Long albumID) {
         System.out.println("getAlbum() called.");
@@ -408,14 +412,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return null;
     }
-
+    
     @Override
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
             Album album = em.getReference(Album.class, albumID);
-
+            
             if (album.getIsPublished()) {
                 System.out.println("Album is already published, cannot be edited.");
                 helper.setDescription("Album has been published and cannot be edited.");
@@ -424,7 +428,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             } else {
                 album.setName(name);
                 album.setDescription(description);
-
+                
                 if (imagePart != null) {
                     String imageLocation = null;
                     String tempImageURL = null;
@@ -433,7 +437,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     System.out.println("file name is " + fileName);
                     InputStream fileInputStream = imagePart.getInputStream();
                     OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
-
+                    
                     System.out.println("writing to... " + tempImageURL);
                     int nextByte;
                     while ((nextByte = fileInputStream.read()) != -1) {
@@ -456,15 +460,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                    }
                     //check whether album belongs to artist/band
                     if (album.getArtist() != null) {
-                        imageLocation = "image/" + album.getArtist().getId() + "/" + name + commonInfrastructureBean.generateUUID();
+                        imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     } else {
-                        imageLocation = "image/" + album.getBand().getId() + "/" + name + commonInfrastructureBean.generateUUID();
+                        imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     }
-
+                    
                     result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true);
                     File file = new File(tempImageURL);
                     System.out.println("deleting file... " + file.delete());
-
+                    
                     if (result.getResult()) {
                         album.setImageLocation(imageLocation);
                     } else {
@@ -473,7 +477,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         return helper;
                     }
                 }
-
+                
                 helper.setDescription("Album details have been updated successfully.");
                 helper.setResult(true);
                 return helper;
@@ -486,7 +490,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         }
     }
-
+    
     @Override
     public ReturnHelper publishAlbum(Long albumID, Date publishDate) {
         System.out.println("publishAlbum() called.");
@@ -510,7 +514,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return helper;
                 }
             }
-
+            
             if (publishDate != null) {
                 if (isArtist) {
                     if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
@@ -521,7 +525,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         album.getBand().setIsApproved(-2);
                     }
                 }
-
+                
                 album.setPublishedDate(publishDate);
                 album.setIsPublished(true);
                 helper.setDescription("Album has been published successfully.");
@@ -532,7 +536,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             helper.setDescription("Error occurred while trying to publish album, please try again.");
@@ -540,7 +544,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         }
     }
-
+    
     @Override
     public ReturnHelper deleteAlbum(Long albumID) {
         System.out.println("MusicManagementBean: deleteAlbum() called.");
@@ -587,7 +591,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
             
             em.flush();
-
+            
             album.setIsDeleted(true);
             for (Music m : album.getListOfMusics()) {
                 m.setIsDeleted(true);
@@ -604,5 +608,5 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         }
     }
-
+    
 }
