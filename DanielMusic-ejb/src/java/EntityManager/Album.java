@@ -36,12 +36,22 @@ public class Album implements Serializable {
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Music> listOfMusics;
     private Long numPurchase;
+    @Lob
+    private String credits;
 
     public Album() {
         isDeleted = false;
         isPublished = false;
         publishedDate = null;
         numPurchase = 0L;
+    }
+
+    public String getCredits() {
+        return credits;
+    }
+
+    public void setCredits(String credits) {
+        this.credits = credits;
     }
 
     public Long getNumPurchase() {

@@ -33,11 +33,21 @@ public class Music implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Album album;
     private Long numPurchase;
+    @Lob
+    private String credits;
 
     public Music() {
         isDeleted = false;
         numDownloaded = 0L;
         numPurchase = 0L;
+    }
+
+    public String getCredits() {
+        return credits;
+    }
+
+    public void setCredits(String credits) {
+        this.credits = credits;
     }
 
     public Long getNumPurchase() {
