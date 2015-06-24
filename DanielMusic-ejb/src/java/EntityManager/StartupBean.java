@@ -1,6 +1,7 @@
 package EntityManager;
 
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
+import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import java.io.File;
 import java.util.List;
@@ -21,10 +22,13 @@ public class StartupBean {
     private EntityManager em;
 
     @EJB
-    private AccountManagementBeanLocal ambl;
+    private AccountManagementBeanLocal accountManagementBeanLocal;
     
     @EJB
-    private CommonInfrastructureBeanLocal cibl;
+    private CommonInfrastructureBeanLocal commonInfrastructureBeanLocal;
+    
+    @EJB
+    private AdminManagementBeanLocal adminManagementBeanLocal;
 
     @PostConstruct
     private void startup() {
@@ -57,7 +61,7 @@ public class StartupBean {
             System.out.print("Initiating Google Cloud Storage authorization...");
             File file = new File("GCS Test File");
             file.createNewFile();
-            cibl.uploadFileToGoogleCloudStorage("/temp/GCS Test File", "GCS Test File", false, false);
+            commonInfrastructureBeanLocal.uploadFileToGoogleCloudStorage("/temp/GCS Test File", "GCS Test File", false, false);
             file.delete();
             // =========== DO NOT DISABLE THIS END   ============
             Query q = em.createQuery("SELECT s FROM Account s where s.email=:email");
@@ -69,14 +73,14 @@ public class StartupBean {
             } else {
                 System.out.println("Initiating sample database records...");
                 ReturnHelper result;
-                result = ambl.registerAccount("Admin", "admin@a.a", "admin", true, false, false);
-                Account account = ambl.getAccount("admin@a.a");
+                result = accountManagementBeanLocal.registerAccount("Admin", "admin@a.a", "admin", true, false, false);
+                Account account = accountManagementBeanLocal.getAccount("admin@a.a");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
                 em.merge(account);
-                ambl.registerAccount("Artist", "artist@a.a", "artist", false, true, false);
-                account = ambl.getAccount("artist@a.a");
+                accountManagementBeanLocal.registerAccount("Artist", "artist@a.a", "artist", false, true, false);
+                account = accountManagementBeanLocal.getAccount("artist@a.a");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
@@ -84,13 +88,16 @@ public class StartupBean {
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 em.merge(account);
-                ambl.registerAccount("Member", "member@a.a", "member", false, false, false);
-                account = ambl.getAccount("member@a.a");
+                accountManagementBeanLocal.registerAccount("Member", "member@a.a", "member", false, false, false);
+                account = accountManagementBeanLocal.getAccount("member@a.a");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
                 em.merge(account);
-                ambl.registerAccount("Member Unverified Email", "member2@a.a", "member", false, false, false);
+                accountManagementBeanLocal.registerAccount("Member Unverified Email", "member2@a.a", "member", false, false, false);
+                adminManagementBeanLocal.createGenre("Rock");
+                adminManagementBeanLocal.createGenre("Electronic");
+                adminManagementBeanLocal.createGenre("Jazz");
             }
         } catch (Exception ex) {
             System.out.println("Error initating database");
