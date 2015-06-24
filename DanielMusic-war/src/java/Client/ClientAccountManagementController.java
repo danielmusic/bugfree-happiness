@@ -55,7 +55,8 @@ public class ClientAccountManagementController extends HttpServlet {
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
 
         session = request.getSession();
-        session.removeAttribute("message");
+        session.removeAttribute("goodMsg");
+        session.removeAttribute("errMsg");
         ReturnHelper returnHelper;
 
         JSONObject jsObj = new JSONObject();
@@ -65,17 +66,16 @@ public class ClientAccountManagementController extends HttpServlet {
         try {
             switch (target) {
                 case "AccountLogin":
-                    System.out.println("Controller: AccountLogin");
                     returnHelper = accountManagementBean.loginAccount(email, password);
 
                     if (returnHelper.getResult()) {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) account);
-                            //session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) account);
-                            //session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
                         } else if (account instanceof Member) {
                             session.setAttribute("fan", (Member) account);
                         }
@@ -159,7 +159,6 @@ public class ClientAccountManagementController extends HttpServlet {
                     break;
             }
 
-            System.out.println("nextpage " + nextPage);
             if (nextPage.equals("")) {
                 session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
                 response.sendRedirect("#!/login");

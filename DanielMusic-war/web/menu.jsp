@@ -33,6 +33,8 @@
                         Artist artist = (Artist) (session.getAttribute("artist"));
                         Band band = (Band) (session.getAttribute("band"));
                         Member fan = (Member) (session.getAttribute("fan"));
+                        session.removeAttribute("errMsg");
+                        session.removeAttribute("goodMsg");
 
                         if (artist != null) {
                     %>
