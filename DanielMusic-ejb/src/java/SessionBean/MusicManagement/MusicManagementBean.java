@@ -8,6 +8,7 @@ import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
+import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
@@ -42,7 +43,9 @@ import javax.sound.sampled.AudioSystem;
 public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @EJB
-    private CommonInfrastructureBeanLocal commonInfrastructureBean;
+    private CommonInfrastructureBeanLocal cibl;
+    @EJB
+    private AccountManagementBeanLocal ambl;
 
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
@@ -143,7 +146,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (artist.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
                 music.setNumDownloaded(music.getNumDownloaded() + 1);
-                String downloadLink = commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3");
+                String downloadLink = cibl.getMusicFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3");
                 helper.setDescription(downloadLink);
                 helper.setResult(true);
             } else {
@@ -286,8 +289,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocation320(musicURL320);
 
             //end create music
-            ReturnHelper result1 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", false, false);
-            ReturnHelper result2 = commonInfrastructureBean.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", false, false);
+            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", false, false);
+            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", false, false);
 
             if (result1.getResult() && result2.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
@@ -366,7 +369,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
-                result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
 
                 File file = new File(tempImageURL);
                 System.out.println("deleting file... " + file.delete());
@@ -418,21 +421,31 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("getAlbumByArtists() called");
         try {
             Query q = null;
-
-            if (showUnpublished) {
-                q = em.createQuery("select a from Album a where ((a.artist.id=:artistID AND a.artist.isApproved>=:isApproved) OR (a.band.id=:bandID AND a.band.isApproved>=:isApproved)) and a.isDeleted=false");
+            Account account = ambl.getAccount(artistOrBandAccountID);
+            if (account instanceof Artist) {
+                if (showUnpublished) {
+                    q = em.createQuery("select a from Album a where (a.artist.id=:artistID AND a.artist.isApproved>=:isApproved) and a.isDeleted=false");
+                } else {
+                    q = em.createQuery("select a from Album a where (a.artist.id=:artistID AND a.artist.isApproved>=:isApproved) and a.isDeleted=false and a.isPublished=:isPublished");
+                    q.setParameter("isPublished", true);
+                }
+                q.setParameter("artistID", artistOrBandAccountID);
+            } else if (account instanceof Band) {
+                if (showUnpublished) {
+                    q = em.createQuery("select a from Album a where (a.band.id=:bandID AND a.band.isApproved>=:isApproved) and a.isDeleted=false");
+                } else {
+                    q = em.createQuery("select a from Album a where (a.band.id=:bandID AND a.band.isApproved>=:isApproved) and a.isDeleted=false and a.isPublished=:isPublished");
+                    q.setParameter("isPublished", true);
+                }
+                q.setParameter("bandID", artistOrBandAccountID);
             } else {
-                q = em.createQuery("select a from Album a where ((a.artist.id=:artistID AND a.artist.isApproved>=:isApproved) OR (a.band.id=:bandID AND a.band.isApproved>=:isApproved)) and a.isDeleted=false and a.isPublished=:isPublished");
-                q.setParameter("isPublished", true);
+                throw new Exception("ID given is not artist or band");
             }
             if (showUnapproved) {
                 q.setParameter("isApproved", -2);
             } else {
                 q.setParameter("isApproved", 1);
             }
-            q.setParameter("artistID", artistOrBandAccountID);
-            q.setParameter("bandID", artistOrBandAccountID);
-
             List<Album> albums = q.getResultList();
             return albums;
         } catch (Exception ex) {
@@ -494,7 +507,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     }
 
-                    result = commonInfrastructureBean.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
+                    result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
                     File file = new File(tempImageURL);
                     System.out.println("deleting file... " + file.delete());
 
@@ -601,8 +614,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         Music m = listOfMusics.get(i);
                         //no track download
                         if (m.getNumPurchase() == 0) {
-                            commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
-                            commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                            cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                            cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
                             em.remove(m);
                         } else {
                             trackPurchase = true;
@@ -613,17 +626,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         em.remove(album);
                     }
                     if (album.getImageLocation() != null) {
-                        commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                        cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
                     }
                 }
             } else {
                 //if album is not published do hard delete
                 if (album.getImageLocation() != null) {
-                    commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                    cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
                 }
                 for (Music m : album.getListOfMusics()) {
-                    commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
-                    commonInfrastructureBean.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                    cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                    cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
                 }
                 em.remove(album);
             }

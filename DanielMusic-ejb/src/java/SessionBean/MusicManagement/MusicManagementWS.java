@@ -5,10 +5,12 @@
  */
 package SessionBean.MusicManagement;
 
+import EntityManager.Album;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
@@ -52,6 +54,26 @@ public class MusicManagementWS {
     @WebMethod(operationName = "search")
     public SearchHelper search(@WebParam(name = "searchString") String searchString) {
         return ejbRef.search(searchString);
+    }
+
+    @WebMethod(operationName = "getAlbum")
+    public Album getAlbum(@WebParam(name = "albumID") Long albumID) {
+        return ejbRef.getAlbum(albumID);
+    }
+
+    @WebMethod(operationName = "getAlbumByArtists")
+    public List<Album> getAlbumByArtists(@WebParam(name = "artistOrBandAccountID") Long artistOrBandAccountID, @WebParam(name = "showUnpublished") Boolean showUnpublished, @WebParam(name = "showUnapproved") Boolean showUnapproved) {
+        return ejbRef.getAlbumByArtists(artistOrBandAccountID, showUnpublished, showUnapproved);
+    }
+
+    @WebMethod(operationName = "publishAlbum")
+    public ReturnHelper publishAlbum(@WebParam(name = "albumID") Long albumID, @WebParam(name = "publishDate") Date publishDate) {
+        return ejbRef.publishAlbum(albumID, publishDate);
+    }
+
+    @WebMethod(operationName = "deleteAlbum")
+    public ReturnHelper deleteAlbum(@WebParam(name = "albumID") Long albumID) {
+        return ejbRef.deleteAlbum(albumID);
     }
     
 }
