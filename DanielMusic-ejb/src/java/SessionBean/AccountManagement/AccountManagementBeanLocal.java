@@ -11,6 +11,7 @@ import javax.servlet.http.Part;
 public interface AccountManagementBeanLocal {
     public ReturnHelper loginAccount(String email, String password);
     public Account getAccount(String email);
+    public Account getAccount(Long accountID);
     
     public ReturnHelper disableAccount(Long accountID);
     public ReturnHelper enableAccount(Long accountID);

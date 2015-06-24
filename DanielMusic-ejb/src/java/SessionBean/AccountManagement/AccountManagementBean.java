@@ -120,6 +120,46 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             return null;
         }
     }
+    
+    @Override
+    public Account getAccount(Long id) {
+        System.out.println("AccountManagementBean: getAccount() called");
+        try {
+            Query q = em.createQuery("SELECT a FROM Account a where a.id=:id");
+            q.setParameter("id", id);
+            Account account = (Account) q.getSingleResult();
+            if (account instanceof Member) {
+                q = em.createQuery("SELECT m FROM Member m where m.id=:id");
+                q.setParameter("id", id);
+                Member member = (Member) q.getSingleResult();
+                return member;
+            } else if (account instanceof Artist) {
+                q = em.createQuery("SELECT a FROM Artist a where a.id=:id");
+                q.setParameter("id", id);
+                Artist artist = (Artist) q.getSingleResult();
+                return artist;
+            } else if (account instanceof Band) {
+                q = em.createQuery("SELECT a FROM Band a where a.id=:id");
+                q.setParameter("id", id);
+                Band band = (Band) q.getSingleResult();
+                return band;
+            } else if (account instanceof Admin) {
+                q = em.createQuery("SELECT a FROM Admin a where a.id=:id");
+                q.setParameter("id", id);
+                Admin admin = (Admin) q.getSingleResult();
+                return admin;
+            }
+            Member member = new Member();
+            return member;
+        } catch (NoResultException ex) {
+            System.out.println("getAccount(): Could not find account with that id");
+            return null;
+        } catch (Exception ex) {
+            System.out.println("getAccount(): Internal error");
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand) {

@@ -13,7 +13,6 @@ import javax.jws.WebService;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.servlet.http.Part;
 
 /**
  *
@@ -22,6 +21,7 @@ import javax.servlet.http.Part;
 @WebService(serviceName = "AccountManagementWS")
 @Stateless()
 public class AccountManagementWS {
+
     @EJB
     private AccountManagementBeanLocal ejbRef;// Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Web Service Operation")
@@ -96,11 +96,6 @@ public class AccountManagementWS {
         return ejbRef.updateMemberProfile(memberID, newName);
     }
 
-    @WebMethod(operationName = "updateMemberProfilePicture")
-    public ReturnHelper updateMemberProfilePicture(@WebParam(name = "accountID") Long accountID, @WebParam(name = "profilePicture") Part profilePicture) {
-        return ejbRef.updateMemberProfilePicture(accountID, profilePicture);
-    }
-
     @WebMethod(operationName = "updateArtistProfile")
     public ReturnHelper updateArtistProfile(@WebParam(name = "artistID") Long artistID, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL) {
         return ejbRef.updateArtistProfile(artistID, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL);
@@ -111,11 +106,6 @@ public class AccountManagementWS {
         return ejbRef.updateArtistName(artistID, newName);
     }
 
-    @WebMethod(operationName = "updateArtistProfilePicture")
-    public ReturnHelper updateArtistProfilePicture(@WebParam(name = "artistID") Long artistID, @WebParam(name = "profilePicture") Part profilePicture) {
-        return ejbRef.updateArtistProfilePicture(artistID, profilePicture);
-    }
-
     @WebMethod(operationName = "updateBandProfile")
     public ReturnHelper updateBandProfile(@WebParam(name = "bandID") Long bandID, @WebParam(name = "members") String members, @WebParam(name = "dateFormed") Date dateFormed, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL) {
         return ejbRef.updateBandProfile(bandID, members, dateFormed, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL);
@@ -124,11 +114,6 @@ public class AccountManagementWS {
     @WebMethod(operationName = "updateBandName")
     public ReturnHelper updateBandName(@WebParam(name = "bandID") Long bandID, @WebParam(name = "newName") String newName) {
         return ejbRef.updateBandName(bandID, newName);
-    }
-
-    @WebMethod(operationName = "updateBandProfilePicture")
-    public ReturnHelper updateBandProfilePicture(@WebParam(name = "bandID") Long bandID, @WebParam(name = "profilePicture") Part profilePicture) {
-        return ejbRef.updateBandProfilePicture(bandID, profilePicture);
     }
 
     @WebMethod(operationName = "deleteAccountProfilePicture")
@@ -145,5 +130,5 @@ public class AccountManagementWS {
     public ReturnHelper updateAccountEmail(@WebParam(name = "accountID") Long accountID, @WebParam(name = "newEmail") String newEmail) {
         return ejbRef.updateAccountEmail(accountID, newEmail);
     }
-    
+
 }
