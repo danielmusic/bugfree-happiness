@@ -217,7 +217,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         try {
             Album album = null;
             String fileName = musicPart.getSubmittedFileName();
-            String tempMusicURL = "temp/" + fileName;
+            String tempMusicURL = "temp/" + fileName + commonInfrastructureBean.generateUUID();
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
@@ -353,7 +353,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //check whether user uploads an image
             if (imagePart != null) {
                 String fileName = imagePart.getSubmittedFileName();
-                tempImageURL = "temp/" + fileName;
+                tempImageURL = "temp/" + fileName + commonInfrastructureBean.generateUUID();
                 System.out.println("file name is " + fileName);
                 InputStream fileInputStream = imagePart.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
@@ -462,7 +462,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     String imageLocation = null;
                     String tempImageURL = null;
                     String fileName = imagePart.getSubmittedFileName();
-                    tempImageURL = "temp/" + fileName;
+                    tempImageURL = "temp/" + fileName + commonInfrastructureBean.generateUUID();
                     System.out.println("file name is " + fileName);
                     InputStream fileInputStream = imagePart.getInputStream();
                     OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
