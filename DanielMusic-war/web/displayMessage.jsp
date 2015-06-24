@@ -11,6 +11,7 @@
             out.println("<p class='success'>" + goodMsg + "</p>");
         }
     }
+    
     session.removeAttribute("errMsg");
     session.removeAttribute("goodMsg");
 %>

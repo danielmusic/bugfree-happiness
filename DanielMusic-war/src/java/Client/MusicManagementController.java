@@ -7,13 +7,14 @@ import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import org.json.JSONObject;
 
+@MultipartConfig
 public class MusicManagementController extends HttpServlet {
 
     @EJB
@@ -25,9 +26,12 @@ public class MusicManagementController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
+        System.out.println("target " + target);
         String source = request.getParameter("source");
+        System.out.println("source " + source);
 
         String name = request.getParameter("name");
+        System.out.println("name " + name);
         String description = request.getParameter("description");
         String yearReleased = request.getParameter("yearReleased");
 
@@ -35,63 +39,43 @@ public class MusicManagementController extends HttpServlet {
         Artist artist = (Artist) (session.getAttribute("artist"));
         Band band = (Band) (session.getAttribute("band"));
 
-        JSONObject jsObj = new JSONObject();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
         ReturnHelper returnHelper;
 
         try {
             switch (target) {
                 case "AddAlbum":
                     System.out.println("Adding albums");
-                    if (checkArtistLogin(response)) {
-                        Part picture = request.getPart("picture");
+                    if (source != null && source.equals("Artist")) {
+                        if (artist != null) {
+                            Part picture = request.getPart("picture");
+                            returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId());
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("albums", musicManagementBean.getAlbumByArtists(artist.getId(), true, true));
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                            nextPage = "#!/artist/albums";
+                        }
+                    } else if (source != null && source.equals("Band")) {
 
-                        returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId());
-
-                        jsObj.put("result", returnHelper.getResult());
-                        jsObj.put("message", returnHelper.getDescription());
-
-                        response.getWriter().write(jsObj.toString());
-                        return;
-
-                    } else {
-                        session.setAttribute("errMsg", "Session expired. Please login again.");
-                        response.sendRedirect("#!/login");
                     }
+                    break;
+
             }
 
+            if (nextPage.equals("")) {
+                session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
+                response.sendRedirect("#!/login");
+                return;
+            } else {
+                response.sendRedirect(nextPage);
+                return;
+            }
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();
             return;
-        }
-    }
-
-    public boolean checkArtistLogin(HttpServletResponse response) {
-        try {
-            Artist artist = (Artist) (session.getAttribute("artist"));
-            if (artist == null) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public boolean checkBandLogin(HttpServletResponse response) {
-        try {
-            Band band = (Band) (session.getAttribute("band"));
-            if (band == null) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception ex) {
-            return false;
         }
     }
 

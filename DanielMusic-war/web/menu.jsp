@@ -33,24 +33,66 @@
                         Artist artist = (Artist) (session.getAttribute("artist"));
                         Band band = (Band) (session.getAttribute("band"));
                         Member fan = (Member) (session.getAttribute("fan"));
+                        session.removeAttribute("errMsg");
+                        session.removeAttribute("goodMsg");
 
                         if (artist != null) {
-                            out.print("<li><a href='#!/artist/albums'>albums</a><li>");
-                            out.print("<li><a href='#!/artist/profile'>profile</a><li>");
-                            out.print("<li><a href='ClientAccountManagementController?target=AccountLogout'>logout</a><li>");
-                        } else if (band != null) {
-                            out.print("<li><a href='#!/band/albums'>albums</a><li>");
-                            out.print("<li><a href='#!/band/profile'>profile</a><li>");
-                            out.print("<li><a href='ClientAccountManagementController?target=AccountLogout'>logout</a><li>");
-                        } else if (fan != null) {
+                    %>
+                    <li>
+                        <a href="#!/artist/albums">albums</a>
+                    </li>
+                    <li class="submenu">
+                        <a href="#!/artist/profile">profile</a>
+                        <ul>
+                            <li>
+                                <a href='#!/artist/profile'>update profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
+                    </li>
+                    <%} else if (band != null) {%>
+                    <li>
+                        <a href="#!/band/albums">albums</a>
+                    </li>
+                    <li class="submenu">
+                        <a href="#!/band/profile">profile</a>
+                        <ul>
+                            <li>
+                                <a href='#!/band/profile'>update profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
+                    </li>
+                    <%} else if (fan != null) {%>
 
-                        } else {
-                            out.print("<li><a href='#!/discover'>discover</a><li>");
-                            out.print("<li class='submenu'><a href='#!/artist'>artist</a>");
-                            out.print("<ul><li><a href='#!/artist/signup'>artist signup</a></li></ul></li>");
-                            out.print("<li class='submenu'><a href='#!/fan'>fan</a>");
-                            out.print("<ul><li><a href='#!/fan/signup'>fan signup</a></li></ul></li>");
-                            out.print("<li><a href='#!/login'>login</a><li>");
+                    <%} else {%>
+                    <li>
+                        <a href="#!/explore">Explore</a>
+                    </li>
+                    <li class="submenu">
+                        <a href="#!/artist">artist</a>
+                        <ul>
+                            <li>
+                                <a href='#!/artist/signup'>artist signup</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#!/fan">fan</a>
+                        <ul>
+                            <li>
+                                <a href='#!/artist/signup'>fan signup</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#!/login">login</a>
+                    </li>
+                    <%
                         }
                     %>
                 </ul>

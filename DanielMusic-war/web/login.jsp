@@ -5,47 +5,10 @@
         <span class="overlay dots"></span>
     </section>
     <section class="content section">
-        <script>
-            function loadAjax() {
-                var email = $('#email').val();
-                var password = $('#password').val();
-                url = "./ClientAccountManagementController?target=AccountLogin";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'email': email, 'password': password},
-                    dataType: "text",
-                    success: function (val) {
-                        var json = JSON.parse(val);
-
-                        if (json.result) {
-                            alert(json.result);
-                            window.location.href = "#!/artist/profile";
-                        } else {
-                            alert(json.result);
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = json.message;
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-        </script>
         <div class="container">
             <article>
-
-                <form class="form" name="loginForm">
+                <form class="form" name="loginForm" action="ClientAccountManagementController">
                     <jsp:include page="displayMessage.jsp" />
-                    <p class="error" id="errMsg" style="display:none;"></p>
-                    <p class="success" id="goodMsg"  style="display:none;"></p>
-
-
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="email"><strong>Email</strong> *</label>
@@ -59,7 +22,8 @@
                             <a href="">Forget password?</a>
                         </div>
                     </div>
-                    <button type="button" onclick="loadAjax()"  class="large invert">Login</button>
+                    <input type="hidden" value="AccountLogin" name="target">
+                    <button type="submit" class="large invert">Login</button>
                     <div class="clear"></div>
                 </form>
             </article>

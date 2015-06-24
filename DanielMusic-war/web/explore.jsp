@@ -2,7 +2,7 @@
 <section id="page" data-title="Discover | ">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Discover JSP</h1>
+        <h1 class="heading-l">Explore JSP</h1>
         <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
     </section>
     <!-- /intro -->

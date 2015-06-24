@@ -554,7 +554,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         album.getBand().setIsApproved(-2);
                     }
                 }
-
+                if (album.getListOfMusics() == null) {
+                    helper.setDescription("The album cannot be published, no tracks found, please try again.");
+                    helper.setResult(false);
+                    return helper;
+                }
+                if (album.getListOfMusics().isEmpty()) {
+                    helper.setDescription("The album cannot be published, no tracks found, please try again.");
+                    helper.setResult(false);
+                    return helper;
+                }
                 album.setPublishedDate(publishDate);
                 album.setIsPublished(true);
                 helper.setDescription("Album has been published successfully.");

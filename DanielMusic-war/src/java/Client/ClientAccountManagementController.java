@@ -55,7 +55,8 @@ public class ClientAccountManagementController extends HttpServlet {
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
 
         session = request.getSession();
-        session.removeAttribute("message");
+        session.removeAttribute("goodMsg");
+        session.removeAttribute("errMsg");
         ReturnHelper returnHelper;
 
         JSONObject jsObj = new JSONObject();
@@ -67,26 +68,27 @@ public class ClientAccountManagementController extends HttpServlet {
                 case "AccountLogin":
                     returnHelper = accountManagementBean.loginAccount(email, password);
 
-                    jsObj.put("result", returnHelper.getResult());
-                    jsObj.put("message", returnHelper.getDescription());
-
                     if (returnHelper.getResult()) {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) account);
-                            //session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) account);
-                            //session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
                         } else if (account instanceof Member) {
                             session.setAttribute("fan", (Member) account);
                         }
+                        session.setAttribute("goodMsg", returnHelper.getDescription());
+                        nextPage = "#!/artist/profile";
+                    } else {
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                        nextPage = "#!/login";
                     }
-                    response.getWriter().write(jsObj.toString());
-                    return;
+                    break;
 
                 case "AccountSignup":
-                    System.out.println("AccountSignup");
+                    System.out.println("Controller: AccountSignup");
                     if (chkAgree == null) {
                         jsObj.put("result", false);
                         jsObj.put("message", "Sorry. You have not agreed to the terms");
@@ -143,7 +145,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         }
 
-                        //nextPage = "#!/artist/profile";
+                        nextPage = "#!/artist/profile";
                     }
                     break;
 
@@ -153,17 +155,18 @@ public class ClientAccountManagementController extends HttpServlet {
                     session.removeAttribute("band");
                     session.removeAttribute("fan");
                     session.setAttribute("goodMsg", "Logout Successful");
-                    response.sendRedirect("#!/login");
+                    nextPage = "#!/login";
                     break;
             }
 
-//            if (nextPage.equals("")) {
-//                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
-//                return;
-//            } else {
-//                response.sendRedirect(nextPage);
-//                return;
-//            }
+            if (nextPage.equals("")) {
+                session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
+                response.sendRedirect("#!/login");
+                return;
+            } else {
+                response.sendRedirect(nextPage);
+                return;
+            }
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
             ex.printStackTrace();

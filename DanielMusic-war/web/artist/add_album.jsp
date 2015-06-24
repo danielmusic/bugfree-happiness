@@ -4,78 +4,14 @@
     <section class="content section">
         <div class="container">
             <article>
-                <script>
-                    function loadAjax() {
-                        var name = $('#name').val();
-                        var yearReleased = $('#yearReleased').val();
-                        var picture = $('#picture').val();
-                        var description = $('#description').val();
-
-                        url = "./MusicManagementController?target=AddAlbum";
-                        //var formData = new FormData($('add_albumForm')[2]);
-                        //formData.append("albumArt", )
-                        var formData = new FormData();
-                        formData.append("name", name);
-                        formData.append("yearReleased", yearReleased);
-                        formData.append("picture", picture);
-                        formData.append("description", description);
-                        $.ajax({
-                            type: "POST",
-                            async: false,
-                            url: url,
-                            enctype: 'multipart/form-data',
-                            data: formData,
-                            //data: {'name': name, 'yearReleased': yearReleased, 'picture': picture, 'description': description},
-                            dataType: "text",
-                            xhr: function () {  // Custom XMLHttpRequest
-                                var myXhr = $.ajaxSettings.xhr();
-                                if (myXhr.upload) { // Check if upload property exists
-                                    myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
-                                }
-                                return myXhr;
-                            },
-                            success: function (val) {
-                                alert("4");
-                                window.event.returnValue = true;
-                                var json = JSON.parse(val);
-                                if (json.result) {
-                                    window.event.returnValue = false;
-                                    window.location.href = "#!/artist/albums";
-                                    document.add_albumForm.getElementById("goodMsg").style.display = "block";
-                                    document.add_albumForm.getElementById('goodMsg').innerHTML = json.message;
-                                } else {
-                                    window.event.returnValue = false;
-                                    window.location.href = "#!/artist/add_album";
-                                    document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = json.message;
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                alert("5");
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = error;
-                                hideLoader();
-                                ajaxResultsError(xhr, status, error);
-                            }
-                        });
-                    }
-
-                    function progressHandlingFunction(e) {
-                        if (e.lengthComputable) {
-                            $('progress').attr({value: e.loaded, max: e.total});
-                        }
-                    }
-                </script>
-
                 <%@page import="EntityManager.Artist"%>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
 
-                <form name="add_albumForm" class="form">
-                    <p class="error" id="errMsg" style="display:none;"></p>
-                    <p class="success" id="goodMsg"  style="display:none;"></p>
+                <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
+                    <jsp:include page="../displayMessage.jsp" />
 
                     <h2>Album details</h2>
 
@@ -104,9 +40,12 @@
                         </div>
                     </div>
 
-                    <button class="large invert" onclick="loadAjax()">Add</button>
+                    <input type="hidden" value="AddAlbum" name="target">
+                    <input type="hidden" value="Artist" name="source">
+                    <button type="submit" class="large invert">Add</button>
                     <div class="clear"></div>
                 </form>
+                    
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>

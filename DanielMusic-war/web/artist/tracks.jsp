@@ -11,7 +11,7 @@
                 %>
                 <h1>Hello world</h1>
                 <%} else {%>
-                <h1>Bye world</h1>
+                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
         </div>

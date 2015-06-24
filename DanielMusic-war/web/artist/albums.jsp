@@ -52,7 +52,7 @@
                             %>
                         </tbody>
                     </table>
-                    <button  class="small" onclick="javascript:addAlbum()">Add Album</button>
+                    <button type="button" class="small" onclick="javascript:addAlbum()">Add Album</button>
                 </form>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
