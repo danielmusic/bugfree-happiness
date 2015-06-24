@@ -43,7 +43,9 @@ public class Band extends Account implements Serializable {
     private String instagramURL;
     @Lob
     private String twitterURL;
-
+    @Lob
+    private String websiteURL;
+    
     public Band() {
         isApproved = 0;
     }
@@ -166,6 +168,14 @@ public class Band extends Account implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getWebsiteURL() {
+        return websiteURL;
+    }
+
+    public void setWebsiteURL(String websiteURL) {
+        this.websiteURL = websiteURL;
     }
 
     @Override

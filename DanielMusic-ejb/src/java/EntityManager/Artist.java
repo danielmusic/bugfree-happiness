@@ -21,7 +21,7 @@ public class Artist extends Account implements Serializable {
     private Integer isApproved; //{new: 0, pending: -2, approve: 1, not approve: -1}
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
-    
+
     @ManyToOne
     private Genre genre;
     @Lob
@@ -36,6 +36,8 @@ public class Artist extends Account implements Serializable {
     private String instagramURL;
     @Lob
     private String twitterURL;
+    @Lob
+    private String websiteURL;
 
     public Artist() {
         isApproved = 0;
@@ -111,6 +113,14 @@ public class Artist extends Account implements Serializable {
 
     public void setListOfAlbums(List<Album> listOfAlbums) {
         this.listOfAlbums = listOfAlbums;
+    }
+
+    public String getWebsiteURL() {
+        return websiteURL;
+    }
+
+    public void setWebsiteURL(String websiteURL) {
+        this.websiteURL = websiteURL;
     }
 
     /**

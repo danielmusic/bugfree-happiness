@@ -97,8 +97,8 @@ public class AccountManagementWS {
     }
 
     @WebMethod(operationName = "updateArtistProfile")
-    public ReturnHelper updateArtistProfile(@WebParam(name = "artistID") Long artistID, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL) {
-        return ejbRef.updateArtistProfile(artistID, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL);
+    public ReturnHelper updateArtistProfile(@WebParam(name = "artistID") Long artistID, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL, @WebParam(name = "websiteURL") String websiteURL) {
+        return ejbRef.updateArtistProfile(artistID, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL);
     }
 
     @WebMethod(operationName = "updateArtistName")
@@ -107,8 +107,8 @@ public class AccountManagementWS {
     }
 
     @WebMethod(operationName = "updateBandProfile")
-    public ReturnHelper updateBandProfile(@WebParam(name = "bandID") Long bandID, @WebParam(name = "members") String members, @WebParam(name = "dateFormed") Date dateFormed, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL) {
-        return ejbRef.updateBandProfile(bandID, members, dateFormed, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL);
+    public ReturnHelper updateBandProfile(@WebParam(name = "bandID") Long bandID, @WebParam(name = "members") String members, @WebParam(name = "dateFormed") Date dateFormed, @WebParam(name = "genreID") Long genreID, @WebParam(name = "biography") String biography, @WebParam(name = "influences") String influences, @WebParam(name = "contactEamil") String contactEamil, @WebParam(name = "paypalEmail") String paypalEmail, @WebParam(name = "facebookURL") String facebookURL, @WebParam(name = "instagramURL") String instagramURL, @WebParam(name = "twitterURL") String twitterURL, @WebParam(name = "websiteURL") String websiteURL) {
+        return ejbRef.updateBandProfile(bandID, members, dateFormed, genreID, biography, influences, contactEamil, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL);
     }
 
     @WebMethod(operationName = "updateBandName")

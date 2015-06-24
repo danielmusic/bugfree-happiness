@@ -556,7 +556,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL) {
         System.out.println("AccountManagementBean: updateArtistProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -581,6 +581,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(newGenre);
             //Update artist genre
             artist.setGenre(newGenre);
+            //Update other fields
+            artist.setBiography(biography);
+            artist.setInfluences(influences);
+            artist.setContactEmail(contactEamil);
+            artist.setPaypalEmail(paypalEmail);
+            artist.setFacebookURL(facebookURL);
+            artist.setInstagramURL(instagramURL);
+            artist.setTwitterURL(twitterURL);
+            artist.setWebsiteURL(websiteURL);
             em.merge(artist);
             result.setResult(true);
             result.setDescription("Profile updated.");
@@ -624,7 +633,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL) {
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL) {
         System.out.println("AccountManagementBean: updateBandProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -649,6 +658,17 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(newGenre);
             //Update band genre
             band.setGenre(newGenre);
+            //Update other fields
+            band.setMembers(members);
+            band.setDateFormed(dateFormed);
+            band.setBiography(biography);
+            band.setInfluences(influences);
+            band.setContactEmail(contactEamil);
+            band.setPaypalEmail(paypalEmail);
+            band.setFacebookURL(facebookURL);
+            band.setInstagramURL(instagramURL);
+            band.setTwitterURL(twitterURL);
+            band.setWebsiteURL(websiteURL);
             em.merge(band);
             result.setResult(true);
             result.setDescription("Profile updated.");

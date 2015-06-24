@@ -29,11 +29,11 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper updateMemberProfile(Long memberID, String newName);
     public ReturnHelper updateMemberProfilePicture(Long accountID, Part profilePicture);
     
-    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
+    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL);
     public ReturnHelper updateArtistName(Long artistID, String newName);
     public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture);
     
-    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL);
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL);
     public ReturnHelper updateBandName(Long bandID, String newName);
     public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture);
     
