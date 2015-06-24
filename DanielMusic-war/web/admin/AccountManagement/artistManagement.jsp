@@ -21,6 +21,9 @@
             function refresh() {
                 window.location.href = "../../AccountManagementController?target=ListAllArtist";
             }
+            function viewArtist(id) {
+                window.location.href = "artist.jsp?id=" + id;
+            }
             function disableAccount(id) {
                 artistManagement.id.value = id;
                 artistManagement.target.value = "DisableAccount";
@@ -68,8 +71,10 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th style="width: 300px;">Status</th>
-                                            <th style="width: 300px; text-align: center;">Action</th>
+                                            <th style="width: 100px;">Status</th>
+                                            <th style="width: 100px;">Email</th>
+                                            <th style="width: 100px;">Disabled?</th>
+                                            <th style="width: 200px; text-align: center;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -82,11 +87,6 @@
                                             <td><%=artists.get(i).getEmail()%></td>
                                             <td>
                                                 <%
-                                                    if (!artists.get(i).getIsDisabled()) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
-                                                    } else {
-                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
-                                                    }
                                                     if (artists.get(i).getIsApproved() == 0) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
                                                     } else if (artists.get(i).getIsApproved() == 1) {
@@ -96,7 +96,10 @@
                                                     } else {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Not approved</span>");
                                                     }
-
+                                                %>
+                                            </td>
+                                            <td>
+                                                <%
                                                     if (artists.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
@@ -105,8 +108,20 @@
                                                 %>
                                             </td>
                                             <td>
+                                                <%
+                                                    if (!artists.get(i).getIsDisabled()) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                    } else {
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
+                                                    }
+                                                %>
+                                            </td>
+                                            <td>
                                                 <% if (!artists.get(i).getIsDisabled()) {%>
-                                                <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
+                                                <div class='btn-group'>
+                                                    <button type="button" class="btn btn-default" onclick="viewArtist(<%=artists.get(i).getId()%>)">View</button>
+                                                    <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove">Disable</button>
+                                                </div>
                                                 <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">

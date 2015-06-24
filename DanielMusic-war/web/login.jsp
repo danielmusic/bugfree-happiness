@@ -8,7 +8,7 @@
         <div class="container">
             <article>
                 <form class="form" name="loginForm" action="ClientAccountManagementController">
-                    <jsp:include page="displayMessage.jsp" />
+                    <jsp:include page="jspIncludePages/displayMessage.jsp" />
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="email"><strong>Email</strong> *</label>

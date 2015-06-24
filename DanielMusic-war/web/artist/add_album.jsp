@@ -11,7 +11,7 @@
                 %>
 
                 <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
-                    <jsp:include page="../displayMessage.jsp" />
+                    <jsp:include page="../jspIncludePages/displayMessage.jsp" />
 
                     <h2>Album details</h2>
 
@@ -20,6 +20,7 @@
                             <label for="name"><strong>Album Name</strong> </label>
                             <input type="text" id="name" name="name" required>
                         </div>
+
                         <div class="col-1-2 last">
                             <label for="yearReleased"><strong>Year Released</strong> </label>
                             <input type="number" id="yearReleased" name="yearReleased" min="1900" max="2050" required>
@@ -36,7 +37,14 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="description"><strong>Album Description</strong> </label>
-                            <textarea id="description" name="description" cols="88" rows="6"></textarea>
+                            <textarea id="description" name="description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label for="credits"><strong>Credits</strong> </label>
+                            <textarea id="credits" name="credits" placeholder="produced by, Mastering, Recording, Design, Photography..." style="min-height:120px;"></textarea>
                         </div>
                     </div>
 
@@ -45,7 +53,7 @@
                     <button type="submit" class="large invert">Add</button>
                     <div class="clear"></div>
                 </form>
-                    
+
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>

@@ -1,7 +1,6 @@
 package Client;
 
 import EntityManager.Account;
-import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.Band;
 import EntityManager.Member;
@@ -9,7 +8,6 @@ import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -46,6 +44,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String facebookURL = request.getParameter("facebookURL");
         String instagramURL = request.getParameter("instagramURL");
         String twitterURL = request.getParameter("twitterURL");
+        String websiteURL = request.getParameter("websiteURL");
 
         String oldpassword = request.getParameter("oldpassword");
         String password = request.getParameter("password");
@@ -79,7 +78,6 @@ public class ClientAccountManagementController extends HttpServlet {
                         } else if (account instanceof Member) {
                             session.setAttribute("fan", (Member) account);
                         }
-                        session.setAttribute("goodMsg", returnHelper.getDescription());
                         nextPage = "#!/artist/profile";
                     } else {
                         session.setAttribute("errMsg", returnHelper.getDescription());
@@ -140,7 +138,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             }
                         }
 
-                        returnHelper = accountManagementBean.updateArtistProfile(Long.parseLong(id), Long.parseLong(genreID), bio, influences, email, paypalEmail, facebookURL, instagramURL, twitterURL);
+                        returnHelper = accountManagementBean.updateArtistProfile(Long.parseLong(id), Long.parseLong(genreID), bio, influences, email, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL);
                         if (returnHelper.getResult()) {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         }

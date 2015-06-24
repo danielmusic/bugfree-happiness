@@ -17,8 +17,7 @@
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));
                 %>
                 <form name="albumManagement">
-                    <p class="error" id="errMsg" style="display:none;"></p>
-                    <p class="success" id="goodMsg"  style="display:none;"></p>
+                    <jsp:include page="../jspIncludePages/displayMessage.jsp" />
 
                     <h2>Albums</h2>
 
@@ -27,14 +26,14 @@
                             <tr>
                                 <th>Publish Date</th>
                                 <th>Status</th>
-                                <th colspan="2">Album Name</th>
+                                <th>Album Name</th>
+                                <th colspan="2"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
                                 if (albums != null) {
-                                    for (int i = 0; i > albums.size(); i++) {
-
+                                    for (int i = 0; i < albums.size(); i++) {
                             %>    
                             <tr>
                                 <td class="table-name"><%=albums.get(i).getPublishedDate()%></td>

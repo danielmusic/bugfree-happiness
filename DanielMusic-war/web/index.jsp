@@ -7,7 +7,7 @@
 <!--[if gt IE 8]><!--> 
 <html class="no-js" lang="en-US"><!--<![endif]-->
     <head>
-        <jsp:include page="head.html" />
+        <jsp:include page="jspIncludePages/head.html" />
     </head>
     <body>
 
@@ -18,7 +18,7 @@
 
         <!-- ############################# navigation section ############################# -->
 
-        <jsp:include page="menu.jsp" />
+        <jsp:include page="jspIncludePages/menu.jsp" />
 
         <!-- ############################# Ajax Page Container ############################# -->
         <section id="ajax-container" class="index-page">
@@ -29,9 +29,9 @@
         </section>
         <!-- /ajax container -->
 
-        <jsp:include page="footer.jsp" />
+        <jsp:include page="jspIncludePages/footer.jsp" />
 
-        <jsp:include page="foot.html" />
+        <jsp:include page="jspIncludePages/foot.html" />
 
     </body>
 </html>

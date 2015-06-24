@@ -4,6 +4,8 @@
     <section class="content section">
         <div class="container">
             <article>
+                <%@page import="EntityManager.Genre"%>
+                <%@page import="java.util.List"%>
                 <%@page import="EntityManager.Artist"%>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
@@ -11,6 +13,7 @@
                 %>
 
                 <form action="../ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
+                    <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <h2>Account Details</h2>
 
                     <div class="row clearfix">
@@ -47,6 +50,29 @@
                     <hr class="divider">
 
                     <h2>Artist Profile</h2>
+
+                    <div class="row clearfix">
+                        <div class="col-1-2">
+                            <label for="genre"><strong>Genre</strong> *</label>
+                            <select name="genre" id="genre">
+                                <option value="">Select</option>
+                                <%
+                                    List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
+                                    for (int i = 0; i < genres.size(); i++) {
+                                        out.write("<option value='" + genres.get(i).getId()+ "'>" + genres.get(i).getName() + "</option>");
+                                    }
+                                %>
+                            </select>
+                        </div>
+
+                        <div class="col-1-2 last">
+                            <label for="contactEmail"><strong>Contact Email</strong></label>
+                            <input type="email" id="contactEmail" name="contactEmail" value="<%if (artist.getContactEmail() != null) {
+                                    out.print(artist.getContactEmail());
+                                }%>">
+                        </div>
+                    </div>
+
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="bio"><strong>Biography</strong> </label>
@@ -56,20 +82,6 @@
                             <label><strong>200 words max</strong> </label>
                         </div>
                     </div>
-
-                    <div class="row clearfix">
-                        <div class="col-1-1">
-                            <label for="genre"><strong>Genre</strong></label>
-                            <select name="genre" id="genre">
-                                <option value="">Select</option>
-                                <option value="volvo">Volvo</option>
-                                <option value="saab">Saab</option>
-                                <option value="opel">Opel</option>
-                                <option value="audi">Audi</option>
-                            </select>
-                        </div>
-                    </div>
-
 
                     <div class="row clearfix">
                         <div class="col-1-1">

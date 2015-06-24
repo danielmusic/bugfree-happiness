@@ -2,9 +2,12 @@ package Client;
 
 import EntityManager.Artist;
 import EntityManager.Band;
+import EntityManager.Genre;
 import EntityManager.ReturnHelper;
+import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -18,6 +21,9 @@ import javax.servlet.http.Part;
 public class MusicManagementController extends HttpServlet {
 
     @EJB
+    private AdminManagementBeanLocal adminManagementBean;
+
+    @EJB
     private MusicManagementBeanLocal musicManagementBean;
 
     String nextPage = "", goodMsg = "", errMsg = "";
@@ -26,25 +32,22 @@ public class MusicManagementController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
-        System.out.println("target " + target);
         String source = request.getParameter("source");
-        System.out.println("source " + source);
 
         String name = request.getParameter("name");
-        System.out.println("name " + name);
         String description = request.getParameter("description");
         String yearReleased = request.getParameter("yearReleased");
 
         session = request.getSession();
         Artist artist = (Artist) (session.getAttribute("artist"));
         Band band = (Band) (session.getAttribute("band"));
+        List<Genre> genres = null;
 
         ReturnHelper returnHelper;
 
         try {
             switch (target) {
                 case "AddAlbum":
-                    System.out.println("Adding albums");
                     if (source != null && source.equals("Artist")) {
                         if (artist != null) {
                             Part picture = request.getPart("picture");
@@ -62,6 +65,17 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
 
+                case "ListAllGenre":
+                    genres = adminManagementBean.listAllGenres(true);
+                    if (genres == null) {
+                        nextPage = "error500.html";
+                    } else {
+                        session.setAttribute("genres", genres);
+                        if (source != null) {
+                            nextPage = source;
+                        }
+                    }
+                    break;
             }
 
             if (nextPage.equals("")) {
