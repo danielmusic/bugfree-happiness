@@ -77,10 +77,16 @@ public interface MusicManagementBeanLocal {
     //still need to handle checking of music length < 10mins
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs);
 
+    public ReturnHelper getMusic(Long musicID);
+
+    public ReturnHelper deleteMusic(Long musicID);
+
+    public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, String artistName, Double price, String lyrics, String credits);
+
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID);
 
     public Album getAlbum(Long albumID);
-    
+
     public List<Album> getAlbumByArtists(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
 
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description);
@@ -88,4 +94,5 @@ public interface MusicManagementBeanLocal {
     public ReturnHelper publishAlbum(Long albumID, Date publishDate);
 
     public ReturnHelper deleteAlbum(Long albumID);
+
 }

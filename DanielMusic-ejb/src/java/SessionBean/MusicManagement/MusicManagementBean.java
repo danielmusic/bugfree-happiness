@@ -313,6 +313,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
+    public ReturnHelper getMusic(Long musicID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper deleteMusic(Long musicID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, String artistName, Double price, String lyrics, String credits) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID) {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
