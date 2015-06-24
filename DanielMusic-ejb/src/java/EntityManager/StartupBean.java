@@ -1,6 +1,7 @@
 package EntityManager;
 
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
+import java.io.File;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -24,6 +25,24 @@ public class StartupBean {
     @PostConstruct
     private void startup() {
         try {
+            // =========== DO NOT DISABLE THIS START ============
+            File theDir = new File("temp");
+            // if the directory does not exist, create it
+            if (!theDir.exists()) {
+                System.out.println("Creating temporary file upload directory...");
+                boolean result = false;
+                try {
+                    theDir.mkdir();
+                    result = true;
+                } catch (SecurityException se) {
+                    System.out.println("Unable to create. File upload functions will not work correctly.");
+                    se.printStackTrace();
+                }
+                if (result) {
+                    System.out.println("Directories created.");
+                }
+            }
+            // =========== DO NOT DISABLE THIS END   ============
             Query q = em.createQuery("SELECT s FROM Account s where s.email=:email");
             q.setParameter("email", "a@a.a");
             List<Account> accounts = q.getResultList();
