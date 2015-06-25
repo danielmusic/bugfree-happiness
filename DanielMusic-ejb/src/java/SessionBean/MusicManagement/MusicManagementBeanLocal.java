@@ -83,7 +83,7 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, String artistName, Double price, String lyrics, String credits);
 
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID);
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased);
 
     public Album getAlbum(Long albumID);
 

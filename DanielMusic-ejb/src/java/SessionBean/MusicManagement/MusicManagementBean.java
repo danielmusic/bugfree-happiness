@@ -328,7 +328,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID) {
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased) {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -358,6 +358,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             album.setDescription(description);
             album.setName(name);
+            album.setYearReleased(yearReleased);
             em.persist(album);
             em.flush();
             System.out.println("MusicManagementBean: em.flush(). Album has been persisted.");
