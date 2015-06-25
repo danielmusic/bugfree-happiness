@@ -328,6 +328,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
+    public List<Music> ListAllTracksByAlbumID(Long albumID) {
+        System.out.println("ListAllTracksByAlbumID() called");
+        try {
+            Query q = em.createQuery("select a from Music a where a.isDeleted=false AND a.album.id=:albumID");
+            q.setParameter("albumID", albumID);
+            List<Music> albums = q.getResultList();
+            return albums;
+        } catch (Exception ex) {
+            System.out.println("ListAllTracksByAlbumID() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased) {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
