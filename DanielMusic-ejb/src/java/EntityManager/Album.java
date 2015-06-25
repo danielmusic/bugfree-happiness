@@ -26,6 +26,7 @@ public class Album implements Serializable {
     private String description;
     @Temporal(TemporalType.DATE)
     private Date publishedDate;
+    private int yearReleased;
     private Boolean isPublished;
     private String imageLocation;
     private Boolean isDeleted;
@@ -132,6 +133,14 @@ public class Album implements Serializable {
 
     public void setImageLocation(String imageLocation) {
         this.imageLocation = imageLocation;
+    }
+
+    public int getYearReleased() {
+        return yearReleased;
+    }
+
+    public void setYearReleased(int yearReleased) {
+        this.yearReleased = yearReleased;
     }
 
     public Long getId() {
