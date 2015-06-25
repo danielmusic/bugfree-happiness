@@ -155,16 +155,11 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     }
 
     @Override
-    public List<Genre> listAllGenres(Boolean isAdmin) {
+    public List<Genre> listAllGenres() {
         System.out.println("AdminManagementBean: listAllGenres() called");
         try {
             Query q;
-            if (isAdmin) {
-                q = em.createQuery("select g from Genre g");
-            } else {
-                q = em.createQuery("select g from Genre g where g.isDeleted=false");
-            }
-
+            q = em.createQuery("SELECT g FROM Genre g");
             List<Genre> listOfGenres = q.getResultList();
             System.out.println("AdminManagementBean: listAllGenres() called successfully");
             return listOfGenres;

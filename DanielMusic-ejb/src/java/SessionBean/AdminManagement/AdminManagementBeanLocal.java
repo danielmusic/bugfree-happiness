@@ -44,7 +44,7 @@ public interface AdminManagementBeanLocal {
      * @param isAdmin Set this to 'true' if it is an admin function
      * @return List{Genre} otherwise return null if error
      */
-    public List<Genre> listAllGenres(Boolean isAdmin);
+    public List<Genre> listAllGenres();
      /**
      * {@inheritDoc}
      * <p>

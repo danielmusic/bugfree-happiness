@@ -36,7 +36,7 @@ public class GenreManagementController extends HttpServlet {
                     case "AddGenre":
                         returnHelper = adminManagementBean.createGenre(name);
                         if (returnHelper.getResult()) {
-                            genres = adminManagementBean.listAllGenres(true);
+                            genres = adminManagementBean.listAllGenres();
                             if (genres == null) {
                                 nextPage = "admin/error500.html";
                             } else {
@@ -47,7 +47,7 @@ public class GenreManagementController extends HttpServlet {
                         break;
 
                     case "ListAllGenre":
-                        genres = adminManagementBean.listAllGenres(true);
+                        genres = adminManagementBean.listAllGenres();
                         if (genres == null) {
                             nextPage = "admin/error500.html";
                         } else {
@@ -59,7 +59,7 @@ public class GenreManagementController extends HttpServlet {
                     case "DeleteGenre":
                         returnHelper = adminManagementBean.deleteGenre(Long.parseLong(id));
                         if (returnHelper.getResult()) {
-                            genres = adminManagementBean.listAllGenres(true);
+                            genres = adminManagementBean.listAllGenres();
                             if (genres == null) {
                                 nextPage = "admin/error500.html";
                             } else {

@@ -66,7 +66,7 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "ListAllGenre":
-                    genres = adminManagementBean.listAllGenres(true);
+                    genres = adminManagementBean.listAllGenres();
                     if (genres == null) {
                         nextPage = "error500.html";
                     } else {
