@@ -328,7 +328,22 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID) {
+    public List<Music> ListAllTracksByAlbumID(Long albumID) {
+        System.out.println("ListAllTracksByAlbumID() called");
+        try {
+            Query q = em.createQuery("select a from Music a where a.isDeleted=false AND a.album.id=:albumID");
+            q.setParameter("albumID", albumID);
+            List<Music> albums = q.getResultList();
+            return albums;
+        } catch (Exception ex) {
+            System.out.println("ListAllTracksByAlbumID() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased) {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -358,6 +373,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             album.setDescription(description);
             album.setName(name);
+            album.setYearReleased(yearReleased);
             em.persist(album);
             em.flush();
             System.out.println("MusicManagementBean: em.flush(). Album has been persisted.");
@@ -365,7 +381,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("MusicManagementBean: em.refresh(). Album ID: " + album.getId());
 
             //check whether user uploads an image
-            if (imagePart != null) {
+            if (imagePart != null && imagePart.getSize() < 5000000) {
                 String fileName = imagePart.getSubmittedFileName();
                 tempImageURL = "temp/" + fileName + cibl.generateUUID();
                 System.out.println("file name is " + fileName);
@@ -467,7 +483,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description) {
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -481,8 +497,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             } else {
                 album.setName(name);
                 album.setDescription(description);
+                album.setYearReleased(yearReleased);
 
-                if (imagePart != null) {
+            if (imagePart != null && imagePart.getSize() < 5000000) {
                     String imageLocation = null;
                     String tempImageURL = null;
                     String fileName = imagePart.getSubmittedFileName();

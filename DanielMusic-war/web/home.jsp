@@ -1,15 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Sounds.sg">
-    <%@page import="EntityManager.Genre"%>
-    <%@page import="java.util.List"%>
-    <%
-        List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
-        if (genres == null) {
-            response.sendRedirect("ClientAccountManagementController?target=ListAllGenre&source=#!/home");
-        } else {
-            System.out.print(">>>>>>>>>>>>>>>>>>>>>> " + genres.size());
-            
-    %>
     <!-- ############################# Sections ############################# -->
 
     <!-- ############################# Intro ############################# -->
@@ -585,7 +575,6 @@
         <!-- /container -->
     </section>
     <!-- /newsletter -->
-    <%}%>
 </section>
 <!-- /page -->
 
