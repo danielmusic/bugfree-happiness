@@ -327,7 +327,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("MusicManagementBean: em.refresh(). Album ID: " + album.getId());
 
             //check whether user uploads an image
-            if (imagePart != null) {
+            if (imagePart != null && imagePart.getSize() < 5000000) {
                 String fileName = imagePart.getSubmittedFileName();
                 tempImageURL = "temp/" + fileName + cibl.generateUUID();
                 System.out.println("file name is " + fileName);
@@ -445,7 +445,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
 
-                if (imagePart != null) {
+            if (imagePart != null && imagePart.getSize() < 5000000) {
                     String imageLocation = null;
                     String tempImageURL = null;
                     String fileName = imagePart.getSubmittedFileName();

@@ -3,6 +3,7 @@ package Client;
 import EntityManager.Artist;
 import EntityManager.Band;
 import EntityManager.Genre;
+import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
@@ -33,7 +34,10 @@ public class MusicManagementController extends HttpServlet {
         System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
+        System.out.println("target " + target);
+        System.out.println("source " + source);
 
+        String id = request.getParameter("id");
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String yearReleased = request.getParameter("yearReleased");
@@ -42,16 +46,17 @@ public class MusicManagementController extends HttpServlet {
         Artist artist = (Artist) (session.getAttribute("artist"));
         Band band = (Band) (session.getAttribute("band"));
         List<Genre> genres = null;
+        List<Music> tracks = null;
 
         ReturnHelper returnHelper;
 
         try {
             switch (target) {
                 case "AddAlbum":
-                    if (source != null && source.equals("Artist")) {
+                    if (source != null && source.equals("Artist") && yearReleased != null) {
                         if (artist != null) {
                             Part picture = request.getPart("picture");
-                            returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId());
+                            returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId(), Integer.parseInt(yearReleased));
                             if (returnHelper.getResult()) {
                                 session.setAttribute("albums", musicManagementBean.getAlbumByArtists(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
@@ -59,6 +64,25 @@ public class MusicManagementController extends HttpServlet {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
                             nextPage = "#!/artist/albums";
+                        }
+                    } else if (source != null && source.equals("Band")) {
+
+                    }
+                    break;
+
+                case "UpdateAlbum":
+                    if (source != null && source.equals("Artist") && yearReleased != null) {
+                        if (artist != null) {
+                            Part picture = request.getPart("picture");
+                            returnHelper = musicManagementBean.editAlbum(Long.parseLong(id), picture, name, description, Integer.parseInt(yearReleased));
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("albums", musicManagementBean.getAlbumByArtists(artist.getId(), true, true));
+                                session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                            nextPage = "#!/artist/edit_album";
                         }
                     } else if (source != null && source.equals("Band")) {
 
@@ -75,6 +99,29 @@ public class MusicManagementController extends HttpServlet {
                             nextPage = source;
                         }
                     }
+                    break;
+
+                case "ListAllTracksByAlbumID":
+                    tracks = musicManagementBean.ListAllTracksByAlbumID(Long.parseLong(id));
+                    if (tracks == null) {
+                        nextPage = "error500.html";
+                    } else {
+                        session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
+                        session.setAttribute("tracks", tracks);
+                        if (source != null && source.equals("tracks")) {
+                            nextPage = "#!/artist/tracks";
+                        }
+                    }
+                    break;
+
+                case "ListAlbumByID":
+                    if (id != null && source != null) {
+                        session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
+                        if (source.equals("edit_album")) {
+                            nextPage = "#!/artist/edit_album";
+                        }
+                    }
+
                     break;
             }
 

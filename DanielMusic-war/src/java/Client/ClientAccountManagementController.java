@@ -6,10 +6,12 @@ import EntityManager.Band;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
+import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +19,11 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.json.JSONObject;
 
+@MultipartConfig
 public class ClientAccountManagementController extends HttpServlet {
+
+    @EJB
+    private AdminManagementBeanLocal adminManagementBean;
 
     @EJB
     private AccountManagementBeanLocal accountManagementBean;
@@ -72,9 +78,11 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) account);
                             session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("genres", adminManagementBean.listAllGenres());
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) account);
                             session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("genres", adminManagementBean.listAllGenres());
                         } else if (account instanceof Member) {
                             session.setAttribute("fan", (Member) account);
                         }

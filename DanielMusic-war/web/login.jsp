@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <input type="hidden" value="AccountLogin" name="target">
-                    <button type="submit" class="large invert">Login</button>
+                    <button type="submit" class="medium invert">Login</button>
                     <div class="clear"></div>
                 </form>
             </article>

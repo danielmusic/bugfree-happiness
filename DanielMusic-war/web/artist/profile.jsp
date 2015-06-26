@@ -8,8 +8,9 @@
                 <%@page import="java.util.List"%>
                 <%@page import="EntityManager.Artist"%>
                 <%
+                    List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
-                    if (artist != null) {
+                    if (artist != null && genres != null) {
                 %>
 
                 <form action="../ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
@@ -52,39 +53,42 @@
                     <h2>Artist Profile</h2>
 
                     <div class="row clearfix">
-                        <div class="col-1-2">
+
+                        <div class="col-1-3">
                             <label for="genre"><strong>Genre</strong> *</label>
-                            <select name="genre" id="genre">
+                            <select name="genre" id="genre" style="width: 100%; height:40px;">
                                 <option value="">Select</option>
                                 <%
-                                    List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
                                     for (int i = 0; i < genres.size(); i++) {
-                                        out.write("<option value='" + genres.get(i).getId()+ "'>" + genres.get(i).getName() + "</option>");
+                                        out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
                                     }
                                 %>
                             </select>
                         </div>
 
-                        <div class="col-1-2 last">
+                        <div class="col-1-3"> 
                             <label for="contactEmail"><strong>Contact Email</strong></label>
                             <input type="email" id="contactEmail" name="contactEmail" value="<%if (artist.getContactEmail() != null) {
                                     out.print(artist.getContactEmail());
                                 }%>">
                         </div>
-                    </div>
 
-                    <div class="row clearfix">
-                        <div class="col-1-1">
-                            <label for="bio"><strong>Biography</strong> </label>
-                            <textarea name="bio" id="bio" required><%if (artist.getBiography() != null) {
-                                    out.print(artist.getBiography());
-                                } %></textarea>
-                            <label><strong>200 words max</strong> </label>
+                        <div class="col-1-3 last">  
+                            <label for="pic"><strong>Profile Picture</strong></label>
+                            <input type="file" id="pic" name="picture" style="height: 40px;padding-top: 8px;padding-bottom: 8px;">
                         </div>
                     </div>
 
                     <div class="row clearfix">
-                        <div class="col-1-1">
+                        <div class="col-1-2">
+                            <label for="bio"><strong>Biography</strong> </label>
+                            <textarea name="bio" id="bio" required style="min-height:120px;"><%if (artist.getBiography() != null) {
+                                    out.print(artist.getBiography());
+                                } %></textarea>
+                            <label><strong>200 words max</strong> </label>
+                        </div>
+
+                        <div class="col-1-2 last">
                             <label for="influences"><strong>Influences</strong> </label>
                             <textarea name="influences" id="influences" required style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getInfluences());
@@ -122,14 +126,7 @@
                         </div>
                     </div>
 
-                    <div class="row clearfix">
-                        <div class="col-1-1">
-                            <label for="pic"><strong>Profile Picture</strong></label>
-                            <input type="file" id="pic" name="picture">
-                        </div>
-                    </div>
-
-                    <input type="submit" value="Save" class="large invert">
+                    <input type="submit" value="Save" class="small invert">
                     <input type="hidden" value="ArtistProfileUpdate" name="target">
                     <div class="clear"></div>
                 </form>
