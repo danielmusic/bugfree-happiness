@@ -1,10 +1,11 @@
 package SessionBean.ClientManagement;
 
-import EntityManager.Member;
-import java.util.List;
+import EntityManager.ReturnHelper;
 import javax.ejb.Local;
 
 @Local
 public interface ClientManagementBeanLocal {
+    
+    //public ReturnHelper createPaymentRequest(Long memberID, List<Music>, Double totalAmount);
 
 }

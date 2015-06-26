@@ -8,6 +8,7 @@ import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -120,7 +121,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             return null;
         }
     }
-    
+
     @Override
     public Account getAccount(Long id) {
         System.out.println("AccountManagementBean: getAccount() called");
@@ -481,7 +482,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper updateMemberProfile(Long accountID, String newName) {
+    public ReturnHelper updateMemberProfile(Long accountID, String newName, Part profilePicture) {
         System.out.println("AccountManagementBean: updateAccountProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -493,6 +494,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 account.setName(newName);
             } else {
                 result.setDescription("Name cannot be empty.");
+            }
+            if (profilePicture != null) {
+                result = updateMemberProfilePicture(accountID, profilePicture);
+                if (!result.getResult()) {
+                    return result;
+                }
             }
             em.merge(account);
             result.setResult(true);
@@ -509,7 +516,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateMemberProfilePicture(Long accountID, Part profilePicture) {
-        //TODO
         System.out.println("AccountManagementBean: updateMemberProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -526,7 +532,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Internal server error, invalid account type.");
                 return result;
             }
-            String tempFileLocation = "temp/profilePicture/" + account.getId()+".jpg";
+            String tempFileLocation = "temp/profilePicture/" + account.getId() + ".jpg";
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
@@ -537,11 +543,22 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
-                String imageLocation = "/images/member/profile/profilepictures" + account.getId() + "/" + new Date() + ".jpg";
-                System.out.println(imageLocation + "WUBWUBWUBWUWBUB");
+                //Upload to GCS
+                String imageLocation = "/images/member/profile/profilepictures" + account.getId() + "/" + new Date();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
-                member.setImageURL(imageLocation);
-                em.merge(member);
+                //Delete away local file
+                File file = new File(tempFileLocation);
+                file.delete();
+                if ((result != null)) {
+                    if (result.getResult()) {
+                        member.setImageURL(tempFileLocation);
+                        em.merge(member);
+                        result.setDescription("Profile picture updated.");
+                        result.setResult(true);
+                    } else {
+                        result.setDescription("Failed to update profile picture, please try again later.");
+                    }
+                }
             }
         } catch (NoResultException ex) {
             System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");
@@ -552,11 +569,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             result.setDescription("Update profille failed, internal server error.");
             ex.printStackTrace();
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return result;
     }
 
     @Override
-    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL) {
+    public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL, Part profilePicture) {
         System.out.println("AccountManagementBean: updateArtistProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -591,6 +608,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             artist.setTwitterURL(twitterURL);
             artist.setWebsiteURL(websiteURL);
             em.merge(artist);
+            if (profilePicture != null) {
+                result = updateArtistProfilePicture(artistID, profilePicture);
+                if (!result.getResult()) {
+                    return result;
+                }
+            }
             result.setResult(true);
             result.setDescription("Profile updated.");
         } catch (NoResultException ex) {
@@ -629,11 +652,64 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateArtistProfilePicture() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT a FROM Account a where a.id=:accountID");
+            q.setParameter("accountID", artistID);
+            Account account = (Account) q.getSingleResult();
+            Artist artist = null;
+            if (account instanceof Artist) {
+                q = em.createQuery("SELECT m FROM Artist m where m.id=:accountID");
+                q.setParameter("accountID", artistID);
+                artist = (Artist) q.getSingleResult();
+            } else {
+                result.setDescription("Internal server error, invalid account type.");
+                return result;
+            }
+            String tempFileLocation = "temp/profilePicture/" + account.getId() + ".jpg";
+            if (profilePicture != null) {
+                //Save file to local drive first
+                InputStream fileInputStream = profilePicture.getInputStream();
+                OutputStream fileOutputStream = new FileOutputStream(tempFileLocation);
+                int nextByte;
+                while ((nextByte = fileInputStream.read()) != -1) {
+                    fileOutputStream.write(nextByte);
+                }
+                fileOutputStream.close();
+                fileInputStream.close();
+                //Upload to GCS
+                String imageLocation = "/images/artist/profile/profilepictures" + account.getId() + "/" + new Date();
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
+                //Delete away local file
+                File file = new File(tempFileLocation);
+                file.delete();
+                if ((result != null)) {
+                    if (result.getResult()) {
+                        artist.setImageURL(tempFileLocation);
+                        em.merge(artist);
+                        result.setDescription("Profile picture updated.");
+                        result.setResult(true);
+                    } else {
+                        result.setDescription("Failed to update profile picture, please try again later.");
+                    }
+                }
+            }
+        } catch (NoResultException ex) {
+            System.out.println("AccountManagementBean: updateArtistProfilePicture() failed");
+            result.setDescription("Account not found.");
+            return result;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateArtistProfilePicture() failed");
+            result.setDescription("Update profille failed, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
-    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL) {
+    public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL, Part profilePicture) {
         System.out.println("AccountManagementBean: updateBandProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -670,6 +746,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             band.setTwitterURL(twitterURL);
             band.setWebsiteURL(websiteURL);
             em.merge(band);
+                        if (profilePicture != null) {
+                result = updateBandProfilePicture(bandID, profilePicture);
+                if (!result.getResult()) {
+                    return result;
+                }
+            }
             result.setResult(true);
             result.setDescription("Profile updated.");
         } catch (NoResultException ex) {
@@ -684,7 +766,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateBandName(Long bandID, String newName) {
-                System.out.println("AccountManagementBean: updateBandName() called");
+        System.out.println("AccountManagementBean: updateBandName() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -708,7 +790,60 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("AccountManagementBean: updateBandProfilePicture() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT a FROM Account a where a.id=:accountID");
+            q.setParameter("accountID", bandID);
+            Account account = (Account) q.getSingleResult();
+            Band band = null;
+            if (account instanceof Band) {
+                q = em.createQuery("SELECT m FROM Band m where m.id=:accountID");
+                q.setParameter("accountID", bandID);
+                band = (Band) q.getSingleResult();
+            } else {
+                result.setDescription("Internal server error, invalid account type.");
+                return result;
+            }
+            String tempFileLocation = "temp/profilePicture/" + account.getId() + ".jpg";
+            if (profilePicture != null) {
+                //Save file to local drive first
+                InputStream fileInputStream = profilePicture.getInputStream();
+                OutputStream fileOutputStream = new FileOutputStream(tempFileLocation);
+                int nextByte;
+                while ((nextByte = fileInputStream.read()) != -1) {
+                    fileOutputStream.write(nextByte);
+                }
+                fileOutputStream.close();
+                fileInputStream.close();
+                //Upload to GCS
+                String imageLocation = "/images/band/profile/profilepictures" + account.getId() + "/" + new Date();
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
+                //Delete away local file
+                File file = new File(tempFileLocation);
+                file.delete();
+                if ((result != null)) {
+                    if (result.getResult()) {
+                        band.setImageURL(tempFileLocation);
+                        em.merge(band);
+                        result.setDescription("Profile picture updated.");
+                        result.setResult(true);
+                    } else {
+                        result.setDescription("Failed to update profile picture, please try again later.");
+                    }
+                }
+            }
+        } catch (NoResultException ex) {
+            System.out.println("AccountManagementBean: updateBandProfilePicture() failed");
+            result.setDescription("Account not found.");
+            return result;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateBandProfilePicture() failed");
+            result.setDescription("Update profille failed, internal server error.");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override

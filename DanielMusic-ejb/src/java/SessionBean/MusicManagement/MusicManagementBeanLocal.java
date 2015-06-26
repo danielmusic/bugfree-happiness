@@ -15,8 +15,6 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper encodeToMP3(File sourceFileName, File targetFileName, int bitrate); //convert all file formats to mp3. so far tested wav file only
 
-    public void testAdaptivePayment();
-
     /**
      * {@inheritDoc}
      * <p>

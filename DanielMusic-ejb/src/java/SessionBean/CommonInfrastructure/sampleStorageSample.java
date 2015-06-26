@@ -32,8 +32,6 @@ import com.google.api.services.storage.StorageScopes;
 import com.google.api.services.storage.model.Bucket;
 import com.google.api.services.storage.model.ObjectAccessControl;
 import com.google.api.services.storage.model.StorageObject;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -43,7 +41,6 @@ import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.Part;
 
 /**
  * Main class for the Cloud Storage API command line sample. Demonstrates how to
@@ -181,11 +178,11 @@ public class sampleStorageSample {
                 // parameters.
                 objectMetadata = new StorageObject()
                         .setName(filename)
-                        .setMetadata(ImmutableMap.of("key1", "value1", "key2", "value2"))
-                        .setAcl(ImmutableList.of(
-                                        new ObjectAccessControl().setEntity("domain-example.com").setRole("READER"),
-                                        new ObjectAccessControl().setEntity("905886242502-qo2e7vbkej1tgpvj4trp278iusii11k9@developer.gserviceaccount.com").setRole("OWNER")
-                                ))
+//                        .setMetadata(ImmutableMap.of("key1", "value1", "key2", "value2"))
+//                        .setAcl(ImmutableList.of(
+//                                        new ObjectAccessControl().setEntity("domain-example.com").setRole("READER"),
+//                                        new ObjectAccessControl().setEntity("905886242502-qo2e7vbkej1tgpvj4trp278iusii11k9@developer.gserviceaccount.com").setRole("OWNER")
+//                                ))
                         .setContentDisposition("attachment");
             }
             objectMetadata.setBucket(BUCKET_NAME);
