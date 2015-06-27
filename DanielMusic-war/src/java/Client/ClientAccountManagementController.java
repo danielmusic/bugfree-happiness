@@ -139,14 +139,8 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
 
                         Part picture = request.getPart("picture");
-                        if (picture != null) {
-                            returnHelper = accountManagementBean.updateArtistProfilePicture(Long.parseLong(id), picture);
-                            if (returnHelper.getResult()) {
-                                session.setAttribute("goodMsg", returnHelper.getDescription());
-                            }
-                        }
 
-                        returnHelper = accountManagementBean.updateArtistProfile(Long.parseLong(id), Long.parseLong(genreID), bio, influences, email, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL);
+                        returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, email, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
                         if (returnHelper.getResult()) {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         }

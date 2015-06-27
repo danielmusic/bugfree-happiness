@@ -80,15 +80,16 @@
                         </div>
                     </div>
 
+                    <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%>
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="picture"><strong>Album Art</strong> </label>
-                            <%if (album.getImageLocation() != null) {
-                                    out.print("<img src='http://danielmusictest.storage.googleapis.com/" + album.getImageLocation() + "'>");
-                                }%>
+                            <label for="picture"><strong>Album Artwork</strong> </label>
+                            <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation()%>">
                             <input type="file" id="picture" name="picture">
                         </div>
                     </div>
+                    <%}%>
+
 
                     <div class="row clearfix">
                         <div class="col-1-1">

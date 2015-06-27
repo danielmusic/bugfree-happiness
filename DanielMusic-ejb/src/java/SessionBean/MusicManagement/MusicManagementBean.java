@@ -390,7 +390,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Album> getAlbumByArtists(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
+    public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
         System.out.println("getAlbumByArtists() called");
         try {
             Query q = null;

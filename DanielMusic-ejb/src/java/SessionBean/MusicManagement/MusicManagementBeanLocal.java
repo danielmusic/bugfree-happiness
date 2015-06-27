@@ -87,7 +87,7 @@ public interface MusicManagementBeanLocal {
 
     public Album getAlbum(Long albumID);
 
-    public List<Album> getAlbumByArtists(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
+    public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
 
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased);
 
