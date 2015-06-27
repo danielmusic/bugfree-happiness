@@ -13,7 +13,7 @@
                     if (artist != null && genres != null) {
                 %>
 
-                <form action="../ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
+                <form action="ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <h2>Account Details</h2>
 
@@ -40,7 +40,7 @@
                         </div>
                         <div class="col-1-3">
                             <label for="password"><strong>New Password</strong> *</label>
-                            <input id="password" type="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  name="pwd" onchange="form.repassword.pattern = this.value;">
+                            <input id="password" type="password" name="password"  title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  onchange="form.repassword.pattern = this.value;">
                         </div>
                         <div class="col-1-3 last">
                             <label for="repassword"><strong>Re-enter Password</strong> *</label>
@@ -80,17 +80,17 @@
                     </div>
 
                     <div class="row clearfix">
-                        <div class="col-1-2">
+                        <div class="col-1-2" style="margin-bottom: 24px;">
                             <label for="bio"><strong>Biography</strong> </label>
-                            <textarea name="bio" id="bio" required style="min-height:120px;"><%if (artist.getBiography() != null) {
+                            <textarea name="bio" id="bio" style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getBiography());
                                 } %></textarea>
-                            <label><strong>200 words max</strong> </label>
+                            <label>200 words max</label>
                         </div>
 
                         <div class="col-1-2 last">
                             <label for="influences"><strong>Influences</strong> </label>
-                            <textarea name="influences" id="influences" required style="min-height:120px;"><%if (artist.getBiography() != null) {
+                            <textarea name="influences" id="influences" style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getInfluences());
                                 } %></textarea>
                         </div>
@@ -126,7 +126,16 @@
                         </div>
                     </div>
 
+                    <%if (artist.getImageURL() != null) {%>
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>">
+                        </div>
+                    </div>
+                    <%}%>
+
                     <input type="submit" value="Save" class="small invert">
+                    <input type="hidden" value="ArtistProfileUpdate" name="target">
                     <input type="hidden" value="ArtistProfileUpdate" name="target">
                     <div class="clear"></div>
                 </form>

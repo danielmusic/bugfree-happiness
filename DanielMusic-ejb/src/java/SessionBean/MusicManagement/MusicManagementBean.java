@@ -162,7 +162,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         try {
             Album album = null;
             String fileName = musicPart.getSubmittedFileName();
-            String tempMusicURL = "temp/" + fileName + cibl.generateUUID();
+            String tempMusicURL = "temp/music_" + fileName + cibl.generateUUID();
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
@@ -327,7 +327,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //check whether user uploads an image
             if (imagePart != null && imagePart.getSize() < 5000000) {
                 String fileName = imagePart.getSubmittedFileName();
-                tempImageURL = "temp/" + fileName + cibl.generateUUID();
+                tempImageURL = "temp/albumart_" + fileName + cibl.generateUUID();
                 System.out.println("file name is " + fileName);
                 InputStream fileInputStream = imagePart.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
@@ -388,7 +388,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Album> getAlbumByArtists(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
+    public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
         System.out.println("getAlbumByArtists() called");
         try {
             Query q = null;
