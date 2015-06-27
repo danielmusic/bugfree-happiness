@@ -157,7 +157,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics) {
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, Integer yearReleased) {
         ReturnHelper helper = new ReturnHelper();
         try {
             Album album = null;
@@ -210,6 +210,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setName(name);
             music.setPrice(price);
             music.setTrackNumber(trackNumber);
+            music.setYearReleased(yearReleased);
             em.persist(music);
             em.flush();
 

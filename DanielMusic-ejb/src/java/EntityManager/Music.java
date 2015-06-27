@@ -22,6 +22,7 @@ public class Music implements Serializable {
     private Integer trackNumber;
     private String name;
     private String artistName;
+    private int yearReleased;
     private Long numDownloaded;
     private Double price;
     private String fileLocation128;
@@ -42,6 +43,14 @@ public class Music implements Serializable {
         numDownloaded = 0L;
         numPurchase = 0L;
         listOfGenres = new ArrayList();
+    }
+
+    public int getYearReleased() {
+        return yearReleased;
+    }
+
+    public void setYearReleased(int yearReleased) {
+        this.yearReleased = yearReleased;
     }
 
     public String getCredits() {
