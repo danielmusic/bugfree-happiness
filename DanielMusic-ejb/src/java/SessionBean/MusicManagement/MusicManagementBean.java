@@ -157,7 +157,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, List<Long> listOfGenreIDs) {
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics) {
         ReturnHelper helper = new ReturnHelper();
         try {
             Album album = null;
@@ -205,9 +205,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
-            for (Long genreID : listOfGenreIDs) {
-                listOfGenres.add(em.getReference(Genre.class, genreID));
-            }
+            music.setLyrics(lyrics);
             music.setListOfGenres(listOfGenres);
             music.setName(name);
             music.setPrice(price);
