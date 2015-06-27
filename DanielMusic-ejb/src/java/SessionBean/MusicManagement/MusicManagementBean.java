@@ -258,13 +258,50 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper getMusic(Long musicID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Music getMusic(Long musicID) {
+        System.out.println("MusicManagementBean: getMusic() called");
+        Music music;
+        try {
+            music = em.getReference(Music.class, musicID);
+            Boolean isDeleted = music.getIsDeleted();
+            if (isDeleted) {
+                System.out.println("MusicManagementBean: Failed to getMusic(), music has been deleted");
+                return null;
+            } else {
+                System.out.println("MusicManagementBean: Successfully called getMusic(), music retrieved");
+                return music;
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to call getMusic()");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public ReturnHelper deleteMusic(Long musicID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("MusicManagementBean: deleteMusic() called");
+        ReturnHelper helper = new ReturnHelper();
+        Music music;
+        try {
+            music = em.getReference(Music.class, musicID);
+            Long numPurchase = music.getNumPurchase();
+            if (numPurchase > 0L) {
+                music.setIsDeleted(true);
+            } else {
+                em.remove(music);
+            }
+            System.out.println("MusicManagementBean: deleteMusic() successfully");
+            helper.setDescription("The track has been deleted successfully.");
+            helper.setResult(true);
+            return helper;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("MusicManagementBean: Error occurred while calling deleteMusic()");
+            helper.setDescription("Error occurred while trying to delete the track, please try again.");
+            helper.setResult(false);
+            return helper;
+        }
     }
 
     @Override
@@ -274,7 +311,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public List<Music> ListAllTracksByAlbumID(Long albumID) {
-        System.out.println("ListAllTracksByAlbumID() called");
+        System.out.println("MusicManagementBean: ListAllTracksByAlbumID() called");
         try {
             Query q = em.createQuery("select a from Music a where a.isDeleted=false AND a.album.id=:albumID");
             q.setParameter("albumID", albumID);
@@ -326,7 +363,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("MusicManagementBean: em.refresh(). Album ID: " + album.getId());
 
             //check whether user uploads an image
-            if (imagePart != null && imagePart.getSize() < 5000000) {
+            if (imagePart != null) {
+                if (imagePart.getSize() > 5000000) {
+                    em.remove(album);
+                    helper.setDescription("Image failed to upload, please check the file size is less than 5MB and create album again.");
+                    helper.setResult(false);
+                    return helper;
+                }
                 String fileName = imagePart.getSubmittedFileName();
                 tempImageURL = "temp/albumart_" + fileName + cibl.generateUUID();
                 System.out.println("file name is " + fileName);
@@ -445,7 +488,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
 
-            if (imagePart != null && imagePart.getSize() < 5000000) {
+                if (imagePart != null && imagePart.getSize() < 5000000) {
                     String imageLocation = null;
                     String tempImageURL = null;
                     String fileName = imagePart.getSubmittedFileName();

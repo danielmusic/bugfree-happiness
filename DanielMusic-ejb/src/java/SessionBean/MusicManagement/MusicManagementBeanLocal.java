@@ -75,7 +75,7 @@ public interface MusicManagementBeanLocal {
     //still need to handle checking of music length < 10mins
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics,Integer yearReleased);
 
-    public ReturnHelper getMusic(Long musicID);
+    public Music getMusic(Long musicID);
 
     public ReturnHelper deleteMusic(Long musicID);
 
