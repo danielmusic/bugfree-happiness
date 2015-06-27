@@ -24,11 +24,6 @@ public class CommonInfrastructureWS {
     private CommonInfrastructureBeanLocal ejbRef;// Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Web Service Operation")
 
-    @WebMethod(operationName = "sendEmail")
-    public Boolean sendEmail(@WebParam(name = "destinationEmail") String destinationEmail, @WebParam(name = "senderEmail") String senderEmail, @WebParam(name = "subject") String subject, @WebParam(name = "message") String message) {
-        return ejbRef.sendEmail(destinationEmail, senderEmail, subject, message);
-    }
-
     @WebMethod(operationName = "uploadFileToGoogleCloudStorage")
     public ReturnHelper uploadFileToGoogleCloudStorage(@WebParam(name = "remoteDestinationFile") String remoteDestinationFile, @WebParam(name = "localSourceFile") String localSourceFile, @WebParam(name = "isImage") Boolean isImage, @WebParam(name = "publiclyReadable") Boolean publiclyReadable) {
         return ejbRef.uploadFileToGoogleCloudStorage(remoteDestinationFile, localSourceFile, isImage, publiclyReadable);

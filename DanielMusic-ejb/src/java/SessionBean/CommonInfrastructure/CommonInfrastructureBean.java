@@ -19,7 +19,6 @@ import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.StorageScopes;
 import com.google.api.services.storage.model.ObjectAccessControl;
 import com.google.api.services.storage.model.StorageObject;
-import com.sendgrid.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -61,28 +60,8 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     private static final String SERVICE_ACCOUNT_EMAIL = "905886242502-8jv7f7qopknh74kmjb1ka4vdnrvk6no1@developer.gserviceaccount.com";
     private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = "C:\\Credentials\\DanielMusic-1536a289ea67.p12";
     private static final long expiration = 60;//60s
-    //SendGrid API Key
-    private static final String SENDGRID_API_USER = "sounds.sg-API";
-    private static final String SENDGRID_API_KEY = "AW3T1KMksoCo";
 
-    @Override
-    public Boolean sendEmail(String destinationEmail, String senderEmail, String subject, String message) {
-        System.out.println("CommonInfrastructureBean: sendEmail() called");
-        try {
-            SendGrid sendgrid = new SendGrid(SENDGRID_API_USER, SENDGRID_API_KEY);
-            SendGrid.Email email = new SendGrid.Email();
-            email.addTo(destinationEmail);
-            email.setFrom(senderEmail);
-            email.setSubject(subject);
-            email.setText(message);
-            SendGrid.Response respose = sendgrid.send(email);
-            return true;
-        } catch (Exception ex) {
-            System.out.println("CommonInfrastructureBean: sendEmail() failed");
-            ex.printStackTrace();
-            return false;
-        }
-    }
+ 
 
     @Override
     public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage, Boolean publiclyReadable) {

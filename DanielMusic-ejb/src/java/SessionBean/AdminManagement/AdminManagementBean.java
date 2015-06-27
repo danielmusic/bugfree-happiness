@@ -8,6 +8,7 @@ import EntityManager.Member;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import SessionBean.CommonInfrastructure.SendGridLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,6 +26,9 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
+    @EJB
+    private SendGridLocal sgl;
+    
     @PersistenceContext
     private EntityManager em;
 
@@ -50,7 +54,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 em.merge(artist);
                 result.setResult(true);
                 result.setDescription("Artist has been approved.");
-                cibl.sendEmail(artist.getEmail(), "TODO", artistAccountApprovedSubject, artistAccountApprovedMsg);
+                sgl.sendEmail(artist.getEmail(), "TODO", artistAccountApprovedSubject, artistAccountApprovedMsg);
             }
         } catch (Exception ex) {
             System.out.println("AdminManagementBean: approveArtist() failed");
@@ -83,7 +87,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 em.merge(artist);
                 result.setResult(true);
                 result.setDescription("Artist has been rejected.");
-                cibl.sendEmail(artist.getEmail(), "TODO", artistAccountRejectedSubject, artistAccountRejectedMsg);
+                sgl.sendEmail(artist.getEmail(), "TODO", artistAccountRejectedSubject, artistAccountRejectedMsg);
             }
         } catch (Exception ex) {
             System.out.println("AdminManagementBean: rejectArtist() failed");
