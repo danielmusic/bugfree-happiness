@@ -60,7 +60,7 @@
 
                     <div class="entry-content">
                         <div class="entry-meta" style="float: right;">
-                            <span class="entry-cat"><a href="javascript:;">Albums</a></span>
+                            <span class="entry-cat"><a href="#!/artist/albums">Albums</a></span>
                             <span class="entry-comments">Add Album</span>
                         </div>                   
                     </div>
@@ -82,7 +82,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="picture"><strong>Album Art</strong> </label>
+                            <label for="picture"><strong>Album Artwork</strong> </label>
                             <input type="file" id="picture" name="picture">
                         </div>
                     </div>
