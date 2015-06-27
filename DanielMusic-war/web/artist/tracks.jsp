@@ -13,7 +13,7 @@
                     }
 
                     function viewTrack(id) {
-                        window.location.href = "MusicManagementController?source=edit_track&target=ListAlbumByID&id=" + id;
+                        window.location.href = "MusicManagementController?source=edit_track&target=ListTrackByID&id=" + id;
                     }
 
                     function back() {

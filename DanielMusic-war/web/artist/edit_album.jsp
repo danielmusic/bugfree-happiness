@@ -24,19 +24,27 @@
 
                     $(function () {
                         $('form').submit(function () {
-                            var file = $('#picture');
-                            var fileSize = $('#picture')[0].files[0].size
+                            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                                var file = $('#picture');
+                                var fileSize = $('#picture')[0].files[0].size;
 
-                            if (fileSize > 5000000) {
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "Image size must be below 5mb.";
-                                return false;
-                            }
+                                if (fileSize > 5000000) {
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Image size must be below 5mb.";
+                                    window.scrollTo(0, 0);
+                                    return false;
+                                }
 
-                            if (!isImage(file.val())) {
+                                if (!isImage(file.val())) {
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Please select a valid image";
+                                    window.scrollTo(0, 0);
+                                    return false;
+                                }
+                            } else {
                                 document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "Please select a valid image";
-                                return false;
+                                document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
+                                window.scrollTo(0, 0);
                             }
                         });
                     });

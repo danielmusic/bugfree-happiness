@@ -10,13 +10,10 @@
                         return parts[parts.length - 1];
                     }
 
-                    function isImage(filename) {
+                    function isMusic(filename) {
                         var ext = getExtension(filename);
                         switch (ext.toLowerCase()) {
-                            case 'jpg':
-                            case 'gif':
-                            case 'bmp':
-                            case 'png':
+                            case 'wav':
                                 return true;
                         }
                         return false;
@@ -24,26 +21,35 @@
 
                     $(function () {
                         $('form').submit(function () {
-                            var file = $('#picture');
-                            var fileSize = $('#picture')[0].files[0].size
+                            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                                //var file = $('#picture');
+                                //var fileSize = $('#picture')[0].files[0].size;
+                                var musicFile = $('#music');
+                                var musicFileSize = $('#music')[0].files[0].size;
 
-                            if (fileSize > 5000000) {
+                                if (!isMusic(musicFile.val())) {
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Only wav format song is allowed";
+                                    window.scrollTo(0, 0);
+                                    return false;
+                                }
+
+                                if (musicFileSize > 50000000) {
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Image size must be below 50mb.";
+                                    window.scrollTo(0, 0);
+                                    return false;
+                                }
+                            } else {
                                 document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "Image size must be below 5mb.";
-                                return false;
+                                document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
+                                window.scrollTo(0, 0);
                             }
-
-                            if (!isImage(file.val())) {
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "Please select a valid image";
-                                return false;
-                            }
-
                         });
                     });
 
                     function back() {
-                        window.location.href = "#!/artist/albums";
+                        window.location.href = "#!/artist/tracks";
                     }
                 </script>
 
@@ -53,11 +59,10 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
-
                 <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
-
+                    zzzzzzzzzzzzzzzzz
                     <div class="entry-content">
                         <div class="entry-meta" style="float: right;">
                             <span class="entry-cat"><a href="#!/artist/albums">Albums</a></span>
@@ -69,14 +74,19 @@
                     <h2>Track details</h2>
 
                     <div class="row clearfix">
-                        <div class="col-1-2">
+                        <div class="col-1-3">
                             <label for="name"><strong>Title</strong> *</label>
                             <input type="text" id="name" name="name" required>
-                        </div>
+                        </div>                        
 
-                        <div class="col-1-2 last">
+                        <div class="col-1-3">
                             <label for="yearReleased"><strong>Year Released</strong> *</label>
                             <input type="number" id="yearReleased" name="yearReleased" min="1900" max="2050" required>
+                        </div>
+
+                        <div class="col-1-3 last">
+                            <label for="trackNumber"><strong>Track no</strong> </label>
+                            <input type="text" id="trackNumber" name="trackNumber">
                         </div>
                     </div>
 
@@ -84,6 +94,13 @@
                         <div class="col-1-1">
                             <label for="picture"><strong>Album Artwork</strong> </label>
                             <input type="file" id="picture" name="picture">
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label for="music"><strong>Music (WAV format, 44.1 kHz, 16bit)</strong> </label>
+                            <input type="file" id="music" name="music">
                         </div>
                     </div>
 
@@ -101,10 +118,10 @@
                         </div>
                     </div>
 
-                    <input type="hidden" value="AddAlbum" name="target">
+                    <input type="hidden" value="AddTrack" name="target">
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
-                    <button type="submit" class="small invert">Add Track</button>
+                    <button type="submit" class="small invert" style="margin-right: 10px;">Add Track</button>
                     <div class="clear"></div>
                 </form>
                 <%} else {%>

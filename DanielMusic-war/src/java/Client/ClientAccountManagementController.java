@@ -77,11 +77,11 @@ public class ClientAccountManagementController extends HttpServlet {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) account);
-                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(account.getId(), true, true));
                             session.setAttribute("genres", adminManagementBean.listAllGenres());
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) account);
-                            session.setAttribute("albums", musicManagementBean.getAlbumByArtists(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(account.getId(), true, true));
                             session.setAttribute("genres", adminManagementBean.listAllGenres());
                         } else if (account instanceof Member) {
                             session.setAttribute("fan", (Member) account);
