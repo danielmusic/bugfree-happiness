@@ -351,6 +351,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     if (result.getResult()) {
                         System.out.println("Image location set... " + imageLocation);
                         album.setImageLocation(imageLocation);
+                        em.merge(album);
                     } else {
                         em.remove(album);
                         helper.setDescription("Image failed to upload, please check the file uploaded is an image and create album again.");
