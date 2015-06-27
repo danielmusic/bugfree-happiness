@@ -1,5 +1,6 @@
 package SessionBean.ClientManagement;
 
+import EntityManager.Music;
 import EntityManager.Payment;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import com.paypal.svcs.services.AdaptivePaymentsService;
@@ -26,10 +27,12 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
 
-    public void createPaymentRequest() {
+    //@Override
+    public void createPaymentRequest(Long accountID, List<Music> items, Double totalAmount) {
         try {
-            Payment payment = new Payment(Long.MIN_VALUE, Double.NaN, null);
-            String key = cibl.generateUUID();
+            
+            String UUID = cibl.generateUUID();
+            Payment payment = new Payment(accountID, totalAmount, UUID);
             PayRequest payRequest = new PayRequest();
 
             List<Receiver> receivers = new ArrayList<Receiver>();
