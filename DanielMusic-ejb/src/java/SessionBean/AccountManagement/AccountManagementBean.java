@@ -532,7 +532,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Internal server error, invalid account type.");
                 return result;
             }
-            String tempFileLocation = "temp/profilePicture/" + account.getId() + ".jpg";
+            String tempFileLocation = "temp/profilepic_" + account.getId() + ".jpg";
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
@@ -668,7 +668,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Internal server error, invalid account type.");
                 return result;
             }
-            String tempFileLocation = "temp/profilePicture/" + account.getId() + ".jpg";
+            String tempFileLocation = "temp/profilepic_" + account.getId() + ".jpg";
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
@@ -806,7 +806,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Internal server error, invalid account type.");
                 return result;
             }
-            String tempFileLocation = "temp/profilePicture/" + account.getId() + ".jpg";
+            String tempFileLocation = "temp/profilepic_" + account.getId() + ".jpg";
             if (profilePicture != null) {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
