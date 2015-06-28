@@ -39,12 +39,21 @@ public class Album implements Serializable {
     private Long numPurchase;
     @Lob
     private String credits;
+    private Double price;
 
     public Album() {
         isDeleted = false;
         isPublished = false;
         publishedDate = null;
         numPurchase = 0L;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getCredits() {

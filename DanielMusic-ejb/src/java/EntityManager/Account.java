@@ -12,6 +12,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -32,18 +33,26 @@ public abstract class Account implements Serializable {
     private Boolean isDisabled;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfPurchasedMusics;
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<TransactionOrder> listOfTransactionOrders;
     private Boolean emailIsVerified; //Initial registered email
     private String verificationCode;
     private Boolean newEmailIsVerified; //Subsequent change (will reset to false when the user tries to change email)
     @Lob
     private String imageURL;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    private ShoppingCart shoppingCart;
 
     public Account() {
         isDisabled = false;
         emailIsVerified = false;
         newEmailIsVerified = false;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 
     public List<Music> getListOfPurchasedMusics() {
@@ -92,14 +101,6 @@ public abstract class Account implements Serializable {
 
     public void setListOfMusics(List<Music> listOfMusics) {
         this.listOfPurchasedMusics = listOfMusics;
-    }
-
-    public List<TransactionOrder> getListOfTransactionOrders() {
-        return listOfTransactionOrders;
-    }
-
-    public void setListOfTransactionOrders(List<TransactionOrder> listOfTransactionOrders) {
-        this.listOfTransactionOrders = listOfTransactionOrders;
     }
 
     public String getEmail() {
