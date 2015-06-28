@@ -89,7 +89,7 @@ public interface MusicManagementBeanLocal {
 
     public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
 
-    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased);
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, String credits, Double price);
 
     public ReturnHelper publishAlbum(Long albumID, Date publishDate);
 

@@ -472,7 +472,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased) {
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, String credits, Double price) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -487,6 +487,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 album.setName(name);
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
+                album.setCredits(credits);
+                album.setPrice(price);
 
                 if (imagePart != null && imagePart.getSize() < 5000000) {
                     String imageLocation = null;
