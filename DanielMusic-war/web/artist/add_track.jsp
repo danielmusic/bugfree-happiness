@@ -22,8 +22,8 @@
                     $(function () {
                         $('form').submit(function () {
                             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                                //var file = $('#picture');
-                                //var fileSize = $('#picture')[0].files[0].size;
+                                var file = $('#picture');
+                                var fileSize = $('#picture')[0].files[0].size;
                                 var musicFile = $('#music');
                                 var musicFileSize = $('#music')[0].files[0].size;
 
