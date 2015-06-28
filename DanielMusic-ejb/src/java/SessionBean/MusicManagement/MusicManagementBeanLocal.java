@@ -73,7 +73,7 @@ public interface MusicManagementBeanLocal {
      * @return @param ReturnHelper
      */
     //still need to handle checking of music length < 10mins
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics,Integer yearReleased);
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, Integer yearReleased);
 
     public Music getMusic(Long musicID);
 
@@ -83,7 +83,7 @@ public interface MusicManagementBeanLocal {
     
     public List<Music> ListAllTracksByAlbumID(Long albumID);
 
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased);
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
 
     public Album getAlbum(Long albumID);
 
