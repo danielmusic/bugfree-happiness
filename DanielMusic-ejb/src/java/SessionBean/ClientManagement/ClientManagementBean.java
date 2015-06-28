@@ -73,7 +73,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     }
                     tracksInCart.add(music);
                     totalPaymentAmount = totalPaymentAmount + music.getPrice();
-                    music.getAlbum().getArtist().get
+                    //music.getAlbum().getArtist().get
                 }
                 for (Long current : albumIDs) {
                     Album album = em.getReference(Album.class, current);
@@ -82,7 +82,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     }
                     albumInCart.add(album);
                     totalPaymentAmount = totalPaymentAmount + album.getPrice();
-                    album.
+                    //album.
                 }
             }
 
