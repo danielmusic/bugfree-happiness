@@ -79,7 +79,7 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper deleteMusic(Long musicID);
 
-    public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, String artistName, Double price, String lyrics, String credits);
+    public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, Double price, String lyrics, String credits);
     
     public List<Music> ListAllTracksByAlbumID(Long albumID);
 
