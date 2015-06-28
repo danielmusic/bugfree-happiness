@@ -77,26 +77,35 @@
                     <h2>Album details</h2>
 
                     <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="name"><strong>Album Name</strong> </label>
+                        <div class="col-1-3">
+                            <label for="name"><strong>Title</strong> *</label>
                             <input type="text" id="name" name="name" value="<%=album.getName()%>" required>
                         </div>
 
-                        <div class="col-1-2 last">
-                            <label for="yearReleased"><strong>Year Released</strong> </label>
+                        <div class="col-1-3">
+                            <label for="yearReleased"><strong>Year Released</strong> *</label>
                             <input type="number" id="yearReleased" name="yearReleased" value="<%=album.getYearReleased()%>" min="1900" max="2050" required>
+                        </div>
+
+                        <div class="col-1-3 last">
+                            <label for="price"><strong>Price</strong> *</label>
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required value="<%if (album.getPrice() != null) {
+                                    out.print(album.getPrice());
+                                }%>" />
                         </div>
                     </div>
 
                     <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%>
+                    <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation()%>">
+                    <%}%>
+
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="picture"><strong>Album Artwork</strong> </label>
-                            <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation()%>">
                             <input type="file" id="picture" name="picture">
                         </div>
                     </div>
-                    <%}%>
+
 
 
                     <div class="row clearfix">
@@ -123,7 +132,6 @@
 
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="submit" class="small invert" style="margin-right: 10px;">Save Changes</button>
-                    <button type="button" class="small invert">Publish Album</button>
                     <div class="clear"></div>
                 </form>
                 <%} else if (album == null) {%>

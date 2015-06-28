@@ -18,6 +18,10 @@
                     function viewTracks(id) {
                         window.location.href = "MusicManagementController?source=tracks&target=ListAllTracksByAlbumID&id=" + id;
                     }
+
+                    function publishAlbum(id) {
+                        window.location.href = "MusicManagementController?source=artist&target=PublishAlbum&id=" + id;
+                    }
                 </script>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
@@ -34,8 +38,7 @@
                             <tr>
                                 <th>no</th>
                                 <th>Album Title</th>
-                                <th>Publish Date</th>
-                                <th>Status</th>
+                                <th>Publish Status</th>
                                 <th colspan="2"></th>
                             </tr>
                         </thead>
@@ -47,20 +50,11 @@
                             <tr>
                                 <td class="table-date"><%=(i + 1)%></td>
                                 <td class="table-name"><%=albums.get(i).getName()%></td>         
-                                <td class="table-name">
-                                    <%
-                                        out.print(albums.get(i).getId() + " <<<id<<<");
-                                        if (albums.get(i).getPublishedDate() != null) {
-                                            out.print(albums.get(i).getPublishedDate());
-                                        } else {
-                                            out.print("-");
-                                        }
-                                    %>
-                                </td>
                                 <td class="table-date"><%=albums.get(i).getIsPublished()%></td>
-                                <td class="actions" style="width: 250px;">
+                                <td class="actions" style="width: 300px;">
                                     <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">View album</a>
                                     <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View track</a>
+                                    <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
                                 </td>
                             </tr>
                             <%

@@ -45,7 +45,9 @@
 
                         <div class="col-1-3 last">
                             <label for="ppEmail"><strong>PayPay email address:</strong> (?)</label>
-                            <input type="text" value="<%=artist.getEmail()%>" name="paypalEmail" id="ppEmail">
+                            <input type="email" value="<%if (artist.getPaypalEmail() != null) {
+                                    out.print(artist.getPaypalEmail());
+                                }%>" name="paypalEmail" id="ppEmail" required>
                         </div>
                     </div>
 
@@ -72,11 +74,15 @@
 
                         <div class="col-1-3">
                             <label for="genre"><strong>Genre</strong> *</label>
-                            <select name="genre" id="genre" style="width: 100%; height:40px;">
+                            <select name="genre" id="genre" style="width: 100%; height:40px;" required>
                                 <option value="">Select</option>
                                 <%
                                     for (int i = 0; i < genres.size(); i++) {
-                                        out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
+                                        if (artist.getGenre() != null && artist.getGenre().getId() == genres.get(i).getId()) {
+                                            out.write("<option selected value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
+                                        } else {
+                                            out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
+                                        }
                                     }
                                 %>
                             </select>
@@ -137,8 +143,10 @@
                         </div>
 
                         <div class="col-1-2 last">
-                            <label for="ws"><strong>Website</strong></label>
-                            <input type="url" id="ws" name="ws" placeholder="http://">
+                            <label for="websiteURL"><strong>Website</strong></label>
+                            <input type="url" id="websiteURL" name="websiteURL" placeholder="http://" value="<%if (artist.getWebsiteURL() != null) {
+                                    out.print(artist.getWebsiteURL());
+                                }%>">
                         </div>
                     </div>
 

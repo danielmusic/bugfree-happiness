@@ -43,6 +43,7 @@ public class ClientAccountManagementController extends HttpServlet {
         //profile parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
+        String contactEmail = request.getParameter("contactEmail");
         String paypalEmail = request.getParameter("paypalEmail");
         String genreID = request.getParameter("genre");
         String bio = request.getParameter("bio");
@@ -138,10 +139,18 @@ public class ClientAccountManagementController extends HttpServlet {
                             }
                         }
 
-                        Part picture = request.getPart("picture");
-
-                        returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, email, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                        returnHelper = accountManagementBean.updateAccountEmail(artist.getId(), email);
                         if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                        }
+
+                        Part picture = request.getPart("picture");
+                        if (picture.getSize() == 0) {
+                            picture = null;
+                        }
+                        returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         }
 
