@@ -83,13 +83,13 @@ public interface MusicManagementBeanLocal {
     
     public List<Music> ListAllTracksByAlbumID(Long albumID);
 
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased);
+    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, Double price);
 
     public Album getAlbum(Long albumID);
 
     public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
 
-    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased);
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, Double price);
 
     public ReturnHelper publishAlbum(Long albumID, Date publishDate);
 
