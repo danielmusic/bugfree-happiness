@@ -2,9 +2,9 @@ package SessionBean.ClientManagement;
 
 import EntityManager.Account;
 import EntityManager.Album;
-import EntityManager.Artist;
 import EntityManager.Music;
 import EntityManager.Payment;
+import EntityManager.PaymentHelper;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
@@ -43,7 +43,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             Double totalPaymentAmount = 0.0;
             Set<Music> tracksInCart = null;
             Set<Album> albumInCart = null;
-            Set<Artist> artistsReceivingPayments = null;
+            List<PaymentHelper> artistsReceivingPayments = null;
+            //artistsReceivingPayments.contains(artist);
+            //artistsReceivingPayments
 
             if (accountID != null) {
                 // If it's a logged in account transaction
