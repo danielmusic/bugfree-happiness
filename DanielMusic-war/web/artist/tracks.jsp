@@ -12,8 +12,8 @@
                         window.location.href = "#!/artist/add_track";
                     }
 
-                    function viewTrack(id) {
-                        window.location.href = "MusicManagementController?source=edit_track&target=ListTrackByID&id=" + id;
+                    function editTrack(id) {
+                        window.location.href = "MusicManagementController?target=ListTrackByID&id=" + id;
                     }
 
                     function back() {
@@ -58,8 +58,8 @@
                                 <td class="table-name"><%=tracks.get(i).getName()%></td>   
                                 <td class="table-date"><%=tracks.get(i).getNumDownloaded()%></td>
                                 <td class="table-date"><%=tracks.get(i).getNumPurchase()%></td>            
-                                <td class="actions" style="width: 250px;">
-                                    <a href="javascript:viewTrack(<%=tracks.get(i).getId()%>);" class="buy-tickets">View track</a>
+                                <td class="actions" style="width: 150px;">
+                                    <a href="javascript:editTrack(<%=tracks.get(i).getId()%>);" class="buy-tickets">Edit track</a>
                                 </td>
                             </tr>
                             <%
