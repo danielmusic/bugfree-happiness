@@ -4,8 +4,6 @@
     <section class="content section">
         <div class="container">
             <article>
-                <link rel="stylesheet" type="text/css" href="css/default.css" />
-                <link rel="stylesheet" type="text/css" href="css/component.css" />
                 <%@page import="EntityManager.Genre"%>
                 <%@page import="java.util.List"%>
                 <%@page import="EntityManager.Artist"%>
