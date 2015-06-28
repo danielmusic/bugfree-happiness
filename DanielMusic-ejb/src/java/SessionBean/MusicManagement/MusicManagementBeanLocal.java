@@ -91,7 +91,7 @@ public interface MusicManagementBeanLocal {
 
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, String credits, Double price);
 
-    public ReturnHelper publishAlbum(Long albumID, Date publishDate);
+    public ReturnHelper publishAlbum(Long albumID);
 
     public ReturnHelper deleteAlbum(Long albumID);
 

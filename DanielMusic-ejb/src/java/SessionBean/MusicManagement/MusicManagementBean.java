@@ -555,7 +555,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper publishAlbum(Long albumID, Date publishDate) {
+    public ReturnHelper publishAlbum(Long albumID) {
         System.out.println("publishAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -578,7 +578,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
 
-            if (publishDate != null) {
                 if (isArtist) {
                     if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
                         album.getArtist().setIsApproved(-2);
@@ -598,16 +597,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     helper.setResult(false);
                     return helper;
                 }
-                album.setPublishedDate(publishDate);
                 album.setIsPublished(true);
                 helper.setDescription("Album has been published successfully.");
                 helper.setResult(true);
                 return helper;
-            } else {
-                helper.setDescription("Publish date is not selected, please try again.");
-                helper.setResult(false);
-                return helper;
-            }
+            
 
         } catch (Exception e) {
             e.printStackTrace();
