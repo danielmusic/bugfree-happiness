@@ -37,13 +37,13 @@
                         if (artist != null) {
                     %>
                     <li>
-                        <a href="#!/artist/albums">albums</a>
+                        <a href="ClientAccountManagementController?target=PageRedirect&source=albums">albums</a>
                     </li>
                     <li class="submenu">
-                        <a href="#!/artist/profile">profile</a>
+                        <a href="ClientAccountManagementController?target=PageRedirect&source=profile">profile</a>
                         <ul>
                             <li>
-                                <a href='#!/artist/profile'>update profile</a>
+                                <a href="ClientAccountManagementController?target=PageRedirect&source=profile">update profile</a>
                             </li>
                         </ul>
                     </li>
