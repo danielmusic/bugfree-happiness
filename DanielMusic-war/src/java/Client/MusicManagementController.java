@@ -108,8 +108,6 @@ public class MusicManagementController extends HttpServlet {
 
                 case "PublishAlbum":
                     if (artist != null) {
-                        System.out.println("here>>>>>>>>>>>>>>>>>>");
-
                         returnHelper = musicManagementBean.publishAlbum(Long.parseLong(id));
                         System.out.println("returnHelper.getResult() " + returnHelper.getResult());
 

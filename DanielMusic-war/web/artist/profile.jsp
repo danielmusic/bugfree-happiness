@@ -1,12 +1,11 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Profile Page">
-
+    <%@page import="EntityManager.Genre"%>
+    <%@page import="java.util.List"%>
+    <%@page import="EntityManager.Artist"%>
     <section class="content section">
         <div class="container">
             <article>
-                <%@page import="EntityManager.Genre"%>
-                <%@page import="java.util.List"%>
-                <%@page import="EntityManager.Artist"%>
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
