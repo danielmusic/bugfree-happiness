@@ -2,6 +2,7 @@ package SessionBean.ClientManagement;
 
 import EntityManager.Account;
 import EntityManager.Album;
+import EntityManager.Artist;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.ReturnHelper;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -39,6 +41,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //Calculate the total amount to be paid
             Account account = null;
             Double totalPaymentAmount = 0.0;
+            Set<Music> tracksInCart = null;
+            Set<Album> albumInCart = null;
+            Set<Artist> artistsReceivingPayments = null;
+
             if (accountID != null) {
                 // If it's a logged in account transaction
                 account = em.getReference(Account.class, accountID);
@@ -49,21 +55,37 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 trackIDs = new ArrayList();
                 albumIDs = new ArrayList();
                 ShoppingCart shoppingCart = account.getShoppingCart();
-                List<Music> tracksInCart = shoppingCart.getListOfMusics();
-                List<Album> albumInCart = shoppingCart.getListOfAlbums();
-                for (Music music:tracksInCart) {
+                tracksInCart = shoppingCart.getListOfMusics();
+                albumInCart = shoppingCart.getListOfAlbums();
+                for (Music music : tracksInCart) {
                     trackIDs.add(music.getId());
                     totalPaymentAmount = totalPaymentAmount + music.getPrice();
                 }
-                for (Album album:albumInCart) {
+                for (Album album : albumInCart) {
                     albumIDs.add(album.getId());
                     totalPaymentAmount = totalPaymentAmount + album.getPrice();
                 }
             } else { // if it's a non logged in user
-                //Do nothing, just take the list of IDs from the arguments intead
+                for (Long current : trackIDs) {
+                    Music music = em.getReference(Music.class, current);
+                    if (music == null) {
+                        return null;
+                    }
+                    tracksInCart.add(music);
+                    totalPaymentAmount = totalPaymentAmount + music.getPrice();
+                    music.getAlbum().getArtist().get
+                }
+                for (Long current : albumIDs) {
+                    Album album = em.getReference(Album.class, current);
+                    if (album == null) {
+                        return null;
+                    }
+                    albumInCart.add(album);
+                    totalPaymentAmount = totalPaymentAmount + album.getPrice();
+                    album.
+                }
             }
-            
-            
+
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);
