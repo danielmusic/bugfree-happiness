@@ -578,30 +578,25 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
 
-                if (isArtist) {
-                    if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
-                        album.getArtist().setIsApproved(-2);
-                    }
-                } else if (isBand) {
-                    if (album.getBand().getIsApproved() == 0 || album.getBand().getIsApproved() == -1) {
-                        album.getBand().setIsApproved(-2);
-                    }
+            if (isArtist) {
+                if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
+                    album.getArtist().setIsApproved(-2);
                 }
-                if (album.getListOfMusics() == null) {
-                    helper.setDescription("The album cannot be published, no tracks found, please try again.");
-                    helper.setResult(false);
-                    return helper;
+            } else if (isBand) {
+                if (album.getBand().getIsApproved() == 0 || album.getBand().getIsApproved() == -1) {
+                    album.getBand().setIsApproved(-2);
                 }
-                if (album.getListOfMusics().isEmpty()) {
-                    helper.setDescription("The album cannot be published, no tracks found, please try again.");
-                    helper.setResult(false);
-                    return helper;
-                }
-                album.setIsPublished(true);
-                helper.setDescription("Album has been published successfully.");
-                helper.setResult(true);
+            }
+            System.out.println("size of music list: " + album.getListOfMusics().size());
+            if (album.getListOfMusics() == null || album.getListOfMusics().isEmpty()) {
+                helper.setDescription("The album cannot be published, no tracks found, please try again.");
+                helper.setResult(false);
                 return helper;
-            
+            }
+            album.setIsPublished(true);
+            helper.setDescription("Album has been published successfully.");
+            helper.setResult(true);
+            return helper;
 
         } catch (Exception e) {
             e.printStackTrace();
