@@ -4,6 +4,8 @@
     <section class="content section">
         <div class="container">
             <article>
+                <link rel="stylesheet" type="text/css" href="css/default.css" />
+                <link rel="stylesheet" type="text/css" href="css/component.css" />
                 <%@page import="EntityManager.Genre"%>
                 <%@page import="java.util.List"%>
                 <%@page import="EntityManager.Artist"%>
@@ -16,6 +18,22 @@
                 <form action="ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <h2>Account Details</h2>
+
+                    <button type="button" class="md-trigger" data-modal="modal-1">Fade in &amp; Scale</button>
+                    <div class="md-modal" id="modal-1">
+                        <div class="md-content">
+                            <h3>Modal Dialog</h3>
+                            <div>
+                                <p>This is a modal window. You can do the following things with it:</p>
+                                <ul>
+                                    <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+                                    <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+                                    <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                                </ul>
+                                <button type="button" class="md-close">Close me!</button>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row clearfix">
                         <div class="col-1-3">
@@ -144,6 +162,14 @@
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
+            <script src="js/classie.js"></script>
+            <script src="js/modalEffects.js"></script>
+            <script>
+                                // this is important for IEs
+                                var polyfilter_scriptpath = '/js/';
+            </script> 
+            <script src="js/cssParser.js"></script>
+            <script src="js/css-filters-polyfill.js"></script>
         </div>
     </section>
 </section>

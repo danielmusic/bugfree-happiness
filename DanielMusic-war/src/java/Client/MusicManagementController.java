@@ -61,7 +61,13 @@ public class MusicManagementController extends HttpServlet {
                         if (artist != null) {
                             Part picture = request.getPart("picture");
                             System.out.println("picture>>>>>> " + picture);
-                            returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId(), Integer.parseInt(yearReleased));
+
+                            if (picture.getSize() == 0) {
+                                returnHelper = musicManagementBean.createAlbum(null, name, description, artist.getId(), Integer.parseInt(yearReleased));
+                            } else {
+                                returnHelper = musicManagementBean.createAlbum(picture, name, description, artist.getId(), Integer.parseInt(yearReleased));
+                            }
+
                             if (returnHelper.getResult()) {
                                 session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
