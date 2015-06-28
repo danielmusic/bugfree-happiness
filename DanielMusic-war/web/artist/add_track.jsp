@@ -62,7 +62,7 @@
                 <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
-                    zzzzzzzzzzzzzzzzz
+
                     <div class="entry-content">
                         <div class="entry-meta" style="float: right;">
                             <span class="entry-cat"><a href="#!/artist/albums">Albums</a></span>
@@ -92,15 +92,8 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="picture"><strong>Album Artwork</strong> </label>
-                            <input type="file" id="picture" name="picture">
-                        </div>
-                    </div>
-
-                    <div class="row clearfix">
-                        <div class="col-1-1">
                             <label for="music"><strong>Music (WAV format, 44.1 kHz, 16bit)</strong> </label>
-                            <input type="file" id="music" name="music">
+                            <input type="file" id="music" name="music" required>
                         </div>
                     </div>
 
