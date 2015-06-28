@@ -1,7 +1,7 @@
 package SessionBean.CommonInfrastructure;
 
 import javax.ejb.Stateless;
-import com.sendgrid.*;
+import com.sendgrid.SendGrid;
 
 @Stateless
 public class SendGridEmail implements SendGridLocal {

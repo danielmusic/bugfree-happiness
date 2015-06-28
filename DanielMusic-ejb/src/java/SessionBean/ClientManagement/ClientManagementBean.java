@@ -150,4 +150,58 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public ShoppingCart getShoppingCart(Long accountID) {
+        System.out.println("ClientManagementBean: getShoppingCart() called");
+        ShoppingCart cart;
+        Account account;
+        try {
+            account = em.getReference(Account.class, accountID);
+            cart = account.getShoppingCart();
+            System.out.println("ClientManagementBean: getShoppingCart() successfully");
+            return cart;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ClientManagementBean: getShoppingCart() failed to execute");
+            return null;
+        }
+    }
+
+    @Override
+    public ReturnHelper removeItemFromShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper addItemToShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
+        System.out.println("ClientManagementBean: addItemToShoppingCart() called");
+        ShoppingCart cart;
+        Account account;
+        Music music;
+        
+        ReturnHelper helper = new ReturnHelper();
+        try {
+            account = em.getReference(Account.class, accountID);
+            cart = account.getShoppingCart();
+            if(isTrack){
+                
+            }else{
+                
+            }
+            
+            System.out.println("ClientManagementBean: addItemToShoppingCart() successfully");
+            
+            
+            return helper;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ClientManagementBean: addItemToShoppingCart() failed");
+        }
+    }
+
+    @Override
+    public ReturnHelper clearShoppingCart(Long accountID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
