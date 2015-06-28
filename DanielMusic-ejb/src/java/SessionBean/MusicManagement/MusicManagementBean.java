@@ -10,12 +10,6 @@ import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
-import com.paypal.svcs.services.AdaptivePaymentsService;
-import com.paypal.svcs.types.ap.PayRequest;
-import com.paypal.svcs.types.ap.PayResponse;
-import com.paypal.svcs.types.ap.Receiver;
-import com.paypal.svcs.types.ap.ReceiverList;
-import com.paypal.svcs.types.common.RequestEnvelope;
 import it.sauronsoftware.jave.AudioAttributes;
 import java.io.File;
 import it.sauronsoftware.jave.Encoder;
@@ -25,12 +19,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -159,8 +151,24 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     @Override
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, Integer yearReleased) {
         ReturnHelper helper = new ReturnHelper();
+        helper.setResult(false);
         try {
             Album album = null;
+            //Check if album is published
+            if (albumID == null) {
+                helper.setDescription("Please check that the album exists for this music.");
+                return helper;
+            } else {
+                Query q = em.createQuery("SELECT E FROM Album E where E.id=:id");
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                q.setParameter("id", albumID);
+                album = (Album) q.getSingleResult();
+                if (album.getIsPublished()) {
+                    helper.setDescription("Unable to edit a published album.");
+                    return helper;
+                }
+            }
+
             String fileName = musicPart.getSubmittedFileName();
             String tempMusicURL = "temp/music_" + fileName + cibl.generateUUID();
             System.out.println("file name is " + fileName);
@@ -184,7 +192,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             double durationInSeconds = (frames + 0.0) / format.getFrameRate();
             if (durationInSeconds > 600) {
                 helper.setDescription("The track duration cannot be more than 10mins, please upload a shorter duration.");
-                helper.setResult(false);
                 return helper;
             }
 
@@ -195,13 +202,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             //create music entity
             Music music = new Music();
-            if (albumID == null) {
-                helper.setDescription("Please check that the album exists for this music.");
-                helper.setResult(false);
-                return helper;
-            } else {
-                album = em.getReference(Album.class, albumID);
-            }
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
@@ -235,10 +235,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             if (result1.getResult() && result2.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
-                helper.setResult(true);
             } else {
                 helper.setDescription("Error occurred while uploading track... Please check that the track is in the correct format.");
-                helper.setResult(false);
                 //delete music entity
                 em.refresh(music);
                 em.remove(music);
@@ -247,7 +245,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("deleting file... " + file.delete());
             System.out.println("deleting file newFile128... " + newFile128.delete());
             System.out.println("deleting file newFile320... " + newFile320.delete());
-
+            helper.setResult(true);
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -284,8 +282,23 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         ReturnHelper helper = new ReturnHelper();
         Music music;
         try {
-            music = em.getReference(Music.class, musicID);
+
+            Query q = em.createQuery("SELECT E FROM Music E where E.id=:id");
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            q.setParameter("id", musicID);
+            music = (Music) q.getSingleResult();
             Long numPurchase = music.getNumPurchase();
+            //Check if album is published
+            if (music == null) {
+                helper.setDescription("Please check that the album exists for this music.");
+                return helper;
+            } else {
+                if (music.getAlbum().getIsPublished()) {
+                    helper.setDescription("Unable to edit a published album.");
+                    return helper;
+                }
+            }
+
             if (numPurchase > 0L) {
                 music.setIsDeleted(true);
             } else {
@@ -478,7 +491,21 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
-            Album album = em.getReference(Album.class, albumID);
+            Album album = null;
+            //Check if album is published
+            if (albumID == null) {
+                helper.setDescription("Please check that the album exists for this music.");
+                return helper;
+            } else {
+                Query q = em.createQuery("SELECT E FROM Album E where E.id=:id");
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                q.setParameter("id", albumID);
+                album = (Album) q.getSingleResult();
+                if (album.getIsPublished()) {
+                    helper.setDescription("Unable to edit a published album.");
+                    return helper;
+                }
+            }
 
             if (album.getIsPublished()) {
                 System.out.println("Album is already published, cannot be edited.");
@@ -559,7 +586,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("publishAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
-            Album album = em.getReference(Album.class, albumID);
+            Query q = em.createQuery("SELECT E FROM Album E where E.id=:id");
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            q.setParameter("id", albumID);
+            Album album = (Album) q.getSingleResult();
             Boolean isArtist = false;
             Boolean isBand = false;
             if (album.getArtist() != null) {
@@ -587,7 +617,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     album.getBand().setIsApproved(-2);
                 }
             }
-            System.out.println("size of music list: " + album.getListOfMusics().size());
             if (album.getListOfMusics() == null || album.getListOfMusics().isEmpty()) {
                 helper.setDescription("The album cannot be published, no tracks found, please try again.");
                 helper.setResult(false);
