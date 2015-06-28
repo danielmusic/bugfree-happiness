@@ -1,7 +1,11 @@
 package SessionBean.ClientManagement;
 
+import EntityManager.Account;
+import EntityManager.Album;
 import EntityManager.Music;
 import EntityManager.Payment;
+import EntityManager.ReturnHelper;
+import EntityManager.ShoppingCart;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
@@ -23,28 +27,59 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
-    
+
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
 
-    //@Override
-    public void createPaymentRequest(Long accountID, List<Music> items, Double totalAmount) {
+    @Override
+    public String getPaymentLink(Long accountID, String nonMemberEmail, List<Long> trackIDs, List<Long> albumIDs) {
         try {
+            //If accountID is not null, is a registered account purchase. Get it's shopping cart content
+            //If null, the other 3 arguments should be filled in
+            //Calculate the total amount to be paid
+            Account account = null;
+            Double totalPaymentAmount = 0.0;
+            if (accountID != null) {
+                // If it's a logged in account transaction
+                account = em.getReference(Account.class, accountID);
+                if (account == null) {
+                    return null;
+                }
+                // Get his shopping cart, update trackIDs and albumIDs and total price
+                trackIDs = new ArrayList();
+                albumIDs = new ArrayList();
+                ShoppingCart shoppingCart = account.getShoppingCart();
+                List<Music> tracksInCart = shoppingCart.getListOfMusics();
+                List<Album> albumInCart = shoppingCart.getListOfAlbums();
+                for (Music music:tracksInCart) {
+                    trackIDs.add(music.getId());
+                    totalPaymentAmount = totalPaymentAmount + music.getPrice();
+                }
+                for (Album album:albumInCart) {
+                    albumIDs.add(album.getId());
+                    totalPaymentAmount = totalPaymentAmount + album.getPrice();
+                }
+            } else { // if it's a non logged in user
+                //Do nothing, just take the list of IDs from the arguments intead
+            }
             
+            
+            //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
-            Payment payment = new Payment(accountID, totalAmount, UUID);
+            Payment payment = new Payment(totalPaymentAmount, UUID);
+            em.persist(payment);
+            //Create PayPal request
             PayRequest payRequest = new PayRequest();
-
             List<Receiver> receivers = new ArrayList<Receiver>();
-//Artist (partial of the total)
+            //Artist (partial of the total)
             Receiver secondaryReceiver = new Receiver();
             secondaryReceiver.setAmount(0.50);
             secondaryReceiver.setEmail("daniel-artist@hotmail.com");
             receivers.add(secondaryReceiver);
 
-//Daniel (total amount)
+            //Daniel (total amount)
             Receiver primaryReceiver = new Receiver();
-            primaryReceiver.setAmount(1.00);
+            primaryReceiver.setAmount(totalPaymentAmount);
             primaryReceiver.setEmail("danielmusic@hotmail.com");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
@@ -57,7 +92,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("https://devtools-paypal.com/guide/ap_chained_payment?cancel=true");//Return if payment cancelled
-            
+
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
             payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
@@ -83,6 +118,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper completePayment(Long paymentID, String UUID) {
+        //Delete shopping cart
+        //Controller will forward to 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

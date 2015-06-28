@@ -33,8 +33,6 @@ public abstract class Account implements Serializable {
     private Boolean isDisabled;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfPurchasedMusics;
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<TransactionOrder> listOfTransactionOrders;
     private Boolean emailIsVerified; //Initial registered email
     private String verificationCode;
     private Boolean newEmailIsVerified; //Subsequent change (will reset to false when the user tries to change email)
@@ -103,14 +101,6 @@ public abstract class Account implements Serializable {
 
     public void setListOfMusics(List<Music> listOfMusics) {
         this.listOfPurchasedMusics = listOfMusics;
-    }
-
-    public List<TransactionOrder> getListOfTransactionOrders() {
-        return listOfTransactionOrders;
-    }
-
-    public void setListOfTransactionOrders(List<TransactionOrder> listOfTransactionOrders) {
-        this.listOfTransactionOrders = listOfTransactionOrders;
     }
 
     public String getEmail() {
