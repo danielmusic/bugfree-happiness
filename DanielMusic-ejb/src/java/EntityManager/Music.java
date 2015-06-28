@@ -27,6 +27,7 @@ public class Music implements Serializable {
     private Double price;
     private String fileLocation128;
     private String fileLocation320;
+    private String fileLocationWAV;
     @Lob
     private String lyrics;
     private Boolean isDeleted;
@@ -59,6 +60,14 @@ public class Music implements Serializable {
 
     public void setCredits(String credits) {
         this.credits = credits;
+    }
+
+    public String getFileLocationWAV() {
+        return fileLocationWAV;
+    }
+
+    public void setFileLocationWAV(String fileLocationWAV) {
+        this.fileLocationWAV = fileLocationWAV;
     }
 
     public Long getNumPurchase() {

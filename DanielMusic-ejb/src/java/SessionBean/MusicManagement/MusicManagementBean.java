@@ -216,24 +216,29 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             String musicURL128;
             String musicURL320;
+            String musicURLwav;
             Artist artist = album.getArtist();
 
             if (artist != null) {
                 musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
                 musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
+                musicURLwav = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName;
             } else {
                 musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
                 musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
+                musicURLwav = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName;
             }
 
             music.setFileLocation128(musicURL128);
             music.setFileLocation320(musicURL320);
+            music.setFileLocationWAV(musicURLwav);
 
             //end create music
             ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", false, false);
             ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", false, false);
+            ReturnHelper result3 = cibl.uploadFileToGoogleCloudStorage(musicURLwav, tempMusicURL, false, false);
 
-            if (result1.getResult() && result2.getResult()) {
+            if (result1.getResult() && result2.getResult() && result3.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
             } else {
                 helper.setDescription("Error occurred while uploading track... Please check that the track is in the correct format.");
