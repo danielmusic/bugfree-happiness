@@ -7,6 +7,7 @@ import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
+import EntityManager.ShoppingCart;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -186,6 +187,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 admin = (Admin) q.getSingleResult();
                 result.setID(admin.getId());
+                ShoppingCart cart = new ShoppingCart();
+                cart.setAccount(admin);
+                em.persist(cart);
             } else if (isArtist) {
                 //Only allow registration if artist name is unique
                 if (checkIfArtistOrBandNameExists(name)) {
@@ -203,6 +207,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 artist = (Artist) q.getSingleResult();
                 result.setID(artist.getId());
+                ShoppingCart cart = new ShoppingCart();
+                cart.setAccount(artist);
+                em.persist(cart);
             } else if (isBand) {
                 //Only allow registration if artist name is unique
                 if (checkIfArtistOrBandNameExists(name)) {
@@ -220,6 +227,10 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 band = (Band) q.getSingleResult();
                 result.setID(band.getId());
+                ShoppingCart cart = new ShoppingCart();
+                cart.setAccount(band);
+                em.persist(cart);
+
             } else {
                 Member member = new Member();
                 member.setEmail(email);
@@ -232,7 +243,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 member = (Member) q.getSingleResult();
                 result.setID(member.getId());
+                ShoppingCart cart = new ShoppingCart();
+                cart.setAccount(member);
+                em.persist(cart);
             }
+
             generateAndSendVerificationEmail(email);
             result.setResult(true);
             result.setDescription("Account registered successfully.");
@@ -746,7 +761,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             band.setTwitterURL(twitterURL);
             band.setWebsiteURL(websiteURL);
             em.merge(band);
-                        if (profilePicture != null) {
+            if (profilePicture != null) {
                 result = updateBandProfilePicture(bandID, profilePicture);
                 if (!result.getResult()) {
                     return result;

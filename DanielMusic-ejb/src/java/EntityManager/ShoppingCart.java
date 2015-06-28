@@ -2,6 +2,7 @@ package EntityManager;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,9 +21,9 @@ public class ShoppingCart implements Serializable {
     @OneToOne(mappedBy = "shoppingCart", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Account account;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Album> listOfAlbums;
+    private Set<Album> listOfAlbums;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Music> listOfMusics;
+    private Set<Music> listOfMusics;
 
     public Account getAccount() {
         return account;
@@ -32,20 +33,20 @@ public class ShoppingCart implements Serializable {
         this.account = account;
     }
 
-    public List<Album> getListOfAlbums() {
+    public Set<Album> getListOfAlbums() {
         return listOfAlbums;
     }
 
     public void setListOfAlbums(List<Album> listOfAlbums) {
-        this.listOfAlbums = listOfAlbums;
+        this.listOfAlbums = (Set<Album>) listOfAlbums;
     }
 
-    public List<Music> getListOfMusics() {
+    public Set<Music> getListOfMusics() {
         return listOfMusics;
     }
 
     public void setListOfMusics(List<Music> listOfMusics) {
-        this.listOfMusics = listOfMusics;
+        this.listOfMusics = (Set<Music>) listOfMusics;
     }
 
     public Long getId() {

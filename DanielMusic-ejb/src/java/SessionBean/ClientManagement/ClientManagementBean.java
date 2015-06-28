@@ -51,19 +51,18 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 ShoppingCart shoppingCart = account.getShoppingCart();
                 List<Music> tracksInCart = shoppingCart.getListOfMusics();
                 List<Album> albumInCart = shoppingCart.getListOfAlbums();
-                for (Music music:tracksInCart) {
+                for (Music music : tracksInCart) {
                     trackIDs.add(music.getId());
                     totalPaymentAmount = totalPaymentAmount + music.getPrice();
                 }
-                for (Album album:albumInCart) {
+                for (Album album : albumInCart) {
                     albumIDs.add(album.getId());
                     totalPaymentAmount = totalPaymentAmount + album.getPrice();
                 }
             } else { // if it's a non logged in user
                 //Do nothing, just take the list of IDs from the arguments intead
             }
-            
-            
+
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);
@@ -125,6 +124,60 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     public ReturnHelper completePayment(Long paymentID, String UUID) {
         //Delete shopping cart
         //Controller will forward to 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ShoppingCart getShoppingCart(Long accountID) {
+        System.out.println("ClientManagementBean: getShoppingCart() called");
+        ShoppingCart cart;
+        Account account;
+        try {
+            account = em.getReference(Account.class, accountID);
+            cart = account.getShoppingCart();
+            System.out.println("ClientManagementBean: getShoppingCart() successfully");
+            return cart;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ClientManagementBean: getShoppingCart() failed to execute");
+            return null;
+        }
+    }
+
+    @Override
+    public ReturnHelper removeItemFromShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper addItemToShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
+        System.out.println("ClientManagementBean: addItemToShoppingCart() called");
+        ShoppingCart cart;
+        Account account;
+        Music music;
+        
+        ReturnHelper helper = new ReturnHelper();
+        try {
+            account = em.getReference(Account.class, accountID);
+            cart = account.getShoppingCart();
+            if(isTrack){
+                
+            }else{
+                
+            }
+            
+            System.out.println("ClientManagementBean: addItemToShoppingCart() successfully");
+            
+            
+            return helper;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ClientManagementBean: addItemToShoppingCart() failed");
+        }
+    }
+
+    @Override
+    public ReturnHelper clearShoppingCart(Long accountID) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
