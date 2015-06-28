@@ -180,24 +180,31 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         ShoppingCart cart;
         Account account;
         Music music;
-        
+        Album album;
         ReturnHelper helper = new ReturnHelper();
         try {
             account = em.getReference(Account.class, accountID);
             cart = account.getShoppingCart();
-            if(isTrack){
-                
-            }else{
-                
+
+            if (isTrack) {
+                music = em.getReference(Music.class, trackOrAlbumID);
+                cart.getListOfMusics().add(music);
+            } else {
+                album = em.getReference(Album.class, trackOrAlbumID);
+                cart.getListOfAlbums().add(album);
             }
-            
+
             System.out.println("ClientManagementBean: addItemToShoppingCart() successfully");
-            
-            
+
+            helper.setDescription("Item added to cart successfully.");
+            helper.setResult(true);
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ClientManagementBean: addItemToShoppingCart() failed");
+            helper.setDescription("Error occurred while adding to cart.");
+            helper.setResult(false);
+            return helper;
         }
     }
 

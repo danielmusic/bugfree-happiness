@@ -1,28 +1,29 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Albums">
+    <%@page import="EntityManager.Artist"%>
+    <%@page import="EntityManager.Album"%>
+    <%@page import="java.util.List"%>
+    <script>
+        function addAlbum() {
+            window.location.href = "#!/artist/add_album";
+        }
+
+        function viewAlbum(id) {
+            window.location.href = "MusicManagementController?source=edit_album&target=ListAlbumByID&id=" + id;
+        }
+
+        function viewTracks(id) {
+            window.location.href = "MusicManagementController?source=tracks&target=ListAllTracksByAlbumID&id=" + id;
+        }
+
+        function publishAlbum(id) {
+            window.location.href = "MusicManagementController?source=artist&target=PublishAlbum&id=" + id;
+        }
+    </script>
     <section class="content section">
         <div class="container">
             <article>
-                <%@page import="EntityManager.Artist"%>
-                <%@page import="EntityManager.Album"%>
-                <%@page import="java.util.List"%>
-                <script>
-                    function addAlbum() {
-                        window.location.href = "#!/artist/add_album";
-                    }
 
-                    function viewAlbum(id) {
-                        window.location.href = "MusicManagementController?source=edit_album&target=ListAlbumByID&id=" + id;
-                    }
-
-                    function viewTracks(id) {
-                        window.location.href = "MusicManagementController?source=tracks&target=ListAllTracksByAlbumID&id=" + id;
-                    }
-
-                    function publishAlbum(id) {
-                        window.location.href = "MusicManagementController?source=artist&target=PublishAlbum&id=" + id;
-                    }
-                </script>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {

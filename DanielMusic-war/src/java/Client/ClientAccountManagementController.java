@@ -166,6 +166,16 @@ public class ClientAccountManagementController extends HttpServlet {
                     session.setAttribute("goodMsg", "Logout Successful");
                     nextPage = "#!/login";
                     break;
+
+                case "PageRedirect":
+                    if (source != null) {
+                        if (source.equals("albums")) {
+                            nextPage = "#!/artist/albums";
+                        } else if (source.equals("profile")) {
+                            nextPage = "#!/artist/profile";
+                        }
+                    }
+                    break;
             }
 
             if (nextPage.equals("")) {
