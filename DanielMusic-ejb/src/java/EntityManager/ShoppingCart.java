@@ -17,7 +17,7 @@ public class ShoppingCart implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne(mappedBy = "shoppingCart", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(mappedBy = "shoppingCart", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Account account;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private List<Album> listOfAlbums;
