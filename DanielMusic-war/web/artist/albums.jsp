@@ -8,8 +8,12 @@
             window.location.href = "#!/artist/add_album";
         }
 
+        function addSingles() {
+            window.location.href = "#!/artist/add_album";
+        }
+
         function viewAlbum(id) {
-            window.location.href = "MusicManagementController?source=edit_album&target=ListAlbumByID&id=" + id;
+            window.location.href = "MusicManagementController?target=ListAlbumByID&id=" + id;
         }
 
         function viewTracks(id) {
@@ -53,9 +57,11 @@
                                 <td class="table-name"><%=albums.get(i).getName()%></td>         
                                 <td class="table-date"><%=albums.get(i).getIsPublished()%></td>
                                 <td class="actions" style="width: 300px;">
-                                    <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">View album</a>
-                                    <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View track</a>
+                                    <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit album</a>
+                                    <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View tracks</a>
+                                    <%if (!albums.get(i).getIsPublished()) {%>
                                     <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
+                                    <%}%>
                                 </td>
                             </tr>
                             <%
@@ -64,7 +70,8 @@
                             %>
                         </tbody>
                     </table>
-                    <button type="button" class="small" onclick="javascript:addAlbum()">Add Album</button>
+                    <button type="button" class="small" onclick="javascript:addAlbum()" style="margin-right: 10px;">Add Album</button>
+                    <button type="button" class="small" onclick="javascript:addSingles()">Add Singles</button>
                 </form>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>

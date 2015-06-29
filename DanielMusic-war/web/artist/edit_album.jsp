@@ -60,6 +60,10 @@
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     Album album = (Album) (session.getAttribute("album"));
+                    String disableFlag = "";
+                    if (album != null && album.getIsPublished()) {
+                        disableFlag = "disabled";
+                    }
                     if (artist != null && album != null) {
                 %>
 
@@ -79,17 +83,17 @@
                     <div class="row clearfix">
                         <div class="col-1-3">
                             <label for="name"><strong>Title</strong> *</label>
-                            <input type="text" id="name" name="name" value="<%=album.getName()%>" required>
+                            <input type="text" id="name" name="name" value="<%=album.getName()%>" required <%=disableFlag%>>
                         </div>
 
                         <div class="col-1-3">
                             <label for="yearReleased"><strong>Year Released</strong> *</label>
-                            <input type="number" id="yearReleased" name="yearReleased" value="<%=album.getYearReleased()%>" min="1900" max="2050" required>
+                            <input type="number" id="yearReleased" name="yearReleased" value="<%=album.getYearReleased()%>" min="1900" max="2050" required <%=disableFlag%>>
                         </div>
 
                         <div class="col-1-3 last">
                             <label for="price"><strong>Price</strong> *</label>
-                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required value="<%if (album.getPrice() != null) {
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required <%=disableFlag%> value="<%if (album.getPrice() != null) {
                                     out.print(album.getPrice());
                                 }%>" />
                         </div>
@@ -102,16 +106,14 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="picture"><strong>Album Artwork</strong> </label>
-                            <input type="file" id="picture" name="picture">
+                            <input type="file" id="picture" name="picture" <%=disableFlag%>>
                         </div>
                     </div>
-
-
 
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="description"><strong>Album Description</strong> </label>
-                            <textarea id="description" name="description"><%if (album.getDescription() != null) {
+                            <textarea id="description" name="description" <%=disableFlag%>><%if (album.getDescription() != null) {
                                     out.print(album.getDescription());
                                 }%></textarea>
                         </div>
@@ -120,22 +122,27 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="credits"><strong>Credits</strong> </label>
-                            <textarea id="credits" name="credits" placeholder="produced by, Mastering, Recording, Design, Photography..." style="min-height:120px;"><%if (album.getCredits() != null) {
+                            <textarea id="credits" name="credits" <%=disableFlag%> placeholder="produced by, Mastering, Recording, Design, Photography..." style="min-height:120px;"><%if (album.getCredits() != null) {
                                     out.print(album.getCredits());
                                 }%></textarea>
                         </div>
                     </div>
+
 
                     <input type="hidden" value="UpdateAlbum" name="target">
                     <input type="hidden" value="Artist" name="source">
                     <input type="hidden" value="<%=album.getId()%>" name="id">
 
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
+
+                    <%if (!album.getIsPublished()) {%>
                     <button type="submit" class="small invert" style="margin-right: 10px;">Save Changes</button>
+                    <%}%>
+
                     <div class="clear"></div>
                 </form>
-                <%} else if (album == null) {%>
-                <p class="warning" id="errMsg">Ops. An error has occured. <a href="#!/artist/albums">Click here to try again.</a></p>
+                <%} else if (artist != null && album == null) {%>
+                <p class="warning" id="errMsg">Ops. An error has occurred. <a href="#!/artist/albums">Click here to try again.</a></p>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>

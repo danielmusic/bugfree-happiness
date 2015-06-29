@@ -16,37 +16,47 @@
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <h2>Account Details</h2>
 
-                    <button type="button" class="md-trigger" data-modal="modal-1">Fade in &amp; Scale</button>
-                    <div class="md-modal" id="modal-1">
-                        <div class="md-content">
-                            <h3>Modal Dialog</h3>
-                            <div>
-                                <p>This is a modal window. You can do the following things with it:</p>
-                                <ul>
-                                    <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
-                                    <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
-                                    <li><strong>Close:</strong> click on the button below to close the modal.</li>
-                                </ul>
-                                <button type="button" class="md-close">Close me!</button>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row clearfix">
                         <div class="col-1-3">
-                            <label for="name"><strong>Name</strong> (?)</label>
+                            <label for="name"><strong>Name</strong> * <a class="md-trigger" data-modal="modal-name">(?)</a></label>
                             <input type="text" id="name" name="name" value="<%=artist.getName()%>">
                         </div>
+
+                        <div class="md-modal md-effect-1" id="modal-name">
+                            <div class="md-content">
+                                <h3>Modal Dialog</h3>
+                                <div>
+                                    <p>This is a modal window. You can do the following things with it:</p>
+                                    <ul>
+                                        <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+                                        <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+                                        <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                                    </ul>
+                                    <button class="md-close" type="button">Close me!</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-1-3">
-                            <label for="email"><strong>Email address</strong> </label>
+                            <label for="email"><strong>Email address</strong> *</label>
                             <input type="email" id="email" name="email" value="<%=artist.getEmail()%>">
                         </div>
 
                         <div class="col-1-3 last">
-                            <label for="ppEmail"><strong>PayPay email address:</strong> (?)</label>
+                            <label for="ppEmail"><strong>PayPay email address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
                             <input type="email" value="<%if (artist.getPaypalEmail() != null) {
                                     out.print(artist.getPaypalEmail());
                                 }%>" name="paypalEmail" id="ppEmail" required>
+                        </div>
+
+                        <div class="md-modal md-effect-1" id="modal-paypal">
+                            <div class="md-content">
+                                <h3>Payment Details</h3>
+                                <div>
+                                    <p>When a fan buys your music, the money will go directly to the above address. Please also be sure to follow the instructions on the Sell Your Music on ?? page!:</p>
+                                    <button class="md-close" type="button">Close me!</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -167,6 +177,9 @@
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
+
+            <div class="md-overlay"></div>
+
             <script src="js/classie.js"></script>
             <script src="js/modalEffects.js"></script>
             <script>

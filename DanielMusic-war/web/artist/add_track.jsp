@@ -22,8 +22,6 @@
                     $(function () {
                         $('form').submit(function () {
                             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                                var file = $('#picture');
-                                var fileSize = $('#picture')[0].files[0].size;
                                 var musicFile = $('#music');
                                 var musicFileSize = $('#music')[0].files[0].size;
 
@@ -52,7 +50,6 @@
                         window.location.href = "#!/artist/tracks";
                     }
                 </script>
-
 
                 <%@page import="EntityManager.Artist"%>
                 <%
@@ -92,7 +89,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="music"><strong>Music (WAV format, 44.1 kHz, 16bit)</strong> </label>
+                            <label for="music"><strong>Music * (WAV format, 44.1 kHz, 16bit)</strong></label>
                             <input type="file" id="music" name="music" required>
                         </div>
                     </div>
