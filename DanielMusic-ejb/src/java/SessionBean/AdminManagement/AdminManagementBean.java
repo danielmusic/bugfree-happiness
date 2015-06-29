@@ -12,6 +12,7 @@ import SessionBean.CommonInfrastructure.SendGridLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -28,7 +29,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     private CommonInfrastructureBeanLocal cibl;
     @EJB
     private SendGridLocal sgl;
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -248,6 +249,60 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public Artist getArtist(Long artistID) {
+        System.out.println("AdminManagementBean: getArtist() called");
+        Artist artist;
+        try {
+            Query q = em.createQuery("Select a from Artist a where a.id=:artistID");
+            q.setParameter("artistID", artistID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            artist = (Artist) q.getSingleResult();
+            System.out.println("AdminManagementBean: getArtist() successfully retrieved");
+            return artist;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("AdminManagementBean: getArtist() got exception");
+            return null;
+        }
+    }
+
+    @Override
+    public Band getBand(Long bandID) {
+        System.out.println("AdminManagementBean: getBand() called");
+        Band band;
+        try {
+            Query q = em.createQuery("Select b from Band b where b.id=:bandID");
+            q.setParameter("bandID", bandID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            band = (Band) q.getSingleResult();
+            System.out.println("AdminManagementBean: getBand() successfully retrieved");
+            return band;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("AdminManagementBean: getBand() got exception");
+            return null;
+        }
+    }
+
+    @Override
+    public Member getMember(Long memberID) {
+        System.out.println("AdminManagementBean: getMember() called");
+        Member member;
+        try {
+            Query q = em.createQuery("Select m from Member m where m.id=:memberID");
+            q.setParameter("memberID", memberID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            member = (Member) q.getSingleResult();
+            System.out.println("AdminManagementBean: getMember() successfully retrieved");
+            return member;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("AdminManagementBean: getMember() got exception");
+            return null;
+        }
     }
 
 }

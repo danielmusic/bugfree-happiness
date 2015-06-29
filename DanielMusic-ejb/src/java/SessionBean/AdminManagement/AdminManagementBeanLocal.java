@@ -63,5 +63,10 @@ public interface AdminManagementBeanLocal {
     //public ReturnHelper removeMusicFromGenre(Long genreID, Long musicID);
     public ReturnHelper deleteGenre(Long genreID);
     
+    public Artist getArtist(Long artistID);
+    
+    public Band getBand(Long bandID);
+    
+    public Member getMember(Long memberID);
 
 }
