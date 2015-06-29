@@ -6,13 +6,14 @@
 package EntityManager;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,7 +24,8 @@ public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long accountID;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Account account;
     private String nonMemberEmail;
     private Double totalPaymentAmount;
     @Temporal(TemporalType.TIMESTAMP)
@@ -32,9 +34,9 @@ public class Payment implements Serializable {
     private Date dateCompleted;
     private Boolean paymentCompleted;
     @OneToMany
-    private List<Music> musicPurchased;
+    private Set<Music> musicPurchased;
     @OneToMany
-    private List<Album> albumPurchased;
+    private Set<Album> albumPurchased;
     private String UUID;
 
     public Payment() {
@@ -44,8 +46,6 @@ public class Payment implements Serializable {
         this.dateCreated = new Date();
         this.paymentCompleted=false;
         this.totalPaymentAmount = paymentAmount;
-        this.musicPurchased = new ArrayList();
-        this.albumPurchased = new ArrayList();
         this.UUID = UUID;
     }
 
@@ -73,28 +73,28 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public List<Album> getAlbumPurchased() {
+    public Set<Album> getAlbumPurchased() {
         return albumPurchased;
     }
 
-    public void setAlbumPurchased(List<Album> albumPurchased) {
+    public void setAlbumPurchased(Set<Album> albumPurchased) {
         this.albumPurchased = albumPurchased;
     }
 
-    public List<Music> getMusicPurchased() {
+    public Set<Music> getMusicPurchased() {
         return musicPurchased;
     }
 
-    public void setMusicPurchased(List<Music> musicPurchased) {
+    public void setMusicPurchased(Set<Music> musicPurchased) {
         this.musicPurchased = musicPurchased;
     }
 
-    public Long getAccountID() {
-        return accountID;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountID(Long accountID) {
-        this.accountID = accountID;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Double getTotalPaymentAmount() {
