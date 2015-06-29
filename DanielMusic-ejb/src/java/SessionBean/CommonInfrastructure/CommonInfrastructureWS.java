@@ -35,8 +35,8 @@ public class CommonInfrastructureWS {
     }
 
     @WebMethod(operationName = "getMusicFileURLFromGoogleCloudStorage")
-    public String getMusicFileURLFromGoogleCloudStorage(@WebParam(name = "filename") String filename) {
-        return ejbRef.getMusicFileURLFromGoogleCloudStorage(filename);
+    public String getMusicFileURLFromGoogleCloudStorage(@WebParam(name = "filename") String filename,@WebParam(name = "expirationInSeconds") Long expirationInSeconds) {
+        return ejbRef.getFileURLFromGoogleCloudStorage(filename,expirationInSeconds);
     }
 
     @WebMethod(operationName = "generateUUID")

@@ -7,6 +7,6 @@ import javax.ejb.Local;
 public interface CommonInfrastructureBeanLocal {
     public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage, Boolean publiclyReadable);
     public ReturnHelper deleteFileFromGoogleCloudStorage(String remoteDestinationFile);
-    public String getMusicFileURLFromGoogleCloudStorage(String filename); //filename: eg music/artistID/albumID/musicName.mp3
+    public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds); //filename: eg music/artistID/albumID/musicName.mp3
     public String generateUUID();
 }

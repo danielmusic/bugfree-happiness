@@ -59,7 +59,6 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     //GCS Download
     private static final String SERVICE_ACCOUNT_EMAIL = "905886242502-8jv7f7qopknh74kmjb1ka4vdnrvk6no1@developer.gserviceaccount.com";
     private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = "C:\\Credentials\\DanielMusic-1536a289ea67.p12";
-    private static final long expiration = 60;//60s
 
  
 
@@ -115,11 +114,11 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     @Override
-    public String getMusicFileURLFromGoogleCloudStorage(String filename) {
+    public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds) {
         System.out.println("CommonInfrastructureBean: getMusicFileURLFromGoogleCloudStorage() called");
         try {
             PrivateKey pk = loadKeyFromPkcs12(SERVICE_ACCOUNT_PKCS12_FILE_PATH, "notasecret".toCharArray());
-            String get_url = this.getSigningURL("GET", filename, pk);
+            String get_url = this.getSigningURL("GET", filename, pk, expirationInSeconds);
             URL url = new URL(get_url);
             HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
             httpCon.setRequestMethod("GET");
@@ -164,11 +163,11 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private String getSigningURL(String verb, String filename, PrivateKey privateKey) throws Exception {
-        String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expiration) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
+    private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
+        String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expirationInSeconds) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
                 + "?GoogleAccessId=" + SERVICE_ACCOUNT_EMAIL
-                + "&Expires=" + (System.currentTimeMillis() / 1000 + expiration)
+                + "&Expires=" + (System.currentTimeMillis() / 1000 + expirationInSeconds)
                 + "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
         return signed_url;
     }
