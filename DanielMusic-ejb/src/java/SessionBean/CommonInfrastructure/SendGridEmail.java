@@ -7,8 +7,8 @@ import com.sendgrid.SendGrid;
 public class SendGridEmail implements SendGridLocal {
 
     //SendGrid API Key
-    private static final String SENDGRID_API_USER = "";
-    private static final String SENDGRID_API_PASSWORD = "";
+    private String SENDGRID_API_USER = "";
+    private String SENDGRID_API_PASSWORD = "";
 
     @Override
     public Boolean sendEmail(String destinationEmail, String senderEmail, String subject, String message) {
