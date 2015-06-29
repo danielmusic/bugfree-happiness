@@ -12,17 +12,16 @@
 <!doctype html>
 <html class="fixed">
     <head>
-        <jsp:include page="../head.html" />
+        <jsp:include page="../jspIncludePages/head.html" />
     </head>
     <body onload="alertFunc()">
-        <jsp:include page="../displayNotification.jsp" />
-
+        <jsp:include page="../jspIncludePages/displayNotification.jsp" />
         <script>
             function refresh() {
                 window.location.href = "../../AccountManagementController?target=ListAllArtist";
             }
             function viewArtist(id) {
-                window.location.href = "artist.jsp?id=" + id;
+                window.location.href = "../../AccountManagementController?target=ListArtistbyID&id=" + id;
             }
             function disableAccount(id) {
                 artistManagement.id.value = id;
@@ -33,10 +32,10 @@
         </script>
 
         <section class="body">
-            <jsp:include page="../header.jsp" />
+            <jsp:include page="../jspIncludePages/header.jsp" />
 
             <div class="inner-wrapper">
-                <jsp:include page="../sidebar.jsp" />
+                <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
                         <h2>Artist Management</h2>
@@ -53,7 +52,6 @@
                     </header>
 
                     <!-- start: page -->
-
                     <section class="panel">
                         <header class="panel-heading">
                             <h2 class="panel-title">Artist Management</h2>
@@ -90,11 +88,11 @@
                                                     if (artists.get(i).getIsApproved() == 0) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
                                                     } else if (artists.get(i).getIsApproved() == 1) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approve</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approved</span>");
                                                     } else if (artists.get(i).getIsApproved() == -2) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Not approved</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Rejected</span>");
                                                     }
                                                 %>
                                             </td>
@@ -167,8 +165,7 @@
                 </section>
             </div>
         </section>
-        <jsp:include page="../foot.html" />
-
+        <jsp:include page="../jspIncludePages/foot.html" />
 
     </body>
 </html>

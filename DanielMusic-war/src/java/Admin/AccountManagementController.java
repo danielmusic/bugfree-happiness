@@ -8,6 +8,7 @@ import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
+import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class AccountManagementController extends HttpServlet {
+
+    @EJB
+    private CommonInfrastructureBeanLocal commonInfrastructureBean;
 
     @EJB
     private AdminManagementBeanLocal adminManagementBean;
@@ -72,6 +76,16 @@ public class AccountManagementController extends HttpServlet {
                     }
                     break;
 
+                case "ListArtistbyID":
+                    if (checkLogin(response)) {
+                        if (id != null) {
+                            Artist artist = adminManagementBean.getArtist(Long.parseLong(id));
+                            session.setAttribute("artist", artist);
+                            nextPage = "admin/AccountManagement/artist.jsp";
+                        }
+                    }
+                    break;
+
                 case "ListAllFan":
                     if (checkLogin(response)) {
                         List<Member> fans = adminManagementBean.listAllMembers(true);
@@ -96,6 +110,16 @@ public class AccountManagementController extends HttpServlet {
                     }
                     break;
 
+                case "ListBandbyID":
+                    if (checkLogin(response)) {
+                        if (id != null) {
+                            Band band = adminManagementBean.getBand(Long.parseLong(id));
+                            session.setAttribute("band", band);
+                            nextPage = "admin/AccountManagement/band.jsp";
+                        }
+                    }
+                    break;
+
                 case "DisableAccount":
                     if (checkLogin(response)) {
                         returnHelper = accountManagementBean.disableAccount(Long.parseLong(id));
@@ -106,7 +130,7 @@ public class AccountManagementController extends HttpServlet {
                                     nextPage = "admin/error500.html";
                                 } else {
                                     session.setAttribute("artists", artists);
-                                    nextPage = "admin/ArtistManagement/artistManagement.jsp";
+                                    nextPage = "admin/AccountManagement/artistManagement.jsp";
                                 }
                             } else if (source != null && source.equals("bandManagement")) {
                                 List<Band> bands = adminManagementBean.listAllBands(true);
