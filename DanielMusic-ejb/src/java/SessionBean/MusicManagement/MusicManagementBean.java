@@ -84,7 +84,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (artist.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
                 music.setNumDownloaded(music.getNumDownloaded() + 1);
-                String downloadLink = cibl.getMusicFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3");
+                String downloadLink = cibl.getFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3", 120L);//2mins expiry
                 helper.setDescription(downloadLink);
                 helper.setResult(true);
             } else {
