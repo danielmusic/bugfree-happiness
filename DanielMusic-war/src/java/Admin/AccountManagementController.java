@@ -8,7 +8,7 @@ import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
-import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 public class AccountManagementController extends HttpServlet {
 
     @EJB
-    private CommonInfrastructureBeanLocal commonInfrastructureBean;
+    private MusicManagementBeanLocal musicManagementBean;
 
     @EJB
     private AdminManagementBeanLocal adminManagementBean;
@@ -150,6 +150,12 @@ public class AccountManagementController extends HttpServlet {
                                 }
                             }
                         }
+                    }
+                    break;
+
+                case "GetDownloadLink":
+                    if (checkLogin(response)) {
+                        musicManagementBean.generateDownloadLink(email, Long.MIN_VALUE, Boolean.TRUE);
                     }
                     break;
             }

@@ -117,7 +117,7 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="description"><strong>Album Description</strong> </label>
-                            <textarea id="description" name="description" <%=disableFlag%>><%if (album.getDescription() != null) {
+                            <textarea id="description" name="description" style="min-height:120px;" <%=disableFlag%>><%if (album.getDescription() != null) {
                                     out.print(album.getDescription());
                                 }%></textarea>
                         </div>
