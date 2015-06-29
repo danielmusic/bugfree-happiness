@@ -17,7 +17,7 @@
         }
 
         function viewTracks(id) {
-            window.location.href = "MusicManagementController?source=tracks&target=ListAllTracksByAlbumID&id=" + id;
+            window.location.href = "MusicManagementController?target=ListAllTracksByAlbumID&id=" + id;
         }
 
         function publishAlbum(id) {
@@ -31,6 +31,9 @@
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
+                        if (!artist.getEmailIsVerified()) {
+                            out.print("<p class='warning'>Your account has not been verified. Please verify first.</p>");
+                        }
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));
                 %>
                 <form name="albumManagement">

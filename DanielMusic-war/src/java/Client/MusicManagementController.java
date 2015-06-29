@@ -3,11 +3,9 @@ package Client;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.Band;
-import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
-import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
 import java.util.List;
@@ -24,9 +22,6 @@ import javax.servlet.http.Part;
 public class MusicManagementController extends HttpServlet {
 
     @EJB
-    private CommonInfrastructureBeanLocal commonInfrastructureBean;
-
-    @EJB
     private AdminManagementBeanLocal adminManagementBean;
 
     @EJB
@@ -38,9 +33,7 @@ public class MusicManagementController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
-        String source = request.getParameter("source");
         System.out.println("target " + target);
-        System.out.println("source " + source);
 
         String id = request.getParameter("id");
         String name = request.getParameter("name");
@@ -114,6 +107,20 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
 
+                case "DeleteAlbum":
+                    if (artist != null) {
+                        returnHelper = musicManagementBean.deleteAlbum(Long.parseLong(id));
+
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                        }
+                        nextPage = "#!/artist/albums";
+                    }
+                    break;
+
                 case "PublishAlbum":
                     if (artist != null) {
                         returnHelper = musicManagementBean.publishAlbum(Long.parseLong(id));
@@ -136,32 +143,34 @@ public class MusicManagementController extends HttpServlet {
                     } else {
                         session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                         session.setAttribute("tracks", tracks);
-                        if (source != null && source.equals("tracks")) {
+                        if (artist != null) {
                             nextPage = "#!/artist/tracks";
                         }
                     }
+
                     break;
 
                 case "ListTrackByID":
                     if (artist != null && id != null) {
                         Music track = musicManagementBean.getMusic(Long.parseLong(id));
                         session.setAttribute("track", track);
-                        session.setAttribute("URL_128", commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage(track.getFileLocation128()));
-                        session.setAttribute("URL_320", commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage(track.getFileLocation320()));
-                        session.setAttribute("URL_Wav", commonInfrastructureBean.getMusicFileURLFromGoogleCloudStorage(track.getFileLocationWAV()));
+
+                        session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(track.getFileLocation128(), Long.parseLong(id), false));
+                        session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(track.getFileLocation320(), Long.parseLong(id), false));
+                        session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(track.getFileLocationWAV(), Long.parseLong(id), false));
                         nextPage = "#!/artist/edit_track";
                     }
                     break;
 
                 case "AddTrack":
                     album = (Album) (session.getAttribute("album"));
-                    if (artist != null && yearReleased != null && album != null) {
+                    if (artist != null && yearReleased != null && album != null && price != null) {
                         Part music = request.getPart("music");
                         if (music.getSize() == 0) {
                             music = null;
                         }
 
-                        returnHelper = musicManagementBean.createMusic(music, album.getId(), intTrackNumber, name, 0.0, lyrics, Integer.parseInt(yearReleased));
+                        returnHelper = musicManagementBean.createMusic(music, album.getId(), intTrackNumber, name, Double.parseDouble(price), lyrics, Integer.parseInt(yearReleased));
                         if (returnHelper.getResult()) {
                             tracks = musicManagementBean.ListAllTracksByAlbumID(album.getId());
                             if (tracks == null) {
@@ -199,7 +208,20 @@ public class MusicManagementController extends HttpServlet {
                     } else {
                         session.setAttribute("errMsg", returnHelper.getDescription());
                     }
+                    break;
 
+                case "DeleteTrack":
+                    if (artist != null) {
+                        returnHelper = musicManagementBean.deleteMusic(Long.parseLong(id));
+
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                        }
+                        nextPage = "#!/artist/albums";
+                    }
                     break;
 
             }

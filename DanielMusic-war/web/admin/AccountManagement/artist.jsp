@@ -168,7 +168,7 @@
 
          
 
-                                        <input type="hidden" name="target" value="AddGenre">   
+                                        <input type="hidden" name="target" value="">   
                                     </div>
 
                                     <footer class="panel-footer">

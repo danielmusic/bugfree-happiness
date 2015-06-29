@@ -49,6 +49,10 @@
                     function back() {
                         window.location.href = "#!/artist/tracks";
                     }
+
+                    function deleteTrack(id) {
+                        window.location.href = "MusicManagementController?target=DeleteTrack&id=" + id;
+                    }
                 </script>
                 <%@page import="EntityManager.Album"%>
                 <%@page import="EntityManager.Music"%>
@@ -61,7 +65,6 @@
                     if (album != null && album.getIsPublished()) {
                         disableFlag = "disabled";
                     }
-                    String requiredFlag = "";
 
                     String URL_128 = (String) (session.getAttribute("URL_128"));
                     String URL_320 = (String) (session.getAttribute("URL_320"));
@@ -83,32 +86,41 @@
                     <h2>Track details</h2>
 
                     <div class="row clearfix">
-                        <div class="col-1-3">
+                        <div class="col-1-2">
                             <label for="name"><strong>Title</strong> *</label>
                             <input type="text" id="name" name="name" <%=disableFlag%> value="<%if (track.getName() != null) {
                                     out.print(track.getName());
                                 }%>" required>
                         </div>                        
 
-                        <div class="col-1-3">
+                        <div class="col-1-2 last">
                             <label for="yearReleased"><strong>Year Released</strong> *</label>
                             <input type="number" id="yearReleased" name="yearReleased" min="1900" max="2050" <%=disableFlag%> value="<%if (track.getYearReleased() != 0) {
                                     out.print(track.getYearReleased());
                                 }%>" required>
                         </div>
+                    </div>
 
-                        <div class="col-1-3 last">
+                    <div class="row clearfix">
+                        <div class="col-1-2">
                             <label for="trackNumber"><strong>Track no</strong> </label>
                             <input type="text" id="trackNumber" name="trackNumber" <%=disableFlag%> value="<%if (track.getTrackNumber() != null && track.getTrackNumber() != 0) {
                                     out.print(track.getTrackNumber());
                                 }%>">
+                        </div>
+
+                        <div class="col-1-2 last">
+                            <label for="price"><strong>Price</strong> *</label>
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required <%=disableFlag%> value="<%if (track.getPrice() != null && track.getPrice() != 0) {
+                                    out.print(track.getPrice());
+                                }%>"/>
                         </div>
                     </div>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="music"><strong>Music * (WAV format, 44.1 kHz, 16bit)</strong></label>
-                            <input type="file" id="music" name="music" required <%=disableFlag%>>
+                            <input type="file" id="music" name="music" <%=disableFlag%>>
 
                             <a href="<%=URL_128%>" target="_blank">Click here to download 128 kbps</a><br>
                             <a href="<%=URL_320%>" target="_blank">Click here to download 320 kbps</a><br>
@@ -138,6 +150,17 @@
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <%if (!album.getIsPublished()) {%>
                     <button type="submit" class="small invert" style="margin-right: 10px;">Save Changes</button>
+                    <button type="button" class="small invert md-trigger" style="margin-right: 10px;" data-modal="modal-delete">Delete Track</button>
+                    <div class="md-modal md-effect-1" id="modal-delete">
+                        <div class="md-content">
+                            <h3>Are you sure?</h3>
+                            <div style="text-align:center;">
+                                <p>Confirm delete track?</p>
+                                <button type="button" onclick="javascript:deleteTrack('<%=track.getId()%>')">Confirm</button>
+                                <button class="md-close" type="button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                     <%}%>
 
                     <div class="clear"></div>
@@ -148,6 +171,14 @@
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
+
+
+            <div class="md-overlay"></div>
+            <script src="js/classie.js"></script>
+            <script src="js/modalEffects.js"></script>
+            <script>var polyfilter_scriptpath = '/js/';</script> 
+            <script src="js/cssParser.js"></script>
+            <script src="js/css-filters-polyfill.js"></script>
         </div>
     </section>
 </section>

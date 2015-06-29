@@ -71,19 +71,27 @@
                     <h2>Track details</h2>
 
                     <div class="row clearfix">
-                        <div class="col-1-3">
+                        <div class="col-1-2">
                             <label for="name"><strong>Title</strong> *</label>
                             <input type="text" id="name" name="name" required>
                         </div>                        
 
-                        <div class="col-1-3">
+                        <div class="col-1-2 last">
                             <label for="yearReleased"><strong>Year Released</strong> *</label>
                             <input type="number" id="yearReleased" name="yearReleased" min="1900" max="2050" required>
                         </div>
+                    </div>
 
-                        <div class="col-1-3 last">
+
+                    <div class="row clearfix">
+                        <div class="col-1-2">
                             <label for="trackNumber"><strong>Track no</strong> </label>
-                            <input type="text" id="trackNumber" name="trackNumber">
+                            <input type="number" id="trackNumber" name="trackNumber">
+                        </div>
+
+                        <div class="col-1-2 last">
+                            <label for="price"><strong>Price</strong> *</label>
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required/>
                         </div>
                     </div>
 

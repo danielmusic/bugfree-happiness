@@ -52,6 +52,10 @@
                     function back() {
                         window.location.href = "#!/artist/albums";
                     }
+
+                    function deleteAlbum(id) {
+                        window.location.href = "MusicManagementController?target=DeleteAlbum&id=" + id;
+                    }
                 </script>
 
                 <%@page import="EntityManager.Album"%>
@@ -130,13 +134,22 @@
 
 
                     <input type="hidden" value="UpdateAlbum" name="target">
-                    <input type="hidden" value="Artist" name="source">
                     <input type="hidden" value="<%=album.getId()%>" name="id">
-
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
 
                     <%if (!album.getIsPublished()) {%>
                     <button type="submit" class="small invert" style="margin-right: 10px;">Save Changes</button>
+                    <button type="button" class="small invert md-trigger" style="margin-right: 10px;" data-modal="modal-delete">Delete Album</button>
+                    <div class="md-modal md-effect-1" id="modal-delete">
+                        <div class="md-content">
+                            <h3>Are you sure?</h3>
+                            <div style="text-align:center;">
+                                <p>All the associated tracks will also be removed.</p>
+                                <button type="button" onclick="javascript:deleteAlbum('<%=album.getId()%>')">Confirm</button>
+                                <button class="md-close" type="button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                     <%}%>
 
                     <div class="clear"></div>
@@ -147,6 +160,14 @@
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
+
+            <div class="md-overlay"></div>
+            <script src="js/classie.js"></script>
+            <script src="js/modalEffects.js"></script>
+            <script>var polyfilter_scriptpath = '/js/';</script> 
+            <script src="js/cssParser.js"></script>
+            <script src="js/css-filters-polyfill.js"></script>
+
         </div>
     </section>
 </section>
