@@ -22,6 +22,10 @@
             function back() {
                 window.location.href = "../../AccountManagementController?target=ListAllArtist";
             }
+
+            function viewArtistAlbum() {
+                window.location.href = "artistAlbums.jsp";
+            }
         </script>
         <jsp:include page="../jspIncludePages/displayNotification.jsp" />
         <section class="body">
@@ -34,12 +38,8 @@
                         <h2>Artist Management</h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
-                                <li>
-                                    <a href="admin/workspace.jsp">
-                                        <i class="fa fa-home"></i>
-                                    </a>
-                                </li>
-                                <li><span>Artist Management</span></li>
+                                <li><a href="admin/workspace.jsp"><i class="fa fa-home"></i></a></li>
+                                <li><a href="../../AccountManagementController?target=ListAllArtist">Artist Management</a></li>
                                 <li><span>Artist &nbsp;&nbsp</span></li>
                             </ol>
                         </div>
@@ -162,13 +162,11 @@
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"></label>
                                             <div class="col-md-6">
-                                                <button class="btn btn-default btn-block modal-with-form"  href="#modalAlbums" type="button">View Albums</button>
+                                                <button class="btn btn-default btn-block" onclick="javascript:viewArtistAlbum();"  type="button">View Albums</button>
                                             </div>
                                         </div>
 
-         
-
-                                        <input type="hidden" name="target" value="AddGenre">   
+                                        <input type="hidden" name="target" value="">   
                                     </div>
 
                                     <footer class="panel-footer">

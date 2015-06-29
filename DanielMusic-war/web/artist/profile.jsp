@@ -10,6 +10,9 @@
                     List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null && genres != null) {
+                        if (!artist.getEmailIsVerified()) {
+                            out.print("<p class='warning'>Your account has not been verified. Please verify first.</p>");
+                        }
                 %>
 
                 <form action="ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
@@ -32,7 +35,9 @@
                                         <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
                                         <li><strong>Close:</strong> click on the button below to close the modal.</li>
                                     </ul>
-                                    <button class="md-close" type="button">Close me!</button>
+                                    <div style="text-align:center;">
+                                        <button class="md-close" type="button">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +59,9 @@
                                 <h3>Payment Details</h3>
                                 <div>
                                     <p>When a fan buys your music, the money will go directly to the above address. Please also be sure to follow the instructions on the Sell Your Music on ?? page!:</p>
-                                    <button class="md-close" type="button">Close me!</button>
+                                    <div style="text-align:center;">
+                                        <button class="md-close" type="button">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -182,10 +189,7 @@
 
             <script src="js/classie.js"></script>
             <script src="js/modalEffects.js"></script>
-            <script>
-                                // this is important for IEs
-                                var polyfilter_scriptpath = '/js/';
-            </script> 
+            <script>var polyfilter_scriptpath = '/js/';</script> 
             <script src="js/cssParser.js"></script>
             <script src="js/css-filters-polyfill.js"></script>
         </div>

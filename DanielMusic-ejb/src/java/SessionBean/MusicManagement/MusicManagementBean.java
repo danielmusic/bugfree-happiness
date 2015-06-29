@@ -72,25 +72,20 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper generateDownloadLink(String email, Long musicID) {
-        System.out.println("generateDownloadLink() called with email: " + email + " and musicID: " + musicID);
+    public String generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount) {
+        System.out.println("generateDownloadLink() called");
         try {
             ReturnHelper helper = new ReturnHelper();
             Query q = em.createQuery("select a from Artist a where a.email=:email and a.isDisabled=false and a.emailIsVerified=true");
-            q.setParameter("email", email);
             Artist artist = (Artist) q.getSingleResult();
             Music music = em.getReference(Music.class, musicID);
 
-            if (artist.getListOfPurchasedMusics().contains(music)) {
                 //generate download link for user
                 music.setNumDownloaded(music.getNumDownloaded() + 1);
                 String downloadLink = cibl.getFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3", 120L);//2mins expiry
                 helper.setDescription(downloadLink);
                 helper.setResult(true);
-            } else {
-                helper.setDescription("Failed to generate download link. Please check that you have bought this music.");
-                helper.setResult(false);
-            }
+            
         } catch (Exception e) {
             System.out.println("Error. Failed to generateDownloadLink()");
             e.printStackTrace();

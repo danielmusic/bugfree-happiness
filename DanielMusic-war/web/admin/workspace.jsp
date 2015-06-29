@@ -39,7 +39,7 @@
         <script src="assets/vendor/modernizr/modernizr.js"></script>
     </head>
     <body onload="alertFunc()">
-        <jsp:include page="displayNotification.jsp" />
+        <jsp:include page="jspIncludePages/displayNotification.jsp" />
         <header class="header">
             <div class="logo-container">
                 <a href="../admin/workspace.jsp" class="logo">

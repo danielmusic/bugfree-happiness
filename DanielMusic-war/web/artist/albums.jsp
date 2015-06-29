@@ -9,7 +9,7 @@
         }
 
         function addSingles() {
-            window.location.href = "#!/artist/add_album";
+            window.location.href = "#!/artist/add_singles";
         }
 
         function viewAlbum(id) {
@@ -17,7 +17,7 @@
         }
 
         function viewTracks(id) {
-            window.location.href = "MusicManagementController?source=tracks&target=ListAllTracksByAlbumID&id=" + id;
+            window.location.href = "MusicManagementController?target=ListAllTracksByAlbumID&id=" + id;
         }
 
         function publishAlbum(id) {
@@ -31,6 +31,9 @@
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
+                        if (!artist.getEmailIsVerified()) {
+                            out.print("<p class='warning'>Your account has not been verified. Please verify first.</p>");
+                        }
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));
                 %>
                 <form name="albumManagement">
@@ -43,7 +46,7 @@
                             <tr>
                                 <th>no</th>
                                 <th>Album Title</th>
-                                <th>Publish Status</th>
+                                <th>Published?</th>
                                 <th colspan="2"></th>
                             </tr>
                         </thead>
@@ -55,7 +58,15 @@
                             <tr>
                                 <td class="table-date"><%=(i + 1)%></td>
                                 <td class="table-name"><%=albums.get(i).getName()%></td>         
-                                <td class="table-date"><%=albums.get(i).getIsPublished()%></td>
+                                <td class="table-date">
+                                    <%
+                                        if (albums.get(i).getIsPublished()) {
+                                            out.print("Yes");
+                                        } else {
+                                            out.print("No");
+                                        }
+                                    %>
+                                </td>
                                 <td class="actions" style="width: 300px;">
                                     <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit album</a>
                                     <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View tracks</a>

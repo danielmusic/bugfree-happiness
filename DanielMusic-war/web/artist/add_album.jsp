@@ -102,7 +102,7 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="description"><strong>Album Description</strong> </label>
-                            <textarea id="description" name="description"></textarea>
+                            <textarea id="description" name="description" style="min-height:120px;"></textarea>
                         </div>
                     </div>
 

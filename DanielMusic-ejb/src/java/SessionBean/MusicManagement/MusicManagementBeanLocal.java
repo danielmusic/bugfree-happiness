@@ -27,7 +27,7 @@ public interface MusicManagementBeanLocal {
      * @return ReturnHelper: Contains the generated download link in the
      * description
      */
-    public ReturnHelper generateDownloadLink(String email, Long musicID);
+    public String generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount);
 
     /**
      * {@inheritDoc}
@@ -80,7 +80,7 @@ public interface MusicManagementBeanLocal {
     public ReturnHelper deleteMusic(Long musicID);
 
     public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, Double price, String lyrics, String credits);
-    
+
     public List<Music> ListAllTracksByAlbumID(Long albumID);
 
     public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);

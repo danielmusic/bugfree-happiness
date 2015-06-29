@@ -24,7 +24,7 @@
                         <h2 class="title text-uppercase text-bold m-none"><i class="fa fa-user mr-xs"></i> Sign In</h2>
                     </div>
                     <div class="panel-body">
-                        <jsp:include page="displayMessageLong.jsp" />
+                        <jsp:include page="jspIncludePages/displayMessageLong.jsp" />
 
                         <form action="../AccountManagementController">
                             <div class="form-group mb-lg">
