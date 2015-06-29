@@ -72,7 +72,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper generateDownloadLink(String fileName, Long musicID, Boolean isIncreaseDownloadCount) {
+    public ReturnHelper generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount) {
         System.out.println("generateDownloadLink() called");
         try {
             ReturnHelper helper = new ReturnHelper();
