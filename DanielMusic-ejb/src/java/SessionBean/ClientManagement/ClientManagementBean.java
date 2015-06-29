@@ -2,6 +2,7 @@ package SessionBean.ClientManagement;
 
 import EntityManager.Account;
 import EntityManager.Album;
+import EntityManager.Artist;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.PaymentHelper;
@@ -26,13 +27,13 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class ClientManagementBean implements ClientManagementBeanLocal {
-
+    
     @EJB
     private CommonInfrastructureBeanLocal cibl;
-
+    
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
-
+    
     @Override
     public String getPaymentLink(Long accountID, String nonMemberEmail, List<Long> trackIDs, List<Long> albumIDs) {
         try {
@@ -43,10 +44,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             Double totalPaymentAmount = 0.0;
             Set<Music> tracksInCart = null;
             Set<Album> albumInCart = null;
-            List<PaymentHelper> artistsReceivingPayments = null;
-            //artistsReceivingPayments.contains(artist);
-            //artistsReceivingPayments
-
+            List<PaymentHelper> artistsReceivingPayments = new ArrayList();
+            
             if (accountID != null) {
                 // If it's a logged in account transaction
                 account = em.getReference(Account.class, accountID);
@@ -62,6 +61,15 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 for (Music music : tracksInCart) {
                     trackIDs.add(music.getId());
                     totalPaymentAmount = totalPaymentAmount + music.getPrice();
+                    Artist currentArtist = music.getAlbum().getArtist();
+                    if (artistsReceivingPayments.contains(currentArtist)) {
+                        int i = artistsReceivingPayments.lastIndexOf(currentArtist);
+                        PaymentHelper paymentHelper = artistsReceivingPayments.get(i);
+                        paymentHelper.setTotalPaymentAmount(paymentHelper.getTotalPaymentAmount() + music.getPrice());
+                        artistsReceivingPayments.set(i, paymentHelper);
+                    } else {
+                        
+                    }
                 }
                 for (Album album : albumInCart) {
                     albumIDs.add(album.getId());
@@ -107,10 +115,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             primaryReceiver.setEmail("danielmusic@hotmail.com");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
-
+            
             ReceiverList receiverList = new ReceiverList(receivers);
             payRequest.setReceiverList(receiverList);
-
+            
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
@@ -120,17 +128,17 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
             payRequest.setCurrencyCode("USD");
             payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
-
+            
             Map<String, String> sdkConfig = new HashMap<String, String>();
             sdkConfig.put("mode", "sandbox");
             sdkConfig.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
             sdkConfig.put("acct1.Password", "WX4WTU3S8MY44S7F");
             sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
             sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
-
+            
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
-
+            
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
@@ -144,14 +152,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public ReturnHelper completePayment(Long paymentID, String UUID) {
         //Delete shopping cart
         //Controller will forward to 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public ShoppingCart getShoppingCart(Long accountID) {
         System.out.println("ClientManagementBean: getShoppingCart() called");
@@ -168,12 +176,12 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             return null;
         }
     }
-
+    
     @Override
     public ReturnHelper removeItemFromShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public ReturnHelper addItemToShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
         System.out.println("ClientManagementBean: addItemToShoppingCart() called");
@@ -185,7 +193,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         try {
             account = em.getReference(Account.class, accountID);
             cart = account.getShoppingCart();
-
+            
             if (isTrack) {
                 music = em.getReference(Music.class, trackOrAlbumID);
                 cart.getListOfMusics().add(music);
@@ -193,9 +201,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 album = em.getReference(Album.class, trackOrAlbumID);
                 cart.getListOfAlbums().add(album);
             }
-
+            
             System.out.println("ClientManagementBean: addItemToShoppingCart() successfully");
-
+            
             helper.setDescription("Item added to cart successfully.");
             helper.setResult(true);
             return helper;
@@ -207,10 +215,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             return helper;
         }
     }
-
+    
     @Override
     public ReturnHelper clearShoppingCart(Long accountID) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
 }
