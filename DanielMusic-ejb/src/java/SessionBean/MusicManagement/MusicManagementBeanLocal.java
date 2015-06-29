@@ -27,7 +27,7 @@ public interface MusicManagementBeanLocal {
      * @return ReturnHelper: Contains the generated download link in the
      * description
      */
-    public ReturnHelper generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount);
+    public String generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount);
 
     /**
      * {@inheritDoc}
