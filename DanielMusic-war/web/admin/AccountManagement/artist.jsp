@@ -5,24 +5,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Admin admin = (Admin) (session.getAttribute("admin"));
-    List<Artist> artists = (List<Artist>) (session.getAttribute("artists"));
-    String id = request.getParameter("id");
+    Artist artist = (Artist) (session.getAttribute("artist"));
     if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
-    } else if (id == null || id.isEmpty() || artists == null) {
-        response.sendRedirect("../artistManagement.jsp?errMsg=An error has occured.");
+    } else if (artist == null) {
+        response.sendRedirect("../AccountManagement/artistManagement.jsp?errMsg=An error has occured.");
     } else {
-        Artist artist = new Artist();
-        for (int i = 0; i < artists.size(); i++) {
-            if (artists.get(i).getId() == Long.parseLong(id)) {
-                artist = artists.get(i);
-            }
-        }
 %>
 <!doctype html>
 <html class="fixed">
     <head>
-        <jsp:include page="../head.html" />
+        <jsp:include page="../jspIncludePages/head.html" />
     </head>
     <body onload="alertFunc()">
         <script>
@@ -30,12 +23,12 @@
                 window.location.href = "../../AccountManagementController?target=ListAllArtist";
             }
         </script>
-        <jsp:include page="../displayNotification.jsp" />
+        <jsp:include page="../jspIncludePages/displayNotification.jsp" />
         <section class="body">
-            <jsp:include page="../header.jsp" />
+            <jsp:include page="../jspIncludePages/header.jsp" />
 
             <div class="inner-wrapper">
-                <jsp:include page="../sidebar.jsp" />
+                <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
                         <h2>Artist Management</h2>
@@ -97,27 +90,27 @@
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">PayPal Email</label>
                                             <div class="col-md-6">
-                                                   <input type="text" class="form-control" value="<%if (artist.getPaypalEmail() != null) {
-                                                           out.print(artist.getPaypalEmail());
-                                                       }%>" disabled>
+                                                <input type="text" class="form-control" value="<%if (artist.getPaypalEmail() != null) {
+                                                        out.print(artist.getPaypalEmail());
+                                                    }%>" disabled>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Biography</label>
                                             <div class="col-md-6">
-                                                    <textarea class="form-control" rows="3" name="address" disabled><%if (artist.getBiography() != null) {
-                                                            out.print(artist.getBiography());
-                                                        }%></textarea>
+                                                <textarea class="form-control" rows="3" name="address" disabled><%if (artist.getBiography() != null) {
+                                                        out.print(artist.getBiography());
+                                                    }%></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Genre</label>
                                             <div class="col-md-6">
-                                                   <input type="text" class="form-control" value="<%if (artist.getGenre() != null) {
-                                                           out.print(artist.getGenre());
-                                                       }%>" disabled>
+                                                <input type="text" class="form-control" value="<%if (artist.getGenre() != null) {
+                                                        out.print(artist.getGenre());
+                                                    }%>" disabled>
                                             </div>
                                         </div>
 
@@ -125,46 +118,55 @@
                                             <label class="col-md-3 control-label">Influences</label>
                                             <div class="col-md-6">
                                                 <textarea class="form-control" rows="3" name="address" disabled><%if (artist.getInfluences() != null) {
-                                                            out.print(artist.getInfluences());
-                                                        }%></textarea>
+                                                        out.print(artist.getInfluences());
+                                                    }%></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Facebook URL</label>
                                             <div class="col-md-6">
-                                                   <input type="text" class="form-control" value="<%if (artist.getFacebookURL() != null) {
-                                                           out.print(artist.getFacebookURL());
-                                                       }%>" disabled>
+                                                <input type="text" class="form-control" value="<%if (artist.getFacebookURL() != null) {
+                                                        out.print(artist.getFacebookURL());
+                                                    }%>" disabled>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Twitter URL</label>
                                             <div class="col-md-6">
-                                                   <input type="text" class="form-control" value="<%if (artist.getTwitterURL() != null) {
-                                                           out.print(artist.getTwitterURL());
-                                                       }%>" disabled>
+                                                <input type="text" class="form-control" value="<%if (artist.getTwitterURL() != null) {
+                                                        out.print(artist.getTwitterURL());
+                                                    }%>" disabled>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Instagram URL</label>
                                             <div class="col-md-6">
-                                                   <input type="text" class="form-control" value="<%if (artist.getInstagramURL() != null) {
-                                                           out.print(artist.getInstagramURL());
-                                                       }%>" disabled>
+                                                <input type="text" class="form-control" value="<%if (artist.getInstagramURL() != null) {
+                                                        out.print(artist.getInstagramURL());
+                                                    }%>" disabled>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Website</label>
                                             <div class="col-md-6">
-                                                   <input type="text" class="form-control" value="<%if (artist.getWebsiteURL() != null) {
-                                                           out.print(artist.getWebsiteURL());
-                                                       }%>" disabled>
+                                                <input type="text" class="form-control" value="<%if (artist.getWebsiteURL() != null) {
+                                                        out.print(artist.getWebsiteURL());
+                                                    }%>" disabled>
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label"></label>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-default btn-block modal-with-form"  href="#modalAlbums" type="button">View Albums</button>
+                                            </div>
+                                        </div>
+
+         
 
                                         <input type="hidden" name="target" value="AddGenre">   
                                     </div>
@@ -172,7 +174,8 @@
                                     <footer class="panel-footer">
                                         <div class="row">
                                             <div class="col-sm-9 col-sm-offset-3">
-                                                <button class="btn btn-primary">Submit</button>
+                                                <button class="btn btn-success">Approve</button>
+                                                <button class="btn btn-danger">Reject</button>
                                                 <input type="button"  class="btn btn-default" value="Back" onclick="javascript:back()"/>
                                             </div>
                                         </div>
@@ -187,7 +190,7 @@
             </div>
         </section>
 
-        <jsp:include page="../foot.html" />
+        <jsp:include page="../jspIncludePages/foot.html" />
     </body>
 </html>
 <%    }
