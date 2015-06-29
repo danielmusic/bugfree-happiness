@@ -20,10 +20,10 @@ import javax.persistence.Query;
 @Stateless
 public class AdminManagementBean implements AdminManagementBeanLocal {
 
-    private static final String artistAccountApprovedSubject = "Daniel Music: Artist Account Approved";
-    private static final String artistAccountApprovedMsg = "Your artist account has been approved. Your artist profile, albums and tracks will now be shown to the public.";
-    private static final String artistAccountRejectedSubject = "Daniel Music: Artist Account Rejected";
-    private static final String artistAccountRejectedMsg = "Unfortuantely your artist account can not be approved.";
+    private static final String artistBandAccountApprovedSubject = "Daniel Music: Artist/Band Account Approved";
+    private static final String artistBandAccountApprovedMsg = "Your account has been approved. Your profile, albums and tracks will now be shown to the public.";
+    private static final String artistBandAccountRejectedSubject = "Daniel Music: Artist/Band Account Rejected";
+    private static final String artistBandAccountRejectedMsg = "Unfortuantely your account has been rejected by our administrators..";
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
@@ -34,31 +34,42 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     private EntityManager em;
 
     @Override
-    public ReturnHelper approveArtist(Long artistID) {
-        System.out.println("AdminManagementBean: approveArtist() called");
+    public ReturnHelper approveArtistOrBand(Long artistOrBandID) {
+        System.out.println("AdminManagementBean: approveArtistOrBand() called");
         ReturnHelper result = new ReturnHelper();
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
-        q.setParameter("id", artistID);
+        q.setParameter("id", artistOrBandID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (!(account instanceof Artist)) {
+            if (!(account instanceof Artist) && !(account instanceof Band)) {
                 result.setResult(false);
-                result.setDescription("Account does not support this functionality. It is not an artist account.");
+                result.setDescription("Account does not support this functionality. It is not an artist or band account.");
             } else if (account.getIsDisabled() == true) {
                 result.setResult(false);
                 result.setDescription("Account can not be aprroved as it has been disabled.");
             } else {
-                q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
-                q.setParameter("id", artistID);
-                Artist artist = (Artist) q.getSingleResult();
-                artist.setIsApproved(1);
-                em.merge(artist);
-                result.setResult(true);
-                result.setDescription("Artist has been approved.");
-                sgl.sendEmail(artist.getEmail(), "TODO", artistAccountApprovedSubject, artistAccountApprovedMsg);
+                if (account instanceof Artist) {
+                    q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
+                    q.setParameter("id", artistOrBandID);
+                    Artist artist = (Artist) q.getSingleResult();
+                    artist.setIsApproved(1);
+                    em.merge(artist);
+                    result.setResult(true);
+                    result.setDescription("Artist has been approved.");
+                    sgl.sendEmail(artist.getEmail(), "TODO", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
+                } else if (account instanceof Band) {
+                    q = em.createQuery("SELECT s FROM Band s where s.id=:id");
+                    q.setParameter("id", artistOrBandID);
+                    Band band = (Band) q.getSingleResult();
+                    band.setIsApproved(1);
+                    em.merge(band);
+                    result.setResult(true);
+                    result.setDescription("Band has been approved.");
+                    sgl.sendEmail(band.getEmail(), "TODO", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
+                }
             }
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: approveArtist() failed");
+            System.out.println("AdminManagementBean: approveArtistOrBand() failed");
             result.setResult(false);
             result.setDescription("Failed to approve artist. Internal server error.");
             ex.printStackTrace();
@@ -67,31 +78,42 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper rejectArtist(Long artistID) {
-        System.out.println("AdminManagementBean: rejectArtist() called");
+    public ReturnHelper rejectArtistOrBand(Long artistOrBandID) {
+        System.out.println("AdminManagementBean: rejectArtistOrBand() called");
         ReturnHelper result = new ReturnHelper();
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
-        q.setParameter("id", artistID);
+        q.setParameter("id", artistOrBandID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (!(account instanceof Artist)) {
+            if (!(account instanceof Artist) && !(account instanceof Band)) {
                 result.setResult(false);
-                result.setDescription("Account does not support this functionality. It is not an artist account.");
+                result.setDescription("Account does not support this functionality. It is not an artist or band account.");
             } else if (account.getIsDisabled() == true) {
                 result.setResult(false);
                 result.setDescription("Account can not be rejected as it has been disabled.");
             } else {
-                q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
-                q.setParameter("id", artistID);
-                Artist artist = (Artist) q.getSingleResult();
-                artist.setIsApproved(1);
-                em.merge(artist);
-                result.setResult(true);
-                result.setDescription("Artist has been rejected.");
-                sgl.sendEmail(artist.getEmail(), "TODO", artistAccountRejectedSubject, artistAccountRejectedMsg);
+                if (account instanceof Artist) {
+                    q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
+                    q.setParameter("id", artistOrBandID);
+                    Artist artist = (Artist) q.getSingleResult();
+                    artist.setIsApproved(1);
+                    em.merge(artist);
+                    result.setResult(true);
+                    result.setDescription("Artist has been rejected.");
+                    sgl.sendEmail(artist.getEmail(), "TODO", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
+                } else if (account instanceof Band) {
+                    q = em.createQuery("SELECT s FROM Band s where s.id=:id");
+                    q.setParameter("id", artistOrBandID);
+                    Band band = (Band) q.getSingleResult();
+                    band.setIsApproved(1);
+                    em.merge(band);
+                    result.setResult(true);
+                    result.setDescription("Band has been rejected.");
+                    sgl.sendEmail(band.getEmail(), "TODO", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
+                }
             }
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: rejectArtist() failed");
+            System.out.println("AdminManagementBean: rejectArtistOrBand() failed");
             result.setResult(false);
             result.setDescription("Failed to approve artist. Internal server error.");
             ex.printStackTrace();
