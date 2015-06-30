@@ -2,6 +2,7 @@ package EntityManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,6 +15,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -36,6 +39,8 @@ public abstract class Account implements Serializable {
     private List<Music> listOfPurchasedMusics;
     private Boolean emailIsVerified; //Initial registered email
     private String verificationCode;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date verificationCodeGeneratedDate;
     private Boolean newEmailIsVerified; //Subsequent change (will reset to false when the user tries to change email)
     @Lob
     private String imageURL;

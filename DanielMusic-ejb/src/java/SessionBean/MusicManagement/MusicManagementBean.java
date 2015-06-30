@@ -15,6 +15,7 @@ import java.io.File;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
+import it.sauronsoftware.jave.MultimediaInfo;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,6 +49,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         result.setResult(false);
         try {
             Encoder encoder = new Encoder();
+
+            //Check if the file meets requirements first
+            MultimediaInfo multimediaInfo = encoder.getInfo(sourceFileName);
+            System.out.println("!!!!");
+            System.out.println(encoder.getSupportedEncodingFormats());
+            System.out.println("BR:"+multimediaInfo.getAudio().getBitRate());
+            System.out.println("SR:"+multimediaInfo.getAudio().getSamplingRate());
+            System.out.println("F:"+multimediaInfo.getFormat());
+            if (!multimediaInfo.getFormat().equals("wav")) {
+                result.setDescription("File uploaded does not match the minimum requirements.");
+                return result;
+            }
+
             AudioAttributes aa = new AudioAttributes();
             aa.setCodec("libmp3lame");
             aa.setBitRate(new Integer(bitrate * 000));
@@ -609,7 +623,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     helper.setDescription("Sorry your email is not verified, please verify your email first.");
                     helper.setResult(false);
                     return helper;
-                }else if (album.getBand().getPaypalEmail() == null || album.getBand().getPaypalEmail().length() == 0) {
+                } else if (album.getBand().getPaypalEmail() == null || album.getBand().getPaypalEmail().length() == 0) {
                     helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
                     helper.setResult(false);
                     return helper;
