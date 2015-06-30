@@ -72,20 +72,32 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public String generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount) {
+    public String generateDownloadLink(Long musicID, String type, Boolean isIncreaseDownloadCount) {
         System.out.println("generateDownloadLink() called");
         try {
-            ReturnHelper helper = new ReturnHelper();
-            Query q = em.createQuery("select a from Artist a where a.email=:email and a.isDisabled=false and a.emailIsVerified=true");
-            Artist artist = (Artist) q.getSingleResult();
-            Music music = em.getReference(Music.class, musicID);
-
+            Query q = em.createQuery("select a from Music a where a.id=:id");
+            q.setParameter("id", musicID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            Music music = (Music) q.getSingleResult();
+            String downloadLink = null;
+            switch (type) {
+                case "wav":
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), 120L);//2mins expiry
+                    break;
+                case "320":
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), 120L);//2mins expiry
+                    break;
+                case "128":
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), 120L);//2mins expiry
+                    break;
+            }
             //generate download link for user
-            music.setNumDownloaded(music.getNumDownloaded() + 1);
-            String downloadLink = cibl.getFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3", 120L);//2mins expiry
-            helper.setDescription(downloadLink);
-            helper.setResult(true);
-
+            if (downloadLink != null) {
+                if (isIncreaseDownloadCount) {
+                    music.setNumDownloaded(music.getNumDownloaded() + 1);
+                }
+                return downloadLink;
+            }
         } catch (Exception e) {
             System.out.println("Error. Failed to generateDownloadLink()");
             e.printStackTrace();
@@ -143,6 +155,28 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
     }
 
+    public static String removeExtension(String s) {
+
+        String separator = System.getProperty("file.separator");
+        String filename;
+
+        // Remove the path upto the filename.
+        int lastSeparatorIndex = s.lastIndexOf(separator);
+        if (lastSeparatorIndex == -1) {
+            filename = s;
+        } else {
+            filename = s.substring(lastSeparatorIndex + 1);
+        }
+
+        // Remove the extension.
+        int extensionIndex = filename.lastIndexOf(".");
+        if (extensionIndex == -1) {
+            return filename;
+        }
+
+        return filename.substring(0, extensionIndex);
+    }
+
     @Override
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, Integer yearReleased) {
         ReturnHelper helper = new ReturnHelper();
@@ -165,6 +199,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
 
             String fileName = musicPart.getSubmittedFileName();
+            //Don't take file extension for the filename
+            fileName = removeExtension(fileName);
             String tempMusicURL = "temp/music_" + fileName + cibl.generateUUID();
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
@@ -215,13 +251,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Artist artist = album.getArtist();
 
             if (artist != null) {
-                musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
-                musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
-                musicURLwav = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName;
+                musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName + ".mp3";
+                musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName + ".mp3";
+                musicURLwav = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName + ".wav";
             } else {
-                musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName;
-                musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName;
-                musicURLwav = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName;
+                musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName + ".mp3";
+                musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName + ".mp3";
+                musicURLwav = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName + ".wav";
             }
 
             music.setFileLocation128(musicURL128);
@@ -338,7 +374,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price) {
+    public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price) {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -365,7 +401,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             } else {
                 album.setBand(band);
             }
-
+            album.setIsSingle(isSingle);
             album.setDescription(description);
             album.setName(name);
             album.setYearReleased(yearReleased);
@@ -609,7 +645,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     helper.setDescription("Sorry your email is not verified, please verify your email first.");
                     helper.setResult(false);
                     return helper;
-                }else if (album.getBand().getPaypalEmail() == null || album.getBand().getPaypalEmail().length() == 0) {
+                } else if (album.getBand().getPaypalEmail() == null || album.getBand().getPaypalEmail().length() == 0) {
                     helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
                     helper.setResult(false);
                     return helper;
