@@ -56,7 +56,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     em.merge(artist);
                     result.setResult(true);
                     result.setDescription("Artist has been approved.");
-                    sgl.sendEmail(artist.getEmail(), "TODO", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
+                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
                 } else if (account instanceof Band) {
                     q = em.createQuery("SELECT s FROM Band s where s.id=:id");
                     q.setParameter("id", artistOrBandID);
@@ -65,7 +65,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     em.merge(band);
                     result.setResult(true);
                     result.setDescription("Band has been approved.");
-                    sgl.sendEmail(band.getEmail(), "TODO", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
+                    sgl.sendEmail(band.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
                 }
             }
         } catch (Exception ex) {
@@ -100,7 +100,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     em.merge(artist);
                     result.setResult(true);
                     result.setDescription("Artist has been rejected.");
-                    sgl.sendEmail(artist.getEmail(), "TODO", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
+                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
                 } else if (account instanceof Band) {
                     q = em.createQuery("SELECT s FROM Band s where s.id=:id");
                     q.setParameter("id", artistOrBandID);
@@ -109,7 +109,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     em.merge(band);
                     result.setResult(true);
                     result.setDescription("Band has been rejected.");
-                    sgl.sendEmail(band.getEmail(), "TODO", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
+                    sgl.sendEmail(band.getEmail(), "no-reply@sounds.sg", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
                 }
             }
         } catch (Exception ex) {
