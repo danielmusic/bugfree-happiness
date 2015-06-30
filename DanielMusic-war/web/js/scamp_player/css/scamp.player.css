@@ -461,6 +461,7 @@ Scamp Player Stylesheet
             text-align: left;
             border: none;
             background-color: transparent;
+            color: black;
         }
         #sp-queue-scroll th.sp-th-cart { text-align: center; }
         #sp-queue-scroll th.sp-th-remove { text-align: right; }

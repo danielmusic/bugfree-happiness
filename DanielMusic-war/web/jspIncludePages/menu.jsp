@@ -69,7 +69,10 @@
 
                     <%} else {%>
                     <li>
-                        <a href="#!/explore">Explore</a>
+                        <a href="#!/artists">Single Artist (test)</a>
+                    </li>
+                    <li>
+                        <a href="#!/explore">explore</a>
                     </li>
                     <li class="submenu">
                         <a href="#!/artist">artist</a>

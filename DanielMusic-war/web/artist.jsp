@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Artist">
+<section id="page" data-title="Sounds.sg | Artist">
     <input type="hidden" value="asdasdasd" name="url" id="url">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
