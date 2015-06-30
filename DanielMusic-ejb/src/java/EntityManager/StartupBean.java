@@ -57,7 +57,7 @@ public class StartupBean {
             } else {
                 System.out.println("Skipping init of directories, already initated.");
             }
-            //TODO init GCS authorization
+            //init GCS authorization
             System.out.print("Initiating Google Cloud Storage authorization...");
             File file = new File("GCS Test File");
             file.createNewFile();
