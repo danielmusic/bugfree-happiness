@@ -26,6 +26,14 @@
             function viewArtistAlbum() {
                 window.location.href = "artistAlbums.jsp";
             }
+
+            function approveArtist(id) {
+                window.location.href = "../../AccountManagementController?target=ApproveArtist&id=" + id;
+            }
+
+            function rejectArtist(id) {
+                window.location.href = "../../AccountManagementController?target=RejectArtist&id=" + id;
+            }
         </script>
         <jsp:include page="../jspIncludePages/displayNotification.jsp" />
         <section class="body">
@@ -35,7 +43,7 @@
                 <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2>Artist Management</h2>
+                        <h2>Artist</h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li><a href="admin/workspace.jsp"><i class="fa fa-home"></i></a></li>
@@ -48,7 +56,7 @@
                     <!-- start: page -->
                     <div class="row">
                         <div class="col-lg-12">
-                            <form class="form-horizontal form-bordered" action="../../GenreManagementController">
+                            <form class="form-horizontal form-bordered" action="../../AccountManagementController">
                                 <section class="panel">
                                     <header class="panel-heading">
                                         <h2 class="panel-title">Artist</h2>
@@ -166,15 +174,15 @@
                                             </div>
                                         </div>
 
-                                        <input type="hidden" name="target" value="">   
+                                        <input type="hidden" name="target" value="ApproveArtist">   
                                     </div>
 
                                     <footer class="panel-footer">
                                         <div class="row">
                                             <div class="col-sm-9 col-sm-offset-3">
-                                                <button class="btn btn-success">Approve</button>
-                                                <button class="btn btn-danger">Reject</button>
-                                                <input type="button"  class="btn btn-default" value="Back" onclick="javascript:back()"/>
+                                                <button type="button" class="btn btn-success" onclick="javascript:approveArtist('<%=artist.getId()%>');">Approve</button>
+                                                <button type="button" class="btn btn-danger" onclick="javascript:rejectArtist('<%=artist.getId()%>');">Reject</button>
+                                                <button type="button"  class="btn btn-default" onclick="javascript:back();">Back</button>
                                             </div>
                                         </div>
                                     </footer>

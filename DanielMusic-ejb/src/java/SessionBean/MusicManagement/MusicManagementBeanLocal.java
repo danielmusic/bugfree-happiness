@@ -19,7 +19,7 @@ public interface MusicManagementBeanLocal {
      * {@inheritDoc}
      * <p>
      * Generate a temporary download link signed URL for member to download the
-     * mp3 music.
+     * mp3 music. Type can be 320 128 or wav
      * </p>
      *
      * @param email Email of the member requesting the download.
@@ -27,7 +27,7 @@ public interface MusicManagementBeanLocal {
      * @return ReturnHelper: Contains the generated download link in the
      * description
      */
-    public String generateDownloadLink(String fileLocation, Long musicID, Boolean isIncreaseDownloadCount);
+    public String generateDownloadLink(Long musicID, String type, Boolean isIncreaseDownloadCount);
 
     /**
      * {@inheritDoc}
@@ -83,7 +83,7 @@ public interface MusicManagementBeanLocal {
 
     public List<Music> ListAllTracksByAlbumID(Long albumID);
 
-    public ReturnHelper createAlbum(Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
+    public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
 
     public Album getAlbum(Long albumID);
 

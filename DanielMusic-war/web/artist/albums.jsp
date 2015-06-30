@@ -40,7 +40,6 @@
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
 
                     <h2>Albums</h2>
-
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
@@ -54,6 +53,7 @@
                             <%
                                 if (albums != null) {
                                     for (int i = 0; i < albums.size(); i++) {
+                                        if (!albums.get(i).getIsSingle()) {
                             %>    
                             <tr>
                                 <td class="table-date"><%=(i + 1)%></td>
@@ -76,11 +76,59 @@
                                 </td>
                             </tr>
                             <%
+                                        }
                                     }
                                 }
                             %>
                         </tbody>
                     </table>
+
+                    <h2>Singles</h2>
+                    <table class="layout display responsive-table">
+                        <thead>
+                            <tr>
+                                <th>no</th>
+                                <th>Title</th>
+                                <th>Published?</th>
+                                <th colspan="2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                if (albums != null) {
+                                    for (int i = 0; i < albums.size(); i++) {
+                                        if (albums.get(i).getIsSingle()) {
+                            %>    
+                            <tr>
+                                <td class="table-date"><%=(i + 1)%></td>
+                                <td class="table-name"><%=albums.get(i).getName()%></td>         
+                                <td class="table-date">
+                                    <%
+                                        if (albums.get(i).getIsPublished()) {
+                                            out.print("Yes");
+                                        } else {
+                                            out.print("No");
+                                        }
+                                    %>
+                                </td>
+                                <td class="actions" style="width: 300px;">
+                                    <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit singles</a>
+                                    <%if (!albums.get(i).getIsPublished()) {%>
+                                    <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
+                                    <%}%>
+                                </td>
+                            </tr>
+                            <%
+                                        }
+                                    }
+                                }
+                            %>
+                        </tbody>
+                    </table>
+
+
+
+
                     <button type="button" class="small" onclick="javascript:addAlbum()" style="margin-right: 10px;">Add Album</button>
                     <button type="button" class="small" onclick="javascript:addSingles()">Add Singles</button>
                 </form>

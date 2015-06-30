@@ -32,6 +32,7 @@ public class Album implements Serializable {
     private Artist artist;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Band band;
+    private Boolean isSingle;
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Music> listOfMusics;
     private Long numPurchase;
@@ -43,6 +44,14 @@ public class Album implements Serializable {
         isDeleted = false;
         isPublished = false;
         numPurchase = 0L;
+    }
+
+    public Boolean getIsSingle() {
+        return isSingle;
+    }
+
+    public void setIsSingle(Boolean isSingle) {
+        this.isSingle = isSingle;
     }
 
     public Double getPrice() {

@@ -33,11 +33,14 @@ public class AccountManagementController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Welcome to AccountManagementController");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
         String id = request.getParameter("id");
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
+
+        System.out.println("target " + target);
 
         session = request.getSession();
         ReturnHelper returnHelper;
@@ -72,6 +75,24 @@ public class AccountManagementController extends HttpServlet {
                         } else {
                             session.setAttribute("artists", artists);
                             nextPage = "admin/AccountManagement/artistManagement.jsp";
+                        }
+                    }
+                    break;
+
+                case "ApproveArtist":
+                    if (checkLogin(response)) {
+                        returnHelper = adminManagementBean.approveArtistOrBand(Long.parseLong(id));
+                        if (returnHelper.getResult()) {
+                            nextPage = "admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
+                        }
+                    }
+                    break;
+
+                case "RejectArtist":
+                    if (checkLogin(response)) {
+                        returnHelper = adminManagementBean.rejectArtistOrBand(Long.parseLong(id));
+                        if (returnHelper.getResult()) {
+                            nextPage = "admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                         }
                     }
                     break;
@@ -155,7 +176,9 @@ public class AccountManagementController extends HttpServlet {
 
                 case "GetDownloadLink":
                     if (checkLogin(response)) {
-                        musicManagementBean.generateDownloadLink(email, Long.MIN_VALUE, Boolean.TRUE);
+                        String url = musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false);
+                        System.out.println(url);
+                        nextPage = url;
                     }
                     break;
             }

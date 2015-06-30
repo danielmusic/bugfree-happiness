@@ -34,6 +34,9 @@
             function back() {
                 window.location.href = "artistAlbums.jsp";
             }
+            function getDownloadLink(id) {
+                window.location.href = "../../AccountManagementController?target=GetDownloadLink&id=" + id;
+            }
         </script>
 
         <section class="body">
@@ -158,28 +161,7 @@
                                             </td>
 
                                             <td>
-                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalDownloadLink">View</a>
-                                                <div id="modalDownloadLink" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
-                                                    <section class="panel">
-                                                        <header class="panel-heading">
-                                                            <h2 class="panel-title">Download Link</h2>
-                                                        </header>
-                                                        <div class="panel-body">
-                                                            <div class="modal-wrapper">
-                                                                <div class="modal-text" style="height: 350px;">
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <footer class="panel-footer">
-                                                            <div class="row">
-                                                                <div class="col-md-12 text-right">
-                                                                    <button class="btn btn-default modal-dismiss">Close</button>
-                                                                </div>
-                                                            </div>
-                                                        </footer>
-                                                    </section>
-                                                </div>
+                                                <button type="button" class="btn btn-default btn-block" onclick="javascript:getDownloadLink('<%=tracks.get(i).getId()%>');">View</button>
                                             </td>
                                         </tr>
                                         <%

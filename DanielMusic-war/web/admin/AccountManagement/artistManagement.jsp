@@ -86,13 +86,13 @@
                                             <td>
                                                 <%
                                                     if (artists.get(i).getIsApproved() == 0) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
+                                                        out.print("<span class='label label-info' style='font-size: 100%;'>New</span>");
                                                     } else if (artists.get(i).getIsApproved() == 1) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Approved</span>");
                                                     } else if (artists.get(i).getIsApproved() == -2) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
+                                                        out.print("<span class='label label-warning' style='font-size: 100%;'>Pending</span>");
                                                     } else {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Rejected</span>");
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Rejected</span>");
                                                     }
                                                 %>
                                             </td>

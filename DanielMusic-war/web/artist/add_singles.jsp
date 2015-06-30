@@ -112,15 +112,16 @@
                             <input type="number" id="yearReleased" name="yearReleased" min="1900" max="2050" required>
                         </div>
 
-                        <div class="col-1-3 last">
+                        <div class="col-1-3 last" style="margin-bottom: 0px;">
                             <label for="price"><strong>Price</strong> *</label>
                             <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required/>
+                            <button type="button" class="small invert">Free</button>
                         </div>
                     </div>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="picture"><strong>Album Artwork</strong> </label>
+                            <label for="picture"><strong>Artwork</strong> </label>
                             <input type="file" id="picture" name="picture">
                         </div>
                     </div>
@@ -134,7 +135,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="description"><strong>Album Description</strong> </label>
+                            <label for="description"><strong>Description</strong> </label>
                             <textarea id="description" name="description" style="min-height:120px;"></textarea>
                         </div>
                     </div>
@@ -153,11 +154,9 @@
                         </div>
                     </div>
 
-
-                    <input type="hidden" value="AddAlbum" name="target">
-                    <input type="hidden" value="Artist" name="source">
+                    <input type="hidden" value="AddSingles" name="target">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
-                    <button type="submit" class="small invert">Add Album</button>
+                    <button type="submit" class="small invert">Add Singles</button>
                     <div class="clear"></div>
                 </form>
                 <%} else {%>
