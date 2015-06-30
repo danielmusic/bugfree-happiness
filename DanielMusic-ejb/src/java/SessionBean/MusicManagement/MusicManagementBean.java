@@ -49,24 +49,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         result.setResult(false);
         try {
             Encoder encoder = new Encoder();
-
-            //Check if the file meets requirements first
-            MultimediaInfo multimediaInfo = encoder.getInfo(sourceFileName);
-            System.out.println("!!!!");
-            System.out.println(encoder.getSupportedEncodingFormats());
-            System.out.println("BR:"+multimediaInfo.getAudio().getBitRate());
-            System.out.println("SR:"+multimediaInfo.getAudio().getSamplingRate());
-            System.out.println("F:"+multimediaInfo.getFormat());
-            if (!multimediaInfo.getFormat().equals("wav")) {
-                result.setDescription("File uploaded does not match the minimum requirements.");
-                return result;
-            }
-
             AudioAttributes aa = new AudioAttributes();
             aa.setCodec("libmp3lame");
-            aa.setBitRate(new Integer(bitrate * 000));
-            aa.setChannels(new Integer(2));
-            aa.setSamplingRate(new Integer(44100));
+            aa.setBitRate(bitrate * 1000);
+            aa.setChannels(2);
+            aa.setSamplingRate(44100);
             EncodingAttributes ea = new EncodingAttributes();
             ea.setFormat("mp3");
             ea.setAudioAttributes(aa);
@@ -215,7 +202,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String fileName = musicPart.getSubmittedFileName();
             //Don't take file extension for the filename
             fileName = removeExtension(fileName);
-            String tempMusicURL = "temp/music_" + fileName + cibl.generateUUID();
+            String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_"+ fileName+".wav";
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
@@ -230,6 +217,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             File file = new File(tempMusicURL);
 
+            //Check if the file meets bitrate requirements
+            Encoder encoder = new Encoder();
+            MultimediaInfo multimediaInfo = encoder.getInfo(file);
+            System.out.println("BR:" + multimediaInfo.getAudio().getBitRate());
+            System.out.println("SR:" + multimediaInfo.getAudio().getSamplingRate());
+            System.out.println("F:" + multimediaInfo.getFormat());
+            if (!multimediaInfo.getFormat().equals("wav")) {
+                helper.setDescription("File uploaded does not appear to be a proper wav format.");
+                return helper;
+            } else if (multimediaInfo.getAudio().getSamplingRate() < 44100) {
+                helper.setDescription("File uploaded does not meet the minimum sampling rate of at least 44.1kHz ");
+                return helper;
+            }
             //check if the music >10mins, if more than 10mins return ReturnHelper
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             AudioFormat format = audioInputStream.getFormat();
@@ -239,9 +239,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setDescription("The track duration cannot be more than 10mins, please upload a shorter duration.");
                 return helper;
             }
+            audioInputStream.close();
 
-            File newFile128 = new File(tempMusicURL + "128");
-            File newFile320 = new File(tempMusicURL + "320");
+            File newFile128 = new File(tempMusicURL + "_128.mp3");
+            File newFile320 = new File(tempMusicURL + "_320.mp3");
             encodeToMP3(file, newFile128, 128);
             encodeToMP3(file, newFile320, 320);
 
@@ -279,8 +280,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocationWAV(musicURLwav);
 
             //end create music
-            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "128", false, false);
-            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "320", false, false);
+            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128.mp3", false, false);
+            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "_320.mp3", false, false);
             ReturnHelper result3 = cibl.uploadFileToGoogleCloudStorage(musicURLwav, tempMusicURL, false, false);
 
             if (result1.getResult() && result2.getResult() && result3.getResult()) {
