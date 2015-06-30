@@ -7,6 +7,9 @@
     <service name="SendGridEmailWS">
       <implementation-class>SessionBean.CommonInfrastructure.SendGridEmailWS</implementation-class>
     </service>
+    <service name="ClientManagementBeanWS">
+      <implementation-class>SessionBean.ClientManagement.ClientManagementBeanWS</implementation-class>
+    </service>
   </services>
   <clients/>
 </jax-ws>

@@ -12,9 +12,9 @@ import javax.ejb.Local;
 @Local
 public interface AdminManagementBeanLocal {
 
-    public ReturnHelper approveArtist(Long artistID);
+    public ReturnHelper approveArtistOrBand(Long artistOrBandID);
 
-    public ReturnHelper rejectArtist(Long artistID);
+    public ReturnHelper rejectArtistOrBand(Long artistOrBandID);
     /**
      * {@inheritDoc}
      * <p>

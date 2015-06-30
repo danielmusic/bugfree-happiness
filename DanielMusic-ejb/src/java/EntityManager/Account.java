@@ -1,6 +1,7 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -40,11 +41,22 @@ public abstract class Account implements Serializable {
     private String imageURL;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private ShoppingCart shoppingCart;
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Payment> paymentRecord;
 
     public Account() {
         isDisabled = false;
         emailIsVerified = false;
         newEmailIsVerified = false;
+        paymentRecord = new ArrayList();
+    }
+
+    public List<Payment> getPaymentRecord() {
+        return paymentRecord;
+    }
+
+    public void setPaymentRecord(List<Payment> paymentRecord) {
+        this.paymentRecord = paymentRecord;
     }
 
     public ShoppingCart getShoppingCart() {

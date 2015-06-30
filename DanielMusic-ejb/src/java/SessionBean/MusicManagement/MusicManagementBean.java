@@ -80,12 +80,12 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Artist artist = (Artist) q.getSingleResult();
             Music music = em.getReference(Music.class, musicID);
 
-                //generate download link for user
-                music.setNumDownloaded(music.getNumDownloaded() + 1);
-                String downloadLink = cibl.getFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3", 120L);//2mins expiry
-                helper.setDescription(downloadLink);
-                helper.setResult(true);
-            
+            //generate download link for user
+            music.setNumDownloaded(music.getNumDownloaded() + 1);
+            String downloadLink = cibl.getFileURLFromGoogleCloudStorage("music/" + artist.getId() + "/" + music.getAlbum().getId() + "/" + music.getName() + ".mp3", 120L);//2mins expiry
+            helper.setDescription(downloadLink);
+            helper.setResult(true);
+
         } catch (Exception e) {
             System.out.println("Error. Failed to generateDownloadLink()");
             e.printStackTrace();
@@ -598,11 +598,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     helper.setDescription("Sorry your email is not verified, please verify your email first.");
                     helper.setResult(false);
                     return helper;
+                } else if (album.getArtist().getPaypalEmail() == null || album.getArtist().getPaypalEmail().length() == 0) {
+                    helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
+                    helper.setResult(false);
+                    return helper;
                 }
             } else {
                 isBand = true;
                 if (!album.getBand().getEmailIsVerified()) {
                     helper.setDescription("Sorry your email is not verified, please verify your email first.");
+                    helper.setResult(false);
+                    return helper;
+                }else if (album.getBand().getPaypalEmail() == null || album.getBand().getPaypalEmail().length() == 0) {
+                    helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
                     helper.setResult(false);
                     return helper;
                 }
@@ -618,7 +626,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
             if (album.getListOfMusics() == null || album.getListOfMusics().isEmpty()) {
-                helper.setDescription("The album cannot be published, no tracks found, please try again.");
+                helper.setDescription("The album cannot be published, no tracks found.");
                 helper.setResult(false);
                 return helper;
             }
@@ -629,7 +637,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
         } catch (Exception e) {
             e.printStackTrace();
-            helper.setDescription("Error occurred while trying to publish album, please try again.");
+            helper.setDescription("Error occurred while trying to publish album, please try again later.");
             helper.setResult(false);
             return helper;
         }
