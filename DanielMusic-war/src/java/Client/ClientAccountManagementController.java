@@ -32,13 +32,11 @@ public class ClientAccountManagementController extends HttpServlet {
     private MusicManagementBeanLocal musicManagementBean;
 
     String nextPage = "", goodMsg = "", errMsg = "";
-    HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Welcome to client account managment controller");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
-        String id = request.getParameter("id");
 
         //profile parameters
         String name = request.getParameter("name");
@@ -60,7 +58,7 @@ public class ClientAccountManagementController extends HttpServlet {
         String chkAgree = request.getParameter("chkAgree");
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
 
-        session = request.getSession();
+        HttpSession session = request.getSession();
         session.removeAttribute("goodMsg");
         session.removeAttribute("errMsg");
         ReturnHelper returnHelper;
@@ -161,10 +159,13 @@ public class ClientAccountManagementController extends HttpServlet {
                     break;
 
                 case "AccountLogout":
-                    session.removeAttribute("errMsg");
-                    session.removeAttribute("artist");
-                    session.removeAttribute("band");
-                    session.removeAttribute("fan");
+//                    session.removeAttribute("errMsg");
+//                    session.removeAttribute("artist");
+//                    session.removeAttribute("band");
+//                    session.removeAttribute("fan");
+                    request.getSession(false).invalidate();
+                    session = request.getSession();
+
                     session.setAttribute("goodMsg", "Logout Successful");
                     nextPage = "#!/login";
                     break;
