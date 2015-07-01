@@ -13,13 +13,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.MessageDigest;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -48,9 +50,10 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
             q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
-            String passwordSalt = account.getPasswordSalt();
-            String passwordHash = generatePasswordHash(passwordSalt, password);
-            if (passwordHash.equals(account.getPasswordHash())) {
+            //String passwordSalt = account.getPasswordSalt();
+            //String passwordHash = generatePasswordHash(passwordSalt, password);
+            Boolean loginSuccess = validatePassword(password, account.getPasswordHash());
+            if (loginSuccess) {
                 if (account.getIsDisabled()) {
                     result.setResult(false);
                     result.setDescription("Unable to login, account is disabled.");
@@ -81,6 +84,31 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             result.setDescription("Unable to login, internal server error.");
             return result;
         }
+    }
+
+    private static boolean validatePassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String[] parts = storedPassword.split(":");
+        int iterations = Integer.parseInt(parts[0]);
+        byte[] salt = fromHex(parts[1]);
+        byte[] hash = fromHex(parts[2]);
+
+        PBEKeySpec spec = new PBEKeySpec(originalPassword.toCharArray(), salt, iterations, hash.length * 8);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] testHash = skf.generateSecret(spec).getEncoded();
+
+        int diff = hash.length ^ testHash.length;
+        for (int i = 0; i < hash.length && i < testHash.length; i++) {
+            diff |= hash[i] ^ testHash[i];
+        }
+        return diff == 0;
+    }
+
+    private static byte[] fromHex(String hex) throws NoSuchAlgorithmException {
+        byte[] bytes = new byte[hex.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        }
+        return bytes;
     }
 
     @Override
@@ -180,7 +208,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 admin.setEmail(email);
                 admin.setNewEmail(email);
                 admin.setPasswordHash(passwordHash);
-                admin.setPasswordSalt(passwordSalt);
+                //admin.setPasswordSalt(passwordSalt);
                 admin.setName(name);
                 em.persist(admin);
                 Query q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
@@ -200,7 +228,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 artist.setEmail(email);
                 artist.setNewEmail(email);
                 artist.setPasswordHash(passwordHash);
-                artist.setPasswordSalt(passwordSalt);
+                //artist.setPasswordSalt(passwordSalt);
                 artist.setName(name);
                 em.persist(artist);
                 Query q = em.createQuery("SELECT a FROM Artist a where a.email=:email");
@@ -220,7 +248,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 band.setEmail(email);
                 band.setNewEmail(email);
                 band.setPasswordHash(passwordHash);
-                band.setPasswordSalt(passwordSalt);
+                //band.setPasswordSalt(passwordSalt);
                 band.setName(name);
                 em.persist(band);
                 Query q = em.createQuery("SELECT a FROM Band a where a.email=:email");
@@ -236,7 +264,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 member.setEmail(email);
                 member.setNewEmail(email);
                 member.setPasswordHash(passwordHash);
-                member.setPasswordSalt(passwordSalt);
+                //member.setPasswordSalt(passwordSalt);
                 member.setName(name);
                 em.persist(member);
                 Query q = em.createQuery("SELECT a FROM Member a where a.email=:email");
@@ -467,16 +495,24 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     public String generatePasswordHash(String salt, String password) {
         String passwordHash = null;
         try {
-            password = salt + password;
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes());
-            byte[] bytes = md.digest();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            passwordHash = sb.toString();
-        } catch (NoSuchAlgorithmException ex) {
+//            password = salt + password;
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            md.update(password.getBytes());
+//            byte[] bytes = md.digest();
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0; i < bytes.length; i++) {
+//                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+//            }
+//            passwordHash = sb.toString();
+            int iterations = 1000;
+            char[] chars = password.toCharArray();
+            byte[] saltInBytes = salt.getBytes();
+
+            PBEKeySpec spec = new PBEKeySpec(chars, saltInBytes, iterations, 64 * 8);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = skf.generateSecret(spec).getEncoded();
+            return iterations + ":" + toHex(saltInBytes) + ":" + toHex(hash);
+        } catch (Exception ex) {
             System.out.println("AccountManagementBean: generatePasswordHash() failed");
             ex.printStackTrace();
         }
@@ -493,7 +529,19 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             System.out.println("AccountManagementBean: generatePasswordSalt() failed");
             ex.printStackTrace();
         }
-        return Arrays.toString(salt);
+        //return Arrays.toString(salt);
+        return salt.toString();
+    }
+
+    private static String toHex(byte[] array) throws NoSuchAlgorithmException {
+        BigInteger bi = new BigInteger(1, array);
+        String hex = bi.toString(16);
+        int paddingLength = (array.length * 2) - hex.length();
+        if (paddingLength > 0) {
+            return String.format("%0" + paddingLength + "d", 0) + hex;
+        } else {
+            return hex;
+        }
     }
 
     @Override
