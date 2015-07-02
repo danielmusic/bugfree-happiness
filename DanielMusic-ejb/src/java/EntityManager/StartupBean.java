@@ -73,14 +73,14 @@ public class StartupBean {
             } else {
                 System.out.println("Initiating sample database records...");
                 ReturnHelper result;
-                result = accountManagementBeanLocal.registerAccount("Admin", "admin@a.a", "admin", true, false, false);
-                Account account = accountManagementBeanLocal.getAccount("admin@a.a");
+                result = accountManagementBeanLocal.registerAccount("Admin", "admin@sounds.sg", "admin", true, false, false);
+                Account account = accountManagementBeanLocal.getAccount("admin@sounds.sg");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
                 em.merge(account);
-                accountManagementBeanLocal.registerAccount("Artist", "artist@a.a", "artist", false, true, false);
-                account = accountManagementBeanLocal.getAccount("artist@a.a");
+                accountManagementBeanLocal.registerAccount("Artist", "artist@sounds.sg", "artist", false, true, false);
+                account = accountManagementBeanLocal.getAccount("artist@sounds.sg");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
@@ -88,13 +88,13 @@ public class StartupBean {
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 em.merge(account);
-                accountManagementBeanLocal.registerAccount("Member", "member@a.a", "member", false, false, false);
-                account = accountManagementBeanLocal.getAccount("member@a.a");
+                accountManagementBeanLocal.registerAccount("Member", "member@sounds.sg", "member", false, false, false);
+                account = accountManagementBeanLocal.getAccount("member@sounds.sg");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
                 em.merge(account);
-                accountManagementBeanLocal.registerAccount("Member Unverified Email", "member2@a.a", "member", false, false, false);
+                accountManagementBeanLocal.registerAccount("Member Unverified Email", "member2@sounds.sg", "member", false, false, false);
                 adminManagementBeanLocal.createGenre("Rock");
                 adminManagementBeanLocal.createGenre("Electronic");
                 adminManagementBeanLocal.createGenre("Jazz");

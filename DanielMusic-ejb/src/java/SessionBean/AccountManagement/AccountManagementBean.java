@@ -58,8 +58,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
             q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
-            //String passwordSalt = account.getPasswordSalt();
-            //String passwordHash = generatePasswordHash(passwordSalt, password);
             Boolean loginSuccess = validatePassword(password, account.getPassword());
             if (loginSuccess) {
                 if (account.getIsDisabled()) {
@@ -280,7 +278,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             generateAndSendVerificationEmail(email, false);
             result.setResult(true);
-            result.setDescription("Account registered successfully.");
+            result.setDescription("Account registered successfully. You may now login");
             return result;
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: registerAccount() failed");
@@ -496,9 +494,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 account.setNewEmailVerificationCodeGeneratedDate(null);
                 em.merge(account);
                 result.setResult(true);
-                result.setDescription("Account verified");
+                result.setDescription("Email verified.");
             } else {
-                result.setDescription("Invalid verification code, please try again.");
+                result.setDescription("Invalid verification code.");
             }
         } catch (NoResultException ex) {
             result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
@@ -555,8 +553,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-            //Check if the account exists & if there is any unverified email tag tied to the account, if not 
-            String unauthorizedMsg = "There is no account registered with this email address or the account email has already been verified.";
+            //Check if the account exists
+            String unauthorizedMsg = "There is no account registered with this email address.";
             if (!checkIfEmailExists(email)) {
                 result.setDescription(unauthorizedMsg);
                 return result;
@@ -564,10 +562,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
             q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
-            if (account.getNewEmailIsVerified()) {
-                result.setDescription(unauthorizedMsg);
-                return result;
-            }
             //Generate the verification code & store it into DB
             SecureRandom random = new SecureRandom();
             String resetCode = new BigInteger(130, random).toString(32);
@@ -621,6 +615,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 em.merge(account);
                 result.setResult(true);
                 result.setDescription("Code verified");
+                result.setID(account.getId());
             } else {
                 result.setDescription("Invalid verification code, please try again.");
             }
@@ -1100,6 +1095,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (!validatePassword(oldPassword, account.getPassword())) {
                 result.setDescription("Old password provided is invalid, password not updated.");
             } else {
+                account.setForgetPassword(false);
                 account.setPassword(generatePasswordHash(generatePasswordSalt(), newPassword));
                 em.merge(account);
                 result.setResult(true);

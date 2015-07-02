@@ -758,4 +758,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
     }
 
+    @Override
+    public List<Artist> listAllArtistInGenre(Long genreID) {
+        //TODO YG
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Artist> listAllArtistByGemre() {
+        //TODO YG
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

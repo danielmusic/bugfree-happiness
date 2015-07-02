@@ -3,15 +3,17 @@
     <%@page import="EntityManager.Genre"%>
     <%@page import="java.util.List"%>
     <%@page import="EntityManager.Artist"%>
+    <%@page import="EntityManager.Account"%>
     <section class="content section">
         <div class="container">
             <article>
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
+                    Account account = (Account) session.getAttribute("account");
                     Artist artist = (Artist) (session.getAttribute("artist"));
-                    if (artist != null && genres != null) {
+                    if (account != null && artist!=null && genres != null) {
                         if (!artist.getEmailIsVerified()) {
-                            out.print("<p class='warning'>Your account has not been verified. Please verify first.</p>");
+                            out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a> or <a href='#!/change-email'>change your email</a>.</p>");
                         }
                 %>
 
@@ -21,8 +23,9 @@
 
                     <div class="row clearfix">
                         <div class="col-1-3">
-                            <label for="name"><strong>Name</strong> * <a class="md-trigger" data-modal="modal-name">(?)</a></label>
-                            <input type="text" id="name" name="name" value="<%=artist.getName()%>">
+                            <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
+                            <input type="text" id="name" name="name" value="<%=artist.getName()%>" disabled>
+                            <a href="#!/change-name">Change Name</a>
                         </div>
 
                         <div class="md-modal md-effect-1" id="modal-name">
@@ -43,8 +46,9 @@
                         </div>
 
                         <div class="col-1-3">
-                            <label for="email"><strong>Email address</strong> *</label>
-                            <input type="email" id="email" name="email" value="<%=artist.getEmail()%>">
+                            <label for="email"><strong>Current Email</strong></label>
+                            <input type="email" id="email" name="eail" value="<%=artist.getEmail()%>" disabled>
+                            <a href="#!/change-email">Change Email</a>
                         </div>
 
                         <div class="col-1-3 last">

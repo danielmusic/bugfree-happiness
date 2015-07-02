@@ -1,11 +1,11 @@
 package SessionBean.MusicManagement;
 
 import EntityManager.Album;
+import EntityManager.Artist;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
@@ -42,7 +42,6 @@ public interface MusicManagementBeanLocal {
     public List<Music> searchMusicByGenre(Long genreID);
 //
 //    public List<Music> searchMusicByArtist(String artistName);
-//
 //    public List<Music> searchMusic(String searchString);
 
     /**
@@ -74,25 +73,22 @@ public interface MusicManagementBeanLocal {
      */
     //still need to handle checking of music length < 10mins
     public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, Integer yearReleased);
-
     public Music getMusic(Long musicID);
-
     public ReturnHelper deleteMusic(Long musicID);
-
     public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, Double price, String lyrics, String credits);
 
-    public List<Music> ListAllTracksByAlbumID(Long albumID);
-
-    public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
-
     public Album getAlbum(Long albumID);
-
     public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
-
+    public List<Music> ListAllTracksByAlbumID(Long albumID);
+    
+    public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, String credits, Double price);
-
     public ReturnHelper publishAlbum(Long albumID);
-
     public ReturnHelper deleteAlbum(Long albumID);
+    
+    public List<Artist> listAllArtistInGenre(Long genreID);
+    public List<Artist> listAllArtistByGemre();
+    
+  
 
 }
