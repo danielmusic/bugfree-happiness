@@ -88,7 +88,7 @@
 
                         <div class="col-1-3 last">
                             <label for="price"><strong>Price</strong> *</label>
-                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required/>
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" placeholder="Enter 0 if free" required/>
                         </div>
                     </div>
 
@@ -117,7 +117,7 @@
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="submit" class="small invert">Add Album</button>
-                    <div class="clear"></div>
+                    <div class="clear" style="margin-bottom: 20px;"></div>
                 </form>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>

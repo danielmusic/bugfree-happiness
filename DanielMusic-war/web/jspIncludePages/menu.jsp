@@ -20,6 +20,7 @@
             <!-- ############ icon navigation ############ -->
             <nav id="icon-nav">
                 <ul>
+                    <li><a href="#!/cart" id="nav-up"><span class="icon icon-cart"></span></a></li>
                     <li><a href="#main-nav-wrapper" id="nav-up" class="smooth-scroll"><span class="icon icon-arrow-up"></span></a></li>
                     <li><a href="javascript:;" id="nav-search" class="external"><span class="icon icon-search"></span></a></li>
                 </ul>
