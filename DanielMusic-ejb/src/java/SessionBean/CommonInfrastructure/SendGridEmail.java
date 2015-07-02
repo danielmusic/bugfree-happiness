@@ -22,7 +22,7 @@ public class SendGridEmail implements SendGridLocal {
             email.setFrom(senderEmail);
             email.setFromName("Sounds.sg");
             email.setSubject(subject);
-            email.setText(message);
+            email.setHtml(message);
             SendGrid.Response response = sendgrid.send(email);
             return response.getStatus();
         } catch (Exception ex) {
