@@ -19,7 +19,7 @@
                         <div class="col-1-1">
                             <label for="password"><strong>Password</strong> *</label>
                             <input type="password" name="password" id="password" required>
-                            <a href="">Forget password?</a>
+                            <a href="#!/reset">Forget password?</a>
                         </div>
                     </div>
                     <input type="hidden" value="AccountLogin" name="target">
