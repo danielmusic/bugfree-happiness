@@ -31,16 +31,20 @@ public abstract class Account implements Serializable {
     @Lob
     private String newEmail;
     private String passwordSalt;
-    private String passwordHash;
+    private String password;
     @Lob
     private String name;
     private Boolean isDisabled;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfPurchasedMusics;
-    private Boolean emailIsVerified; //Initial registered email
-    private String verificationCode;
+    private Boolean forgetPassword;
+    private String passwordResetCode;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date verificationCodeGeneratedDate;
+    private Date passwordResetCodeGeneratedDate;
+    private Boolean emailIsVerified; //Initial registered email
+    private String newEmailVerificationCode;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date newEmailVerificationCodeGeneratedDate;
     private Boolean newEmailIsVerified; //Subsequent change (will reset to false when the user tries to change email)
     @Lob
     private String imageURL;
@@ -52,8 +56,42 @@ public abstract class Account implements Serializable {
     public Account() {
         isDisabled = false;
         emailIsVerified = false;
+        forgetPassword = false;
         newEmailIsVerified = false;
         paymentRecord = new ArrayList();
+    }
+
+    public Boolean getForgetPassword() {
+        return forgetPassword;
+    }
+
+    public void setForgetPassword(Boolean forgetPassword) {
+        this.forgetPassword = forgetPassword;
+    }
+
+    public String getPasswordResetCode() {
+        return passwordResetCode;
+    }
+
+    public void setPasswordResetCode(String passwordResetCode) {
+        this.passwordResetCode = passwordResetCode;
+        this.passwordResetCodeGeneratedDate = new Date();
+    }
+
+    public Date getPasswordResetCodeGeneratedDate() {
+        return passwordResetCodeGeneratedDate;
+    }
+
+    public void setPasswordResetCodeGeneratedDate(Date passwordResetCodeGeneratedDate) {
+        this.passwordResetCodeGeneratedDate = passwordResetCodeGeneratedDate;
+    }
+
+    public Date getNewEmailVerificationCodeGeneratedDate() {
+        return newEmailVerificationCodeGeneratedDate;
+    }
+
+    public void setNewEmailVerificationCodeGeneratedDate(Date newEmailVerificationCodeGeneratedDate) {
+        this.newEmailVerificationCodeGeneratedDate = newEmailVerificationCodeGeneratedDate;
     }
 
     public List<Payment> getPaymentRecord() {
@@ -136,12 +174,12 @@ public abstract class Account implements Serializable {
         this.passwordSalt = passwordSalt;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -160,12 +198,13 @@ public abstract class Account implements Serializable {
         this.id = id;
     }
 
-    public String getVerificationCode() {
-        return verificationCode;
+    public String getNewEmailVerificationCode() {
+        return newEmailVerificationCode;
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
+    public void setNewEmailVerificationCode(String newEmailVerificationCode) {
+        this.newEmailVerificationCode = newEmailVerificationCode;
+        this.newEmailVerificationCodeGeneratedDate = new Date();
     }
 
     

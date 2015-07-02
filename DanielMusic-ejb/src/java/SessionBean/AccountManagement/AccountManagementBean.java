@@ -9,6 +9,7 @@ import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import SessionBean.CommonInfrastructure.SendGridLocal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -36,11 +37,17 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     @EJB
     private CommonInfrastructureBeanLocal cibl;
 
+    @EJB
+    private SendGridLocal sgl;
+
     public AccountManagementBean() {
     }
 
     @PersistenceContext
     private EntityManager em;
+
+    private static final String UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT = "There is no account registered with this email address or the account email has already been verified.";
+    private static final String UNAUTHORIZED_RESET_PASSWORD_ATTEMPT = "There is no password reset request for this account or the password reset code is invalid or has expired.";
 
     @Override
     public ReturnHelper loginAccount(String email, String password) {
@@ -61,7 +68,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 }
                 System.out.println("loginAccount(): Account with email:" + email + " logged in successfully.");
                 em.detach(account);
-                account.setPasswordHash(null);
+                account.setPassword(null);
                 account.setPasswordSalt(null);
                 result.setResult(true);
                 result.setDescription("Login successful.");
@@ -275,8 +282,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 cart.setAccount(member);
                 em.persist(cart);
             }
-
-            generateAndSendVerificationEmail(email);
+            generateAndSendVerificationEmail(email, false);
             result.setResult(true);
             result.setDescription("Account registered successfully.");
             return result;
@@ -412,19 +418,19 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper generateAndSendVerificationEmail(String emailAddress) {
-        System.out.println("AccountManagementBean: sendVerificationEmail() called");
+    public ReturnHelper generateAndSendVerificationEmail(String email, Boolean changingEmail) {
+        System.out.println("AccountManagementBean: generateAndSendVerificationEmail() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
             //Check if the account exists & if there is any unverified email tag tied to the account, if not 
             String unauthorizedMsg = "There is no account registered with this email address or the account email has already been verified.";
-            if (!checkIfEmailExists(emailAddress)) {
+            if (!checkIfEmailExists(email)) {
                 result.setDescription(unauthorizedMsg);
                 return result;
             }
             Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
-            q.setParameter("email", emailAddress);
+            q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
             if (account.getNewEmailIsVerified()) {
                 result.setDescription(unauthorizedMsg);
@@ -433,19 +439,33 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             //Generate the verification code & store it into DB
             Random r = new Random();
             int verificationCode = r.nextInt(9999);
-            account.setVerificationCode(verificationCode + "");
+            account.setNewEmailVerificationCode(verificationCode + "");
             em.merge(account);
             //Send the verification code
-            String verificationInstructions = "Verification instruction";
-            Boolean emailSent = false;//cibl.sendEmail(account.getNewEmail(), "no-reply@example.com", "Daniel Music Account Verification", verificationInstructions);
+            String verificationInstructions = "";
+            if (changingEmail) {
+                verificationInstructions = "You have request for a change of account email.<br/><br/>"
+                        + "Your verification code is: <b>" + verificationCode + "</b><br/>"
+                        + "Visit this link to key in the code: todo <br/><br/>"
+                        // need to login first before they can key
+                        + "If this email change was not initated by you, please ignore this email."
+                        + "TODO";
+            } else {
+                verificationInstructions = "Thank you for registering at Sounds.SG <br/><br/>"
+                        + "Your verification code is: <b>" + verificationCode + "</b><br/>"
+                        + "Visit this link to key in the code: todo <br/><br/>"
+                        + "If you did not sign up for an account at Sounds.SG, please ignore this email."
+                        + "TODO";
+            }
+            Boolean emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "Sounds.SG Account Verification", verificationInstructions);
             if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
             } else {
-                result.setDescription("Unable to send verificaiton email due to an internal serverr error. Please try again later.");
+                result.setDescription("Unable to send verificaiton email due to issues with our email servers. Please try again later.");
             }
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: sendVerificationEmail() failed");
+            System.out.println("AccountManagementBean: generateAndSendVerificationEmail() failed");
             ex.printStackTrace();
             result.setDescription("Unable to send verification email because of an internal server error, please try again later.");
         }
@@ -453,42 +473,179 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper enterVerificationCode(String emailAddress, String verificationCode) {
-        System.out.println("AccountManagementBean: enterVerificationCode() called");
+    public ReturnHelper enterEmailVerificationCode(String email, String verificationCode) {
+        System.out.println("AccountManagementBean: enterEmailVerificationCode() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            //Check if the account exists & if there is any unverified email tag tied to the account, if not 
+            if (!checkIfEmailExists(email)) {
+                result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
+                return result;
+            }
+            Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
+            q.setParameter("email", email);
+            Account account = (Account) q.getSingleResult();
+            if (account.getEmailIsVerified()) {
+                result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
+                return result;
+            }
+            //Retrieve the verification code, compare and update account
+            if (account.getNewEmailVerificationCode().equalsIgnoreCase(verificationCode)) {
+                account.setEmail(account.getNewEmail());
+                account.setEmailIsVerified(true);
+                account.setNewEmailIsVerified(true);
+                account.setNewEmail("");
+                account.setNewEmailVerificationCode(null);
+                account.setNewEmailVerificationCodeGeneratedDate(null);
+                em.merge(account);
+                result.setResult(true);
+                result.setDescription("Account verified");
+            } else {
+                result.setDescription("Invalid verification code, please try again.");
+            }
+        } catch (NoResultException ex) {
+            result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: enterEmailVerificationCode() failed");
+            ex.printStackTrace();
+            result.setDescription("Unable to verify code because of an internal server error, please try again later.");
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper enterNewEmailVerificationCode(String newEmailAddress, String verificationCode) {
+        System.out.println("AccountManagementBean: enterNewEmailVerificationCode() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            //Check if the account exists & if there is any unverified email tag tied to the account
+            Query q = em.createQuery("SELECT a FROM Account a WHERE a.newEmail=:email");
+            q.setParameter("email", newEmailAddress);
+            Account account = (Account) q.getSingleResult();
+            if (account.getNewEmailIsVerified()) {
+                result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
+                return result;
+            }
+            //Retrieve the verification code, compare and update account
+            if (account.getNewEmailVerificationCode().equalsIgnoreCase(verificationCode)) {
+                account.setEmail(account.getNewEmail());
+                account.setEmailIsVerified(true);
+                account.setNewEmailIsVerified(true);
+                account.setNewEmail("");
+                account.setNewEmailVerificationCode(null);
+                account.setNewEmailVerificationCodeGeneratedDate(null);
+                em.merge(account);
+                result.setResult(true);
+                result.setDescription("Account verified");
+            } else {
+                result.setDescription("Invalid verification code, please try again.");
+            }
+        } catch (NoResultException ex) {
+            result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: enterEmailVerificationCode() failed");
+            ex.printStackTrace();
+            result.setDescription("Unable to verify code because of an internal server error, please try again later.");
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper generateAndSendForgetPasswordEmail(String email) {
+        System.out.println("AccountManagementBean: generateAndSendForgetPasswordEmail() called");
+        //todo
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
             //Check if the account exists & if there is any unverified email tag tied to the account, if not 
             String unauthorizedMsg = "There is no account registered with this email address or the account email has already been verified.";
-            if (!checkIfEmailExists(emailAddress)) {
+            if (!checkIfEmailExists(email)) {
                 result.setDescription(unauthorizedMsg);
                 return result;
             }
             Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
-            q.setParameter("email", emailAddress);
+            q.setParameter("email", email);
             Account account = (Account) q.getSingleResult();
             if (account.getNewEmailIsVerified()) {
                 result.setDescription(unauthorizedMsg);
                 return result;
             }
-            //Retrieve the verification code, compare and update account
-            if (account.getVerificationCode().equalsIgnoreCase(verificationCode)) {
-                account.setEmail(account.getNewEmail());
-                account.setEmailIsVerified(true);
-                account.setNewEmailIsVerified(true);
-                account.setNewEmail("");
+            //Generate the verification code & store it into DB
+            SecureRandom random = new SecureRandom();
+            String resetCode = new BigInteger(130, random).toString(32);
+            account.setPasswordResetCode(resetCode);
+            account.setForgetPassword(true);
+            em.merge(account);
+            //Send the verification code
+            String resetInstructions = "You have request for a password reset.<br/><br/>"
+                        + "Your password reset code is: <b>" + resetCode + "</b><br/>"
+                        + "Visit this link to key in the code: todo <br/><br/>"
+                        + "If this password reset was not initated by you, please ignore this email."
+                        + "TODO";
+            Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Sounds.SG Password Reset", resetInstructions);
+            if (emailSent) {
+                result.setResult(true);
+                result.setDescription("Password reset code sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
+            } else {
+                result.setDescription("Unable to send password reset code due issues with our email servers. Please try again later.");
+            }
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: generateAndSendForgetPasswordEmail() failed");
+            ex.printStackTrace();
+            result.setDescription("Unable to passowrd reset coode because of an internal server error, please try again later.");
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper enterForgetPasswordCode(String email, String passwordResetCode) {
+        System.out.println("AccountManagementBean: enterForgetPasswordCode() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            //Check if the account exists & if there is any unverified email tag tied to the account
+            if (!checkIfEmailExists(email)) {
+                result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
+                return result;
+            }
+            Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
+            q.setParameter("email", email);
+            Account account = (Account) q.getSingleResult();
+            if (account.getForgetPassword() == false) {
+                result.setDescription(UNAUTHORIZED_RESET_PASSWORD_ATTEMPT);
+                return result;
+            }
+            //Check if code has expired
+            int hoursDiff = getHoursDifference(new Date(), account.getPasswordResetCodeGeneratedDate());
+            if (hoursDiff > 1) {
+                result.setDescription(UNAUTHORIZED_RESET_PASSWORD_ATTEMPT);
+            } else if (account.getPasswordResetCode().equals(passwordResetCode)) {
                 em.merge(account);
                 result.setResult(true);
-                result.setDescription("Verification email sent successfully, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
+                result.setDescription("Code verified");
             } else {
                 result.setDescription("Invalid verification code, please try again.");
             }
+        } catch (NoResultException ex) {
+            result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: enterVerificationCode() failed");
+            System.out.println("AccountManagementBean: enterForgetPasswordCode() failed");
             ex.printStackTrace();
             result.setDescription("Unable to verify code because of an internal server error, please try again later.");
         }
         return result;
+    }
+
+    public static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    public static int getHoursDifference(Date date1, Date date2) {
+        final int MILLI_TO_HOUR = 1000 * 60 * 60;
+        return (int) (date1.getTime() - date2.getTime()) / MILLI_TO_HOUR;
     }
 
     @Override
@@ -944,11 +1101,36 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (!generatePasswordHash(account.getPasswordSalt(), oldPassword).equals(account.getPasswordHash())) {
+            if (!generatePasswordHash(account.getPasswordSalt(), oldPassword).equals(account.getPassword())) {
                 result.setDescription("Old password provided is invalid, password not updated.");
             } else {
                 account.setPasswordSalt(generatePasswordSalt());
-                account.setPasswordHash(generatePasswordHash(account.getPasswordSalt(), newPassword));
+                account.setPassword(generatePasswordHash(account.getPasswordSalt(), newPassword));
+                em.merge(account);
+                result.setResult(true);
+                result.setDescription("Password updated successfully.");
+            }
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to find account with the provided ID.");
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: updateAccountPassword() failed");
+            result.setDescription("Unable to update account's password due to internal server error. Please try again later.");
+            ex.printStackTrace();
+        }
+        return result;
+    }
+    
+    @Override
+    public ReturnHelper updateAccountPassword(Long accountID, String newPassword) {
+        System.out.println("AccountManagementBean: updateAccountPassword() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        Query q = em.createQuery("SELECT a FROM Account a WHERE a.id=:id");
+        q.setParameter("id", accountID);
+        try {
+            Account account = (Account) q.getSingleResult();
+                account.setPasswordSalt(generatePasswordSalt());
+                account.setPassword(generatePasswordHash(account.getPasswordSalt(), newPassword));
                 em.merge(account);
                 result.setResult(true);
                 result.setDescription("Password updated successfully.");
@@ -975,7 +1157,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             account.setNewEmail(newEmail);
             account.setNewEmailIsVerified(false);
             em.merge(account);
-            ReturnHelper verificationCodeResult = generateAndSendVerificationEmail(newEmail);
+            ReturnHelper verificationCodeResult = generateAndSendVerificationEmail(newEmail, true);
             if (verificationCodeResult.getResult()) {
                 result.setResult(true);
                 result.setDescription("Account email verification sent successfully successfully.");
