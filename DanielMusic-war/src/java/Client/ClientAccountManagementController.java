@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import javax.servlet.jsp.PageContext;
 import org.json.JSONObject;
 
 @MultipartConfig
@@ -41,6 +42,7 @@ public class ClientAccountManagementController extends HttpServlet {
         //profile parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
+        String newEmail = request.getParameter("newEmail");
         String contactEmail = request.getParameter("contactEmail");
         String paypalEmail = request.getParameter("paypalEmail");
         String genreID = request.getParameter("genre");
@@ -58,7 +60,15 @@ public class ClientAccountManagementController extends HttpServlet {
         String chkAgree = request.getParameter("chkAgree");
         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
 
+        //Password reset parameters
+        String resetPasswordCode = request.getParameter("resetPasswordCode");
+
+        //Email change parameters
+        String verifyEmailCode = request.getParameter("verifyEmailCode");
+
         HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        Artist artist = (Artist) (session.getAttribute("artist"));
         session.removeAttribute("goodMsg");
         session.removeAttribute("errMsg");
         ReturnHelper returnHelper;
@@ -73,7 +83,8 @@ public class ClientAccountManagementController extends HttpServlet {
                     returnHelper = accountManagementBean.loginAccount(email, password);
 
                     if (returnHelper.getResult()) {
-                        Account account = accountManagementBean.getAccount(email);
+                        account = accountManagementBean.getAccount(email);
+                        session.setAttribute("account", account);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) account);
                             session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(account.getId(), true, true));
@@ -129,7 +140,6 @@ public class ClientAccountManagementController extends HttpServlet {
                     return;
 
                 case "ArtistProfileUpdate":
-                    Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                         //check need to update password
                         if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty()) {
@@ -139,9 +149,11 @@ public class ClientAccountManagementController extends HttpServlet {
                             }
                         }
 
-                        returnHelper = accountManagementBean.updateAccountEmail(artist.getId(), email);
+                        returnHelper = accountManagementBean.updateAccountEmail(artist.getId(), newEmail);
                         if (returnHelper.getResult()) {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
                         }
 
                         Part picture = request.getPart("picture");
@@ -152,12 +164,63 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
                         }
 
                         nextPage = "#!/artist/profile";
                     }
                     break;
-
+                case "SendResetPasswordEmail":
+                    returnHelper = accountManagementBean.generateAndSendForgetPasswordEmail(email);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("goodMsg", returnHelper.getDescription());
+                        session.setAttribute("resetPasswordEmail", email);
+                        nextPage = "#!/reset-password2";
+                    } else {
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                        session.setAttribute("resetPasswordEmail", "");
+                        nextPage = "#!/reset-password";
+                    }
+                    break;
+                case "SendEmailVerification":
+                    if (account != null) {
+                        returnHelper = accountManagementBean.generateAndSendVerificationEmail(account.getEmail(), false);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                        }
+                        nextPage = "#!/verify-email";
+                    }
+                    break;
+                case "VerifyResetCode":
+                    returnHelper = accountManagementBean.enterForgetPasswordCode(email, resetPasswordCode);
+                    if (returnHelper.getResult()) {
+                        Long accountID = returnHelper.getID();
+                        returnHelper = accountManagementBean.updateAccountPassword(accountID, password);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                            nextPage = "#!/login";
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                            nextPage = "#!/reset-password2";
+                        }
+                    } else {
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                        nextPage = "#!/reset-password2";
+                    }
+                    break;
+                case "VerifyEmail":
+                    returnHelper = accountManagementBean.enterEmailVerificationCode(account.getEmail(), verifyEmailCode);
+                    if (returnHelper.getResult()) {
+                        session.setAttribute("goodMsg", returnHelper.getDescription());
+                        nextPage = "#!/verify-email";
+                    } else {
+                        session.setAttribute("errMsg", returnHelper.getDescription());
+                        nextPage = "#!/verify-email";
+                    }
+                    break;
                 case "AccountLogout":
 //                    session.removeAttribute("errMsg");
 //                    session.removeAttribute("artist");
