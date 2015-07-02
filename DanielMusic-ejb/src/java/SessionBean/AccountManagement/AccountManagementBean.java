@@ -21,6 +21,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.EJB;
@@ -59,7 +60,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Account account = (Account) q.getSingleResult();
             //String passwordSalt = account.getPasswordSalt();
             //String passwordHash = generatePasswordHash(passwordSalt, password);
-            Boolean loginSuccess = validatePassword(password, account.getPasswordHash());
+            Boolean loginSuccess = validatePassword(password, account.getPassword());
             if (loginSuccess) {
                 if (account.getIsDisabled()) {
                     result.setResult(false);
@@ -69,7 +70,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 System.out.println("loginAccount(): Account with email:" + email + " logged in successfully.");
                 em.detach(account);
                 account.setPassword(null);
-                account.setPasswordSalt(null);
                 result.setResult(true);
                 result.setDescription("Login successful.");
                 return result;
@@ -214,8 +214,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 Admin admin = new Admin();
                 admin.setEmail(email);
                 admin.setNewEmail(email);
-                admin.setPasswordHash(passwordHash);
-                //admin.setPasswordSalt(passwordSalt);
+                admin.setPassword(passwordHash);
                 admin.setName(name);
                 em.persist(admin);
                 Query q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
@@ -234,8 +233,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 Artist artist = new Artist();
                 artist.setEmail(email);
                 artist.setNewEmail(email);
-                artist.setPasswordHash(passwordHash);
-                //artist.setPasswordSalt(passwordSalt);
+                artist.setPassword(passwordHash);
                 artist.setName(name);
                 em.persist(artist);
                 Query q = em.createQuery("SELECT a FROM Artist a where a.email=:email");
@@ -254,8 +252,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 Band band = new Band();
                 band.setEmail(email);
                 band.setNewEmail(email);
-                band.setPasswordHash(passwordHash);
-                //band.setPasswordSalt(passwordSalt);
+                band.setPassword(passwordHash);
                 band.setName(name);
                 em.persist(band);
                 Query q = em.createQuery("SELECT a FROM Band a where a.email=:email");
@@ -270,8 +267,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 Member member = new Member();
                 member.setEmail(email);
                 member.setNewEmail(email);
-                member.setPasswordHash(passwordHash);
-                //member.setPasswordSalt(passwordSalt);
+                member.setPassword(passwordHash);
                 member.setName(name);
                 em.persist(member);
                 Query q = em.createQuery("SELECT a FROM Member a where a.email=:email");
@@ -580,10 +576,10 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(account);
             //Send the verification code
             String resetInstructions = "You have request for a password reset.<br/><br/>"
-                        + "Your password reset code is: <b>" + resetCode + "</b><br/>"
-                        + "Visit this link to key in the code: todo <br/><br/>"
-                        + "If this password reset was not initated by you, please ignore this email."
-                        + "TODO";
+                    + "Your password reset code is: <b>" + resetCode + "</b><br/>"
+                    + "Visit this link to key in the code: todo <br/><br/>"
+                    + "If this password reset was not initated by you, please ignore this email."
+                    + "TODO";
             Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Sounds.SG Password Reset", resetInstructions);
             if (emailSent) {
                 result.setResult(true);
@@ -1101,11 +1097,10 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (!generatePasswordHash(account.getPasswordSalt(), oldPassword).equals(account.getPassword())) {
+            if (!validatePassword(oldPassword, account.getPassword())) {
                 result.setDescription("Old password provided is invalid, password not updated.");
             } else {
-                account.setPasswordSalt(generatePasswordSalt());
-                account.setPassword(generatePasswordHash(account.getPasswordSalt(), newPassword));
+                account.setPassword(generatePasswordHash(generatePasswordSalt(), newPassword));
                 em.merge(account);
                 result.setResult(true);
                 result.setDescription("Password updated successfully.");
@@ -1119,7 +1114,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         }
         return result;
     }
-    
+
     @Override
     public ReturnHelper updateAccountPassword(Long accountID, String newPassword) {
         System.out.println("AccountManagementBean: updateAccountPassword() called");
@@ -1129,12 +1124,10 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
-                account.setPasswordSalt(generatePasswordSalt());
-                account.setPassword(generatePasswordHash(account.getPasswordSalt(), newPassword));
-                em.merge(account);
-                result.setResult(true);
-                result.setDescription("Password updated successfully.");
-            }
+            account.setPassword(generatePasswordHash(generatePasswordSalt(), newPassword));
+            em.merge(account);
+            result.setResult(true);
+            result.setDescription("Password updated successfully.");
         } catch (NoResultException ex) {
             result.setDescription("Unable to find account with the provided ID.");
         } catch (Exception ex) {

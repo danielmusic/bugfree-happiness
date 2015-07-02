@@ -30,7 +30,6 @@ public abstract class Account implements Serializable {
     private String email;
     @Lob
     private String newEmail;
-    private String passwordSalt;
     private String password;
     @Lob
     private String name;
@@ -164,14 +163,6 @@ public abstract class Account implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordSalt() {
-        return passwordSalt;
-    }
-
-    public void setPasswordSalt(String passwordSalt) {
-        this.passwordSalt = passwordSalt;
     }
 
     public String getPassword() {
