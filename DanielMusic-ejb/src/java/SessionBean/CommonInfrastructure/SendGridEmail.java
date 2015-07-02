@@ -7,22 +7,25 @@ import com.sendgrid.SendGrid;
 public class SendGridEmail implements SendGridLocal {
 
     //SendGrid API Key
-    private String SENDGRID_API_USER = "";
-    private String SENDGRID_API_PASSWORD = "";
+    private String SENDGRID_USER = "API@.sg";
+    private String SENDGRID_PASSWORD = "";
+    private String SENDGRID_API_KEY = "";
 
     @Override
     public Boolean sendEmail(String destinationEmail, String senderEmail, String subject, String message) {
         System.out.println("CommonInfrastructureBean: sendEmail() called");
         try {
-            SendGrid sendgrid = new SendGrid(SENDGRID_API_USER, SENDGRID_API_PASSWORD);
+            //SendGrid sendgrid = new SendGrid(SENDGRID_USER, SENDGRID_PASSWORD);
+            SendGrid sendgrid = new SendGrid(SENDGRID_API_KEY);
             SendGrid.Email email = new SendGrid.Email();
             email.addTo(destinationEmail);
             email.setFrom(senderEmail);
             email.setFromName("Sounds.sg");
             email.setSubject(subject);
             email.setText(message);
-            SendGrid.Response respose = sendgrid.send(email);
-            return true;
+            SendGrid.Response response = sendgrid.send(email);
+            System.out.println(response.getStatus());
+            return response.getStatus();
         } catch (Exception ex) {
             System.out.println("CommonInfrastructureBean: sendEmail() failed");
             ex.printStackTrace();
