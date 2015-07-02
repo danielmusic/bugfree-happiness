@@ -1,9 +1,9 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Sounds.sg | Explore">
     <!-- ############################# Intro ############################# -->
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Explore JSP</h1>
-        <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
+    <section class="intro-title section border-bottom" style="background-image: url(placeholders/blog-bg.jpg)">
+        <h1 class="heading-l">Explore</h1>
+        <h2 class="heading-m">explore  and <span class="color">Discover</span></h2>
     </section>
     <!-- /intro -->
 
@@ -11,48 +11,37 @@
     <section class="content section">
         <!-- container -->
         <div class="container">
-
-            <!-- ############################# About US ############################# -->
-
-            <!-- Article -->
             <article>
 
-                <div class="col-1-2">
-                    <img src="placeholders/about-img01.jpg" alt="Noisa image" class="inline">
-                    <br>
-                    <!-- Buttons list -->
-                    <ul class="buttons-list">
+
+
+                <div class="col-1-1">
+                    <h2>Rock Loop Genre Title here</h2>
+                    <ol id="release-list" class="tracklist">
+
                         <li>
-                            <a class="btn small" href="javascript:;" ><i class="icon icon-download"></i> Download Recents Podcasts</a>
+                            <div class="track-details">
+                                <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3" data-cover="placeholders/release-image02.jpg">
+                                    <!-- cover -->
+                                    <img class="track-cover" src="img/cover.png">
+                                    <!-- Title -->
+                                    <span class="track-title" data-artist_url="artist_url">Track Title</span>
+                                    <!-- Artists -->
+                                    <span class="track-artists">Track Artist</span>
+                                </a>
+
+                                <!-- <a  href="track.mp3" data-cover="img/cover.png" data-artist="Track Artist" data-artist_url="artist_url" data-artist_target="_self"  
+                                    data-release_url="http://google.com" data-release_target="_blank" data-shop_url="shop_url" 
+                                    data-shop_target="_blank">Track Title
+                                </a>-->
+
+                                <div class="track-buttons">
+                                    <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3"><i class="icon icon-play2"></i></a>
+                                    <a href="javascript:;"><i class="icon icon-cart"></i></a>
+                                </div>
+                            </div>
                         </li>
-                        <li>
-                            <a class="btn small dark" href="javascript:;" ><i class="icon icon-download"></i> Download Our Bio</a>
-                        </li>
-
-                    </ul>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                </div>
-
-                <div class="col-1-2 last">
-                    <h2>Biography</h2>
-                    <p class="intro-text caps">Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
-
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                    <p>Duis dolor tellus, faucibus non ligula ac, fringilla porttitor eros. Cras sagittis eleifend erat ac fringilla. Proin ac odio et neque vulputate tempus at vel justo. Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
-
-                    <blockquote>
-                        <p>
-                            Sed pellentesque dapibus tellus in semper. Aenean faucibus aliquet turpis, id fermentum sem consectetur id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus euismod nunc scelerisque tincidunt.
-                        </p>
-                    </blockquote>
-                    <br>
-                    <h3>Videos</h3>
-                    <iframe src="//player.vimeo.com/video/66171813?portrait=0&amp;color=ea4233" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
+                    </ol>
                 </div>
 
 
@@ -70,5 +59,5 @@
 <script>
     //var new_url = $('#url').val();
     //window.history.pushState("object or string", "Title", "" + new_url);
-    window.history.replaceState("object or string", "Title", "Discover");
+    //window.history.replaceState("object or string", "Title", "Discover");
 </script>
