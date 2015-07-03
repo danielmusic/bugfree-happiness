@@ -52,18 +52,21 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             Receiver secondaryReceiver = new Receiver();
             secondaryReceiver.setAmount(amount2); //Artist receive this full amount
             secondaryReceiver.setEmail("daniel-artist@hotmail.com");
+            secondaryReceiver.setPaymentType("DIGITALGOODS");
             receivers.add(secondaryReceiver);
 
             //Artist (partial of the total)
             secondaryReceiver = new Receiver();
             secondaryReceiver.setAmount(amount3); //Artist receive this full amount
             secondaryReceiver.setEmail("daniel-artist2@hotmail.com");
+            secondaryReceiver.setPaymentType("DIGITALGOODS");
             receivers.add(secondaryReceiver);
 
             //Daniel (total amount)
             Receiver primaryReceiver = new Receiver();
             primaryReceiver.setAmount(totalAmount);//total amount to be charged
             primaryReceiver.setEmail("admin@sounds.sg");
+            primaryReceiver.setPaymentType("DIGITALGOODS");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
 
@@ -74,9 +77,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
-            payRequest.setCancelUrl("https://devtools-paypal.com/guide/ap_chained_payment?cancel=true");//Return if payment cancelled
-
-            payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
+            payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/#!/payment-cancelled");//Return if payment cancelled
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/payment-success");//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 
@@ -93,7 +95,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
+            System.out.println("Open link: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey="+ payKey);
+            //System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
             //open link in browser
             //Accounts (all password is 12345678): 
             //daniel-buyer@hotmail.com, daniel-artist@hotmail.com, danielmusic@hotmail.com
@@ -271,6 +274,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 Receiver secondaryReceiver = new Receiver();
                 secondaryReceiver.setAmount(partiesReceivingPayments.get(i).getTotalPaymentAmount() * ARTISTBAND_CUT_PERCENTAGE);
                 secondaryReceiver.setEmail(partiesReceivingPayments.get(i).getArtistOrBandPaypalEmail());
+                secondaryReceiver.setPaymentType("DIGITALGOODS");
                 receivers.add(secondaryReceiver);
             }
 
@@ -279,6 +283,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             primaryReceiver.setAmount(totalPaymentAmount);
             primaryReceiver.setEmail(MAIN_PAYPAL_RECIVING_ACCOUNT);
             primaryReceiver.setPrimary(true);
+            primaryReceiver.setPaymentType("DIGITALGOODS");
             receivers.add(primaryReceiver);
 
             ReceiverList receiverList = new ReceiverList(receivers);
@@ -288,8 +293,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
-            payRequest.setCancelUrl("https://devtools-paypal.com/guide/ap_chained_payment?cancel=true");//Return if payment cancelled
-            payRequest.setReturnUrl("https://devtools-paypal.com/guide/ap_chained_payment?success=true");//Return after payment complete
+            payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/#!/payment-cancelled");//Return if payment cancelled
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/Controller?PaymentID="+payment.getId()+"UUID="+payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 
@@ -306,9 +311,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
+            System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);
             if (payKey != null) {
-                return "https://www.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey;
+                //TODO remove sandbox
+                return "https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey;
             } else {
                 return null;
             }
