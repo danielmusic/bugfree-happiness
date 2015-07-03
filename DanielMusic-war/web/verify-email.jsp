@@ -37,7 +37,11 @@
                         </div>
                     </div>
                     <input type="hidden" value="VerifyEmail" name="target">
+                    <%if (account.getEmailIsVerified()!= true) {%>
                     <button type="submit" class="medium invert">Submit Code</button>
+                    <%} else {%>
+                    <button type="button" class="medium invert" onclick="window.location.href = ''">Back to Home</button>
+                    <%}%>
                     <div class="clear"></div>
                 </form>
             </article>

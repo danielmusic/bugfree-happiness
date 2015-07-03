@@ -149,11 +149,18 @@ public class ClientAccountManagementController extends HttpServlet {
                             }
                         }
 
-                        returnHelper = accountManagementBean.updateAccountEmail(artist.getId(), newEmail);
-                        if (returnHelper.getResult()) {
-                            session.setAttribute("goodMsg", returnHelper.getDescription());
-                        } else {
-                            session.setAttribute("errMsg", returnHelper.getDescription());
+                        //Updates email only if the user enters a different mail
+                        if (!account.getEmail().equalsIgnoreCase(email)) {
+                            returnHelper = accountManagementBean.updateAccountEmail(account.getId(), email);
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                                account = accountManagementBean.getAccount(account.getId());
+                                session.setAttribute("account", account);
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                                nextPage = "#!/artist/profile";
+                                break;
+                            }
                         }
 
                         Part picture = request.getPart("picture");
@@ -202,50 +209,68 @@ public class ClientAccountManagementController extends HttpServlet {
                     break;
                 case "SendEmailVerification":
                     if (account != null) {
-                        returnHelper = accountManagementBean.generateAndSendVerificationEmail(account.getEmail(), false);
+                        returnHelper = accountManagementBean.generateAndSendVerificationEmail(account.getId(), account.getEmail(), false);
                         if (returnHelper.getResult()) {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
                         }
                         nextPage = "#!/verify-email";
+                    }
+                    break;
+                case "SendNewEmailVerification":
+                    if (account != null) {
+                        returnHelper = accountManagementBean.generateAndSendVerificationEmail(account.getId(), account.getEmail(), true);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                        }
+                        nextPage = "#!/change-email";
                     }
                     break;
                 case "VerifyEmail":
-                    returnHelper = accountManagementBean.enterEmailVerificationCode(account.getEmail(), verifyEmailCode);
-                    if (returnHelper.getResult()) {
-                        session.setAttribute("goodMsg", returnHelper.getDescription());
-                        //Refresh account
-                        account = accountManagementBean.getAccount(account.getId());
-                        session.setAttribute("account", account);
-                        nextPage = "#!/verify-email";
-                    } else {
-                        session.setAttribute("errMsg", returnHelper.getDescription());
-                        nextPage = "#!/verify-email";
-                    }
-                    break;
-                case "ChangeEmail":
                     if (account != null) {
-                        returnHelper = accountManagementBean.updateAccountEmail(account.getId(), newEmail);
+                        returnHelper = accountManagementBean.enterEmailVerificationCode(account.getEmail(), verifyEmailCode);
                         if (returnHelper.getResult()) {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
+                            //Refresh account
+                            account = accountManagementBean.getAccount(account.getId());
+                            session.setAttribute("account", account);
+                            nextPage = "#!/verify-email";
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
+                            nextPage = "#!/verify-email";
                         }
-                        nextPage = "#!/change-email";
+                    }
+                    break;
+                case "CancelUpdateEmail":
+                    if (account != null) {
+                        returnHelper = accountManagementBean.cancelUpdateAccountEmail(account.getId());
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                            account = accountManagementBean.getAccount(account.getId());
+                            session.setAttribute("account", account);
+                            nextPage = "#!/change-email";
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                            nextPage = "#!/change-email";
+                        }
                     }
                     break;
                 case "VerifyNewEmail":
-                    returnHelper = accountManagementBean.enterNewEmailVerificationCode(account.getEmail(), verifyEmailCode);
-                    if (returnHelper.getResult()) {
-                        session.setAttribute("goodMsg", returnHelper.getDescription());
-                        //Refresh account
-                        account = accountManagementBean.getAccount(account.getId());
-                        session.setAttribute("account", account);
-                        nextPage = "#!/change-email";
-                    } else {
-                        session.setAttribute("errMsg", returnHelper.getDescription());
-                        nextPage = "#!/change-email";
+                    if (account != null) {
+                        returnHelper = accountManagementBean.enterNewEmailVerificationCode(account.getNewEmail(), verifyEmailCode);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                            //Refresh account
+                            account = accountManagementBean.getAccount(account.getId());
+                            session.setAttribute("account", account);
+                            nextPage = "#!/change-email";
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                            nextPage = "#!/change-email";
+                        }
                     }
                     break;
                 case "AccountLogout":

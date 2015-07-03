@@ -11,9 +11,9 @@
                     List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
                     Account account = (Account) session.getAttribute("account");
                     Artist artist = (Artist) (session.getAttribute("artist"));
-                    if (account != null && artist!=null && genres != null) {
-                        if (!artist.getEmailIsVerified()) {
-                            out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a> or <a href='#!/change-email'>change your email</a>.</p>");
+                    if (account != null && artist != null && genres != null) {
+                        if (!account.getEmailIsVerified()) {
+                            out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
                         }
                 %>
 
@@ -24,8 +24,8 @@
                     <div class="row clearfix">
                         <div class="col-1-3">
                             <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
-                            <input type="text" id="name" name="name" value="<%=artist.getName()%>" disabled>
-                            <a href="#!/change-name">Change Name</a>
+                            <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
+                            <a href="#!/change-name">Change name</a>
                         </div>
 
                         <div class="md-modal md-effect-1" id="modal-name">
@@ -45,10 +45,28 @@
                             </div>
                         </div>
 
+                        <div class="md-modal md-effect-1" id="modal-change-email">
+                            <div class="md-content">
+                                <h3>Account Email</h3>
+                                <div>
+                                    <p>This is the email address that you will use to:</p>
+                                    <ul>
+                                        <li><strong>Login:</strong> into Sounds.SG</li>
+                                        <li><strong>Reset:</strong> your password if the need arises</li>
+                                        <li><strong>Receive:</strong> invoices about your purchases on Sounds.SG</li>
+                                    </ul>
+                                    <p>Update this field only if you are changing your email. A verification code will be sent to the new email.</p>
+                                    <div style="text-align:center;">
+                                        <button class="md-close" type="button">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-1-3">
-                            <label for="email"><strong>Current Email</strong></label>
-                            <input type="email" id="email" name="eail" value="<%=artist.getEmail()%>" disabled>
-                            <a href="#!/change-email">Change Email</a>
+                            <label for="email"><strong>Current Email</strong> <a class="md-trigger" data-modal="modal-change-email">(?)</a></label>
+                            <input type="email" id="email" name="email" value="<%=account.getEmail()%>">
+                            <%if (account.getNewEmail()!=null && account.getNewEmail().length()>0) {%><a href="#!/change-email">Email change in progress...</a><%}%>
                         </div>
 
                         <div class="col-1-3 last">

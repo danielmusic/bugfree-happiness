@@ -40,7 +40,12 @@ public abstract class Account implements Serializable {
     private String passwordResetCode;
     @Temporal(TemporalType.TIMESTAMP)
     private Date passwordResetCodeGeneratedDate;
+    
     private Boolean emailIsVerified; //Initial registered email
+    private String initialEmailVerificationCode;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date initialEmailVerificationCodeGeneratedDate;
+    
     private String newEmailVerificationCode;
     @Temporal(TemporalType.TIMESTAMP)
     private Date newEmailVerificationCodeGeneratedDate;
@@ -81,6 +86,23 @@ public abstract class Account implements Serializable {
         return passwordResetCodeGeneratedDate;
     }
 
+    public String getInitialEmailVerificationCode() {
+        return initialEmailVerificationCode;
+    }
+
+    public void setInitialEmailVerificationCode(String initialEmailVerificationCode) {
+        this.initialEmailVerificationCode = initialEmailVerificationCode;
+        this.initialEmailVerificationCodeGeneratedDate = new Date();
+    }
+
+    public Date getInitialEmailVerificationCodeGeneratedDate() {
+        return initialEmailVerificationCodeGeneratedDate;
+    }
+
+    public void setInitialEmailVerificationCodeGeneratedDate(Date initialEmailVerificationCodeGeneratedDate) {
+        this.initialEmailVerificationCodeGeneratedDate = initialEmailVerificationCodeGeneratedDate;
+    }
+
     public void setPasswordResetCodeGeneratedDate(Date passwordResetCodeGeneratedDate) {
         this.passwordResetCodeGeneratedDate = passwordResetCodeGeneratedDate;
     }
@@ -91,6 +113,7 @@ public abstract class Account implements Serializable {
 
     public void setNewEmailVerificationCodeGeneratedDate(Date newEmailVerificationCodeGeneratedDate) {
         this.newEmailVerificationCodeGeneratedDate = newEmailVerificationCodeGeneratedDate;
+        this.newEmailVerificationCodeGeneratedDate = new Date();
     }
 
     public List<Payment> getPaymentRecord() {
@@ -198,7 +221,6 @@ public abstract class Account implements Serializable {
         this.newEmailVerificationCodeGeneratedDate = new Date();
     }
 
-    
     public Boolean getNewEmailIsVerified() {
         return newEmailIsVerified;
     }

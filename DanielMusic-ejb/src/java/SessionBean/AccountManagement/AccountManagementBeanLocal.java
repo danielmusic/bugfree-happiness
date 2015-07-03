@@ -21,11 +21,14 @@ public interface AccountManagementBeanLocal {
     public boolean checkIfArtistNameExists(String name);
     public boolean checkIfBandNameExists(String name);
     public boolean checkIfArtistOrBandNameExists(String name);
-    public ReturnHelper generateAndSendVerificationEmail(String email, Boolean changingEmail);
+    
+    public ReturnHelper generateAndSendVerificationEmail(Long accountID, String email, Boolean changingEmail);
     public ReturnHelper enterEmailVerificationCode(String email, String verificationCode);
     public ReturnHelper enterNewEmailVerificationCode(String newEmailAddress, String verificationCode);
+    
     public ReturnHelper generateAndSendForgetPasswordEmail(String email);
     public ReturnHelper enterForgetPasswordCode(String email, String passwordResetCode);
+    
     public String generatePasswordHash(String salt, String password);
     public String generatePasswordSalt();
     
@@ -44,6 +47,7 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);
     public ReturnHelper updateAccountPassword(Long accountID, String newPassword);
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail);
+    public ReturnHelper cancelUpdateAccountEmail(Long accountID);
     //public List<Account> listAllAccount();
     
 }

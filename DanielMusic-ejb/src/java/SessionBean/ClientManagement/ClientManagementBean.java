@@ -34,7 +34,7 @@ import javax.persistence.Query;
 public class ClientManagementBean implements ClientManagementBeanLocal {
 
     private static final Double ARTISTBAND_CUT_PERCENTAGE = 0.7; //70%
-    private static final String MAIN_PAYPAL_RECIVING_ACCOUNT = "danielmusic@hotmail.com"; // For reciving the 100% of the amount first before passing it to the artists
+    private static final String MAIN_PAYPAL_RECIVING_ACCOUNT = "admin@sounds.sg"; // For reciving the 100% of the amount first before passing it to the artists
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
@@ -57,13 +57,13 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //Artist (partial of the total)
             secondaryReceiver = new Receiver();
             secondaryReceiver.setAmount(amount3); //Artist receive this full amount
-            secondaryReceiver.setEmail("daniel-buyer@hotmail.com");
+            secondaryReceiver.setEmail("daniel-artist2@hotmail.com");
             receivers.add(secondaryReceiver);
 
             //Daniel (total amount)
             Receiver primaryReceiver = new Receiver();
             primaryReceiver.setAmount(totalAmount);//total amount to be charged
-            primaryReceiver.setEmail("danielmusic@hotmail.com");
+            primaryReceiver.setEmail("admin@sounds.sg");
             primaryReceiver.setPrimary(true);
             receivers.add(primaryReceiver);
 

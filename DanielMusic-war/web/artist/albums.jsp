@@ -32,7 +32,7 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                         if (!artist.getEmailIsVerified()) {
-                            out.print("<p class='warning'>You will not be able to todo _____? until you verify your email. Click here to <a href='#!/verify-email'>resend verification code</a> or <a href='#!/change-email'>change your email</a>.</p>");
+                            out.print("<p class='warning'>You will not be able to todo _____? until you verify your email. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
                         }
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));
                 %>

@@ -64,8 +64,7 @@ public class StartupBean {
             commonInfrastructureBeanLocal.uploadFileToGoogleCloudStorage("/temp/GCS Test File", "GCS Test File", false, false);
             file.delete();
             // =========== DO NOT DISABLE THIS END   ============
-            Query q = em.createQuery("SELECT s FROM Account s where s.email=:email");
-            q.setParameter("email", "a@a.a");
+            Query q = em.createQuery("SELECT s FROM Account s");
             List<Account> accounts = q.getResultList();
             // Don't insert anything if database appears to be initiated.
             if (accounts != null && accounts.size() > 0) {
