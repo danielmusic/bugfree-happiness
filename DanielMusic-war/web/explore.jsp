@@ -21,19 +21,27 @@
 
                         <li>
                             <div class="track-details">
-                                <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3" data-cover="placeholders/release-image02.jpg">
+                                <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3" data-cover="placeholders/release-image02.jpg"
+                                   data-artist="Madoff"
+                                   data-artist_url="http://artist.com/madoff-freak" 
+                                   data-artist_target="_self"
+                                   data-shop_url="shop_url" 
+                                   data-shop_target="_blank"
+                                   >
                                     <!-- cover -->
                                     <img class="track-cover" src="img/cover.png">
                                     <!-- Title -->
-                                    <span class="track-title" data-artist_url="artist_url">Track Title</span>
+                                    <span class="track-title" data-artist_url="artist_url">One Last Time</span>
                                     <!-- Artists -->
-                                    <span class="track-artists">Track Artist</span>
+                                    <span class="track-artists">Ariana Grande </span>
                                 </a>
 
-                                <!-- <a  href="track.mp3" data-cover="img/cover.png" data-artist="Track Artist" data-artist_url="artist_url" data-artist_target="_self"  
+                                <!--
+                                 <a  href="track.mp3" data-cover="img/cover.png" data-artist="Track Artist" data-artist_url="artist_url" data-artist_target="_self"  
                                     data-release_url="http://google.com" data-release_target="_blank" data-shop_url="shop_url" 
                                     data-shop_target="_blank">Track Title
-                                </a>-->
+                                </a>
+                                -->
 
                                 <div class="track-buttons">
                                     <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3"><i class="icon icon-play2"></i></a>
