@@ -7,6 +7,7 @@ public class SearchHelper {
     private List<Album> listOfAlbums;
     private List<Artist> listOfArtists;
     private List<Music> listOfMusics;
+    private List<Band> listOfBand;
 
     public List<Album> getListOfAlbums() {
         return listOfAlbums;

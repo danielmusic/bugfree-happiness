@@ -79,7 +79,7 @@ public class MusicManagementController extends HttpServlet {
                         returnHelper = musicManagementBean.createAlbum(false, picture, name, description, artist.getId(), Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                         if (returnHelper.getResult()) {
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
@@ -105,7 +105,7 @@ public class MusicManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             musicManagementBean.createMusic(music, returnHelper.getID(), null, name, Double.parseDouble(price), lyrics, Integer.parseInt(yearReleased));
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             }
                         } else {
@@ -126,7 +126,7 @@ public class MusicManagementController extends HttpServlet {
                         returnHelper = musicManagementBean.editAlbum(Long.parseLong(id), picture, name, description, Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                         if (returnHelper.getResult()) {
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
                             session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
@@ -141,7 +141,7 @@ public class MusicManagementController extends HttpServlet {
                         returnHelper = musicManagementBean.deleteAlbum(Long.parseLong(id));
 
                         if (returnHelper.getResult()) {
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
@@ -156,7 +156,7 @@ public class MusicManagementController extends HttpServlet {
                         System.out.println("returnHelper.getResult() " + returnHelper.getResult());
 
                         if (returnHelper.getResult()) {
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
@@ -244,7 +244,7 @@ public class MusicManagementController extends HttpServlet {
                         returnHelper = musicManagementBean.deleteMusic(Long.parseLong(id));
 
                         if (returnHelper.getResult()) {
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistorBandID(artist.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());

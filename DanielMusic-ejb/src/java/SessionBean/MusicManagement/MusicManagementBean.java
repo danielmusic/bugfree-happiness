@@ -3,6 +3,7 @@ package SessionBean.MusicManagement;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
+import EntityManager.ArtistBandHelper;
 import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Music;
@@ -138,6 +139,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
 
+            q = em.createQuery("SELECT a FROM Band a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
+            q.setParameter("searchString", searchString);
+            List<Band> listOfBands = q.getResultList();
+
             q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
@@ -202,7 +207,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String fileName = musicPart.getSubmittedFileName();
             //Don't take file extension for the filename
             fileName = removeExtension(fileName);
-            String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_"+ fileName+".wav";
+            String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_" + fileName + ".wav";
             System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
@@ -499,8 +504,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Album> ListAllAlbumByArtistorBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
-        System.out.println("getAlbumByArtists() called");
+    public List<Album> ListAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
+        System.out.println("ListAllAlbumByArtistOrBandID() called");
         try {
             Query q = null;
             Account account = ambl.getAccount(artistOrBandAccountID);
@@ -531,7 +536,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             List<Album> albums = q.getResultList();
             return albums;
         } catch (Exception ex) {
-            System.out.println("getAlbumByArtists() failed");
+            System.out.println("ListAllAlbumByArtistOrBandID() failed");
             ex.printStackTrace();
             return null;
         }
@@ -759,15 +764,67 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Artist> listAllArtistInGenre(Long genreID) {
-        //TODO YG
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<ArtistBandHelper> listAllArtistBandInGenre(Long genreID) {
+        System.out.println("MusicManagement: listAllArtistBandInGenre() called");
+        try {
+            Query q;
+            q = em.createQuery("select a from Artist a where a.isApproved=true and a.genre=:genreID");
+            q.setParameter("genreID", genreID);
+            List<Artist> listOfArtists = q.getResultList();
+            q = em.createQuery("select a from Band a where a.isApproved=true and a.genre=:genreID");
+            q.setParameter("genreID", genreID);
+            List<Band> listOfBands = q.getResultList();
+            List<ArtistBandHelper> artistBandHelpers = new ArrayList();
+            for (Artist artist : listOfArtists) {
+                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
+                artistBandHelper.setIsArtist(true);
+                artistBandHelper.setArtist(artist);
+                artistBandHelpers.add(artistBandHelper);
+            }
+            for (Band band : listOfBands) {
+                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
+                artistBandHelper.setIsArtist(false);
+                artistBandHelper.setBand(band);
+                artistBandHelpers.add(artistBandHelper);
+            }
+            return artistBandHelpers;
+        } catch (Exception e) {
+            System.out.println("MusicManagement: Error while calling listAllArtistBandInGenre()");
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public List<Artist> listAllArtistByGemre() {
-        //TODO YG
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<ArtistBandHelper> listAllArtistBandByGenre() {
+        System.out.println("MusicManagement: listAllArtistBandByGenre() called");
+        try {
+            Query q;
+            q = em.createQuery("select a from Artist a where a.isApproved=true");
+            List<Artist> listOfArtists = q.getResultList();
+            q = em.createQuery("select a from Band a where a.isApproved=true");
+            List<Band> listOfBands = q.getResultList();
+            List<ArtistBandHelper> artistBandHelpers = new ArrayList();
+            for (Artist artist : listOfArtists) {
+                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
+                artistBandHelper.setIsArtist(true);
+                artistBandHelper.setArtist(artist);
+                artistBandHelpers.add(artistBandHelper);
+            }
+            for (Band band : listOfBands) {
+                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
+                artistBandHelper.setIsArtist(false);
+                artistBandHelper.setBand(band);
+                artistBandHelpers.add(artistBandHelper);
+            }
+            //TODO sort artistband
+            return artistBandHelpers;
+        } catch (Exception e) {
+            System.out.println("MusicManagement: Error while calling listAllArtistBandByGenre()");
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
