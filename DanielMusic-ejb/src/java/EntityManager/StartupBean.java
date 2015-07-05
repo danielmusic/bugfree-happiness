@@ -84,7 +84,7 @@ public class StartupBean {
                 account.setNewEmailIsVerified(true);
                 account.setNewEmail("");
                 em.merge(account);
-                accountManagementBeanLocal.registerAccount("Band", "band@sounds.sg", "band", false, true, true);
+                accountManagementBeanLocal.registerAccount("Band", "band@sounds.sg", "band", false, false, true);
                 account = accountManagementBeanLocal.getAccount("band@sounds.sg");
                 account.setEmailIsVerified(true);
                 account.setNewEmailIsVerified(true);
