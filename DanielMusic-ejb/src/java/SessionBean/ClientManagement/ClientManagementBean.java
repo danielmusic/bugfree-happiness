@@ -304,6 +304,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 result.setDescription("Payment completed successfully. Thank you for your purchase!");
                 em.merge(payment);
                 clearShoppingCart(payment.getAccount().getId());
+                //TODO add the payment to the user list of purchased music
+                //Increase all the purchased count by +1
             }
         } catch (NoResultException ex) {
             result.setDescription("Unable to find a matching payment record in our system. If you have completed your PayPal payment and see this error message, please contact us.");
