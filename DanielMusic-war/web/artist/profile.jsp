@@ -25,7 +25,7 @@
                         <div class="col-1-3">
                             <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
                             <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
-                            <a href="#!/change-name">Change name</a>
+                            <a href="#!/change-name">Change Name</a>
                         </div>
 
                         <div class="md-modal md-effect-1" id="modal-name">

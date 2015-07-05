@@ -273,6 +273,21 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                     }
                     break;
+                case "ChangeName":
+                    if (account != null) {
+                        returnHelper = accountManagementBean.updateArtistName(account.getId(), name);
+                        if (returnHelper.getResult()) {
+                            session.setAttribute("goodMsg", returnHelper.getDescription());
+                            //Refresh account
+                            account = accountManagementBean.getAccount(account.getId());
+                            session.setAttribute("account", account);
+                            nextPage = "#!/change-name";
+                        } else {
+                            session.setAttribute("errMsg", returnHelper.getDescription());
+                            nextPage = "#!/change-name";
+                        }
+                    }
+                    break;
                 case "AccountLogout":
 //                    session.removeAttribute("errMsg");
 //                    session.removeAttribute("artist");
