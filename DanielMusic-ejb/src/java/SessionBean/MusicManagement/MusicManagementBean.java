@@ -424,6 +424,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             album.setIsSingle(isSingle);
             album.setDescription(description);
             album.setName(name);
+            album.setArtistName(account.getName());
             album.setYearReleased(yearReleased);
             album.setCredits(credits);
             album.setPrice(price);
