@@ -147,7 +147,7 @@
                             <%
                                 String date = "";
                                 if (artist.getBandDateFormed() != null) {
-                                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
+                                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
                                     date = DATE_FORMAT.format(artist.getBandDateFormed());
                                 }
                             %>

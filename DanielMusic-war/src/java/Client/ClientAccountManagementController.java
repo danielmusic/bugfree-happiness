@@ -8,7 +8,6 @@ import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.ejb.EJB;
@@ -165,7 +164,6 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                         if (artist != null) {
                             if (!artist.getIsBand()) {
-                                System.out.println("1");
                                 returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
                             } else {
                                 String bandMembers = request.getParameter("bandMembers");
@@ -174,14 +172,9 @@ public class ClientAccountManagementController extends HttpServlet {
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                 Date date = null;
 
-                                System.out.println("2");
-                                System.out.println("dateFormed " + dateFormed);
-
                                 if (dateFormed != null) {
                                     date = formatter.parse(dateFormed);
                                 }
-                                System.out.println("date " + date);
-
                                 returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, date, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
                             }
 
