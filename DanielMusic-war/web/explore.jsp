@@ -12,9 +12,6 @@
         <!-- container -->
         <div class="container">
             <article>
-
-
-
                 <div class="col-1-1">
                     <h2>Rock Loop Genre Title here</h2>
                     <ol id="release-list" class="tracklist">
@@ -35,13 +32,6 @@
                                     <!-- Artists -->
                                     <span class="track-artists">Ariana Grande </span>
                                 </a>
-
-                                <!--
-                                 <a  href="track.mp3" data-cover="img/cover.png" data-artist="Track Artist" data-artist_url="artist_url" data-artist_target="_self"  
-                                    data-release_url="http://google.com" data-release_target="_blank" data-shop_url="shop_url" 
-                                    data-shop_target="_blank">Track Title
-                                </a>
-                                -->
 
                                 <div class="track-buttons">
                                     <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3"><i class="icon icon-play2"></i></a>
