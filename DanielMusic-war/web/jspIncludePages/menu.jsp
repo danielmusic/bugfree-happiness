@@ -1,4 +1,3 @@
-<%@page import="EntityManager.Band"%>
 <%@page import="EntityManager.Member"%>
 <%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
@@ -32,7 +31,6 @@
                 <ul>
                     <%
                         Artist artist = (Artist) (session.getAttribute("artist"));
-                        Band band = (Band) (session.getAttribute("band"));
                         Member fan = (Member) (session.getAttribute("fan"));
 
                         if (artist != null) {
@@ -45,21 +43,6 @@
                         <ul>
                             <li>
                                 <a href="ClientAccountManagementController?target=PageRedirect&source=profile">update profile</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
-                    </li>
-                    <%} else if (band != null) {%>
-                    <li>
-                        <a href="#!/band/albums">albums</a>
-                    </li>
-                    <li class="submenu">
-                        <a href="#!/band/profile">profile</a>
-                        <ul>
-                            <li>
-                                <a href='#!/band/profile'>update profile</a>
                             </li>
                         </ul>
                     </li>
@@ -79,7 +62,7 @@
                         <a href="#!/artist">artist</a>
                         <ul>
                             <li>
-                                <a href='#!/artist/signup'>artist signup</a>
+                                <a href='#!/artist/signup'>signup</a>
                             </li>
                         </ul>
                     </li>

@@ -3,7 +3,6 @@ package Admin;
 import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;

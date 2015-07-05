@@ -3,7 +3,6 @@ package Client;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
@@ -52,7 +51,6 @@ public class MusicManagementController extends HttpServlet {
 
         session = request.getSession();
         Artist artist = (Artist) session.getAttribute("artist");
-        Band band = (Band) session.getAttribute("band");
         Account account = (Account) session.getAttribute("account");
         List<Music> tracks = null;
         Album album = null;
