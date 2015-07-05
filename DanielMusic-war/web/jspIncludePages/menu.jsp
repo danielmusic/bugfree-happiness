@@ -1,3 +1,4 @@
+<%@page import="EntityManager.Account"%>
 <%@page import="EntityManager.Member"%>
 <%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
@@ -12,6 +13,34 @@
         <!-- /search -->
         <!-- navigation container -->
         <div class="container">
+            <script>
+                function loadAjax() {
+                    url = "./MusicController?target=ListGenreArtist";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/explore";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+            </script>
+
+
             <a href="#!/home" id="logo">
                 <img src="placeholders/logo.png" alt="Logo">
             </a>
@@ -20,7 +49,6 @@
             <nav id="icon-nav">
                 <ul>
                     <li><a href="#!/cart" id="nav-up"><span class="icon icon-cart"></span></a></li>
-                    <li><a href="#main-nav-wrapper" id="nav-up" class="smooth-scroll"><span class="icon icon-arrow-up"></span></a></li>
                     <li><a href="javascript:;" id="nav-search" class="external"><span class="icon icon-search"></span></a></li>
                 </ul>
             </nav>
@@ -30,21 +58,28 @@
             <nav id="nav">
                 <ul>
                     <%
+                        Account account = (Account) (session.getAttribute("artist"));
                         Artist artist = (Artist) (session.getAttribute("artist"));
                         Member fan = (Member) (session.getAttribute("fan"));
 
                         if (artist != null) {
                     %>
                     <li>
-                        <a href="ClientAccountManagementController?target=PageRedirect&source=albums">albums</a>
+                        <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>
                     </li>
                     <li class="submenu">
-                        <a href="ClientAccountManagementController?target=PageRedirect&source=profile">profile</a>
+                        <a href="ClientAccountManagementController?target=PageRedirect&source=profile">manage</a>
                         <ul>
                             <li>
-                                <a href="ClientAccountManagementController?target=PageRedirect&source=profile">update profile</a>
+                                <a href="ClientAccountManagementController?target=PageRedirect&source=profile">profile</a>
+                            </li> 
+                            <li>
+                                <a href="ClientAccountManagementController?target=PageRedirect&source=albums">albums</a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="MusicController?target=ViewArtistPage&id=<%=account.getId()%>">my page</a>
                     </li>
                     <li>
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
@@ -53,29 +88,28 @@
 
                     <%} else {%>
                     <li>
-                        <a href="#!/artists">Single Artist (test)</a>
+                        <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>
                     </li>
                     <li>
-                        <a href="#!/explore">explore</a>
-                    </li>
-                    <li class="submenu">
                         <a href="#!/artist">artist</a>
-                        <ul>
-                            <li>
-                                <a href='#!/artist/signup'>signup</a>
-                            </li>
-                        </ul>
                     </li>
-                    <li class="submenu">
+                    <li>
                         <a href="#!/fan">fan</a>
-                        <ul>
-                            <li>
-                                <a href='#!/artist/signup'>fan signup</a>
-                            </li>
-                        </ul>
                     </li>
                     <li>
                         <a href="#!/login">login</a>
+                    </li>
+
+                    <li class="submenu">
+                        <a href="#!/artist">sign up</a>
+                        <ul>
+                            <li>
+                                <a href='#!/artist/signup'>Artist signup</a>
+                            </li>
+                            <li>
+                                <a href='#!/fan/signup'>Fan signup</a>
+                            </li>
+                        </ul>
                     </li>
                     <%
                         }

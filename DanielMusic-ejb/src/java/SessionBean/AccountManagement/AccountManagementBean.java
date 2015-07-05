@@ -722,7 +722,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 file.delete();
                 if ((result != null)) {
                     if (result.getResult()) {
-                        member.setImageURL(tempFileLocation);
+                        member.setImageURL(imageLocation);
                         em.merge(member);
                         result.setDescription("Profile picture updated.");
                         result.setResult(true);
@@ -858,7 +858,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 file.delete();
                 if ((result != null)) {
                     if (result.getResult()) {
-                        artist.setImageURL(tempFileLocation);
+                        artist.setImageURL(imageLocation);
                         em.merge(artist);
                         result.setDescription("Profile picture updated.");
                         result.setResult(true);

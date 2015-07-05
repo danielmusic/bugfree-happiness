@@ -134,7 +134,7 @@
                         </div>
 
                         <div class="col-1-3 last">  
-                            <label for="pic"><strong>Profile Picture</strong></label>
+                            <label for="pic"><strong>Change Profile Picture</strong></label>
                             <input type="file" id="pic" name="picture" style="height: 40px;padding-top: 8px;padding-bottom: 8px;">
                         </div>
                     </div>
@@ -187,14 +187,6 @@
                                 }%>">
                         </div>
                     </div>
-
-                    <%if (artist.getImageURL() != null) {%>
-                    <div class="row clearfix">
-                        <div class="col-1-1">
-                            <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>">
-                        </div>
-                    </div>
-                    <%}%>
 
                     <input type="submit" value="Save" class="small invert">
                     <input type="hidden" value="ArtistProfileUpdate" name="target">

@@ -6,40 +6,61 @@
         <h2 class="heading-m">explore  and <span class="color">Discover</span></h2>
     </section>
     <!-- /intro -->
-
-    <!-- ############################# Content ############################# -->
     <section class="content section">
-        <!-- container -->
         <div class="container">
+            <%@page import="EntityManager.Artist"%>
+            <%@page import="EntityManager.ExploreHelper"%>
+            <%@page import="EntityManager.Genre"%>
+            <%@page import="java.util.List"%>
+
+            <script>
+                function loadAjax(id) {
+                    exploreForm.id.value = id;
+                    url = "./MusicController?target=GetArtistByID";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'id': id},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+            </script>
+
             <article>
                 <div class="col-1-1">
-                    <h2>Rock Loop Genre Title here</h2>
-                    <ol id="release-list" class="tracklist">
+                    <form name="exploreForm">
+                        <%
+                            List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
+                            for (ExploreHelper eh : exploreHelpers) {
+                        %>
+                        <h2> <%=eh.getGenre().getName()%></h2>
+                        <%
+                            for (Artist artist : eh.getArtists()) {
+                        %>
 
-                        <li>
-                            <div class="track-details">
-                                <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3" data-cover="placeholders/release-image02.jpg"
-                                   data-artist="Madoff"
-                                   data-artist_url="http://artist.com/madoff-freak" 
-                                   data-artist_target="_self"
-                                   data-shop_url="shop_url" 
-                                   data-shop_target="_blank"
-                                   >
-                                    <!-- cover -->
-                                    <img class="track-cover" src="img/cover.png">
-                                    <!-- Title -->
-                                    <span class="track-title" data-artist_url="artist_url">One Last Time</span>
-                                    <!-- Artists -->
-                                    <span class="track-artists">Ariana Grande </span>
-                                </a>
+                        <a onclick="javascript:loadAjax(<%=artist.getId()%>)"><%=artist.getName()%></a>
 
-                                <div class="track-buttons">
-                                    <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3"><i class="icon icon-play2"></i></a>
-                                    <a href="javascript:;"><i class="icon icon-cart"></i></a>
-                                </div>
-                            </div>
-                        </li>
-                    </ol>
+
+                        <br/>
+                        <%}%>
+                        <%}%>
+                        <input type="hidden" value="" name="id" id="id">
+                    </form>
                 </div>
 
 

@@ -10,7 +10,6 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-    
     <servlet>
         <servlet-name>GenreManagementController</servlet-name>
         <servlet-class>Admin.GenreManagementController</servlet-class>
@@ -27,6 +26,10 @@
         <servlet-name>ClientAccountManagementController</servlet-name>
         <servlet-class>Client.ClientAccountManagementController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MusicController</servlet-name>
+        <servlet-class>Client.MusicController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GenreManagementController</servlet-name>
         <url-pattern>/GenreManagementController</url-pattern>
@@ -42,6 +45,10 @@
     <servlet-mapping>
         <servlet-name>ClientAccountManagementController</servlet-name>
         <url-pattern>/ClientAccountManagementController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MusicController</servlet-name>
+        <url-pattern>/MusicController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

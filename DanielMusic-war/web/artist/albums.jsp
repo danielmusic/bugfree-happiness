@@ -1,5 +1,6 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Albums">
+    <%@page import="EntityManager.Account"%>
     <%@page import="EntityManager.Artist"%>
     <%@page import="EntityManager.Album"%>
     <%@page import="java.util.List"%>
@@ -29,9 +30,10 @@
             <article>
 
                 <%
+                    Account account = (Account) (session.getAttribute("account"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
-                    if (artist != null) {
-                        if (!artist.getEmailIsVerified()) {
+                    if (account != null) {
+                        if (!account.getEmailIsVerified()) {
                             out.print("<p class='warning'>You will not be able to todo _____? until you verify your email. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
                         }
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));

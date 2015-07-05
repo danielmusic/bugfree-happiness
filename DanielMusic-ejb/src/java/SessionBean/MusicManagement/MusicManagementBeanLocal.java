@@ -2,7 +2,7 @@ package SessionBean.MusicManagement;
 
 import EntityManager.Album;
 import EntityManager.Artist;
-import EntityManager.ArtistBandHelper;
+import EntityManager.ExploreHelper;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
@@ -88,7 +88,7 @@ public interface MusicManagementBeanLocal {
     public ReturnHelper deleteAlbum(Long albumID);
     
     public List<Artist> listAllArtistBandInGenre(Long genreID);
-    public List<Artist> listAllArtistBandByGenre();
+    public List<ExploreHelper> listAllGenreArtist();
     
   
 

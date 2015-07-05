@@ -3,7 +3,7 @@ package SessionBean.MusicManagement;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
-import EntityManager.ArtistBandHelper;
+import EntityManager.ExploreHelper;
 import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
@@ -198,6 +198,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return helper;
                 }
             }
+            if (name==null || name.isEmpty()) {
+                helper.setDescription("Music name cannot be empty!");
+                return helper;
+            }
 
             String fileName = musicPart.getSubmittedFileName();
             //Don't take file extension for the filename
@@ -274,7 +278,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocationWAV(musicURLwav);
 
             //end create music
-            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128.mp3", false, false);
+            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128.mp3", false, true);
             ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "_320.mp3", false, false);
             ReturnHelper result3 = cibl.uploadFileToGoogleCloudStorage(musicURLwav, tempMusicURL, false, false);
 
@@ -717,7 +721,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("MusicManagement: listAllArtistBandInGenre() called");
         try {
             Query q;
-            q = em.createQuery("select a from Artist a where a.isApproved=true and a.genre=:genreID");
+            q = em.createQuery("select a from Artist a where a.isApproved=true and a.genre.id=:genreID");
             q.setParameter("genreID", genreID);
             List<Artist> artists = q.getResultList();
             return artists;
@@ -729,15 +733,23 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Artist> listAllArtistBandByGenre() {
-        System.out.println("MusicManagement: listAllArtistBandByGenre() called");
+    public List<ExploreHelper> listAllGenreArtist() {
+        System.out.println("MusicManagement: listAllGenreArtist() called");
         try {
             Query q;
-            q = em.createQuery("select a from Artist a where a.isApproved=true ORDER BY a.genre.name ASC");
-            List<Artist> listOfArtists = q.getResultList();
-            return listOfArtists;
+            q = em.createQuery("select a from Genre a  ORDER BY a.name ASC");
+
+            List<Genre> genres = q.getResultList();
+            List<ExploreHelper> exploreHelpers = new ArrayList();
+            for (Genre genre : genres) {
+                ExploreHelper exploreHelper = new ExploreHelper();
+                exploreHelper.setGenre(genre);
+                exploreHelper.setArtists(listAllArtistBandInGenre(genre.getId()));
+                exploreHelpers.add(exploreHelper);
+            }
+            return exploreHelpers;
         } catch (Exception e) {
-            System.out.println("MusicManagement: Error while calling listAllArtistBandByGenre()");
+            System.out.println("MusicManagement: Error while calling listAllGenreArtist()");
             e.printStackTrace();
         }
 

@@ -3,6 +3,7 @@ package Client;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
+import EntityManager.ExploreHelper;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.json.JSONObject;
 
 @MultipartConfig
 public class MusicManagementController extends HttpServlet {
@@ -56,6 +58,10 @@ public class MusicManagementController extends HttpServlet {
         Album album = null;
 
         ReturnHelper returnHelper;
+
+        JSONObject jsObj = new JSONObject();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         try {
             switch (target) {
@@ -188,6 +194,8 @@ public class MusicManagementController extends HttpServlet {
                         nextPage = "#!/artist/edit_track";
                     }
                     break;
+
+     
 
                 case "AddTrack":
                     album = (Album) (session.getAttribute("album"));

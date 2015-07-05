@@ -7,40 +7,57 @@
     </section>
     <section class="content section">
         <div class="container">
-
+            <%@page import="java.util.List"%>
+            <%@page import="EntityManager.Album"%>
+            <%@page import="EntityManager.Music"%>
+            <%@page import="EntityManager.Artist"%>
             <%@page import="EntityManager.Account"%>
+            <%@page import="java.text.NumberFormat"%>
             <%
                 Account account = (Account) session.getAttribute("account");
-                if (account != null) {
-                    out.write(">>>>>>>>>>>>>>>>>" + account.getName());
-                }
+                Artist artist = (Artist) session.getAttribute("artistDetails");
             %>
 
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <a style="cursor: default;" class="thumb-glitch">
                         <span class="img">
-                            <img src="placeholders/M5.jpg" />
+                            <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
+                            <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>" />
+                            <%} else {%>
+                            <img src="placeholders/artist01.jpg" />
+                            <%}%>
                         </span>
                     </a>
                     <div class="details-meta">
                         <ul class="details-list">
                             <li>
                                 <span class="label">Name</span>
-                                <div class="data"><b>Obiekt ZERO</b></div>
+                                <div class="data"><b><%=artist.getName()%></b></div>
                             </li>
                             <li>
                                 <span class="label">Genres</span>
-                                <div class="data">Breakbeat</div>
+                                <div class="data"><%=artist.getGenre().getName()%></div>
                             </li>
                         </ul>
                     </div>
                     <!-- Details Share -->
                     <div class="details-social-box">
-                        <a href="javascript:;" class="facebook-share"><i class="icon icon-facebook"></i></a>
-                        <a href="javascript:;" class="twitter-share"><i class="icon icon-twitter"></i></a>
-                        <a href="javascript:;" class="googleplus-share"><i class="icon icon-googleplus"></i></a>
-                        <a href="javascript:;" class="googleplus-share"><i class="icon icon-soundcloud"></i></a>
+                        <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
+                        <a href="<%=artist.getFacebookURL()%>" class="facebook-share"><i class="icon icon-facebook"></i></a>
+                            <%}%>
+
+                        <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
+                        <a href="<%=artist.getTwitterURL()%>" class="twitter-share"><i class="icon icon-twitter"></i></a>
+                            <%}%>
+
+                        <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
+                        <a href="<%=artist.getInstagramURL()%>" class="googleplus-share"><i class="icon icon-user"></i></a>
+                            <%}%>
+
+                        <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
+                        <a href="<%=artist.getWebsiteURL()%>" class="googleplus-share"><i class="icon icon-IE"></i></a>
+                            <%}%>
                     </div>
                 </div>
             </div>
@@ -59,43 +76,101 @@
                         <!-- tab content -->
                         <div id="tab-bio" class="tab-content">
                             <h2>Biography</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                            </p>
-                            <p>Duis dolor tellus, faucibus non ligula ac, fringilla porttitor eros. Cras sagittis eleifend erat ac fringilla. Proin ac odio et neque vulputate tempus at vel justo. Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
+                                <%
+                                    String repl = artist.getBiography().replaceAll("\\r", "<br>");
+                                    out.print(repl);
+                                %>
                             </p>
                         </div>
                         <!-- /tab content -->
                         <!-- tab content -->
                         <div id="tab-releases" class="tab-content">
-                            <h2>Loop Albums</h2>
 
-                            <ol id="release-list" class="tracklist">
+                            <%
+                                for (int i = 0; i < artist.getListOfAlbums().size(); i++) {
+                                    Album album = artist.getListOfAlbums().get(i);
+                                    String albumArt = album.getImageLocation();
+                                    if (albumArt == null || albumArt.isEmpty()) {
+                                        albumArt = "/img/cover.png";
+                                    }
+                            %>
+                            <h2><%=album.getName()%></h2>
+                            <p>
+                                <%
+                                    repl = album.getDescription().replaceAll("\\r", "<br>");
+                                    out.print(repl);
+                                %>
+                            </p>
+                            <p>
+                                Price: 
+                                <%
+                                    if (album.getPrice() == 0.0) {
+                                        out.print("Free");
+                                    } else {
+                                        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                        out.print(formatter.format(album.getPrice()));
+                                    }
+                                %>
+                            </p>
+                            <p>Year Released: <%=album.getYearReleased()%></p>
+                            <%
+                                List<Music> musics = album.getListOfMusics();
+                            %>
+                            <ul id="release-list" class="tracklist">
+                                <%
+                                    for (int j = 0; j < musics.size(); j++) {
+                                        Music music = musics.get(j);
+                                %>
                                 <li>
                                     <div class="track-details">
-                                        <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3" data-cover="placeholders/M5.jpg"
-                                           data-artist="Madoff"
+                                        <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>"
+                                           data-artist="<%=music.getArtistName()%>"
                                            data-artist_url="http://artist.com/madoff-freak" 
                                            data-artist_target="_self"
-                                           data-shop_url="shop_url" 
+                                           data-shop_url="#!/cart" 
                                            data-shop_target="_blank"
                                            >
                                             <!-- cover -->
-                                            <img class="track-cover" src="placeholders/M5.jpg">
+                                            <img class="track-cover" src="http://danielmusictest.storage.googleapis.com/<%=albumArt%>">
                                             <!-- Title -->
-                                            <span class="track-title" data-artist_url="artist_url">One Last Time</span>
+                                            <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
                                             <!-- Artists -->
-                                            <span class="track-artists">Ariana Grande </span>
                                         </a>
 
                                         <div class="track-buttons">
-                                            <a class="track sp-play-track" href="placeholders/mp3/adg3com_chuckedknuckles.mp3"><i class="icon icon-play2"></i></a>
+                                            <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>"
+                                               data-artist="<%=music.getArtistName()%>"
+                                               data-artist_url="http://artist.com/madoff-freak" 
+                                               data-artist_target="_self"
+                                               data-shop_url="#!/cart" 
+                                               data-shop_target="_blank"
+                                               >
+                                                <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                            </a>
                                             <a href="javascript:;"><i class="icon icon-cart"></i></a>
+                                                <%
+                                                    if (music.getPrice() == 0.0) {
+                                                        out.print("Free");
+                                                    } else {
+                                                        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                                        out.print(formatter.format(music.getPrice()));
+                                                    }
+                                                %>
                                         </div>
                                     </div>
                                 </li>
-                            </ol>
+                                <%}%>                                    
+
+
+                            </ul>
+                            <%
+                                }
+                            %>
+
+
+
+
                             <p>
                                 <a href="javascript:;" class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
                                 <a href="javascript:;" class="btn sp-add-list" data-id="release-list">Add All Tracks</a>

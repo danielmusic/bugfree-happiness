@@ -63,6 +63,7 @@
                                 }
                             });
                         } else {
+                            window.event.returnValue = false;
                             document.getElementById("errMsg").style.display = "block";
                             document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
                         }

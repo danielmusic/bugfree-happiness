@@ -85,8 +85,6 @@ public class ClientAccountManagementController extends HttpServlet {
                         account = accountManagementBean.getAccount(email);
                         session.setAttribute("account", account);
                         if (account instanceof Artist) {
-                            
-                            
                             session.setAttribute("artist", (Artist) account);
                             session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(account.getId(), true, true));
                             session.setAttribute("genres", adminManagementBean.listAllGenres());
