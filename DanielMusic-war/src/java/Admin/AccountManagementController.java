@@ -121,7 +121,7 @@ public class AccountManagementController extends HttpServlet {
 
                 case "ListAllBand":
                     if (checkLogin(response)) {
-                        List<Band> bands = adminManagementBean.listAllBands(true);
+                        List<Artist> bands = adminManagementBean.listAllBands(true);
                         if (bands == null) {
                             nextPage = "admin/error500.html";
                         } else {
@@ -134,7 +134,7 @@ public class AccountManagementController extends HttpServlet {
                 case "ListBandbyID":
                     if (checkLogin(response)) {
                         if (id != null) {
-                            Band band = adminManagementBean.getBand(Long.parseLong(id));
+                            Artist band = adminManagementBean.getArtist(Long.parseLong(id));
                             session.setAttribute("band", band);
                             nextPage = "admin/AccountManagement/band.jsp";
                         }
@@ -154,7 +154,7 @@ public class AccountManagementController extends HttpServlet {
                                     nextPage = "admin/AccountManagement/artistManagement.jsp";
                                 }
                             } else if (source != null && source.equals("bandManagement")) {
-                                List<Band> bands = adminManagementBean.listAllBands(true);
+                                List<Artist> bands = adminManagementBean.listAllBands(true);
                                 if (bands == null) {
                                     nextPage = "admin/error500.html";
                                 } else {

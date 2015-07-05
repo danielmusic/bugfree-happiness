@@ -1,4 +1,4 @@
-<%@page import="EntityManager.Band"%>
+<%@page import="EntityManager.Artist"%>
 <%@page import="EntityManager.Admin"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -7,7 +7,7 @@
     if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
-        List<Band> bands = (List<Band>) (session.getAttribute("bands"));
+        List<Artist> bands = (List<Artist>) (session.getAttribute("bands"));
 %>
 <!doctype html>
 <html class="fixed">

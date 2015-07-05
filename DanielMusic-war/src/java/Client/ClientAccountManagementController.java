@@ -2,7 +2,6 @@ package Client;
 
 import EntityManager.Account;
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
@@ -86,10 +85,13 @@ public class ClientAccountManagementController extends HttpServlet {
                         account = accountManagementBean.getAccount(email);
                         session.setAttribute("account", account);
                         if (account instanceof Artist) {
+                            
+                            
                             session.setAttribute("artist", (Artist) account);
                             session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(account.getId(), true, true));
                             session.setAttribute("genres", adminManagementBean.listAllGenres());
                             nextPage = "#!/artist/profile";
+                            
                         } else if (account instanceof Band) {
                             session.setAttribute("band", (Band) account);
                             session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(account.getId(), true, true));
