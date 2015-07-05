@@ -612,6 +612,55 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         }
     }
+    
+    @Override
+    public ReturnHelper editMusicPrice(Long musicID, Double newPrice) {
+        System.out.println("MusicManagementBean: editMusicPrice() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Music music = em.getReference(Music.class, musicID);
+            Boolean isDeleted = music.getIsDeleted();
+            if (isDeleted) {
+                result.setDescription("Price cannot be updated as the music has been deleted.");
+            } else {
+                music.setPrice(newPrice);
+                em.merge(music);
+                result.setDescription("Price updated");
+                result.setResult(true);
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to editMusicPrice()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper editAlbumPrice(Long albumID, Double newPrice) {
+        System.out.println("MusicManagementBean: editAlbumPrice() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Album album = em.getReference(Album.class, albumID);
+            Boolean isDeleted = album.getIsDeleted();
+            if (isDeleted) {
+                result.setDescription("Price cannot be updated as the music has been deleted.");
+            } else {
+                album.setPrice(newPrice);
+                em.merge(album);
+                result.setDescription("Price updated");
+                result.setResult(true);
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to editAlbumPrice()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+        }
+        return result;
+    }
+
 
     @Override
     public ReturnHelper publishAlbum(Long albumID) {
