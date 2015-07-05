@@ -332,7 +332,62 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper removeItemFromShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("ClientManagementBean: removeItemFromShoppingCart() called");
+        ReturnHelper helper = new ReturnHelper();
+        Account account;
+        ShoppingCart cart;
+        Boolean result;
+        try {
+            Query q = em.createQuery("Select a from Account a where a.id=:accountID");
+            q.setParameter("accountID", accountID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            account = (Account) q.getSingleResult();
+            cart = account.getShoppingCart();
+            em.merge(cart);
+            if (isTrack) {
+                System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Removing track from cart...");
+                q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
+                q.setParameter("trackOrAlbumID", trackOrAlbumID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                Music m = (Music) q.getSingleResult();
+                result = cart.getListOfMusics().remove(m);
+                em.flush();
+
+                if (result) {
+                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Track has been removed from cart");
+                    helper.setDescription("Track has been removed from cart successfully.");
+                    helper.setResult(true);
+                } else {
+                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Failed to remove track from cart");
+                    helper.setDescription("Error while removing track from cart, please try again.");
+                    helper.setResult(false);
+                }
+            } else {
+                System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Removing album from cart...");
+                q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
+                q.setParameter("trackOrAlbumID", trackOrAlbumID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                Album a = (Album) q.getSingleResult();
+                result = cart.getListOfAlbums().remove(a);
+                em.flush();
+
+                if (result) {
+                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Album has been removed from cart");
+                    helper.setDescription("A;bum has been removed from cart successfully.");
+                    helper.setResult(true);
+                } else {
+                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Failed to remove album from cart");
+                    helper.setDescription("Error while removing album from cart, please try again.");
+                    helper.setResult(false);
+                }
+            }
+            return helper;
+        } catch (Exception e) {
+            System.out.println("ClientManagementBean: removeItemFromShoppingCart() exception occurred");
+            helper.setDescription("An error occurred while removing item from shopping cart, please try again.");
+            helper.setResult(false);
+            return helper;
+        }
     }
 
     @Override
