@@ -163,7 +163,7 @@ public class Artist extends Account implements Serializable {
         this.id = id;
     }
 
-    public boolean isIsBand() {
+    public boolean getIsBand() {
         return isBand;
     }
 

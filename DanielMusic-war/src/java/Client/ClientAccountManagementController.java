@@ -134,7 +134,7 @@ public class ClientAccountManagementController extends HttpServlet {
                     return;
 
                 case "ArtistProfileUpdate":
-                    if (artist != null) {
+                    if (account != null) {
                         //check need to update password
                         if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty()) {
                             returnHelper = accountManagementBean.updateAccountPassword(artist.getId(), oldpassword, password);
@@ -161,14 +161,25 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (picture.getSize() == 0) {
                             picture = null;
                         }
-                        returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
-                        if (returnHelper.getResult()) {
-                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
-                            session.setAttribute("goodMsg", returnHelper.getDescription());
-                        } else {
-                            session.setAttribute("errMsg", returnHelper.getDescription());
+                        if (artist != null) {
+                            if (artist.getIsBand()) {
+                                returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                                if (returnHelper.getResult()) {
+                                    session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
+                                    session.setAttribute("goodMsg", returnHelper.getDescription());
+                                } else {
+                                    session.setAttribute("errMsg", returnHelper.getDescription());
+                                }
+                            } else {
+                                returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, dateFormed, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                                if (returnHelper.getResult()) {
+                                    session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
+                                    session.setAttribute("goodMsg", returnHelper.getDescription());
+                                } else {
+                                    session.setAttribute("errMsg", returnHelper.getDescription());
+                                }
+                            }
                         }
-
                         nextPage = "#!/artist/profile";
                     }
                     break;
