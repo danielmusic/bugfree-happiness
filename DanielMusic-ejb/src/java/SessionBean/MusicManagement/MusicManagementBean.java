@@ -25,6 +25,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.servlet.http.Part;
@@ -198,7 +199,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return helper;
                 }
             }
-            if (name==null || name.isEmpty()) {
+            if (name == null || name.isEmpty()) {
                 helper.setDescription("Music name cannot be empty!");
                 return helper;
             }
@@ -369,6 +370,54 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     @Override
     public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, Double price, String lyrics, String credits) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReturnHelper editMusicPrice(Long musicID, Double newPrice) {
+        System.out.println("MusicManagementBean: editMusicPrice() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Music music = em.getReference(Music.class, musicID);
+            Boolean isDeleted = music.getIsDeleted();
+            if (isDeleted) {
+                result.setDescription("Price cannot be updated as the music has been deleted.");
+            } else {
+                music.setPrice(newPrice);
+                em.merge(music);
+                result.setDescription("Price updated");
+                result.setResult(true);
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to editMusicPrice()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+        }
+        return result;
+    }
+
+    @Override
+    public ReturnHelper editAlbumPrice(Long albumID, Double newPrice) {
+        System.out.println("MusicManagementBean: editAlbumPrice() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Album album = em.getReference(Album.class, albumID);
+            Boolean isDeleted = album.getIsDeleted();
+            if (isDeleted) {
+                result.setDescription("Price cannot be updated as the music has been deleted.");
+            } else {
+                album.setPrice(newPrice);
+                em.merge(album);
+                result.setDescription("Price updated");
+                result.setResult(true);
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to editAlbumPrice()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+        }
+        return result;
     }
 
     @Override
@@ -754,6 +803,42 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
 
         return null;
+    }
+
+    @Override
+    public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID) {
+        System.out.println("checkIfMusicBelongsToArtist() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:artistID and e.listOfAlbums.listOfMusics.id=:musicID");
+            q.setParameter("artistID", artistID);
+            q.setParameter("musicID", musicID);
+            Artist artist = (Artist) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("checkIfMusicBelongsToArtist() failed");
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean checkIfAlbumBelongsToArtist(Long artistID, Long albumID) {
+        System.out.println("checkIfAlbumBelongsToArtist() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:artistID and e.listOfAlbums.id=:albumID");
+            q.setParameter("artistID", artistID);
+            q.setParameter("albumID", albumID);
+            Artist artist = (Artist) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("checkIfAlbumBelongsToArtist() failed");
+            ex.printStackTrace();
+        }
+        return false;
     }
 
 }
