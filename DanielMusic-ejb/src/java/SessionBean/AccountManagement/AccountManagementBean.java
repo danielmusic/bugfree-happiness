@@ -3,7 +3,6 @@ package SessionBean.AccountManagement;
 import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
@@ -132,11 +131,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("email", email);
                 Artist artist = (Artist) q.getSingleResult();
                 return artist;
-            } else if (account instanceof Band) {
-                q = em.createQuery("SELECT a FROM Band a where a.email=:email");
-                q.setParameter("email", email);
-                Band band = (Band) q.getSingleResult();
-                return band;
             } else if (account instanceof Admin) {
                 q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
                 q.setParameter("email", email);
@@ -172,11 +166,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 q.setParameter("id", id);
                 Artist artist = (Artist) q.getSingleResult();
                 return artist;
-            } else if (account instanceof Band) {
-                q = em.createQuery("SELECT a FROM Band a where a.id=:id");
-                q.setParameter("id", id);
-                Band band = (Band) q.getSingleResult();
-                return band;
             } else if (account instanceof Admin) {
                 q = em.createQuery("SELECT a FROM Admin a where a.id=:id");
                 q.setParameter("id", id);
@@ -220,16 +209,21 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 ShoppingCart cart = new ShoppingCart();
                 cart.setAccount(admin);
                 em.persist(cart);
-            } else if (isArtist) {
+            } else if (isArtist || isBand) {
                 //Only allow registration if artist name is unique
-                if (checkIfArtistOrBandNameExists(name)) {
-                    result.setDescription("Artist name cannot be registered as it has already been taken.");
+                if (checkIfArtistNameExists(name)) {
+                    result.setDescription("Artist or band name cannot be registered as it has already been taken.");
                     return result;
                 }
                 Artist artist = new Artist();
                 artist.setEmail(email);
                 artist.setPassword(passwordHash);
                 artist.setName(name);
+                if (isArtist) {
+                    artist.setIsBand(false);
+                } else if (isBand) {
+                    artist.setIsBand(true);
+                }
                 em.persist(artist);
                 Query q = em.createQuery("SELECT a FROM Artist a where a.email=:email");
                 q.setParameter("email", email);
@@ -238,25 +232,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 ShoppingCart cart = new ShoppingCart();
                 cart.setAccount(artist);
                 em.persist(cart);
-            } else if (isBand) {
-                //Only allow registration if artist name is unique
-                if (checkIfArtistOrBandNameExists(name)) {
-                    result.setDescription("Band name cannot be registered as it has already been taken.");
-                    return result;
-                }
-                Band band = new Band();
-                band.setEmail(email);
-                band.setPassword(passwordHash);
-                band.setName(name);
-                em.persist(band);
-                Query q = em.createQuery("SELECT a FROM Band a where a.email=:email");
-                q.setParameter("email", email);
-                band = (Band) q.getSingleResult();
-                result.setID(band.getId());
-                ShoppingCart cart = new ShoppingCart();
-                cart.setAccount(band);
-                em.persist(cart);
-
             } else {
                 Member member = new Member();
                 member.setEmail(email);
@@ -353,6 +328,23 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
+    public boolean checkIfNewEmailExists(String newEmail) {
+        System.out.println("AccountManagementBean: checkIfNewEmailExists() called");
+        Query q = em.createQuery("SELECT a FROM Account a WHERE a.newEmail=:newEmail");
+        q.setParameter("newEmail", newEmail);
+        try {
+            Account account = (Account) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("AccountManagementBean: checkIfNewEmailExists() failed");
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     public boolean checkIfArtistNameExists(String name) {
         System.out.println("AccountManagementBean: checkIfAritstNameExists() called");
         Query q = em.createQuery("SELECT a FROM Artist a WHERE a.name=:name");
@@ -364,43 +356,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             return false;
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: checkIfAritstNameExists() failed");
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean checkIfBandNameExists(String name) {
-        System.out.println("AccountManagementBean: checkIfBandNameExists() called");
-        Query q = em.createQuery("SELECT a FROM Band a WHERE a.name=:name");
-        q.setParameter("name", name);
-        try {
-            Band band = (Band) q.getSingleResult();
-            return true;
-        } catch (NoResultException ex) {
-            return false;
-        } catch (Exception ex) {
-            System.out.println("AccountManagementBean: checkIfBandNameExists() failed");
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean checkIfArtistOrBandNameExists(String name) {
-        System.out.println("AccountManagementBean: checkIfArtistOrBandNameExists() called");
-        Query q = em.createQuery("SELECT a FROM Artist a WHERE a.name=:name and a.isDisabled=false");
-        Query qq = em.createQuery("SELECT b FROM Band b WHERE b.name=:name and b.isDisabled=false");
-        q.setParameter("name", name);
-        qq.setParameter("name", name);
-        try {
-            Artist artist = (Artist) q.getSingleResult();
-            Band band = (Band) qq.getSingleResult();
-            return true;
-        } catch (NoResultException ex) {
-            return false;
-        } catch (Exception ex) {
-            System.out.println("AccountManagementBean: checkIfArtistOrBandNameExists() failed");
             ex.printStackTrace();
             return false;
         }
@@ -930,29 +885,29 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-            Query q = em.createQuery("SELECT e FROM Band e WHERE e.id=:id");
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:id");
             q.setParameter("id", bandID);
-            Band band = (Band) q.getSingleResult();
+            Artist band = (Artist) q.getSingleResult();
             //Update old genre list
             Genre oldGenre = band.getGenre();
             if (oldGenre != null) {
-                List<Band> genreBand = oldGenre.getListOfBands();
+                List<Artist> genreBand = oldGenre.getListOfArtists();
                 genreBand.remove(band);
-                oldGenre.setListOfBands(genreBand);
+                oldGenre.setListOfArtists(genreBand);
                 em.merge(oldGenre);
             }
             //Update new genre list
             q = em.createQuery("SELECT e FROM Genre e WHERE e.id=:id");
             q.setParameter("id", genreID);
             Genre newGenre = (Genre) q.getSingleResult();
-            List<Band> genreBands = newGenre.getListOfBands();
+            List<Artist> genreBands = newGenre.getListOfArtists();
             genreBands.add(band);
             em.merge(newGenre);
             //Update band genre
             band.setGenre(newGenre);
             //Update other fields
-            band.setMembers(members);
-            band.setDateFormed(dateFormed);
+            band.setBandMembers(members);
+            band.setBandDateFormed(dateFormed);
             band.setBiography(biography);
             band.setInfluences(influences);
             band.setContactEmail(contactEamil);
@@ -963,7 +918,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             band.setWebsiteURL(websiteURL);
             em.merge(band);
             if (profilePicture != null) {
-                result = updateBandProfilePicture(bandID, profilePicture);
+                result = updateArtistProfilePicture(bandID, profilePicture);
                 if (!result.getResult()) {
                     return result;
                 }
@@ -975,88 +930,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (Exception ex) {
             System.out.println("AccountManagementBean: updateBandProfile() failed");
             result.setDescription("Update profile failed, internal server error.");
-            ex.printStackTrace();
-        }
-        return result;
-    }
-
-    @Override
-    public ReturnHelper updateBandName(Long bandID, String newName) {
-        System.out.println("AccountManagementBean: updateBandName() called");
-        ReturnHelper result = new ReturnHelper();
-        result.setResult(false);
-        try {
-            Query q = em.createQuery("SELECT e FROM Band e WHERE e.id=:id");
-            q.setParameter("id", bandID);
-            Band band = (Band) q.getSingleResult();
-            band.setIsApproved(-2);//Pending
-            band.setName(newName);
-            em.merge(band);
-            result.setResult(true);
-            result.setDescription("Name updated and is now pending approval.");
-        } catch (NoResultException ex) {
-            result.setDescription("Band no longer exists.");
-        } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateBandName() failed");
-            result.setDescription("Name change failed, internal server error.");
-            ex.printStackTrace();
-        }
-        return result;
-    }
-
-    @Override
-    public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture) {
-        System.out.println("AccountManagementBean: updateBandProfilePicture() called");
-        ReturnHelper result = new ReturnHelper();
-        result.setResult(false);
-        try {
-            Query q = em.createQuery("SELECT a FROM Account a where a.id=:accountID");
-            q.setParameter("accountID", bandID);
-            Account account = (Account) q.getSingleResult();
-            Band band = null;
-            if (account instanceof Band) {
-                q = em.createQuery("SELECT m FROM Band m where m.id=:accountID");
-                q.setParameter("accountID", bandID);
-                band = (Band) q.getSingleResult();
-            } else {
-                result.setDescription("Internal server error, invalid account type.");
-                return result;
-            }
-            String tempFileLocation = "temp/profilepic_" + account.getId() + ".jpg";
-            if (profilePicture != null) {
-                //Save file to local drive first
-                InputStream fileInputStream = profilePicture.getInputStream();
-                OutputStream fileOutputStream = new FileOutputStream(tempFileLocation);
-                int nextByte;
-                while ((nextByte = fileInputStream.read()) != -1) {
-                    fileOutputStream.write(nextByte);
-                }
-                fileOutputStream.close();
-                fileInputStream.close();
-                //Upload to GCS
-                String imageLocation = "/images/band/profile/profilepictures" + account.getId() + "/" + new Date();
-                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
-                //Delete away local file
-                File file = new File(tempFileLocation);
-                file.delete();
-                if ((result != null)) {
-                    if (result.getResult()) {
-                        band.setImageURL(tempFileLocation);
-                        em.merge(band);
-                        result.setDescription("Profile picture updated.");
-                        result.setResult(true);
-                    } else {
-                        result.setDescription("Failed to update profile picture, please try again later.");
-                    }
-                }
-            }
-        } catch (NoResultException ex) {
-            System.out.println("AccountManagementBean: updateBandProfilePicture() failed");
-            result.setDescription("Account not found.");
-            return result;
-        } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateBandProfilePicture() failed");
-            result.setDescription("Update profille failed, internal server error.");
             ex.printStackTrace();
         }
         return result;
@@ -1150,6 +1023,10 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Account account = (Account) q.getSingleResult();
             if (account.getEmail().equalsIgnoreCase(newEmail)) {
                 result.setDescription("New email is the same as your old email!");
+                return result;
+            }
+            if (checkIfEmailExists(newEmail) || checkIfNewEmailExists(newEmail)) {
+                result.setDescription("New email is in used by another user.");
                 return result;
             }
             account.setNewEmail(newEmail);

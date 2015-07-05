@@ -18,9 +18,8 @@ public interface AccountManagementBeanLocal {
     
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand);  
     public boolean checkIfEmailExists(String email);
+    public boolean checkIfNewEmailExists(String newEmail);
     public boolean checkIfArtistNameExists(String name);
-    public boolean checkIfBandNameExists(String name);
-    public boolean checkIfArtistOrBandNameExists(String name);
     
     public ReturnHelper generateAndSendVerificationEmail(Long accountID, String email, Boolean changingEmail);
     public ReturnHelper enterEmailVerificationCode(String email, String verificationCode);
@@ -40,8 +39,6 @@ public interface AccountManagementBeanLocal {
     public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture);
     
     public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL, Part profilePicture);
-    public ReturnHelper updateBandName(Long bandID, String newName);
-    public ReturnHelper updateBandProfilePicture(Long bandID, Part profilePicture);
     
     public ReturnHelper deleteAccountProfilePicture(Long accountID);
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword);

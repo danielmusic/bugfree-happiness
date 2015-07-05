@@ -21,8 +21,6 @@ public class Genre implements Serializable {
     private String name;
     @OneToMany(mappedBy = "genre", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Artist> listOfArtists;
-    @OneToMany(mappedBy = "genre", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Band> listOfBands;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
@@ -61,14 +59,6 @@ public class Genre implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Band> getListOfBands() {
-        return listOfBands;
-    }
-
-    public void setListOfBands(List<Band> listOfBands) {
-        this.listOfBands = listOfBands;
     }
 
     @Override

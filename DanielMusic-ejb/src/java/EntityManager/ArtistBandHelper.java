@@ -8,7 +8,6 @@ package EntityManager;
 public class ArtistBandHelper {
     private boolean isArtist;
     private Artist artist;
-    private Band band;
 
     public boolean isIsArtist() {
         return isArtist;
@@ -24,14 +23,5 @@ public class ArtistBandHelper {
 
     public void setArtist(Artist artist) {
         this.artist = artist;
-    }
-
-    public Band getBand() {
-        return band;
-    }
-
-    public void setBand(Band band) {
-        this.band = band;
-    }
-    
+    }    
 }

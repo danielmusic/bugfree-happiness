@@ -4,7 +4,6 @@ import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.ArtistBandHelper;
-import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
@@ -139,10 +138,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setParameter("searchString", searchString);
             List<Artist> listOfArtists = q.getResultList();
 
-            q = em.createQuery("SELECT a FROM Band a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
-            q.setParameter("searchString", searchString);
-            List<Band> listOfBands = q.getResultList();
-
             q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.publishedDate DESC");
             q.setParameter("searchString", searchString);
             List<Music> listOfMusics = q.getResultList();
@@ -270,15 +265,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String musicURLwav;
             Artist artist = album.getArtist();
 
-            if (artist != null) {
-                musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName + ".mp3";
-                musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName + ".mp3";
-                musicURLwav = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName + ".wav";
-            } else {
-                musicURL128 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName + ".mp3";
-                musicURL320 = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName + ".mp3";
-                musicURLwav = "music/" + album.getBand().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName + ".wav";
-            }
+            musicURL128 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/128/" + fileName + ".mp3";
+            musicURL320 = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/320/" + fileName + ".mp3";
+            musicURLwav = "music/" + album.getArtist().getId() + "/" + album.getId() + "/" + music.getId() + "/wav/" + fileName + ".wav";
 
             music.setFileLocation128(musicURL128);
             music.setFileLocation320(musicURL320);
@@ -405,22 +394,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
-            Band band = null;
-            if (account instanceof Artist) {
-                artist = (Artist) account;
-                isArtist = true;
-            } else {
-                band = (Band) account;
-                isArtist = false;
-            }
+            artist = (Artist) account;
 
             Album album = new Album();
 
-            if (isArtist) {
-                album.setArtist(artist);
-            } else {
-                album.setBand(band);
-            }
+            album.setArtist(artist);
             album.setIsSingle(isSingle);
             album.setDescription(description);
             album.setName(name);
@@ -518,14 +496,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     q.setParameter("isPublished", true);
                 }
                 q.setParameter("artistID", artistOrBandAccountID);
-            } else if (account instanceof Band) {
-                if (showUnpublished) {
-                    q = em.createQuery("select a from Album a where (a.band.id=:bandID AND a.band.isApproved>=:isApproved) and a.isDeleted=false");
-                } else {
-                    q = em.createQuery("select a from Album a where (a.band.id=:bandID AND a.band.isApproved>=:isApproved) and a.isDeleted=false and a.isPublished=:isPublished");
-                    q.setParameter("isPublished", true);
-                }
-                q.setParameter("bandID", artistOrBandAccountID);
             } else {
                 throw new Exception("ID given is not artist or band");
             }
@@ -647,40 +617,18 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             q.setParameter("id", albumID);
             Album album = (Album) q.getSingleResult();
-            Boolean isArtist = false;
-            Boolean isBand = false;
-            if (album.getArtist() != null) {
-                isArtist = true;
-                if (!album.getArtist().getEmailIsVerified()) {
-                    helper.setDescription("Sorry your email is not verified, please verify your email first.");
-                    helper.setResult(false);
-                    return helper;
-                } else if (album.getArtist().getPaypalEmail() == null || album.getArtist().getPaypalEmail().length() == 0) {
-                    helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
-                    helper.setResult(false);
-                    return helper;
-                }
-            } else {
-                isBand = true;
-                if (!album.getBand().getEmailIsVerified()) {
-                    helper.setDescription("Sorry your email is not verified, please verify your email first.");
-                    helper.setResult(false);
-                    return helper;
-                } else if (album.getBand().getPaypalEmail() == null || album.getBand().getPaypalEmail().length() == 0) {
-                    helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
-                    helper.setResult(false);
-                    return helper;
-                }
+            if (!album.getArtist().getEmailIsVerified()) {
+                helper.setDescription("Sorry your email is not verified, please verify your email first.");
+                helper.setResult(false);
+                return helper;
+            } else if (album.getArtist().getPaypalEmail() == null || album.getArtist().getPaypalEmail().length() == 0) {
+                helper.setDescription("Sorry your PayPal email is not filled in, please edit your profile first.");
+                helper.setResult(false);
+                return helper;
             }
 
-            if (isArtist) {
-                if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
-                    album.getArtist().setIsApproved(-2);
-                }
-            } else if (isBand) {
-                if (album.getBand().getIsApproved() == 0 || album.getBand().getIsApproved() == -1) {
-                    album.getBand().setIsApproved(-2);
-                }
+            if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
+                album.getArtist().setIsApproved(-2);
             }
             if (album.getListOfMusics() == null || album.getListOfMusics().isEmpty()) {
                 helper.setDescription("The album cannot be published, no tracks found.");
@@ -765,30 +713,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<ArtistBandHelper> listAllArtistBandInGenre(Long genreID) {
+    public List<Artist> listAllArtistBandInGenre(Long genreID) {
         System.out.println("MusicManagement: listAllArtistBandInGenre() called");
         try {
             Query q;
             q = em.createQuery("select a from Artist a where a.isApproved=true and a.genre=:genreID");
             q.setParameter("genreID", genreID);
-            List<Artist> listOfArtists = q.getResultList();
-            q = em.createQuery("select a from Band a where a.isApproved=true and a.genre=:genreID");
-            q.setParameter("genreID", genreID);
-            List<Band> listOfBands = q.getResultList();
-            List<ArtistBandHelper> artistBandHelpers = new ArrayList();
-            for (Artist artist : listOfArtists) {
-                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
-                artistBandHelper.setIsArtist(true);
-                artistBandHelper.setArtist(artist);
-                artistBandHelpers.add(artistBandHelper);
-            }
-            for (Band band : listOfBands) {
-                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
-                artistBandHelper.setIsArtist(false);
-                artistBandHelper.setBand(band);
-                artistBandHelpers.add(artistBandHelper);
-            }
-            return artistBandHelpers;
+            List<Artist> artists = q.getResultList();
+            return artists;
         } catch (Exception e) {
             System.out.println("MusicManagement: Error while calling listAllArtistBandInGenre()");
             e.printStackTrace();
@@ -797,29 +729,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<ArtistBandHelper> listAllArtistBandByGenre() {
+    public List<Artist> listAllArtistBandByGenre() {
         System.out.println("MusicManagement: listAllArtistBandByGenre() called");
         try {
             Query q;
-            q = em.createQuery("select a from Artist a where a.isApproved=true");
+            q = em.createQuery("select a from Artist a where a.isApproved=true ORDER BY a.genre.name ASC");
             List<Artist> listOfArtists = q.getResultList();
-            q = em.createQuery("select a from Band a where a.isApproved=true");
-            List<Band> listOfBands = q.getResultList();
-            List<ArtistBandHelper> artistBandHelpers = new ArrayList();
-            for (Artist artist : listOfArtists) {
-                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
-                artistBandHelper.setIsArtist(true);
-                artistBandHelper.setArtist(artist);
-                artistBandHelpers.add(artistBandHelper);
-            }
-            for (Band band : listOfBands) {
-                ArtistBandHelper artistBandHelper = new ArtistBandHelper();
-                artistBandHelper.setIsArtist(false);
-                artistBandHelper.setBand(band);
-                artistBandHelpers.add(artistBandHelper);
-            }
-            //TODO sort artistband
-            return artistBandHelpers;
+            return listOfArtists;
         } catch (Exception e) {
             System.out.println("MusicManagement: Error while calling listAllArtistBandByGenre()");
             e.printStackTrace();

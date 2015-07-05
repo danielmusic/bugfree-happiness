@@ -1,10 +1,8 @@
 package SessionBean.AdminManagement;
 
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
-import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import java.util.List;
 import javax.ejb.Local;
@@ -54,7 +52,7 @@ public interface AdminManagementBeanLocal {
      * @param isAdmin Set this to 'true' if it is an admin function
      * @return List{Band} otherwise return null if error
      */
-    public List<Band> listAllBands(Boolean isAdmin);
+    public List<Artist> listAllBands(Boolean isAdmin);
     
     public ReturnHelper createGenre(String name);
     //public List<Music> listMusicInGenre(Long genreID);
@@ -64,8 +62,6 @@ public interface AdminManagementBeanLocal {
     public ReturnHelper deleteGenre(Long genreID);
     
     public Artist getArtist(Long artistID);
-    
-    public Band getBand(Long bandID);
     
     public Member getMember(Long memberID);
 

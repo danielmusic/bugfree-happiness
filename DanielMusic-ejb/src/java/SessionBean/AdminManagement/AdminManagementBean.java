@@ -2,7 +2,6 @@ package SessionBean.AdminManagement;
 
 import EntityManager.Account;
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.Music;
@@ -41,12 +40,12 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
         q.setParameter("id", artistOrBandID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (!(account instanceof Artist) && !(account instanceof Band)) {
+            if (!(account instanceof Artist)) {
                 result.setResult(false);
                 result.setDescription("Account does not support this functionality. It is not an artist or band account.");
             } else if (account.getIsDisabled() == true) {
                 result.setResult(false);
-                result.setDescription("Account can not be aprroved as it has been disabled.");
+                result.setDescription("Account can not be approved as it has been disabled.");
             } else {
                 if (account instanceof Artist) {
                     q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
@@ -55,17 +54,8 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     artist.setIsApproved(1);
                     em.merge(artist);
                     result.setResult(true);
-                    result.setDescription("Artist has been approved.");
+                    result.setDescription("Artist/Band has been approved.");
                     sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
-                } else if (account instanceof Band) {
-                    q = em.createQuery("SELECT s FROM Band s where s.id=:id");
-                    q.setParameter("id", artistOrBandID);
-                    Band band = (Band) q.getSingleResult();
-                    band.setIsApproved(1);
-                    em.merge(band);
-                    result.setResult(true);
-                    result.setDescription("Band has been approved.");
-                    sgl.sendEmail(band.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
                 }
             }
         } catch (Exception ex) {
@@ -85,7 +75,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
         q.setParameter("id", artistOrBandID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (!(account instanceof Artist) && !(account instanceof Band)) {
+            if (!(account instanceof Artist)) {
                 result.setResult(false);
                 result.setDescription("Account does not support this functionality. It is not an artist or band account.");
             } else if (account.getIsDisabled() == true) {
@@ -101,15 +91,6 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     result.setResult(true);
                     result.setDescription("Artist has been rejected.");
                     sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
-                } else if (account instanceof Band) {
-                    q = em.createQuery("SELECT s FROM Band s where s.id=:id");
-                    q.setParameter("id", artistOrBandID);
-                    Band band = (Band) q.getSingleResult();
-                    band.setIsApproved(1);
-                    em.merge(band);
-                    result.setResult(true);
-                    result.setDescription("Band has been rejected.");
-                    sgl.sendEmail(band.getEmail(), "no-reply@sounds.sg", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
                 }
             }
         } catch (Exception ex) {
@@ -129,7 +110,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             if (isAdmin) {
                 q = em.createQuery("select a from Artist a");
             } else {
-                q = em.createQuery("select a from Artist a where a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
+                q = em.createQuery("select a from Artist a where a.isBand=true AND a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
             }
             List<Artist> listOfArtists = q.getResultList();
             System.out.println("AdminManagementBean: listAllArtists() called successfully");
@@ -142,16 +123,16 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     }
 
     @Override
-    public List<Band> listAllBands(Boolean isAdmin) {
+    public List<Artist> listAllBands(Boolean isAdmin) {
         System.out.println("AdminManagementBean: listAllBands() called");
         try {
             Query q;
             if (isAdmin) {
-                q = em.createQuery("select b from Band b");
+                q = em.createQuery("select b from Artist b");
             } else {
-                q = em.createQuery("select b from Band b where b.isDisabled=false and b.emailIsVerified=true and b.isApproved=true");
+                q = em.createQuery("select b from Artist b where b.isBand=true AND b.isDisabled=false and b.emailIsVerified=true and b.isApproved=true");
             }
-            List<Band> listOfBands = q.getResultList();
+            List<Artist> listOfBands = q.getResultList();
             System.out.println("AdminManagementBean: listAllBands() called successfully");
             return listOfBands;
         } catch (Exception e) {
@@ -287,24 +268,6 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("AdminManagementBean: getArtist() got exception");
-            return null;
-        }
-    }
-
-    @Override
-    public Band getBand(Long bandID) {
-        System.out.println("AdminManagementBean: getBand() called");
-        Band band;
-        try {
-            Query q = em.createQuery("Select b from Band b where b.id=:bandID");
-            q.setParameter("bandID", bandID);
-            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-            band = (Band) q.getSingleResult();
-            System.out.println("AdminManagementBean: getBand() successfully retrieved");
-            return band;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("AdminManagementBean: getBand() got exception");
             return null;
         }
     }

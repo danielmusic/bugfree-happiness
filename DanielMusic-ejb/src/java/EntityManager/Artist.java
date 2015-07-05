@@ -1,6 +1,7 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Artist extends Account implements Serializable {
@@ -22,6 +25,11 @@ public class Artist extends Account implements Serializable {
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Album> listOfAlbums;
 
+    private boolean isBand;
+    @Temporal(TemporalType.DATE)
+    private Date bandDateFormed;
+    @Lob
+    private String bandMembers;
     @ManyToOne
     private Genre genre;
     @Lob
@@ -153,6 +161,30 @@ public class Artist extends Account implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isIsBand() {
+        return isBand;
+    }
+
+    public void setIsBand(boolean isBand) {
+        this.isBand = isBand;
+    }
+
+    public Date getBandDateFormed() {
+        return bandDateFormed;
+    }
+
+    public void setBandDateFormed(Date bandDateFormed) {
+        this.bandDateFormed = bandDateFormed;
+    }
+
+    public String getBandMembers() {
+        return bandMembers;
+    }
+
+    public void setBandMembers(String bandMembers) {
+        this.bandMembers = bandMembers;
     }
 
     @Override
