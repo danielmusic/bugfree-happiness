@@ -35,6 +35,8 @@ public class MusicController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+        Artist artist = null;
+
         try {
             switch (target) {
                 case "ListGenreArtist":
@@ -45,7 +47,7 @@ public class MusicController extends HttpServlet {
                     return;
 
                 case "GetArtistByID":
-                    Artist artist = adminManagementBean.getArtist(Long.parseLong(id));
+                    artist = adminManagementBean.getArtist(Long.parseLong(id));
                     session.setAttribute("artistDetails", artist);
                     jsObj.put("result", true);
                     response.getWriter().write(jsObj.toString());

@@ -38,6 +38,32 @@
                         }
                     });
                 }
+
+                function loadAjax2(id) {
+                    url = "./MusicController?target=GetArtistByID";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'id': id},
+                        dataType: "text",
+                        success: function (val) {
+                            alert("hi2");
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
             </script>
 
 
@@ -79,7 +105,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="MusicController?target=ViewArtistPage&id=<%=account.getId()%>">my page</a>
+                        <a onclick="javascript:loadAjax2(<%=account.getId()%>);">my page</a>
                     </li>
                     <li>
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
@@ -96,10 +122,6 @@
                     <li>
                         <a href="#!/fan">fan</a>
                     </li>
-                    <li>
-                        <a href="#!/login">login</a>
-                    </li>
-
                     <li class="submenu">
                         <a href="#!/artist">sign up</a>
                         <ul>
@@ -110,6 +132,9 @@
                                 <a href='#!/fan/signup'>Fan signup</a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="#!/login">login</a>
                     </li>
                     <%
                         }

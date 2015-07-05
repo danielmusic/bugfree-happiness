@@ -8,6 +8,8 @@ import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -16,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import javax.servlet.jsp.PageContext;
 import org.json.JSONObject;
 
 @MultipartConfig
@@ -134,7 +135,7 @@ public class ClientAccountManagementController extends HttpServlet {
                     return;
 
                 case "ArtistProfileUpdate":
-                    if (artist != null) {
+                    if (account != null) {
                         //check need to update password
                         if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty()) {
                             returnHelper = accountManagementBean.updateAccountPassword(artist.getId(), oldpassword, password);
@@ -161,14 +162,29 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (picture.getSize() == 0) {
                             picture = null;
                         }
-                        returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
-                        if (returnHelper.getResult()) {
-                            session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
-                            session.setAttribute("goodMsg", returnHelper.getDescription());
-                        } else {
-                            session.setAttribute("errMsg", returnHelper.getDescription());
-                        }
+                        if (artist != null) {
+                            if (!artist.getIsBand()) {
+                                returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                            } else {
+                                String bandMembers = request.getParameter("bandMembers");
+                                String dateFormed = request.getParameter("dateFormed");
 
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date = null;
+
+                                if (dateFormed != null) {
+                                    date = formatter.parse(dateFormed);
+                                }
+                                returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, date, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                            }
+
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                        }
                         nextPage = "#!/artist/profile";
                     }
                     break;

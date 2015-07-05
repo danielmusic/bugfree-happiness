@@ -14,8 +14,11 @@
             <%@page import="EntityManager.Account"%>
             <%@page import="java.text.NumberFormat"%>
             <%
-                Account account = (Account) session.getAttribute("account");
                 Artist artist = (Artist) session.getAttribute("artistDetails");
+                System.out.print(">>>>>>>>>>>>>>>>>>>> " + artist);
+                if (artist == null) {
+                    out.print("<p class='warning'>Ops. No results found.</p>");
+                }
             %>
 
             <div class="sidebar main-left main-medium">
@@ -37,7 +40,9 @@
                             </li>
                             <li>
                                 <span class="label">Genres</span>
-                                <div class="data"><%=artist.getGenre().getName()%></div>
+                                <div class="data"><%if (artist.getGenre() != null) {
+                                        out.print(artist.getGenre().getName());
+                                    }%></div>
                             </li>
                         </ul>
                     </div>
@@ -61,7 +66,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="main" class="release main-left main-medium">
                 <article>
 
@@ -78,15 +82,16 @@
                             <h2>Biography</h2>
                             <p>
                                 <%
-                                    String repl = artist.getBiography().replaceAll("\\r", "<br>");
-                                    out.print(repl);
+                                    if (artist.getBiography() != null && !artist.getBiography().isEmpty()) {
+                                        String repl = artist.getBiography().replaceAll("\\r", "<br>");
+                                        out.print(repl);
+                                    }
                                 %>
                             </p>
                         </div>
                         <!-- /tab content -->
                         <!-- tab content -->
                         <div id="tab-releases" class="tab-content">
-
                             <%
                                 for (int i = 0; i < artist.getListOfAlbums().size(); i++) {
                                     Album album = artist.getListOfAlbums().get(i);
@@ -98,8 +103,10 @@
                             <h2><%=album.getName()%></h2>
                             <p>
                                 <%
-                                    repl = album.getDescription().replaceAll("\\r", "<br>");
-                                    out.print(repl);
+                                    if (album.getDescription() != null && !album.getDescription().isEmpty()) {
+                                        String repl = album.getDescription().replaceAll("\\r", "<br>");
+                                        out.print(repl);
+                                    }
                                 %>
                             </p>
                             <p>
@@ -137,7 +144,6 @@
                                             <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
                                             <!-- Artists -->
                                         </a>
-
                                         <div class="track-buttons">
                                             <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>"
                                                data-artist="<%=music.getArtistName()%>"
@@ -161,30 +167,20 @@
                                     </div>
                                 </li>
                                 <%}%>                                    
-
-
                             </ul>
                             <%
                                 }
                             %>
-
-
-
-
                             <p>
                                 <a href="javascript:;" class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
                                 <a href="javascript:;" class="btn sp-add-list" data-id="release-list">Add All Tracks</a>
                             </p>
-
                         </div>
                         <!-- /tab content -->
                     </div>
                     <!-- /tabs -->
-
-
                 </article>
                 <!-- /article -->
-
             </div>
             <!-- /main -->
         </div>

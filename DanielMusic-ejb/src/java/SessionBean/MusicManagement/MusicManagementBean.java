@@ -25,6 +25,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.servlet.http.Part;
@@ -198,7 +199,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return helper;
                 }
             }
-            if (name==null || name.isEmpty()) {
+            if (name == null || name.isEmpty()) {
                 helper.setDescription("Music name cannot be empty!");
                 return helper;
             }
@@ -754,6 +755,42 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
 
         return null;
+    }
+
+    @Override
+    public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID) {
+        System.out.println("checkIfMusicBelongsToArtist() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:artistID and e.listOfAlbums.listOfMusics.id=:musicID");
+            q.setParameter("artistID", artistID);
+            q.setParameter("musicID", musicID);
+            Artist artist = (Artist) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("checkIfMusicBelongsToArtist() failed");
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean checkIfAlbumBelongsToArtist(Long artistID, Long albumID) {
+        System.out.println("checkIfAlbumBelongsToArtist() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:artistID and e.listOfAlbums.id=:albumID");
+            q.setParameter("artistID", artistID);
+            q.setParameter("albumID", albumID);
+            Artist artist = (Artist) q.getSingleResult();
+            return true;
+        } catch (NoResultException ex) {
+            return false;
+        } catch (Exception ex) {
+            System.out.println("checkIfAlbumBelongsToArtist() failed");
+            ex.printStackTrace();
+        }
+        return false;
     }
 
 }
