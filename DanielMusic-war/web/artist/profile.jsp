@@ -4,6 +4,7 @@
     <%@page import="java.util.List"%>
     <%@page import="EntityManager.Artist"%>
     <%@page import="EntityManager.Account"%>
+    <%@page import="java.text.SimpleDateFormat"%>
     <section class="content section">
         <div class="container">
             <article>
@@ -66,7 +67,7 @@
                         <div class="col-1-3">
                             <label for="email"><strong>Current Email</strong> <a class="md-trigger" data-modal="modal-change-email">(?)</a></label>
                             <input type="email" id="email" name="email" value="<%=account.getEmail()%>">
-                            <%if (account.getNewEmail()!=null && account.getNewEmail().length()>0) {%><a href="#!/change-email">Email change in progress...</a><%}%>
+                            <%if (account.getNewEmail() != null && account.getNewEmail().length() > 0) {%><a href="#!/change-email">Email change in progress...</a><%}%>
                         </div>
 
                         <div class="col-1-3 last">
@@ -106,7 +107,7 @@
 
                     <hr class="divider">
 
-                    <h2>Artist Profile</h2>
+                    <h2>Account Profile</h2>
 
                     <div class="row clearfix">
 
@@ -138,6 +139,28 @@
                             <input type="file" id="pic" name="picture" style="height: 40px;padding-top: 8px;padding-bottom: 8px;">
                         </div>
                     </div>
+
+                    <%if (artist.getIsBand()) {%>
+                    <div class="row clearfix">
+                        <div class="col-1-2">
+                            <label for="dateFormed"><strong>Date Formed</strong> </label>
+                            <%
+                                String date = "";
+                                if (artist.getBandDateFormed() != null) {
+                                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
+                                    date = DATE_FORMAT.format(artist.getBandDateFormed());
+                                }
+                            %>
+                            <input type="date" id="dateFormed" name="dateFormed" value="<%=date%>">
+                        </div>
+                        <div class="col-1-2 last">
+                            <label for="bandMembers"><strong>Members</strong> </label>
+                            <input type="text" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
+                                           out.print(artist.getBandMembers());
+                                       }%>">
+                        </div>
+                    </div>
+                    <%}%>
 
                     <div class="row clearfix">
                         <div class="col-1-2" style="margin-bottom: 24px;">

@@ -8,6 +8,9 @@ import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -16,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import javax.servlet.jsp.PageContext;
 import org.json.JSONObject;
 
 @MultipartConfig
@@ -162,22 +164,32 @@ public class ClientAccountManagementController extends HttpServlet {
                             picture = null;
                         }
                         if (artist != null) {
-                            if (artist.getIsBand()) {
+                            if (!artist.getIsBand()) {
+                                System.out.println("1");
                                 returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
-                                if (returnHelper.getResult()) {
-                                    session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
-                                    session.setAttribute("goodMsg", returnHelper.getDescription());
-                                } else {
-                                    session.setAttribute("errMsg", returnHelper.getDescription());
-                                }
                             } else {
-                                returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, dateFormed, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
-                                if (returnHelper.getResult()) {
-                                    session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
-                                    session.setAttribute("goodMsg", returnHelper.getDescription());
-                                } else {
-                                    session.setAttribute("errMsg", returnHelper.getDescription());
+                                String bandMembers = request.getParameter("bandMembers");
+                                String dateFormed = request.getParameter("dateFormed");
+
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date = null;
+
+                                System.out.println("2");
+                                System.out.println("dateFormed " + dateFormed);
+
+                                if (dateFormed != null) {
+                                    date = formatter.parse(dateFormed);
                                 }
+                                System.out.println("date " + date);
+
+                                returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, date, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
+                            }
+
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("artist", (Artist) accountManagementBean.getAccount(artist.getEmail()));
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
                             }
                         }
                         nextPage = "#!/artist/profile";
