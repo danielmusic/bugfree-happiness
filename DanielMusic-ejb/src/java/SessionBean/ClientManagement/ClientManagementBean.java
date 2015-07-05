@@ -3,7 +3,6 @@ package SessionBean.ClientManagement;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
-import EntityManager.Band;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.PaymentHelper;
@@ -95,7 +94,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            System.out.println("Open link: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey="+ payKey);
+            System.out.println("Open link: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);
             //System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
             //open link in browser
             //Accounts (all password is 12345678): 
@@ -126,7 +125,6 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             Set<Album> albumInCart = null;
             List<PaymentHelper> partiesReceivingPayments = new ArrayList();
             Artist currentArtist = null;
-            Band currentBand = null;
 
             if (accountID != null) {
                 // If it's a logged in account, get from cart
@@ -159,91 +157,46 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //and calculate the total amount to be paid
             for (Music music : tracksInCart) {
                 totalPaymentAmount = totalPaymentAmount + music.getPrice();
-                currentArtist = null;
-                currentBand = null;
-                // If it's a artist
-                if (music.getAlbum().getArtist() != null) {
-                    currentArtist = music.getAlbum().getArtist();
-                    //Loop through the helpers to search for the artist
-                    Boolean artistFound = false;
-                    for (int i = 0; i < partiesReceivingPayments.size(); i++) {
-                        PaymentHelper currentPaymentHelper = partiesReceivingPayments.get(i);
-                        //If the artist already exist inside, add to the price for that artist
-                        if (currentPaymentHelper.getArtistOrBandPaypalEmail().equals(currentArtist.getPaypalEmail())) {
-                            currentPaymentHelper.setTotalPaymentAmount(currentPaymentHelper.getTotalPaymentAmount() + music.getPrice());
-                            partiesReceivingPayments.set(i, currentPaymentHelper);
-                            artistFound = true;
-                            break;
-                        }
-                    }//If artist not found, create the new paymenthelper and add it to the list
-                    if (!artistFound) {
-                        PaymentHelper paymentHelper = new PaymentHelper(currentArtist.getPaypalEmail());
-                        paymentHelper.setTotalPaymentAmount(music.getPrice());
+                currentArtist = music.getAlbum().getArtist();
+                //Loop through the helpers to search for the artist
+                Boolean artistFound = false;
+                for (int i = 0; i < partiesReceivingPayments.size(); i++) {
+                    PaymentHelper currentPaymentHelper = partiesReceivingPayments.get(i);
+                    //If the artist already exist inside, add to the price for that artist
+                    if (currentPaymentHelper.getArtistOrBandPaypalEmail().equals(currentArtist.getPaypalEmail())) {
+                        currentPaymentHelper.setTotalPaymentAmount(currentPaymentHelper.getTotalPaymentAmount() + music.getPrice());
+                        partiesReceivingPayments.set(i, currentPaymentHelper);
+                        artistFound = true;
+                        break;
                     }
-                } else if (music.getAlbum().getBand() != null) { //Otherwise if it's a band
-                    currentBand = music.getAlbum().getBand();
-                    //Loop through the helpers to search for the band
-                    Boolean bandFound = false;
-                    for (int i = 0; i < partiesReceivingPayments.size(); i++) {
-                        PaymentHelper currentPaymentHelper = partiesReceivingPayments.get(i);
-                        //If the band already exist inside, add to the price for that band
-                        if (currentPaymentHelper.getArtistOrBandPaypalEmail().equals(currentBand.getPaypalEmail())) {
-                            currentPaymentHelper.setTotalPaymentAmount(currentPaymentHelper.getTotalPaymentAmount() + music.getPrice());
-                            partiesReceivingPayments.set(i, currentPaymentHelper);
-                            bandFound = true;
-                            break;
-                        }
-                    }//If band not found, create the new paymenthelper and add it to the list
-                    if (!bandFound) {
-                        PaymentHelper paymentHelper = new PaymentHelper(currentBand.getPaypalEmail());
-                        paymentHelper.setTotalPaymentAmount(music.getPrice());
-                    }
+                }//If artist not found, create the new paymenthelper and add it to the list
+                if (!artistFound) {
+                    PaymentHelper paymentHelper = new PaymentHelper(currentArtist.getPaypalEmail());
+                    paymentHelper.setTotalPaymentAmount(music.getPrice());
                 }
+
             }
 
             //Create the list of artist/band to be paid and the amount to be paid for each artist for each music track
             //and calculate the total amount to be paid
             for (Album album : albumInCart) {
                 totalPaymentAmount = totalPaymentAmount + album.getPrice();
-                currentArtist = null;
-                currentBand = null;
-                // If it's a artist
-                if (album.getArtist() != null) {
-                    currentArtist = album.getArtist();
-                    //Loop through the helpers to search for the artist
-                    Boolean artistFound = false;
-                    for (int i = 0; i < partiesReceivingPayments.size(); i++) {
-                        PaymentHelper currentPaymentHelper = partiesReceivingPayments.get(i);
-                        //If the artist already exist inside, add to the price for that artist
-                        if (currentPaymentHelper.getArtistOrBandPaypalEmail().equals(currentArtist.getPaypalEmail())) {
-                            currentPaymentHelper.setTotalPaymentAmount(currentPaymentHelper.getTotalPaymentAmount() + album.getPrice());
-                            partiesReceivingPayments.set(i, currentPaymentHelper);
-                            artistFound = true;
-                            break;
-                        }
-                    }//If artist not found, create the new paymenthelper and add it to the list
-                    if (!artistFound) {
-                        PaymentHelper paymentHelper = new PaymentHelper(currentArtist.getPaypalEmail());
-                        paymentHelper.setTotalPaymentAmount(album.getPrice());
+                currentArtist = album.getArtist();
+                //Loop through the helpers to search for the artist
+                Boolean artistFound = false;
+                for (int i = 0; i < partiesReceivingPayments.size(); i++) {
+                    PaymentHelper currentPaymentHelper = partiesReceivingPayments.get(i);
+                    //If the artist already exist inside, add to the price for that artist
+                    if (currentPaymentHelper.getArtistOrBandPaypalEmail().equals(currentArtist.getPaypalEmail())) {
+                        currentPaymentHelper.setTotalPaymentAmount(currentPaymentHelper.getTotalPaymentAmount() + album.getPrice());
+                        partiesReceivingPayments.set(i, currentPaymentHelper);
+                        artistFound = true;
+                        break;
                     }
-                } else if (album.getBand() != null) { //Otherwise if it's a band
-                    currentBand = album.getBand();
-                    //Loop through the helpers to search for the band
-                    Boolean bandFound = false;
-                    for (int i = 0; i < partiesReceivingPayments.size(); i++) {
-                        PaymentHelper currentPaymentHelper = partiesReceivingPayments.get(i);
-                        //If the band already exist inside, add to the price for that band
-                        if (currentPaymentHelper.getArtistOrBandPaypalEmail().equals(currentBand.getPaypalEmail())) {
-                            currentPaymentHelper.setTotalPaymentAmount(currentPaymentHelper.getTotalPaymentAmount() + album.getPrice());
-                            partiesReceivingPayments.set(i, currentPaymentHelper);
-                            bandFound = true;
-                            break;
-                        }
-                    }//If band not found, create the new paymenthelper and add it to the list
-                    if (!bandFound) {
-                        PaymentHelper paymentHelper = new PaymentHelper(currentBand.getPaypalEmail());
-                        paymentHelper.setTotalPaymentAmount(album.getPrice());
-                    }
+                }//If artist not found, create the new paymenthelper and add it to the list
+                if (!artistFound) {
+                    PaymentHelper paymentHelper = new PaymentHelper(currentArtist.getPaypalEmail());
+                    paymentHelper.setTotalPaymentAmount(album.getPrice());
                 }
             }
 
@@ -294,7 +247,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/#!/payment-cancelled");//Return if payment cancelled
-            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/Controller?PaymentID="+payment.getId()+"UUID="+payment.getUUID());//Return after payment complete
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/Controller?PaymentID=" + payment.getId() + "UUID=" + payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 
