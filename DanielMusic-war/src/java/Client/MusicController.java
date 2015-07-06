@@ -3,6 +3,7 @@ package Client;
 import EntityManager.Artist;
 import EntityManager.ExploreHelper;
 import EntityManager.ReturnHelper;
+import EntityManager.SearchHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
@@ -49,6 +50,13 @@ public class MusicController extends HttpServlet {
                 case "GetArtistByID":
                     artist = adminManagementBean.getArtist(Long.parseLong(id));
                     session.setAttribute("artistDetails", artist);
+                    jsObj.put("result", true);
+                    response.getWriter().write(jsObj.toString());
+                    return;
+                case "Search":
+                    String searchText = request.getParameter("text");
+                    SearchHelper result = musicManagementBean.search(searchText);
+                    session.setAttribute("searchResult", result);
                     jsObj.put("result", true);
                     response.getWriter().write(jsObj.toString());
                     return;
