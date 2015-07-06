@@ -347,7 +347,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             cart = account.getShoppingCart();
             em.merge(cart);
             if (isTrack) {
-                System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Removing track from cart...");
+                System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Removing track from cart...");
                 q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
@@ -356,16 +356,16 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 em.flush();
 
                 if (result) {
-                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Track has been removed from cart");
+                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Track has been removed from cart");
                     helper.setDescription("Track has been removed from cart successfully.");
                     helper.setResult(true);
                 } else {
-                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Failed to remove track from cart");
+                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Failed to remove track from cart");
                     helper.setDescription("Error while removing track from cart, please try again.");
                     helper.setResult(false);
                 }
             } else {
-                System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Removing album from cart...");
+                System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Removing album from cart...");
                 q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
@@ -374,11 +374,11 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 em.flush();
 
                 if (result) {
-                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Album has been removed from cart");
+                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Album has been removed from cart");
                     helper.setDescription("A;bum has been removed from cart successfully.");
                     helper.setResult(true);
                 } else {
-                    System.out.println("\"ClientManagementBean: removeItemFromShoppingCart(): Failed to remove album from cart");
+                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Failed to remove album from cart");
                     helper.setDescription("Error while removing album from cart, please try again.");
                     helper.setResult(false);
                 }
@@ -396,31 +396,42 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     public ReturnHelper addItemToShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
         System.out.println("ClientManagementBean: addItemToShoppingCart() called");
         ShoppingCart cart;
-        Account account;
         Music music;
         Album album;
         ReturnHelper helper = new ReturnHelper();
         try {
-            account = em.getReference(Account.class, accountID);
-            cart = account.getShoppingCart();
-
+            Query q = em.createQuery("Select sc from ShoppingCart sc where sc.account.id=:accountID");
+            q.setParameter("accountID", accountID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            cart = (ShoppingCart) q.getSingleResult();
+            Boolean result;
             if (isTrack) {
-                music = em.getReference(Music.class, trackOrAlbumID);
-                cart.getListOfMusics().add(music);
+                q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
+                q.setParameter("trackOrAlbumID", trackOrAlbumID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                music = (Music) q.getSingleResult();
+                result = cart.getListOfMusics().add(music);
             } else {
-                album = em.getReference(Album.class, trackOrAlbumID);
-                cart.getListOfAlbums().add(album);
+                q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
+                q.setParameter("trackOrAlbumID", trackOrAlbumID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                album = (Album) q.getSingleResult();
+                result = cart.getListOfAlbums().add(album);
             }
-
+            if (!result) {
+                helper.setDescription("Failed to add item to cart, please try again.");
+                helper.setResult(false);
+                return helper;
+            }
             System.out.println("ClientManagementBean: addItemToShoppingCart() successfully");
 
-            helper.setDescription("Item added to cart successfully.");
+            helper.setDescription("Item has been added to cart successfully.");
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ClientManagementBean: addItemToShoppingCart() failed");
-            helper.setDescription("Error occurred while adding to cart.");
+            helper.setDescription("Error occurred while adding item to cart.");
             helper.setResult(false);
             return helper;
         }
@@ -428,7 +439,29 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper clearShoppingCart(Long accountID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("ClientManagementBean: clearShoppingCart() called");
+        ShoppingCart cart;
+        ReturnHelper helper = new ReturnHelper();
+        try {
+            Query q = em.createQuery("Select sc from ShoppingCart sc where sc.account.id=:accountID");
+            q.setParameter("accountID", accountID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            cart = (ShoppingCart) q.getSingleResult();
+
+            cart.getListOfAlbums().removeAll(cart.getListOfAlbums());
+            cart.getListOfMusics().removeAll(cart.getListOfMusics());
+            System.out.println("ClientManagementBean: clearShoppingCart() successfully");
+
+            helper.setDescription("Shopping cart has been cleared successfully.");
+            helper.setResult(true);
+            return helper;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ClientManagementBean: clearShoppingCart() failed");
+            helper.setDescription("Failed to clear shopping cart please try again.");
+            helper.setResult(false);
+            return helper;
+        }
     }
 
 }
