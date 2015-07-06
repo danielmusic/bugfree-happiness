@@ -6,7 +6,8 @@
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
-                <input type="text" placeholder="Search and hit enter..." name="s" id="search" />
+                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()"/>
+                <input type="hidden" id="btnSearch" value="Search" onclick="searchAjax()" />
                 <span id="close-search"><i class="icon icon-close"></i></span>
             </div>
         </div>
@@ -48,12 +49,39 @@
                         data: {'id': id},
                         dataType: "text",
                         success: function (val) {
-                            alert("hi2");
                             window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
                                 window.event.returnValue = false;
                                 window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+
+                function searchAjax() {
+                    var text = document.getElementById("search").value;
+                    url = "./MusicController?target=Search";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'text': text},
+                        dataType: "text",
+                        success: function (val) {
+                            alert(text);
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/search";
                             }
                         },
                         error: function (xhr, status, error) {
