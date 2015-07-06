@@ -247,7 +247,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/#!/payment-cancelled");//Return if payment cancelled
-            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/Controller?PaymentID=" + payment.getId() + "UUID=" + payment.getUUID());//Return after payment complete
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/Controller?PaymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 

@@ -1,6 +1,32 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Shopping Cart">
-
+<script>
+                function loadAjax(id) {
+                    exploreForm.id.value = id;
+                    url = "./MusicController?target=GetArtistByID";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'id': id},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+            </script>
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/events-bg.jpg)">
         <h1 class="heading-l">Upcoming <span class="color">Events</span></h1>
     </section>
