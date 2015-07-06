@@ -1,26 +1,24 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Sound.sg">
+    <%@page import="java.util.List"%>
+    <%@page import="EntityManager.Album"%>
+    <%@page import="EntityManager.Music"%>
+    <%@page import="EntityManager.Artist"%>
+    <%@page import="EntityManager.Account"%>
+    <%@page import="java.text.NumberFormat"%>
+    <%
+        Artist artist = (Artist) session.getAttribute("artistDetails");
+        if (artist == null) {
+            out.print("<p class='warning'>Ops. No results found.</p>");
+        }
+    %>
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/artist-single-bg.jpg)">
-        <h2 class="heading-l">Artist <span class="color">ZERO</span></h2>
+        <h2 class="heading-l">Artist <span class="color"><%=artist.getName()%></span></h2>
         <br>
         <span class="overlay grids"></span>
     </section>
     <section class="content section">
         <div class="container">
-            <%@page import="java.util.List"%>
-            <%@page import="EntityManager.Album"%>
-            <%@page import="EntityManager.Music"%>
-            <%@page import="EntityManager.Artist"%>
-            <%@page import="EntityManager.Account"%>
-            <%@page import="java.text.NumberFormat"%>
-            <%
-                Artist artist = (Artist) session.getAttribute("artistDetails");
-                System.out.print(">>>>>>>>>>>>>>>>>>>> " + artist);
-                if (artist == null) {
-                    out.print("<p class='warning'>Ops. No results found.</p>");
-                }
-            %>
-
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <a style="cursor: default;" class="thumb-glitch">
@@ -49,19 +47,19 @@
                     <!-- Details Share -->
                     <div class="details-social-box">
                         <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
-                        <a href="<%=artist.getFacebookURL()%>" class="facebook-share"><i class="icon icon-facebook"></i></a>
+                        <a href="<%=artist.getFacebookURL()%>"><i class="icon icon-facebook"></i></a>
                             <%}%>
 
                         <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
-                        <a href="<%=artist.getTwitterURL()%>" class="twitter-share"><i class="icon icon-twitter"></i></a>
+                        <a href="<%=artist.getTwitterURL()%>"><i class="icon icon-twitter"></i></a>
                             <%}%>
 
                         <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
-                        <a href="<%=artist.getInstagramURL()%>" class="googleplus-share"><i class="icon icon-user"></i></a>
+                        <a href="<%=artist.getInstagramURL()%>"><i class="icon icon-user"></i></a>
                             <%}%>
 
                         <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
-                        <a href="<%=artist.getWebsiteURL()%>" class="googleplus-share"><i class="icon icon-IE"></i></a>
+                        <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
                             <%}%>
                     </div>
                 </div>
@@ -144,7 +142,7 @@
                                             <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
                                             <!-- Artists -->
                                         </a>
-                                        <div class="track-buttons">
+                                        <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
                                             <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>"
                                                data-artist="<%=music.getArtistName()%>"
                                                data-artist_url="http://artist.com/madoff-freak" 
@@ -154,6 +152,22 @@
                                                >
                                                 <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
                                             </a>
+
+                                            <%if (music.getLyrics() != null) {%>
+                                            <!--<a class="md-trigger" data-modal="modal-lyrics"><i class="icon icon-eye"></i></a>-->
+                                            <div class="md-modal md-effect-1" id="modal-lyrics">
+                                                <div class="md-content">
+                                                    <h3>Lyrics</h3>
+                                                    <p>
+                                                        <%
+                                                            String repl = music.getLyrics().replaceAll("\\r", "<br>");
+                                                            out.print(repl);
+                                                        %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <%}%>
+
                                             <a href="javascript:;"><i class="icon icon-cart"></i></a>
                                                 <%
                                                     if (music.getPrice() == 0.0) {
@@ -168,25 +182,23 @@
                                 </li>
                                 <%}%>                                    
                             </ul>
-                            <%
-                                }
-                            %>
+                            <%}%>
                             <p>
                                 <a href="javascript:;" class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
                                 <a href="javascript:;" class="btn sp-add-list" data-id="release-list">Add All Tracks</a>
                             </p>
                         </div>
-                        <!-- /tab content -->
                     </div>
-                    <!-- /tabs -->
                 </article>
-                <!-- /article -->
             </div>
-            <!-- /main -->
         </div>
-        <!-- /container -->
-    </section>
-    <!-- /Content -->
 
+        <div class="md-overlay"></div>
+
+        <script src="js/classie.js"></script>
+        <script src="js/modalEffects.js"></script>
+        <script>var polyfilter_scriptpath = '/js/';</script> 
+        <script src="js/cssParser.js"></script>
+        <script src="js/css-filters-polyfill.js"></script>
+    </section>
 </section>
-<!-- /page -->
