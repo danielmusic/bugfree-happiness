@@ -131,16 +131,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Query q;
             SearchHelper helper = new SearchHelper();
 
-            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE '%:searchString%' AND a.isDeleted=false AND a.isPublished=true ORDER BY a.publishedDate DESC");
-            q.setParameter("searchString", searchString);
+            q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE :searchString AND a.isDeleted=false AND a.isPublished=true ORDER BY a.yearReleased DESC");
+            q.setParameter("searchString","%"+searchString+"%");
             List<Album> listOfAlbums = q.getResultList();
 
-            q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE '%:searchString%' AND a.isDisabled=false AND a.isApproved=true");
-            q.setParameter("searchString", searchString);
+            q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE :searchString AND a.isDisabled=false AND a.isApproved=true");
+            q.setParameter("searchString","%"+searchString+"%");
             List<Artist> listOfArtists = q.getResultList();
 
-            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE '%:searchString%' AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.publishedDate DESC");
-            q.setParameter("searchString", searchString);
+            q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE :searchString AND m.isDeleted=false AND m.album.isPublished=true ORDER BY m.album.yearReleased DESC");
+            q.setParameter("searchString","%"+searchString+"%");
             List<Music> listOfMusics = q.getResultList();
 
             helper.setListOfAlbums(listOfAlbums);
@@ -810,10 +810,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID) {
         System.out.println("checkIfMusicBelongsToArtist() called");
         try {
-            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:artistID and e.listOfAlbums.listOfMusics.id=:musicID");
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.id=:musicID and e.album.artist=:artistID");
             q.setParameter("artistID", artistID);
             q.setParameter("musicID", musicID);
-            Artist artist = (Artist) q.getSingleResult();
+            Music music = (Music) q.getSingleResult();
             return true;
         } catch (NoResultException ex) {
             return false;
@@ -828,10 +828,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public Boolean checkIfAlbumBelongsToArtist(Long artistID, Long albumID) {
         System.out.println("checkIfAlbumBelongsToArtist() called");
         try {
-            Query q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:artistID and e.listOfAlbums.id=:albumID");
+            Query q = em.createQuery("SELECT e FROM Album e WHERE e.id=:albumID AND e.artist.id=:artistID");
             q.setParameter("artistID", artistID);
             q.setParameter("albumID", albumID);
-            Artist artist = (Artist) q.getSingleResult();
+            Album album = (Album) q.getSingleResult();
             return true;
         } catch (NoResultException ex) {
             return false;
