@@ -6,7 +6,8 @@
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
-                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()"/>
+                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="if (event.keyCode == 13)
+                            document.getElementById('btnSearch').click()"/>
                 <input type="hidden" id="btnSearch" value="Search" onclick="searchAjax()" />
                 <span id="close-search"><i class="icon icon-close"></i></span>
             </div>
@@ -39,32 +40,6 @@
                         }
                     });
                 }
-
-                function loadAjax2(id) {
-                    url = "./MusicController?target=GetArtistByID";
-                    $.ajax({
-                        type: "GET",
-                        async: false,
-                        url: url,
-                        data: {'id': id},
-                        dataType: "text",
-                        success: function (val) {
-                            window.event.returnValue = true;
-                            var json = JSON.parse(val);
-                            if (json.result) {
-                                window.event.returnValue = false;
-                                window.location.href = "#!/artists";
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = error;
-                            hideLoader();
-                            ajaxResultsError(xhr, status, error);
-                        }
-                    });
-                }
-
 
                 function searchAjax() {
                     var text = document.getElementById("search").value;
@@ -133,7 +108,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a onclick="javascript:loadAjax2(<%=account.getId()%>);">my page</a>
+                        <a href="MusicManagementController?target=GetArtistByID&id=<%=account.getId()%>">my page</a>
                     </li>
                     <li>
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>

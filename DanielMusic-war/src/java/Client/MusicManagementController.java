@@ -263,7 +263,6 @@ public class MusicManagementController extends HttpServlet {
 //                        }
 //                    }
 //                    break;
-
                 case "DeleteTrack":
                     if (artist != null) {
                         if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), Long.parseLong(id))) {
@@ -282,6 +281,13 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
 
+                case "GetArtistByID":
+                    if (artist != null) {
+                        artist = adminManagementBean.getArtist(Long.parseLong(id));
+                        session.setAttribute("artistDetails", artist);
+                        nextPage = "#!/artists";
+                    }
+                    break;
             }
 
             if (nextPage.equals("")) {
