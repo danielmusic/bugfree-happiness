@@ -288,7 +288,7 @@ public class MusicManagementController extends HttpServlet {
                 case "GetShoppingCart":
                     ShoppingCart shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
                     session.setAttribute("ShoppingCart", shoppingCart);
-
+                    break;
                 case "GetArtistByID":
                     if (artist != null) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
