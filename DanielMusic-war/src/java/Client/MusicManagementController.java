@@ -6,7 +6,9 @@ import EntityManager.Artist;
 import EntityManager.ExploreHelper;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
+import EntityManager.ShoppingCart;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
+import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +24,9 @@ import org.json.JSONObject;
 
 @MultipartConfig
 public class MusicManagementController extends HttpServlet {
+
+    @EJB
+    private ClientManagementBeanLocal clientManagementBean;
 
     @EJB
     private AdminManagementBeanLocal adminManagementBean;
@@ -263,7 +268,6 @@ public class MusicManagementController extends HttpServlet {
 //                        }
 //                    }
 //                    break;
-
                 case "DeleteTrack":
                     if (artist != null) {
                         if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), Long.parseLong(id))) {
@@ -281,7 +285,10 @@ public class MusicManagementController extends HttpServlet {
                         }
                     }
                     break;
-
+                case "GetShoppingCart":
+                    ShoppingCart shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
+                    session.setAttribute("ShoppingCart", shoppingCart);
+                    break;
             }
 
             if (nextPage.equals("")) {

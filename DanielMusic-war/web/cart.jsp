@@ -1,32 +1,45 @@
+<%@page import="EntityManager.ShoppingCart"%>
+<%@page import="EntityManager.Account"%>
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Shopping Cart">
-<script>
-                function loadAjax(id) {
-                    exploreForm.id.value = id;
-                    url = "./MusicController?target=GetArtistByID";
-                    $.ajax({
-                        type: "GET",
-                        async: false,
-                        url: url,
-                        data: {'id': id},
-                        dataType: "text",
-                        success: function (val) {
-                            window.event.returnValue = true;
-                            var json = JSON.parse(val);
-                            if (json.result) {
-                                window.event.returnValue = false;
-                                window.location.href = "#!/artists";
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = error;
-                            hideLoader();
-                            ajaxResultsError(xhr, status, error);
-                        }
-                    });
+    <%
+        Account account = (Account) session.getAttribute("account");
+        if (account != null) {
+    %>
+    <input type="hidden" name="accountID" id="accountID" value="<%=account.getId() %>" />
+    <script>
+        function getShoppingCartFromServer(id) {
+            accountID = $("accountID").val();
+            url = "./MusicManagementController?target=GetShoppingCart";
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: url,
+                data: {'id': accountID},
+                dataType: "text",
+                success: function (val) {
+                    window.event.returnValue = true;
+                    var json = JSON.parse(val);
+                    if (json.result) {
+                        window.event.returnValue = false;
+                        window.location.href = "#!/cart";
+                    }
+                },
+                error: function (xhr, status, error) {
+                    document.getElementById("errMsg").style.display = "block";
+                    document.getElementById('errMsg').innerHTML = error;
+                    hideLoader();
+                    ajaxResultsError(xhr, status, error);
                 }
-            </script>
+            });
+        }
+    </script>
+    <%
+        } else {
+            ShoppingCart cart = (ShoppingCart) session.getAttribute("ShoppingCart");
+        }
+    %>
+
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/events-bg.jpg)">
         <h1 class="heading-l">Upcoming <span class="color">Events</span></h1>
     </section>
