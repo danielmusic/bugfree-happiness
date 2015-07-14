@@ -29,14 +29,9 @@
                             async: false,
                             url: url,
                             data: {'id': accountID},
-                            dataType: "text",
                             success: function (val) {
-                                window.event.returnValue = true;
-                                var json = JSON.parse(val);
-                                if (json.result) {
-                                    window.event.returnValue = false;
-                                    window.location.href = "#!/cart";
-                                }
+                                window.event.returnValue = false;
+                                window.location.href = "#!/cart";
                             },
                             error: function (xhr, status, error) {
                                 document.getElementById("errMsg").style.display = "block";
@@ -47,60 +42,40 @@
                         });
                     });
                 </script>
+                <%}%>
+                <h1>Shopping Cart</h1>
                 <%
-                    }
-                    ShoppingCart cart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                    ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                    if (shoppingCart != null) {
+
+                        Set<Music> setOfMusics = shoppingCart.getListOfMusics();
+                        if (setOfMusics != null) {
+                            List<Music> listOfMusics = new ArrayList();
+                            listOfMusics.addAll(setOfMusics);
+
                 %>
-                <form name="albumManagement">
-                    <h2>Shopping Cart</h2>
+                <form name="trackManagement">
+                    <h2>Tracks</h2>
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Album Name</th>
-                                <th>Artist Name</th>
-                                <th>Price</th>
-                                <th>Type</th>
-                                <th colspan="2"></th>
+                                <th class="product-remove" style="width: 5%">
+                                    <input type="checkbox" onclick="checkAll(this)" />
+                                </th>     
+                                <th style="width: 20%">Track Name</th>
+                                <th style="width: 20%">Album Name</th>
+                                <th style="width: 20%">Artist Name</th>
+                                <th style="width: 10%">Price</th>
+                                <th colspan="2" style="width: 15%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%
-                                if (cart != null) {
-                                    Set<Album> setOfAlbums = cart.getListOfAlbums();
-                                    List<Album> listOfAlbums = new ArrayList();
-                                    listOfAlbums.addAll(setOfAlbums);
-
-                                    Set<Music> setOfMusics = cart.getListOfMusics();
-                                    List<Music> listOfMusics = new ArrayList();
-                                    listOfMusics.addAll(setOfMusics);
-                                    
-                                    for (Album a : listOfAlbums) {
+                            <%                                for (Music m : listOfMusics) {
                             %>
                             <tr>
-                                <td class="table-date">
-                                    <%=a.getName()%>
-                                </td>
-                                <td class="table-name">
-                                    <%=a.getDescription()%>
-                                </td>
                                 <td>
-                                    <%=a.getArtistName()%>
+                                    <input type="checkbox" name="delete" value="music:<%=m.getId()%>" />
                                 </td>
-                                <td>
-                                    $<%=a.getPrice()%>0
-                                </td>
-                                <td>
-                                    Album
-                                </td>
-                                <td class="actions">
-                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
-                                </td>
-                            </tr>
-                            <%                                }
-                                for (Music m : listOfMusics) {
-                            %>
-                            <tr>
                                 <td class="table-date">
                                     <%=m.getName()%>
                                 </td>
@@ -113,19 +88,19 @@
                                 <td>
                                     $<%=m.getPrice()%>0
                                 </td>
-                                <td>
-                                    Track
-                                </td>
                                 <td class="actions">
                                     <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
                                 </td>
                             </tr>
-                            <%                                }
-                            } else {
+                            <%
+                                }
                             %>
-                            <tr>
-                                <td class="table-date">
-                                    Flower hearts
+                            <!--tr>
+                                <td>
+                                    <input type="checkbox" name="delete" value="music123" />
+                                </td>
+                                <td class="table-name">
+                                    Herarts
                                 </td>
                                 <td class="table-name">
                                     Legend of the tales
@@ -136,8 +111,52 @@
                                 <td>
                                     $5.00
                                 </td>
+                                <td class="actions">
+                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
+                                </td>
+                            </tr-->
+                        </tbody>
+                    </table>
+                    <hr class="divider2" style="margin-right: 0px;">
+                </form>
+                <%
+                    }
+
+                    Set<Album> setOfAlbums = shoppingCart.getListOfAlbums();
+                    if (setOfAlbums != null) {
+                        List<Album> listOfAlbums = new ArrayList();
+                        listOfAlbums.addAll(setOfAlbums);
+                %>
+                <form name="albumManagement">
+                    <h2>Albums</h2>
+                    <table class="layout display responsive-table">
+                        <thead>
+                            <tr>
+                                <th class="product-remove" style="width: 5%">
+                                    <input type="checkbox" onclick="checkAll(this)" />
+                                </th>     
+                                <th style="width: 20%">Album Name</th>
+                                <th style="width: 20%">Artist Name</th>
+                                <th style="width: 10%">Price</th>
+                                <th colspan="2" style="width: 15%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                for (Album a : listOfAlbums) {
+                            %>
+                            <tr>
                                 <td>
-                                    Track
+                                    <input type="checkbox" name="delete" value="album:<%=a.getId()%>" />
+                                </td>
+                                <td class="table-date">
+                                    <%=a.getName()%>
+                                </td>
+                                <td>
+                                    <%=a.getArtistName()%>
+                                </td>
+                                <td>
+                                    $<%=a.getPrice()%>0
                                 </td>
                                 <td class="actions">
                                     <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
@@ -145,17 +164,36 @@
                             </tr>
                             <%
                                 }
+
                             %>
-
-
+                            <!--tr>
+                                <td>
+                                    <input type="checkbox" name="delete" value="music123" />
+                                </td>
+                                <td class="table-date">
+                                    Legend of the tales
+                                </td>
+                                <td>
+                                    Lee Siao Long
+                                </td>
+                                <td>
+                                    $5.00
+                                </td>
+                                <td class="actions">
+                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
+                                </td>
+                            </tr-->
                         </tbody>
                     </table>
-
                     <hr class="divider2" style="margin-right: 0px;">
-                    <p style="float: right;"><strong>Subtotal: $99</strong> </p>
-                    <br><br>
-                    <button type="submit" class="medium invert" style="float: right;">Next</button>
                 </form>
+                <%                                }
+                %>
+                <p style="float: right;"><strong>Subtotal: $99</strong> </p>
+                <br><br>
+                <button type="submit" class="medium invert" style="float: right;">Next</button>
+                <%}%>
+                <h2>The cart is empty.</h2>
             </article>
         </div>
     </section>

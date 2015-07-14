@@ -50,6 +50,7 @@ public class MusicManagementController extends HttpServlet {
         String trackNumber = request.getParameter("trackNumber");
         String credits = request.getParameter("credits");
         String price = request.getParameter("price");
+        ShoppingCart shoppingCart = null;
 
         int intTrackNumber = 0;
         if (trackNumber != null && !trackNumber.isEmpty()) {
@@ -62,7 +63,7 @@ public class MusicManagementController extends HttpServlet {
         List<Music> tracks = null;
         Album album = null;
 
-        ReturnHelper returnHelper;
+        ReturnHelper returnHelper = new ReturnHelper();
 
         JSONObject jsObj = new JSONObject();
         response.setContentType("application/json");
@@ -286,9 +287,45 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
                 case "GetShoppingCart":
-                    ShoppingCart shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
+                    shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                    account = (Account) session.getAttribute("Account");
+                    if (account != null) {
+                        if (id != null) {
+                            //retrieve from server
+                            shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
+                        }
+                    }
+                    
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+                case "RemoveAlbumFromShoppingCart":
+                    account = (Account) session.getAttribute("account");
+                    Long albumID = Long.parseLong(request.getParameter("albumID"));
+                    if (account != null) {
+                        returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), albumID, false);
+                        if (returnHelper.getResult()) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        }
+                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                    } else {
+                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                        album = new Album();
+                        album.setId(albumID);
+                        shoppingCart.getListOfAlbums().remove(album);
+                    }
+                    session.setAttribute("ShoppingCart", shoppingCart);
+                    break;
+                case "AddItemToShoppingCart":
+                    shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
+                    session.setAttribute("ShoppingCart", shoppingCart);
+                    break;
+
                 case "GetArtistByID":
                     if (artist != null) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
