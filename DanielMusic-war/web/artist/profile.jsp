@@ -9,7 +9,7 @@
         <div class="container">
             <article>
                 <%
-                    List<Genre> genres = (List<Genre>) (session.getAttribute("genres"));
+                    List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Account account = (Account) session.getAttribute("account");
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (account != null && artist != null && genres != null) {

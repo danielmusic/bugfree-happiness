@@ -26,7 +26,7 @@
             <!-- Article -->
             <article>
                 <div class="row">
-                    <h3><%=totalAmtOfResults%> matching results found</h3>
+                    <h3><%=totalAmtOfResults%> results found</h3>
                     <!-- column -->
                     <div class="col-1-1 last">
                         <!-- tabs -->
@@ -41,7 +41,12 @@
                             <!-- tab content -->
                             <div id="tab-artist" class="tab-content">
                                 <div id="artists" class="masonry clearfix">
-                                    <%for (Artist artist : result.getListOfArtists()) {%>
+                                    <%for (Artist artist : result.getListOfArtists()) {
+                                            String genre = "";
+                                            if (artist.getGenre() != null) {
+                                                genre = artist.getGenre().getName();
+                                            }
+                                    %>
                                     <div class="col-1-4 item" data-genres="">
                                         <a href="#!/pages/artist-single" class="thumb-glitch artist" data-thumbicon="plus">
                                             <span class="hoverlayer"></span>
@@ -55,7 +60,7 @@
                                         </a>
                                         <div class="artist-footer">
                                             <h2 class="artist-title"><a href="#!/pages/artist-single"><%=artist.getName()%></a></h2>
-                                            <span class="artist-genres"><%=artist.getGenre().getName()%></span>
+                                            <span class="artist-genres"><%=genre%></span>
                                         </div>
                                         <div class="artist-social">
                                             <!--TODO (copy from artists page)-->
@@ -73,8 +78,8 @@
                                         <%for (Album album : result.getListOfAlbums()) {
                                                 String albumArt = album.getImageLocation();
                                                 if (albumArt == null || albumArt.isEmpty()) {
-                                                albumArt = "/img/cover.png";
-                                            }%>
+                                                    albumArt = "/img/cover.png";
+                                                }%>
                                         <a href="#!/pages/release-single" class="thumb-glitch release tip" data-thumbicon="plus">
                                             <span class="hoverlayer"></span>
                                             <span class="release-badge">new?</span>

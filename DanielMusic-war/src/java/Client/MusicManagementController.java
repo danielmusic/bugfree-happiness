@@ -3,7 +3,6 @@ package Client;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
-import EntityManager.ExploreHelper;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
@@ -11,6 +10,7 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -291,7 +291,7 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
                 case "GetShoppingCart":
-                    account = (Account) session.getAttribute("Account");
+                    account = (Account) session.getAttribute("account");
                     shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     if (account != null) {
                         //retrieve from server
@@ -445,6 +445,26 @@ public class MusicManagementController extends HttpServlet {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
                         session.setAttribute("artistDetails", artist);
                         nextPage = "#!/artists";
+                    }
+                    break;
+                case "Checkout":
+                    System.out.println("yooo");
+                    shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                    if (account != null) {
+                        Set<Music> musicSet = shoppingCart.getListOfMusics();
+                        Set<Album> albumSet = shoppingCart.getListOfAlbums();
+                        ArrayList<Long> trackIDs = new ArrayList();
+                        ArrayList<Long> albumIDs = new ArrayList();
+                        for(Music m : musicSet){
+                            trackIDs.add(m.getId());
+                        }
+                        for(Album a : albumSet){
+                            albumIDs.add(a.getId());
+                        }
+
+                        nextPage = clientManagementBean.getPaymentLink(account.getId(), null, trackIDs, albumIDs);
+                    } else {
+
                     }
                     break;
             }

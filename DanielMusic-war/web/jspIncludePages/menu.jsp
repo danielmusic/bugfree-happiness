@@ -51,13 +51,32 @@
                         data: {'text': text},
                         dataType: "text",
                         success: function (val) {
-                            alert(text);
                             window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
                                 window.event.returnValue = false;
                                 window.location.href = "#!/search";
                             }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+                function getShoppingCart() {
+                    url = "./MusicManagementController?target=GetShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
                         },
                         error: function (xhr, status, error) {
                             document.getElementById("errMsg").style.display = "block";
@@ -77,8 +96,8 @@
             <!-- ############ icon navigation ############ -->
             <nav id="icon-nav">
                 <ul>
-                    <li><a href="#!/cart" id="nav-up"><span class="icon icon-cart"></span></a></li>
-                    <li><a href="javascript:;" id="nav-search" class="external"><span class="icon icon-search"></span></a></li>
+                    <li><a onclick="javascript:getShoppingCart();" id="nav-up"><span class="icon icon-cart"></span></a></li>
+                    <li><a onclick="javascript:;" id="nav-search" class="external"><span class="icon icon-search"></span></a></li>
                 </ul>
             </nav>
             <!-- /icon navigation -->

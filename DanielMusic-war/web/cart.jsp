@@ -16,6 +16,10 @@
                 checkboxes[i].checked = source.checked;
             }
         }
+
+        function checkout() {
+            window.location.href = "./MusicManagementController?target=Checkout";
+        }
     </script>
     <section class="content section">
         <div class="container">
@@ -27,34 +31,6 @@
                 <%@page import="java.util.Set"%>
                 <%@page import="EntityManager.Music"%>
                 <%@page import="java.util.List"%>
-                <%
-                    Account account = (Account) session.getAttribute("account");
-                    if (account != null) {
-                %>
-                <input type="hidden" name="accountID" id="accountID" value="<%=account.getId()%>" />
-                <script>
-                    $(function () {
-                        accountID = $("accountID").val();
-                        url = "./MusicManagementController?target=GetShoppingCart";
-                        $.ajax({
-                            type: "GET",
-                            async: false,
-                            url: url,
-                            data: {'id': accountID},
-                            success: function (val) {
-                                window.event.returnValue = false;
-                                window.location.href = "#!/cart";
-                            },
-                            error: function (xhr, status, error) {
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = error;
-                                hideLoader();
-                                ajaxResultsError(xhr, status, error);
-                            }
-                        });
-                    });
-                </script>
-                <%}%>
                 <h1>Shopping Cart</h1>
                 <%
                     ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
@@ -200,10 +176,35 @@
                 %>
                 <p style="float: right;"><strong>Subtotal: $99</strong> </p>
                 <br><br>
-                <button type="submit" class="medium invert" style="float: right;">Next</button>
+                <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
                 <%}%>
                 <h2>The cart is empty.</h2>
+
+                <div class="md-modal md-effect-1" id="checkout-confirm">
+                    <div class="md-content">
+                        <h3>Checkout Cart</h3>
+                        <div>
+                            <p>This is a modal window. You can do the following things with it:</p>
+                            <ul>
+                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+                                <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                            </ul>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button" onclick="checkout()">Checkout</button>
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </article>
+            <div class="md-overlay"></div>
+
+            <script src="js/classie.js"></script>
+            <script src="js/modalEffects.js"></script>
+            <script>var polyfilter_scriptpath = '/js/';</script> 
+            <script src="js/cssParser.js"></script>
+            <script src="js/css-filters-polyfill.js"></script>
         </div>
     </section>
 </section>

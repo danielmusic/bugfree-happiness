@@ -236,7 +236,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             Receiver primaryReceiver = new Receiver();
             primaryReceiver.setAmount(totalPaymentAmount);
             primaryReceiver.setEmail(MAIN_PAYPAL_RECIVING_ACCOUNT);
-            primaryReceiver.setPrimary(true);
+            primaryReceiver.setPrimary(Boolean.TRUE);
             primaryReceiver.setPaymentType("DIGITALGOODS");
             receivers.add(primaryReceiver);
 
@@ -322,7 +322,12 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         ShoppingCart cart;
         Account account;
         try {
-            account = em.getReference(Account.class, accountID);
+            Query q = em.createQuery("Select a from Account a where a.id=:accountID");
+            q.setParameter("accountID", accountID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            account = (Account) q.getSingleResult();
+           // account = em.getReference(Account.class, accountID);
+
             cart = account.getShoppingCart();
             System.out.println("ClientManagementBean: getShoppingCart() successfully");
             return cart;
@@ -401,39 +406,42 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         Album album;
         ReturnHelper helper = new ReturnHelper();
         try {
-            Query q = em.createQuery("Select sc from ShoppingCart sc where sc.account.id=:accountID");
+            Query q = em.createQuery("Select sc from Account sc where sc.id=:accountID");
             q.setParameter("accountID", accountID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-            cart = (ShoppingCart) q.getSingleResult();
-
+            Account account = (Account) q.getSingleResult();
+            cart = account.getShoppingCart();
             if (cart == null) {
-                q = em.createQuery("Select a from Account a where a.id=:accountID");
-                q.setParameter("accountID", accountID);
-                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-                Account account = (Account) q.getSingleResult();
-
                 cart = new ShoppingCart();
                 cart.setAccount(account);
+                account.setShoppingCart(cart);
                 cart.setListOfAlbums(new HashSet<>());
                 cart.setListOfMusics(new HashSet<>());
                 em.persist(cart);
-                em.flush();
-                em.refresh(cart);
             }
 
             Boolean result;
             if (isTrack) {
+                System.out.println("addItemToShoppingCart: inside isTrack");
                 q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
                 music = (Music) q.getSingleResult();
-                result = cart.getListOfMusics().add(music);
+                Set<Music> musicSet = cart.getListOfMusics();
+                result = musicSet.add(music);
+                cart.setListOfMusics(musicSet);
+                em.merge(cart);
             } else {
+                System.out.println("addItemToShoppingCart: inside isAlbum");
+
                 q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
                 album = (Album) q.getSingleResult();
-                result = cart.getListOfAlbums().add(album);
+                Set<Album> albumSet = cart.getListOfAlbums();
+                result = albumSet.add(album);
+                cart.setListOfAlbums(albumSet);
+                em.merge(cart);
             }
             if (!result) {
                 helper.setDescription("Failed to add item to cart, please try again. Note that duplicate item cannot be added.");

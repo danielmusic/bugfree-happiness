@@ -19,6 +19,7 @@
     </section>
     <section class="content section">
         <div class="container">
+
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <a style="cursor: default;" class="thumb-glitch">
@@ -168,7 +169,7 @@
                                             </div>
                                             <%}%>
 
-                                            <a href="javascript:;"><i class="icon icon-cart"></i></a>
+                                            <a onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
                                                 <%
                                                     if (music.getPrice() == 0.0) {
                                                         out.print("Free");
@@ -194,11 +195,53 @@
         </div>
 
         <div class="md-overlay"></div>
+        <script>
+            function addTrackToCart(trackID) {
+                alert("magic!!!!" + trackID);
+                url = "./MusicManagementController?target=AddTrackToShoppingCart";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {'trackID': trackID},
+                    success: function (val) {
+                        window.event.returnValue = false;
+                        window.location.href = "#!/cart";
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
 
+            function addAlbumToCart(albumID) {
+                url = "./MusicManagementController?target=AddAlbumToShoppingCart";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {'albumID': albumID},
+                    success: function (val) {
+                        window.event.returnValue = false;
+                        window.location.href = "#!/cart";
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
+        </script>
         <script src="js/classie.js"></script>
         <script src="js/modalEffects.js"></script>
         <script>var polyfilter_scriptpath = '/js/';</script> 
         <script src="js/cssParser.js"></script>
         <script src="js/css-filters-polyfill.js"></script>
+
     </section>
 </section>
