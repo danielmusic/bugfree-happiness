@@ -4,6 +4,18 @@
         <h1 class="heading-l">Upcoming <span class="color">Events</span></h1>
     </section>
     <script>
+        function checkAllTracks(source) {
+            checkboxes = document.getElementsByName('deleteTrack');
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+        function checkAllAlbums(source) {
+            checkboxes = document.getElementsByName('deleteAlbum');
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
     </script>
     <section class="content section">
         <div class="container">
@@ -47,20 +59,18 @@
                 <%
                     ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     if (shoppingCart != null) {
-
                         Set<Music> setOfMusics = shoppingCart.getListOfMusics();
                         if (setOfMusics != null) {
                             List<Music> listOfMusics = new ArrayList();
                             listOfMusics.addAll(setOfMusics);
-
                 %>
-                <form name="trackManagement">
+                <form name="cartManagement">
                     <h2>Tracks</h2>
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
                                 <th class="product-remove" style="width: 5%">
-                                    <input type="checkbox" onclick="checkAll(this)" />
+                                    <input type="checkbox" onclick="checkAllTracks(this)" />
                                 </th>     
                                 <th style="width: 20%">Track Name</th>
                                 <th style="width: 20%">Album Name</th>
@@ -74,7 +84,7 @@
                             %>
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="delete" value="music:<%=m.getId()%>" />
+                                    <input type="checkbox" name="deleteTrack" value="music:<%=m.getId()%>" />
                                 </td>
                                 <td class="table-date">
                                     <%=m.getName()%>
@@ -118,22 +128,21 @@
                         </tbody>
                     </table>
                     <hr class="divider2" style="margin-right: 0px;">
-                </form>
-                <%
-                    }
 
-                    Set<Album> setOfAlbums = shoppingCart.getListOfAlbums();
-                    if (setOfAlbums != null) {
-                        List<Album> listOfAlbums = new ArrayList();
-                        listOfAlbums.addAll(setOfAlbums);
-                %>
-                <form name="albumManagement">
+                    <%
+                        }
+
+                        Set<Album> setOfAlbums = shoppingCart.getListOfAlbums();
+                        if (setOfAlbums != null) {
+                            List<Album> listOfAlbums = new ArrayList();
+                            listOfAlbums.addAll(setOfAlbums);
+                    %>
                     <h2>Albums</h2>
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
                                 <th class="product-remove" style="width: 5%">
-                                    <input type="checkbox" onclick="checkAll(this)" />
+                                    <input type="checkbox" onclick="checkAllAlbums(this)" />
                                 </th>     
                                 <th style="width: 20%">Album Name</th>
                                 <th style="width: 20%">Artist Name</th>
@@ -147,7 +156,7 @@
                             %>
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="delete" value="album:<%=a.getId()%>" />
+                                    <input type="checkbox" name="deleteAlbum" value="album:<%=a.getId()%>" />
                                 </td>
                                 <td class="table-date">
                                     <%=a.getName()%>

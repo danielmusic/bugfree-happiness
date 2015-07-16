@@ -291,13 +291,11 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
                 case "GetShoppingCart":
-                    shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     account = (Account) session.getAttribute("Account");
+                    shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     if (account != null) {
-                        if (id != null) {
-                            //retrieve from server
-                            shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
-                        }
+                        //retrieve from server
+                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                     }
 
                     session.setAttribute("ShoppingCart", shoppingCart);
