@@ -37,7 +37,7 @@ public class ShoppingCart implements Serializable {
         return listOfAlbums;
     }
 
-    public void setListOfAlbums(List<Album> listOfAlbums) {
+    public void setListOfAlbums(Set<Album> listOfAlbums) {
         this.listOfAlbums = (Set<Album>) listOfAlbums;
     }
 
@@ -45,7 +45,7 @@ public class ShoppingCart implements Serializable {
         return listOfMusics;
     }
 
-    public void setListOfMusics(List<Music> listOfMusics) {
+    public void setListOfMusics(Set<Music> listOfMusics) {
         this.listOfMusics = (Set<Music>) listOfMusics;
     }
 

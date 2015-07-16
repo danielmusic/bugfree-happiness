@@ -18,6 +18,7 @@ import com.paypal.svcs.types.common.RequestEnvelope;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -404,6 +405,22 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             q.setParameter("accountID", accountID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             cart = (ShoppingCart) q.getSingleResult();
+
+            if (cart == null) {
+                q = em.createQuery("Select a from Account a where a.id=:accountID");
+                q.setParameter("accountID", accountID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                Account account = (Account) q.getSingleResult();
+
+                cart = new ShoppingCart();
+                cart.setAccount(account);
+                cart.setListOfAlbums(new HashSet<>());
+                cart.setListOfMusics(new HashSet<>());
+                em.persist(cart);
+                em.flush();
+                em.refresh(cart);
+            }
+
             Boolean result;
             if (isTrack) {
                 q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
@@ -419,7 +436,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 result = cart.getListOfAlbums().add(album);
             }
             if (!result) {
-                helper.setDescription("Failed to add item to cart, please try again.");
+                helper.setDescription("Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
                 helper.setResult(false);
                 return helper;
             }

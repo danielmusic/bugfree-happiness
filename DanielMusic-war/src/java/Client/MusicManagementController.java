@@ -11,7 +11,9 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -50,6 +52,7 @@ public class MusicManagementController extends HttpServlet {
         String trackNumber = request.getParameter("trackNumber");
         String credits = request.getParameter("credits");
         String price = request.getParameter("price");
+        Long albumID, trackID;
         ShoppingCart shoppingCart = null;
 
         int intTrackNumber = 0;
@@ -62,6 +65,7 @@ public class MusicManagementController extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
         List<Music> tracks = null;
         Album album = null;
+        Music track = null;
 
         ReturnHelper returnHelper = new ReturnHelper();
 
@@ -203,7 +207,7 @@ public class MusicManagementController extends HttpServlet {
 
                 case "ListTrackByID":
                     if (artist != null && id != null) {
-                        Music track = musicManagementBean.getMusic(Long.parseLong(id));
+                        track = musicManagementBean.getMusic(Long.parseLong(id));
                         session.setAttribute("track", track);
 
                         session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(Long.parseLong(id), "128", false));
@@ -295,12 +299,12 @@ public class MusicManagementController extends HttpServlet {
                             shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
                         }
                     }
-                    
+
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
                 case "RemoveAlbumFromShoppingCart":
                     account = (Account) session.getAttribute("account");
-                    Long albumID = Long.parseLong(request.getParameter("albumID"));
+                    albumID = Long.parseLong(request.getParameter("albumID"));
                     if (account != null) {
                         returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), albumID, false);
                         if (returnHelper.getResult()) {
@@ -321,11 +325,123 @@ public class MusicManagementController extends HttpServlet {
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
-                case "AddItemToShoppingCart":
-                    shoppingCart = clientManagementBean.getShoppingCart(Long.parseLong(id));
+                case "RemoveTrackFromShoppingCart":
+                    account = (Account) session.getAttribute("account");
+                    trackID = Long.parseLong(request.getParameter("trackID"));
+                    if (account != null) {
+                        returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), trackID, true);
+                        if (returnHelper.getResult()) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        }
+                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                    } else {
+                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                        Music music = new Music();
+                        music.setId(trackID);
+                        shoppingCart.getListOfMusics().remove(music);
+                    }
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+                case "AddAlbumToShoppingCart":
+                    account = (Account) session.getAttribute("account");
+                    albumID = Long.parseLong(request.getParameter("albumID"));
+                    if (account != null) {
+                        returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), albumID, false);
+                        if (returnHelper.getResult()) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        }
 
+                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                    } else {
+                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                        album = musicManagementBean.getAlbum(albumID);
+                        Boolean result;
+                        if (shoppingCart == null) {
+                            shoppingCart = new ShoppingCart();
+
+                            HashSet<Album> albumSet = new HashSet<Album>();
+                            result = albumSet.add(album);
+                            HashSet<Music> musicSet = new HashSet<Music>();
+
+                            shoppingCart.setListOfAlbums(albumSet);
+                            shoppingCart.setListOfMusics(musicSet);
+                        } else {
+                            Set set = shoppingCart.getListOfAlbums();
+                            result = set.add(album);
+                            shoppingCart.setListOfAlbums(set);
+                        }
+
+                        if (result) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", "Item has been added to cart successfully.");
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
+                            response.getWriter().write(jsObj.toString());
+                        }
+                    }
+                    session.setAttribute("ShoppingCart", shoppingCart);
+                    break;
+                case "AddTrackToShoppingCart":
+                    account = (Account) session.getAttribute("account");
+                    trackID = Long.parseLong(request.getParameter("trackID"));
+                    if (account != null) {
+                        returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), trackID, true);
+                        if (returnHelper.getResult()) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", returnHelper.getDescription());
+                            response.getWriter().write(jsObj.toString());
+                        }
+
+                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                    } else {
+                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                        track = musicManagementBean.getMusic(trackID);
+                        Boolean result;
+                        if (shoppingCart == null) {
+                            shoppingCart = new ShoppingCart();
+
+                            HashSet<Album> albumSet = new HashSet<Album>();
+                            HashSet<Music> musicSet = new HashSet<Music>();
+                            result = musicSet.add(track);
+
+                            shoppingCart.setListOfAlbums(albumSet);
+                            shoppingCart.setListOfMusics(musicSet);
+                        } else {
+                            Set set = shoppingCart.getListOfMusics();
+                            result = set.add(track);
+                            shoppingCart.setListOfMusics(set);
+                        }
+
+                        if (result) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", "Item has been added to cart successfully.");
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
+                            response.getWriter().write(jsObj.toString());
+                        }
+                    }
+                    session.setAttribute("ShoppingCart", shoppingCart);
+                    break;
                 case "GetArtistByID":
                     if (artist != null) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
