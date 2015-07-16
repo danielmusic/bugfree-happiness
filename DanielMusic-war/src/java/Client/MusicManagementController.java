@@ -448,21 +448,20 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
                 case "Checkout":
-                    System.out.println("yooo");
                     shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     if (account != null) {
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
-                        ArrayList<Long> trackIDs = new ArrayList();
-                        ArrayList<Long> albumIDs = new ArrayList();
-                        for(Music m : musicSet){
-                            trackIDs.add(m.getId());
-                        }
-                        for(Album a : albumSet){
-                            albumIDs.add(a.getId());
-                        }
+//                        ArrayList<Long> trackIDs = new ArrayList();
+//                        ArrayList<Long> albumIDs = new ArrayList();
+//                        for(Music m : musicSet){
+//                            trackIDs.add(m.getId());
+//                        }
+//                        for(Album a : albumSet){
+//                            albumIDs.add(a.getId());
+//                        }
 
-                        nextPage = clientManagementBean.getPaymentLink(account.getId(), null, trackIDs, albumIDs);
+                        nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
                     } else {
 
                     }

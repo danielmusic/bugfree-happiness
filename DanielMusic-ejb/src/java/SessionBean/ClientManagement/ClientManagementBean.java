@@ -114,7 +114,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     }
 
     @Override
-    public String getPaymentLink(Long accountID, String nonMemberEmail, List<Long> trackIDs, List<Long> albumIDs) {
+    public String getPaymentLink(Long accountID, String nonMemberEmail, Set<Music> tracksInCart, Set<Album> albumInCart) {
         System.out.println("getPaymentLink() called");
         try {
             //If accountID is not null, is a registered account purchase. Get it's shopping cart content
@@ -122,8 +122,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //Calculate the total amount to be paid
             Account account = null;
             Double totalPaymentAmount = 0.0;
-            Set<Music> tracksInCart = null;
-            Set<Album> albumInCart = null;
+//            Set<Music> tracksInCart = null;
+//            Set<Album> albumInCart = null;
             List<PaymentHelper> partiesReceivingPayments = new ArrayList();
             Artist currentArtist = null;
 
@@ -133,25 +133,25 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 if (account == null) {
                     return null;
                 }
-                // Get his shopping cart
-                ShoppingCart shoppingCart = account.getShoppingCart();
-                tracksInCart = shoppingCart.getListOfMusics();
-                albumInCart = shoppingCart.getListOfAlbums();
-            } else { // if it's a non logged in user, retrieve the list of IDs into the actual entities
-                for (Long current : trackIDs) {
-                    Music music = em.getReference(Music.class, current);
-                    if (music == null) {
-                        return null;
-                    }
-                    tracksInCart.add(music);
-                }
-                for (Long current : albumIDs) {
-                    Album album = em.getReference(Album.class, current);
-                    if (album == null) {
-                        return null;
-                    }
-                    albumInCart.add(album);
-                }
+//                // Get his shopping cart
+//                ShoppingCart shoppingCart = account.getShoppingCart();
+//                tracksInCart = shoppingCart.getListOfMusics();
+//                albumInCart = shoppingCart.getListOfAlbums();
+//            } else { // if it's a non logged in user, retrieve the list of IDs into the actual entities
+//                for (Long current : trackIDs) {
+//                    Music music = em.getReference(Music.class, current);
+//                    if (music == null) {
+//                        return null;
+//                    }
+//                    tracksInCart.add(music);
+//                }
+//                for (Long current : albumIDs) {
+//                    Album album = em.getReference(Album.class, current);
+//                    if (album == null) {
+//                        return null;
+//                    }
+//                    albumInCart.add(album);
+//                }
             }
 
             //Create the list of artist/band to be paid and the amount to be paid for each artist for each music track
@@ -174,6 +174,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 if (!artistFound) {
                     PaymentHelper paymentHelper = new PaymentHelper(currentArtist.getPaypalEmail());
                     paymentHelper.setTotalPaymentAmount(music.getPrice());
+                    partiesReceivingPayments.add(paymentHelper);
                 }
 
             }
@@ -198,6 +199,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 if (!artistFound) {
                     PaymentHelper paymentHelper = new PaymentHelper(currentArtist.getPaypalEmail());
                     paymentHelper.setTotalPaymentAmount(album.getPrice());
+                    partiesReceivingPayments.add(paymentHelper);
                 }
             }
 
