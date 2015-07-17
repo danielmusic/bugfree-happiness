@@ -117,7 +117,7 @@
                                             <label class="col-md-3 control-label">Genre</label>
                                             <div class="col-md-6">
                                                 <input type="text" class="form-control" value="<%if (artist.getGenre() != null) {
-                                                        out.print(artist.getGenre());
+                                                        out.print(artist.getGenre().getName());
                                                     }%>" disabled>
                                             </div>
                                         </div>
