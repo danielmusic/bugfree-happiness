@@ -25,11 +25,6 @@ public class ClientManagementBeanWS {
     private ClientManagementBeanLocal ejbRef;// Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Web Service Operation")
 
-    @WebMethod(operationName = "getPaymentLink")
-    public String getPaymentLink(@WebParam(name = "accountID") Long accountID, @WebParam(name = "nonMemberEmail") String nonMemberEmail, @WebParam(name = "trackIDs") List<Long> trackIDs, @WebParam(name = "albumIDs") List<Long> albumIDs) {
-        return ejbRef.getPaymentLink(accountID, nonMemberEmail, trackIDs, albumIDs);
-    }
-
     @WebMethod(operationName = "completePayment")
     public ReturnHelper completePayment(@WebParam(name = "paymentID") Long paymentID, @WebParam(name = "UUID") String UUID) {
         return ejbRef.completePayment(paymentID, UUID);
