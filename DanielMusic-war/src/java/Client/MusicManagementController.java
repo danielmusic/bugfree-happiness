@@ -10,7 +10,6 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,10 +81,20 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
 
+                case "ViewSingles":
+                    if (artist != null && id != null) {
+                        album = musicManagementBean.getAlbum(Long.parseLong(id));
+                        session.setAttribute("singles", album);
+                        session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false));
+                        session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false));
+                        session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false));
+                        nextPage = "#!/artist/add_singles";
+                    }
+                    break;
+
                 case "AddAlbum":
                     if (artist != null && yearReleased != null && price != null) {
                         Part picture = request.getPart("picture");
-
                         if (picture.getSize() == 0) {
                             picture = null;
                         }

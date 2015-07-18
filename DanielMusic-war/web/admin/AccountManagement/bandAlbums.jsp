@@ -5,11 +5,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Admin admin = (Admin) (session.getAttribute("admin"));
-    Artist artist = (Artist) (session.getAttribute("artist"));
+    Artist band = (Artist) (session.getAttribute("band"));
     if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
-    } else if (artist == null) {
-        response.sendRedirect("../AccountManagement/artistManagement.jsp?errMsg=An error has occured.");
+    } else if (band == null) {
+        response.sendRedirect("../AccountManagement/bandManagement.jsp?errMsg=An error has occured.");
     } else {
 %>
 <!doctype html>
@@ -20,12 +20,12 @@
     <body onload="alertFunc()">
         <jsp:include page="../jspIncludePages/displayNotification.jsp" />
         <script>
-            function viewArtistTrack(id) {
-                window.location.href = "artistTracks.jsp?id=" + id;
+            function viewBandTrack(id) {
+                window.location.href = "bandTracks.jsp?id=" + id;
             }
 
             function back() {
-                window.location.href = "artist.jsp";
+                window.location.href = "band.jsp";
             }
         </script>
 
@@ -36,13 +36,13 @@
                 <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2>Artist Albums  - <%=artist.getName()%></h2>
+                        <h2>Band Albums  - <%=band.getName()%></h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li><a href="admin/workspace.jsp"><i class="fa fa-home"></i></a></li>
-                                <li><a href="../../AccountManagementController?target=ListAllArtist">Artist Management</a></li>
-                                <li><a href="artist.jsp"><%=artist.getName()%></a></li>
-                                <li><span>Artist Albums &nbsp;&nbsp</span></li>
+                                <li><a href="../../AccountManagementController?target=ListAllBand">Band Management</a></li>
+                                <li><a href="band.jsp"><%=band.getName()%></a></li>
+                                <li><span>Band Albums &nbsp;&nbsp</span></li>
                             </ol>
                         </div>
                     </header>
@@ -50,7 +50,7 @@
                     <!-- start: page -->
                     <section class="panel">
                         <header class="panel-heading">
-                            <h2 class="panel-title">Albums - <%=artist.getName()%></h2>
+                            <h2 class="panel-title">Albums - <%=band.getName()%></h2>
                         </header>
                         <div class="panel-body">
                             <div class="row">
@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <br/>
-                            <form name="artistAlbumManagement">
+                            <form name="bandAlbumManagement">
                                 <table class="table table-bordered table-striped mb-none" id="datatable-default">
                                     <thead>
                                         <tr>
@@ -75,8 +75,8 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (artist != null) {
-                                                List<Album> albums = artist.getListOfAlbums();
+                                            if (band != null) {
+                                                List<Album> albums = band.getListOfAlbums();
                                                 for (int i = 0; i < albums.size(); i++) {
                                         %>
                                         <tr>        
@@ -177,7 +177,7 @@
                                                 %>
                                             </td>
 
-                                            <td><button type="button" class="btn btn-default btn-block" onclick="javascript:viewArtistTrack('<%=albums.get(i).getId()%>');">View Tracks</button></td>
+                                            <td><button type="button" class="btn btn-default btn-block" onclick="javascript:viewBandTrack('<%=albums.get(i).getId()%>');">View Tracks</button></td>
                                         </tr>
                                         <%
                                                 }

@@ -17,6 +17,10 @@
             window.location.href = "MusicManagementController?target=ListAlbumByID&id=" + id;
         }
 
+       function editSingles(id) {
+            window.location.href = "MusicManagementController?target=ViewSingles&id=" + id;
+        }
+        
         function viewTracks(id) {
             window.location.href = "MusicManagementController?target=ListAllTracksByAlbumID&id=" + id;
         }
@@ -47,7 +51,7 @@
                             <tr>
                                 <th>no</th>
                                 <th>Album Title</th>
-                                <th>Published?</th>
+                                <th>Status</th>
                                 <th colspan="2"></th>
                             </tr>
                         </thead>
@@ -63,9 +67,9 @@
                                 <td class="table-date">
                                     <%
                                         if (albums.get(i).getIsPublished()) {
-                                            out.print("Yes");
+                                            out.print("Published");
                                         } else {
-                                            out.print("No");
+                                            out.print("Not Published");
                                         }
                                     %>
                                 </td>
@@ -90,8 +94,8 @@
                         <thead>
                             <tr>
                                 <th>no</th>
-                                <th>Title</th>
-                                <th>Published?</th>
+                                <th>Singles Title</th>
+                                <th>Status</th>
                                 <th colspan="2"></th>
                             </tr>
                         </thead>
@@ -107,14 +111,14 @@
                                 <td class="table-date">
                                     <%
                                         if (albums.get(i).getIsPublished()) {
-                                            out.print("Yes");
+                                            out.print("Published");
                                         } else {
-                                            out.print("No");
+                                            out.print("Not Published");
                                         }
                                     %>
                                 </td>
                                 <td class="actions" style="width: 300px;">
-                                    <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit singles</a>
+                                    <a href="javascript:editSingles(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit singles</a>
                                     <%if (!albums.get(i).getIsPublished()) {%>
                                     <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
                                     <%}%>
@@ -127,9 +131,6 @@
                             %>
                         </tbody>
                     </table>
-
-
-
 
                     <button type="button" class="small" onclick="javascript:addAlbum()" style="margin-right: 10px;">Add Album</button>
                     <button type="button" class="small" onclick="javascript:addSingles()">Add Singles</button>

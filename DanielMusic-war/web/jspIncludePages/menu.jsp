@@ -170,7 +170,7 @@
                         <a href="#!/fan">fan</a>
                     </li>
                     <li class="submenu">
-                        <a href="#!/artist">sign up</a>
+                        <a>sign up</a>
                         <ul>
                             <li>
                                 <a href='#!/artist/signup'>Artist signup</a>

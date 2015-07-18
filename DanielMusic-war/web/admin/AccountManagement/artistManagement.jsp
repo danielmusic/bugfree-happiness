@@ -79,6 +79,7 @@
                                         <%
                                             if (artists != null && artists.size() > 0) {
                                                 for (int i = 0; i < artists.size(); i++) {
+                                                    if (!artists.get(i).getIsBand()) {
                                         %>
                                         <tr>        
                                             <td><%=artists.get(i).getName()%></td>
@@ -149,6 +150,7 @@
                                             </td>
                                         </tr>
                                         <%
+                                                    }
                                                 }
                                             }
                                         %>
