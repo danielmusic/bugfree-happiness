@@ -132,15 +132,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             SearchHelper helper = new SearchHelper();
 
             q = em.createQuery("SELECT a FROM Album a WHERE a.name LIKE :searchString AND a.isDeleted=false AND a.artist.isApproved=1 AND a.isPublished=true ORDER BY a.yearReleased DESC");
-            q.setParameter("searchString","%"+searchString+"%");
+            q.setParameter("searchString", "%" + searchString + "%");
             List<Album> listOfAlbums = q.getResultList();
 
             q = em.createQuery("SELECT a FROM Artist a WHERE a.name LIKE :searchString AND a.isDisabled=false AND a.isApproved=1");
-            q.setParameter("searchString","%"+searchString+"%");
+            q.setParameter("searchString", "%" + searchString + "%");
             List<Artist> listOfArtists = q.getResultList();
 
             q = em.createQuery("SELECT m FROM Music m WHERE m.name LIKE :searchString AND m.isDeleted=false AND m.album.artist.isApproved=1 AND m.album.isPublished=true ORDER BY m.album.yearReleased DESC");
-            q.setParameter("searchString","%"+searchString+"%");
+            q.setParameter("searchString", "%" + searchString + "%");
             List<Music> listOfMusics = q.getResultList();
 
             helper.setListOfAlbums(listOfAlbums);
@@ -151,7 +151,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println(helper.getListOfArtists().size());
             System.out.println(helper.getListOfAlbums().size());
             System.out.println(helper.getListOfMusics().size());
-            
+
             return helper;
         } catch (Exception e) {
             e.printStackTrace();
@@ -374,7 +374,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //    public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, Double price, String lyrics, String credits) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
-
     @Override
     public List<Music> ListAllTracksByAlbumID(Long albumID) {
         System.out.println("MusicManagementBean: ListAllTracksByAlbumID() called");
@@ -396,6 +395,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         ReturnHelper helper = new ReturnHelper();
         try {
             ReturnHelper result = null;
+            result.setResult(false);
             String imageLocation = null;
             String tempImageURL = null;
             Boolean isArtist = null;
@@ -403,7 +403,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
             artist = (Artist) account;
-
+            String text = Double.toString(Math.abs(price));
+            int integerPlaces = text.indexOf('.');
+            int decimalPlaces = text.length() - integerPlaces - 1;
+            if (decimalPlaces > 1) {
+                result.setDescription("Price must be rounded to the nearest 10 cents.");
+                return result;
+            }
             Album album = new Album();
 
             album.setArtist(artist);
@@ -548,6 +554,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             } else {
+                String text = Double.toString(Math.abs(price));
+                int integerPlaces = text.indexOf('.');
+                int decimalPlaces = text.length() - integerPlaces - 1;
+                if (decimalPlaces > 1) {
+                    helper.setDescription("Price must be rounded to the nearest 10 cents.");
+                    helper.setResult(false);
+                    return helper;
+                }
                 album.setName(name);
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
@@ -615,7 +629,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
         }
     }
-    
+
     @Override
     public ReturnHelper editMusicPrice(Long musicID, Double newPrice) {
         System.out.println("MusicManagementBean: editMusicPrice() called");
@@ -627,6 +641,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (isDeleted) {
                 result.setDescription("Price cannot be updated as the music has been deleted.");
             } else {
+                String text = Double.toString(Math.abs(newPrice));
+                int integerPlaces = text.indexOf('.');
+                int decimalPlaces = text.length() - integerPlaces - 1;
+                if (decimalPlaces > 1) {
+                    result.setDescription("Price must be rounded to the nearest 10 cents.");
+                    return result;
+                }
                 music.setPrice(newPrice);
                 em.merge(music);
                 result.setDescription("Price updated");
@@ -651,6 +672,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (isDeleted) {
                 result.setDescription("Price cannot be updated as the music has been deleted.");
             } else {
+                String text = Double.toString(Math.abs(newPrice));
+                int integerPlaces = text.indexOf('.');
+                int decimalPlaces = text.length() - integerPlaces - 1;
+                if (decimalPlaces > 1) {
+                    result.setDescription("Price must be rounded to the nearest 10 cents.");
+                    return result;
+                }
                 album.setPrice(newPrice);
                 em.merge(album);
                 result.setDescription("Price updated");
@@ -663,7 +691,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return result;
     }
-
 
     @Override
     public ReturnHelper publishAlbum(Long albumID) {
@@ -813,7 +840,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID) {
         System.out.println("checkIfMusicBelongsToArtist() called");
         try {
-            Query q = em.createQuery("SELECT e FROM Music e WHERE e.id=:musicID and e.album.artist=:artistID");
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.id=:musicID and e.album.artist.id=:artistID");
             q.setParameter("artistID", artistID);
             q.setParameter("musicID", musicID);
             Music music = (Music) q.getSingleResult();
