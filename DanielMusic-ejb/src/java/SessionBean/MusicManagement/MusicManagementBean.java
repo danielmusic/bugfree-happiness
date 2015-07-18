@@ -148,8 +148,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setListOfMusics(listOfMusics);
 
             System.out.println("search() successful");
-            System.out.println(helper.getListOfAlbums().size());
             System.out.println(helper.getListOfArtists().size());
+            System.out.println(helper.getListOfAlbums().size());
             System.out.println(helper.getListOfMusics().size());
             
             return helper;

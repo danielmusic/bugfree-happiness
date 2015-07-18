@@ -11,6 +11,19 @@
         if (artist == null) {
             out.print("<p class='warning'>Ops. No results found.</p>");
         }
+        String jumpToAlbumID = (String) session.getAttribute("jumpToAlbumID");
+        if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
+System.out.println("INNN");
+    %>
+    <script>
+        window.onload = function() {
+            alert("WYVB");
+            document.getElementById("album_<%=jumpToAlbumID%>").focus();
+        }
+    </script>
+    <%
+            session.removeAttribute("jumpToAlbumID");
+        }
     %>
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/artist-single-bg.jpg)">
         <h2 class="heading-l">Artist <span class="color"><%=artist.getName()%></span></h2>
@@ -97,9 +110,11 @@
                                     String albumArt = album.getImageLocation();
                                     if (albumArt == null || albumArt.isEmpty()) {
                                         albumArt = "/img/cover.png";
+                                    } else {
+                                        albumArt = "http://danielmusictest.storage.googleapis.com/" + albumArt;
                                     }
                             %>
-                            <h2><%=album.getName()%></h2>
+                            <h2 id="album_<%=album.getId()%>"><%=album.getName()%></h2>
                             <p>
                                 <%
                                     if (album.getDescription() != null && !album.getDescription().isEmpty()) {
@@ -130,7 +145,7 @@
                                 %>
                                 <li>
                                     <div class="track-details">
-                                        <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>"
+                                        <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                            data-artist="<%=music.getArtistName()%>"
                                            data-artist_url="http://artist.com/madoff-freak" 
                                            data-artist_target="_self"
@@ -138,13 +153,13 @@
                                            data-shop_target="_blank"
                                            >
                                             <!-- cover -->
-                                            <img class="track-cover" src="http://danielmusictest.storage.googleapis.com/<%=albumArt%>">
+                                            <img class="track-cover" src="<%=albumArt%>">
                                             <!-- Title -->
                                             <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
                                             <!-- Artists -->
                                         </a>
                                         <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
-                                            <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>"
+                                            <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                data-artist="<%=music.getArtistName()%>"
                                                data-artist_url="http://artist.com/madoff-freak" 
                                                data-artist_target="_self"
@@ -197,7 +212,6 @@
         <div class="md-overlay"></div>
         <script>
             function addTrackToCart(trackID) {
-                alert("magic!!!!" + trackID);
                 url = "./MusicManagementController?target=AddTrackToShoppingCart";
                 $.ajax({
                     type: "GET",
@@ -242,6 +256,5 @@
         <script>var polyfilter_scriptpath = '/js/';</script> 
         <script src="js/cssParser.js"></script>
         <script src="js/css-filters-polyfill.js"></script>
-
     </section>
 </section>

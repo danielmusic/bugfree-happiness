@@ -1,5 +1,6 @@
 package Client;
 
+import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.ExploreHelper;
 import EntityManager.ReturnHelper;
@@ -50,6 +51,15 @@ public class MusicController extends HttpServlet {
                 case "GetArtistByID":
                     artist = adminManagementBean.getArtist(Long.parseLong(id));
                     session.setAttribute("artistDetails", artist);
+                    jsObj.put("result", true);
+                    response.getWriter().write(jsObj.toString());
+                    return;
+                case "GetAlbumByID":
+                    Album album = musicManagementBean.getAlbum(Long.parseLong(id));
+                    artist = album.getArtist();
+                    session.setAttribute("artistDetails", artist);
+                    session.setAttribute("jumpToAlbumID", album.getId().toString());
+                    System.out.println(album.getId().toString() + "!!!!!");
                     jsObj.put("result", true);
                     response.getWriter().write(jsObj.toString());
                     return;
