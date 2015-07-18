@@ -10,7 +10,6 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,6 +78,13 @@ public class MusicManagementController extends HttpServlet {
                     if (artist != null && id != null) {
                         session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                         nextPage = "#!/artist/edit_album";
+                    }
+                    break;
+
+                case "ViewSingles":
+                    if (artist != null && id != null) {
+                        session.setAttribute("singles", musicManagementBean.getAlbum(Long.parseLong(id)));
+                        nextPage = "#!/artist/add_singles";
                     }
                     break;
 

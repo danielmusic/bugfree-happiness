@@ -69,7 +69,9 @@
                         </tbody>
                     </table>
                     <button type="button" class="small" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
+                    <%if (!album.getIsPublished()) {%>
                     <button type="button" class="small" onclick="javascript:addTrack()">Add Track</button>
+                    <%}%>
                 </form>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>

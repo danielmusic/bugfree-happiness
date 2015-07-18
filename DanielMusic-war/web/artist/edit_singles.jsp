@@ -80,14 +80,17 @@
                         window.location.href = "#!/artist/albums";
                     }
                 </script>
-
-
+                <%@page import="EntityManager.Album"%>
                 <%@page import="EntityManager.Artist"%>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
+                    Album album = (Album) (session.getAttribute("album"));
+                    String disableFlag = "";
+                    if (album != null && album.getIsPublished()) {
+                        disableFlag = "disabled";
+                    }
                     if (artist != null) {
                 %>
-
                 <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
@@ -114,8 +117,7 @@
 
                         <div class="col-1-3 last" style="margin-bottom: 0px;">
                             <label for="price"><strong>Price</strong> *</label>
-                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required/>
-                            <button type="button" class="small invert">Free</button>
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" placeholder="Enter 0 if free" required/>
                         </div>
                     </div>
 
@@ -156,7 +158,20 @@
 
                     <input type="hidden" value="AddSingles" name="target">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
-                    <button type="submit" class="small invert">Add Singles</button>
+                    <%if (!album.getIsPublished()) {%>
+                    <button type="submit" class="small invert" style="margin-right: 10px;">Save Changes</button>
+                    <button type="button" class="small invert md-trigger" style="margin-right: 10px;" data-modal="modal-delete">Delete Singles</button>
+                    <div class="md-modal md-effect-1" id="modal-delete">
+                        <div class="md-content">
+                            <h3>Are you sure?</h3>
+                            <div style="text-align:center;">
+                                <p>Are you sure?</p>
+                                <button type="button" onclick="javascript:deleteAlbum('<%=album.getId()%>')">Confirm</button>
+                                <button class="md-close" type="button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <%}%>
                     <div class="clear"></div>
                 </form>
                 <%} else {%>

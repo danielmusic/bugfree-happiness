@@ -7,7 +7,7 @@
     if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
-        List<Artist> bands = (List<Artist>) (session.getAttribute("bands"));
+        List<Artist> artists = (List<Artist>) (session.getAttribute("artists"));
 %>
 <!doctype html>
 <html class="fixed">
@@ -73,30 +73,31 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (bands != null && bands.size() > 0) {
-                                                for (int i = 0; i < bands.size(); i++) {
+                                            if (artists != null && artists.size() > 0) {
+                                                for (int i = 0; i < artists.size(); i++) {
+                                                    if (artists.get(i).getIsBand()) {
                                         %>
                                         <tr>        
-                                            <td><%=bands.get(i).getName()%></td>
-                                            <td><%=bands.get(i).getEmail()%></td>
+                                            <td><%=artists.get(i).getName()%></td>
+                                            <td><%=artists.get(i).getEmail()%></td>
                                             <td>
                                                 <%
-                                                    if (!bands.get(i).getIsDisabled()) {
+                                                    if (!artists.get(i).getIsDisabled()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
-                                                    if (bands.get(i).getIsApproved() == 0) {
+                                                    if (artists.get(i).getIsApproved() == 0) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
-                                                    } else if (bands.get(i).getIsApproved() == 1) {
+                                                    } else if (artists.get(i).getIsApproved() == 1) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Approve</span>");
-                                                    } else if (bands.get(i).getIsApproved() == -2) {
+                                                    } else if (artists.get(i).getIsApproved() == -2) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Not approved</span>");
                                                     }
 
-                                                    if (bands.get(i).getEmailIsVerified()) {
+                                                    if (artists.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
                                                         out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not verified</span>");
@@ -104,7 +105,7 @@
                                                 %>
                                             </td>
                                             <td>
-                                                <% if (!bands.get(i).getIsDisabled()) {%>
+                                                <% if (!artists.get(i).getIsDisabled()) {%>
                                                 <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
                                                 <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
@@ -124,7 +125,7 @@
                                                         <footer class="panel-footer">
                                                             <div class="row">
                                                                 <div class="col-md-12 text-right">
-                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=bands.get(i).getId()%>)"  />
+                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=artists.get(i).getId()%>)"  />
                                                                     <button class="btn btn-default modal-dismiss">Cancel</button>
                                                                 </div>
                                                             </div>
@@ -135,6 +136,7 @@
                                             </td>
                                         </tr>
                                         <%
+                                                    }
                                                 }
                                             }
                                         %>
