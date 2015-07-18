@@ -7,7 +7,7 @@
     if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
-        List<Artist> artists = (List<Artist>) (session.getAttribute("artists"));
+        List<Artist> band = (List<Artist>) (session.getAttribute("band"));
 %>
 <!doctype html>
 <html class="fixed">
@@ -19,6 +19,9 @@
         <script>
             function refresh() {
                 window.location.href = "../../AccountManagementController?target=ListAllBand";
+            }
+            function viewArtist(id) {
+                window.location.href = "../../AccountManagementController?target=ListBandbyID&id=" + id;
             }
             function disableAccount(id) {
                 bandManagement.id.value = id;
@@ -73,31 +76,31 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (artists != null && artists.size() > 0) {
-                                                for (int i = 0; i < artists.size(); i++) {
-                                                    if (artists.get(i).getIsBand()) {
+                                            if (band != null && band.size() > 0) {
+                                                for (int i = 0; i < band.size(); i++) {
+                                                    if (band.get(i).getIsBand()) {
                                         %>
                                         <tr>        
-                                            <td><%=artists.get(i).getName()%></td>
-                                            <td><%=artists.get(i).getEmail()%></td>
+                                            <td><%=band.get(i).getName()%></td>
+                                            <td><%=band.get(i).getEmail()%></td>
                                             <td>
                                                 <%
-                                                    if (!artists.get(i).getIsDisabled()) {
+                                                    if (!band.get(i).getIsDisabled()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
-                                                    if (artists.get(i).getIsApproved() == 0) {
+                                                    if (band.get(i).getIsApproved() == 0) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
-                                                    } else if (artists.get(i).getIsApproved() == 1) {
+                                                    } else if (band.get(i).getIsApproved() == 1) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Approve</span>");
-                                                    } else if (artists.get(i).getIsApproved() == -2) {
+                                                    } else if (band.get(i).getIsApproved() == -2) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Not approved</span>");
                                                     }
 
-                                                    if (artists.get(i).getEmailIsVerified()) {
+                                                    if (band.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
                                                         out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not verified</span>");
@@ -105,7 +108,7 @@
                                                 %>
                                             </td>
                                             <td>
-                                                <% if (!artists.get(i).getIsDisabled()) {%>
+                                                <% if (!band.get(i).getIsDisabled()) {%>
                                                 <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
                                                 <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
@@ -125,7 +128,7 @@
                                                         <footer class="panel-footer">
                                                             <div class="row">
                                                                 <div class="col-md-12 text-right">
-                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=artists.get(i).getId()%>)"  />
+                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=band.get(i).getId()%>)"  />
                                                                     <button class="btn btn-default modal-dismiss">Cancel</button>
                                                                 </div>
                                                             </div>
