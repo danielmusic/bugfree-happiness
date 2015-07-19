@@ -438,6 +438,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
             artist = (Artist) account;
+            if (artist.getGenre()==null) {
+                result.setDescription("Update your profile with a genre first before creating albums.");
+                return result;
+            }
             String text = Double.toString(Math.abs(price));
             int integerPlaces = text.indexOf('.');
             int decimalPlaces = text.length() - integerPlaces - 1;
