@@ -394,7 +394,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
-            ReturnHelper result = null;
+            ReturnHelper result = new ReturnHelper();
             result.setResult(false);
             String imageLocation = null;
             String tempImageURL = null;
