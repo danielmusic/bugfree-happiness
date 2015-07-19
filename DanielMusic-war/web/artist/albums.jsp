@@ -17,10 +17,18 @@
             window.location.href = "MusicManagementController?target=ListAlbumByID&id=" + id;
         }
 
-       function editSingles(id) {
-            window.location.href = "MusicManagementController?target=ViewSingles&id=" + id;
+        function viewSingle(id) {
+            window.location.href = "MusicManagementController?target=RetrieveSingle&id=" + id;
         }
-        
+
+        function editSinglePrice(id) {
+            window.location.href = "MusicManagementController?target=RetrieveSingle&source=editSinglePrice&id=" + id;
+        }
+
+        function deleteSingle(id) {
+            window.location.href = "MusicManagementController?target=DeleteAlbum&id=" + id;
+        }
+
         function viewTracks(id) {
             window.location.href = "MusicManagementController?target=ListAllTracksByAlbumID&id=" + id;
         }
@@ -28,7 +36,7 @@
         function publishAlbum(id) {
             window.location.href = "MusicManagementController?source=artist&target=PublishAlbum&id=" + id;
         }
-    </script>
+    </script> 
     <section class="content section">
         <div class="container">
             <article>
@@ -39,11 +47,11 @@
                     if (account != null) {
                         if (!account.getEmailIsVerified()) {
                             out.print("<p class='warning'>You will not be able to todo _____? until you verify your email. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
-                        } else if (artist.getIsApproved()==0) { //new
+                        } else if (artist.getIsApproved() == 0) { //new
                             out.print("<p class='warning'>Your account will be subjected to an approval process when you publish your first album/single. Your profile, albums and tracks will not be searchable on the website until your account is approved.</p>");
-                        } else if (artist.getIsApproved()==-1) { //rejected
+                        } else if (artist.getIsApproved() == -1) { //rejected
                             out.print("<p class='warning'>Your account's published album(s) has been rejected, review your profile, albums and tracks and republish a new album for us to review your account again.</p>");
-                        } else if (artist.getIsApproved()==-2) { //pending
+                        } else if (artist.getIsApproved() == -2) { //pending
                             out.print("<p class='warning'>Your account is pending approval by our administrators, your profile and published albums/tracks will not appear on our website until your account is approved.</p>");
                         }
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));
@@ -100,7 +108,7 @@
                         <thead>
                             <tr>
                                 <th>no</th>
-                                <th>Singles Title</th>
+                                <th>Single Title</th>
                                 <th>Status</th>
                                 <th colspan="2"></th>
                             </tr>
@@ -123,9 +131,23 @@
                                         }
                                     %>
                                 </td>
-                                <td class="actions" style="width: 300px;">
-                                    <a href="javascript:editSingles(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit singles</a>
+                                <td class="actions" style="width: 400px;">
+                                    <a href="javascript:viewSingle(<%=albums.get(i).getId()%>);" class="buy-tickets">View Single</a>
+                                    <a href="javascript:editSinglePrice(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
+
                                     <%if (!albums.get(i).getIsPublished()) {%>
+                                    <a class="md-trigger buy-tickets" data-modal="modal-name">Delete Single</a>
+                                    <div class="md-modal md-effect-1" id="modal-delete">
+                                        <div class="md-content">
+                                            <h3>Are you sure?</h3>
+                                            <div style="text-align:center;">
+                                                <p>Are you sure?</p>
+                                                <button type="button" onclick="javascript:deleteSingle('<%=albums.get(i).getId()%>')">Confirm</button>
+                                                <button class="md-close" type="button">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
                                     <%}%>
                                 </td>
@@ -139,12 +161,12 @@
                     </table>
 
                     <button type="button" class="small" onclick="javascript:addAlbum()" style="margin-right: 10px;">Add Album</button>
-                    <button type="button" class="small" onclick="javascript:addSingles()">Add Singles</button>
+                    <button type="button" class="small" onclick="javascript:addSingles()">Add Single</button>
                 </form>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
-        </div>
+       </div>
     </section>
 </section>

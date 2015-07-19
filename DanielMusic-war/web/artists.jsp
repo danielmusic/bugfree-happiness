@@ -13,10 +13,10 @@
         }
         String jumpToAlbumID = (String) session.getAttribute("jumpToAlbumID");
         if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
-System.out.println("INNN");
+            System.out.println("INNN");
     %>
     <script>
-        window.onload = function() {
+        window.onload = function () {
             alert("WYVB");
             document.getElementById("album_<%=jumpToAlbumID%>").focus();
         }
@@ -143,22 +143,12 @@ System.out.println("INNN");
                                     for (int j = 0; j < musics.size(); j++) {
                                         Music music = musics.get(j);
                                 %>
-                                <li>
-                                    <div class="track-details">
-                                        <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                           data-artist="<%=music.getArtistName()%>"
-                                           data-artist_url="http://artist.com/madoff-freak" 
-                                           data-artist_target="_self"
-                                           data-shop_url="#!/cart" 
-                                           data-shop_target="_blank"
-                                           >
-                                            <!-- cover -->
-                                            <img class="track-cover" src="<%=albumArt%>">
-                                            <!-- Title -->
-                                            <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
-                                            <!-- Artists -->
-                                        </a>
-                                        <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
+
+
+                                <div class="toggle">
+                                    <li>
+
+                                        <div class="track-details">
                                             <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                data-artist="<%=music.getArtistName()%>"
                                                data-artist_url="http://artist.com/madoff-freak" 
@@ -166,36 +156,50 @@ System.out.println("INNN");
                                                data-shop_url="#!/cart" 
                                                data-shop_target="_blank"
                                                >
-                                                <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                                <!-- cover -->
+                                                <img class="track-cover" src="<%=albumArt%>">
+                                                <!-- Title -->
+                                                <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
+                                                <!-- Artists -->
                                             </a>
-
-                                            <%if (music.getLyrics() != null) {%>
-                                            <!--<a class="md-trigger" data-modal="modal-lyrics"><i class="icon icon-eye"></i></a>-->
-                                            <div class="md-modal md-effect-1" id="modal-lyrics">
-                                                <div class="md-content">
-                                                    <h3>Lyrics</h3>
-                                                    <p>
-                                                        <%
-                                                            String repl = music.getLyrics().replaceAll("\\r", "<br>");
-                                                            out.print(repl);
-                                                        %>
-                                                    </p>
-                                                </div>
+                                            <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
+                                                <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                   data-artist="<%=music.getArtistName()%>"
+                                                   data-artist_url="http://artist.com/madoff-freak" 
+                                                   data-artist_target="_self"
+                                                   data-shop_url="#!/cart" 
+                                                   data-shop_target="_blank"
+                                                   >
+                                                    <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                                </a>
+                                                <i style="cursor: pointer;" class="icon icon-menu2 toggle-title"><span style='display: none;'></span></i>
+                                                <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
+                                                    <%
+                                                        if (music.getPrice() == 0.0) {
+                                                            out.print("Free");
+                                                        } else {
+                                                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                                            out.print(formatter.format(music.getPrice()));
+                                                        }
+                                                    %>
                                             </div>
-                                            <%}%>
-
-                                            <a onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
-                                                <%
-                                                    if (music.getPrice() == 0.0) {
-                                                        out.print("Free");
-                                                    } else {
-                                                        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                                                        out.print(formatter.format(music.getPrice()));
-                                                    }
-                                                %>
                                         </div>
+
+                                    </li>
+
+                                    <div class="toggle-content">
+                                        <%
+                                            if (music.getLyrics() != null) {
+                                                String repl = music.getLyrics().replaceAll("\\r", "<br>");
+                                                out.print(repl);
+                                            }
+                                        %>
+
                                     </div>
-                                </li>
+
+                                </div>
+
+
                                 <%}%>                                    
                             </ul>
                             <%}%>

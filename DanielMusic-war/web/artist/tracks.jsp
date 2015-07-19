@@ -12,8 +12,12 @@
                         window.location.href = "#!/artist/add_track";
                     }
 
-                    function editTrack(id) {
+                    function viewTrack(id) {
                         window.location.href = "MusicManagementController?target=ListTrackByID&id=" + id;
+                    }
+
+                    function editTrackPrice(id) {
+                        window.location.href = "MusicManagementController?target=ListTrackByID&source=editMusicPrice&id=" + id;
                     }
 
                     function back() {
@@ -58,8 +62,22 @@
                                 <td class="table-name"><%=tracks.get(i).getName()%></td>   
                                 <td class="table-date"><%=tracks.get(i).getNumDownloaded()%></td>
                                 <td class="table-date"><%=tracks.get(i).getNumPurchase()%></td>            
-                                <td class="actions" style="width: 150px;">
-                                    <a href="javascript:editTrack(<%=tracks.get(i).getId()%>);" class="buy-tickets">Edit track</a>
+                                <td class="actions" style="width: 350px;">
+                                    <a href="javascript:viewTrack(<%=tracks.get(i).getId()%>);" class="buy-tickets">View Track</a>
+                                    <a href="javascript:editTrackPrice(<%=tracks.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
+                                    <%if (!album.getIsPublished()) {%>
+                                    <a class="md-trigger buy-tickets" data-modal="modal-name">Delete Track</a>
+                                    <div class="md-modal md-effect-1" id="modal-delete">
+                                        <div class="md-content">
+                                            <h3>Are you sure?</h3>
+                                            <div style="text-align:center;">
+                                                <p>Are you sure?</p>
+                                                <button type="button" onclick="javascript:deleteSingle('<%=tracks.get(i).getId()%>')">Confirm</button>
+                                                <button class="md-close" type="button">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%}%>
                                 </td>
                             </tr>
                             <%

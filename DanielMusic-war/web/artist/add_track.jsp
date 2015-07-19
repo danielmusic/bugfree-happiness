@@ -91,7 +91,7 @@
 
                         <div class="col-1-2 last">
                             <label for="price"><strong>Price</strong> *</label>
-                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" placeholder="Enter 0 if free" required/>
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.1" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.#) are optional" placeholder="Enter 0 if free" required/>
                         </div>
                     </div>
 
