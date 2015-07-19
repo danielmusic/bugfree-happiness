@@ -10,6 +10,9 @@ import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.Mp3File;
 import it.sauronsoftware.jave.AudioAttributes;
 import java.io.File;
 import it.sauronsoftware.jave.Encoder;
@@ -249,16 +252,48 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
             audioInputStream.close();
 
+            //Create the 2 mp3 from the wav file
             File newFile128 = new File(tempMusicURL + "_128.mp3");
             File newFile320 = new File(tempMusicURL + "_320.mp3");
             encodeToMP3(file, newFile128, 128);
             encodeToMP3(file, newFile320, 320);
 
+            //To the tagging for the mp3 files
+            Mp3File mp3file = new Mp3File(tempMusicURL + "_128.mp3");
+            ID3v2 id3v2Tag;
+            if (mp3file.hasId3v2Tag()) {
+                id3v2Tag = mp3file.getId3v2Tag();
+            } else {
+                id3v2Tag = new ID3v24Tag();
+                mp3file.setId3v2Tag(id3v2Tag);
+            }
+            id3v2Tag.setTrack(trackNumber + "");
+            id3v2Tag.setArtist(album.getArtistName());
+            id3v2Tag.setTitle(name);
+            id3v2Tag.setAlbum(album.getName());
+            id3v2Tag.setYear(yearReleased + "");
+            mp3file.save(tempMusicURL + "_128.mp3");
+            //repeat for 320
+            mp3file = new Mp3File(tempMusicURL + "_320.mp3");
+            if (mp3file.hasId3v2Tag()) {
+                id3v2Tag = mp3file.getId3v2Tag();
+            } else {
+                id3v2Tag = new ID3v24Tag();
+                mp3file.setId3v2Tag(id3v2Tag);
+            }
+            id3v2Tag.setTrack(trackNumber + "");
+            id3v2Tag.setArtist(album.getArtistName());
+            id3v2Tag.setTitle(name);
+            id3v2Tag.setAlbum(album.getName());
+            id3v2Tag.setYear(yearReleased + "");
+            mp3file.save(tempMusicURL + "_320.mp3");
+            
             //create music entity
             Music music = new Music();
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
+            listOfGenres.add(album.getArtist().getGenre());
             music.setLyrics(lyrics);
             music.setListOfGenres(listOfGenres);
             music.setName(name);
