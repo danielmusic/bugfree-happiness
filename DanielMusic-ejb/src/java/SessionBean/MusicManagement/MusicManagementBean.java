@@ -490,17 +490,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (imagePart != null) {
                 if (imagePart.getSize() > 5000000) {
                     em.remove(album);
-                    helper.setDescription("Image failed to upload, please check the file size is less than 5MB and create album again.");
+                    helper.setDescription("Album art cannot be larger than 5MB");
                     helper.setResult(false);
                     return helper;
                 }
                 String fileName = imagePart.getSubmittedFileName();
-                tempImageURL = "temp/albumart_" + fileName + cibl.generateUUID();
-                System.out.println("file name is " + fileName);
+                tempImageURL = "temp/albumart_" + cibl.generateUUID() + "_" + fileName;
                 InputStream fileInputStream = imagePart.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
 
-                System.out.println("writing to... " + tempImageURL);
                 int nextByte;
                 while ((nextByte = fileInputStream.read()) != -1) {
                     fileOutputStream.write(nextByte);
@@ -511,7 +509,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
 
                 File file = new File(tempImageURL);
-                System.out.println("deleting file... " + file.delete());
+                file.delete();
 
                 if ((result != null)) {
                     if (result.getResult()) {
@@ -546,7 +544,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public Album getAlbum(Long albumID) {
         System.out.println("getAlbum() called.");
         try {
-            Album album = em.getReference(Album.class, albumID);
+            Query q = em.createQuery("SELECT E FROM Album E WHERE E.id=:albumID");
+            q.setParameter("albumID", albumID);
+            Album album = (Album) q.getSingleResult();
             System.out.println("getAlbum() called successfully");
             return album;
         } catch (Exception e) {
@@ -638,12 +638,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     String imageLocation = null;
                     String tempImageURL = null;
                     String fileName = imagePart.getSubmittedFileName();
-                    tempImageURL = "temp/" + fileName + cibl.generateUUID();
-                    System.out.println("file name is " + fileName);
+                    tempImageURL = "temp/" + cibl.generateUUID() + "_" + fileName;
                     InputStream fileInputStream = imagePart.getInputStream();
                     OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
 
-                    System.out.println("writing to... " + tempImageURL);
                     int nextByte;
                     while ((nextByte = fileInputStream.read()) != -1) {
                         fileOutputStream.write(nextByte);
@@ -663,16 +661,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                            return helper;
 //                        }
 //                    }
-                    //check whether album belongs to artist/band
-                    if (album.getArtist() != null) {
-                        imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
-                    } else {
-                        imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
-                    }
-
+                    imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
+                    
                     File file = new File(tempImageURL);
-
+                    file.delete();
                     if (result.getResult()) {
                         album.setImageLocation(imageLocation);
                     } else {
