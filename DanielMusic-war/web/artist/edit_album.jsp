@@ -61,6 +61,7 @@
                 <%@page import="EntityManager.Album"%>
                 <%@page import="java.util.List"%>
                 <%@page import="EntityManager.Artist"%>
+                <%@page import="java.util.Date"%>
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
@@ -105,7 +106,7 @@
                     </div>
 
                     <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%>
-                    <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation()%>">
+                    <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation()+"?"+ new Date()%>">
                     <%}%>
 
                     <div class="row clearfix">
