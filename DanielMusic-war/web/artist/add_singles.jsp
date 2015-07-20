@@ -80,12 +80,13 @@
                         window.location.href = "#!/artist/albums";
                     }
                 </script>
-
-
+                <%@page import="EntityManager.Genre"%>
+                <%@page import="java.util.List"%>
                 <%@page import="EntityManager.Artist"%>
                 <%
+                    List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
-                    if (artist != null) {
+                    if (artist != null && genres != null) {
                 %>
 
                 <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
@@ -119,7 +120,20 @@
                     </div>
 
                     <div class="row clearfix">
-                        <div class="col-1-1">
+                        <div class="col-1-2">
+                            <label for="genre"><strong>Genre</strong> *</label>
+                            <select name="genre" id="genre" style="width: 100%; height:40px;" required>
+                                <option value="">Select</option>
+                                <%
+                                        for (int i = 0; i < genres.size(); i++) {
+                                            out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
+                                        }
+                                    }
+                                %>
+                            </select>
+                        </div>
+
+                        <div class="col-1-2 last">
                             <label for="picture"><strong>Artwork</strong> </label>
                             <input type="file" id="picture" name="picture">
                         </div>
@@ -158,7 +172,11 @@
                     <button type="submit" class="small invert">Add Singles</button>
                     <div class="clear"></div>
                 </form>
-                <%} else {%>
+                <%}
+
+                    
+                    
+                else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
