@@ -125,6 +125,14 @@ public class ClientAccountManagementController extends HttpServlet {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
                     }
 
+                    if (source.equals("BandSignup")) {
+                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, true);
+                    } else if (source.equals("ArtistSignup")) {
+                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
+                    } else if (source.equals("FanSignup")) {
+                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, false);
+                    }
+
                     if (returnHelper.getResult()) {
                         session.setAttribute("goodMsg", returnHelper.getDescription());
                     }
