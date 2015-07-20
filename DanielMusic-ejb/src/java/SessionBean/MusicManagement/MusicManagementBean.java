@@ -230,7 +230,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
             File file = new File(tempMusicURL);
             if (file.length() / 1024 / 1024 > 100) {
-                helper.setDescription("File size is over 100mb and cannot be uploaded");
+                helper.setDescription("File size is over 100MB and can not be accepted by our system");
                 file.delete();
                 return helper;
             }
@@ -448,7 +448,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price) {
+    public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, Long genreID, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price) {
         System.out.println("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -465,6 +465,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 result.setDescription("Update your profile with a genre first before creating albums.");
                 return result;
             }
+            Genre genre = em.getReference(Genre.class, genreID);
             String text = Double.toString(Math.abs(price));
             int integerPlaces = text.indexOf('.');
             int decimalPlaces = text.length() - integerPlaces - 1;
@@ -478,6 +479,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             album.setIsSingle(isSingle);
             album.setDescription(description);
             album.setName(name);
+            album.setGenreName(genre.getName());
             album.setArtistName(account.getName());
             album.setYearReleased(yearReleased);
             album.setCredits(credits);
@@ -590,7 +592,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, String credits, Double price) {
+    public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, Long genreID, String description, Integer yearReleased, String credits, Double price) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -620,6 +622,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             } else {
+                Genre genre = em.getReference(Genre.class, genreID);
                 String text = Double.toString(Math.abs(price));
                 int integerPlaces = text.indexOf('.');
                 int decimalPlaces = text.length() - integerPlaces - 1;
@@ -629,6 +632,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return helper;
                 }
                 album.setName(name);
+                album.setGenreName(genre.getName());
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
                 album.setCredits(credits);
@@ -692,72 +696,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setDescription("Error while editing album, please try again.");
             helper.setResult(false);
             return helper;
-        }
-    }
-
-    @Override
-    public ReturnHelper editPublishedAlbum(Long albumID, Part imagePart, String description, String credits, Double price) {
-        System.out.println("MusicManagementBean: editAlbumPrice() called");
-        ReturnHelper result = new ReturnHelper();
-        result.setResult(false);
-        try {
-            if (imagePart.getSize() < 5000000) {
-                result.setDescription("Album art cannot be larger than 5MB");
-                result.setResult(false);
-                return result;
-            }
-            result = editAlbumPrice(albumID, price);
-            if (!result.getResult()) {
-                return result;
-            }
-            Query q = em.createQuery("SELECT E FROM Album E where E.id=:id");
-            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-            q.setParameter("id", albumID);
-            Album album = (Album) q.getSingleResult();
-            album.setDescription(description);
-            album.setCredits(credits);
-
-            if (imagePart != null) {
-                String imageLocation = null;
-                String tempImageURL = null;
-                String fileName = imagePart.getSubmittedFileName();
-                tempImageURL = "temp/" + fileName + cibl.generateUUID();
-                InputStream fileInputStream = imagePart.getInputStream();
-                OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
-
-                int nextByte;
-                while ((nextByte = fileInputStream.read()) != -1) {
-                    fileOutputStream.write(nextByte);
-                }
-                fileOutputStream.close();
-                fileInputStream.close();
-
-                //check whether album belongs to artist/band
-                if (album.getArtist() != null) {
-                    imageLocation = "image/album/" + album.getId() + "/albumart/" + album.getName() + ".jpg";
-                } else {
-                    imageLocation = "image/album/" + album.getId() + "/albumart/" + album.getName() + ".jpg";
-                }
-
-                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
-                File file = new File(tempImageURL);
-
-                if (result.getResult()) {
-                    album.setImageLocation(imageLocation);
-                } else {
-                    result.setDescription("Error while editing album, please try again.");
-                    result.setResult(false);
-                    return result;
-                }
-            }
-            em.merge(album);
-            result.setDescription("Album details have been updated successfully.");
-            result.setResult(true);
-            return result;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            result.setDescription("Internal server error");
-            return result;
         }
     }
 

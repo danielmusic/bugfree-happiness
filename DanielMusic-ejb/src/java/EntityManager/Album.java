@@ -1,7 +1,6 @@
 package EntityManager;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Album implements Serializable {
@@ -35,6 +32,8 @@ public class Album implements Serializable {
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Music> listOfMusics;
     private Long numPurchase;
+    @Lob
+    private String genreName;
     @Lob
     private String credits;
     private Double price;
@@ -147,6 +146,14 @@ public class Album implements Serializable {
 
     public void setYearReleased(int yearReleased) {
         this.yearReleased = yearReleased;
+    }
+
+    public String getGenreName() {
+        return genreName;
+    }
+
+    public void setGenreName(String genreName) {
+        this.genreName = genreName;
     }
 
     public Long getId() {
