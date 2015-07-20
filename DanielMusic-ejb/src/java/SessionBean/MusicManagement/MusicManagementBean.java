@@ -613,7 +613,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setDescription("Album has been published and cannot be edited.");
                 helper.setResult(false);
                 return helper;
-            } else if (imagePart.getSize() < 5000000) {
+            } else if (imagePart.getSize() > 5000000) {
                 helper.setDescription("Album art cannot be larger than 5MB");
                 helper.setResult(false);
                 return helper;
