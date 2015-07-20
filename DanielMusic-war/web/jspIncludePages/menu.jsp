@@ -133,7 +133,7 @@
                     <%
                         Account account = (Account) (session.getAttribute("artist"));
                         Artist artist = (Artist) (session.getAttribute("artist"));
-                        Member fan = (Member) (session.getAttribute("fan"));
+                        Member fan = (Member) (session.getAttribute("member"));
 
                         if (artist != null) {
                     %>
@@ -158,7 +158,16 @@
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
                     </li>
                     <%} else if (fan != null) {%>
-
+                    <li>
+                        <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>
+                    </li>
+                    <li>
+                        <a href=""></a>
+                        <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">transaction history</a>
+                    </li> 
+                    <li>
+                        <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
+                    </li>
                     <%} else {%>
                     <li>
                         <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>

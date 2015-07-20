@@ -1,17 +1,30 @@
-<%-- 
-    Document   : profile
-    Created on : May 18, 2015, 11:37:30 PM
-    Author     : darius
---%>
+<!-- ############################# Ajax Page Container ############################# -->
+<section id="page" data-title="Profile Page">
+    <%@page import="EntityManager.Genre"%>
+    <%@page import="java.util.List"%>
+    <%@page import="EntityManager.Member"%>
+    <%@page import="EntityManager.Account"%>
+    <%@page import="java.text.SimpleDateFormat"%>
+    <section class="content section">
+        <div class="container">
+            <article>
+                <%
+                    List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
+                    Account account = (Account) session.getAttribute("account");
+                    Member member = (Member) (session.getAttribute("member"));
+                    if (account != null && member != null) {
+                        if (!account.getEmailIsVerified()) {
+                            out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
+                        }
+                %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+                <p>Transaction history write here</p>
+           
+
+                <%} else {%>
+                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+                <%}%>
+            </article>
+        </div>
+    </section>
+</section>
