@@ -461,10 +461,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
             artist = (Artist) account;
-            if (artist.getGenre() == null) {
-                result.setDescription("Update your profile with a genre first before creating albums.");
-                return result;
-            }
             Genre genre = em.getReference(Genre.class, genreID);
             String text = Double.toString(Math.abs(price));
             int integerPlaces = text.indexOf('.');
@@ -479,7 +475,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             album.setIsSingle(isSingle);
             album.setDescription(description);
             album.setName(name);
-            album.setGenreName(genre.getName());
+            album.setGenreName(album.getGenreName());
             album.setArtistName(account.getName());
             album.setYearReleased(yearReleased);
             album.setCredits(credits);
