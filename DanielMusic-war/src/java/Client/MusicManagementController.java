@@ -83,7 +83,11 @@ public class MusicManagementController extends HttpServlet {
 
                 case "ViewSingles":
                     if (artist != null && id != null) {
-                        session.setAttribute("singles", musicManagementBean.getAlbum(Long.parseLong(id)));
+                        album = musicManagementBean.getAlbum(Long.parseLong(id));
+                        session.setAttribute("singles", album);
+                        session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false));
+                        session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false));
+                        session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false));
                         nextPage = "#!/artist/add_singles";
                     }
                     break;
@@ -91,7 +95,6 @@ public class MusicManagementController extends HttpServlet {
                 case "AddAlbum":
                     if (artist != null && yearReleased != null && price != null) {
                         Part picture = request.getPart("picture");
-
                         if (picture.getSize() == 0) {
                             picture = null;
                         }
