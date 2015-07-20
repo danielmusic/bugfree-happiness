@@ -546,6 +546,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         try {
             Query q = em.createQuery("SELECT E FROM Album E WHERE E.id=:albumID");
             q.setParameter("albumID", albumID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             Album album = (Album) q.getSingleResult();
             System.out.println("getAlbum() called successfully");
             return album;

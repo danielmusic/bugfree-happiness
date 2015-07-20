@@ -193,8 +193,8 @@
                                                 String repl = music.getLyrics().replaceAll("\\r", "<br>");
                                                 out.print(repl);
                                             }
-                                        %>
-
+                                        %> 
+                                       <br/><br/><a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=<%=music.getId()%>','_blank','width=600,height=760')">Open in new window</a>
                                     </div>
 
                                 </div>

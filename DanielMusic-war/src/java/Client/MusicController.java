@@ -3,6 +3,7 @@ package Client;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.ExploreHelper;
+import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
@@ -69,6 +70,12 @@ public class MusicController extends HttpServlet {
                     session.setAttribute("searchResult", result);
                     jsObj.put("result", true);
                     response.getWriter().write(jsObj.toString());
+                    return;
+                case "Lyrics":
+                    Long musicID = Long.parseLong(request.getParameter("id"));
+                    Music music = musicManagementBean.getMusic(musicID);
+                    session.setAttribute("musicLyrics", music);
+                    response.sendRedirect("#!/lyrics");
                     return;
             }
         } catch (Exception ex) {
