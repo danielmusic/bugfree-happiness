@@ -11,7 +11,7 @@ import EntityManager.SearchHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.Mp3File;
 import it.sauronsoftware.jave.AudioAttributes;
 import java.io.File;
@@ -206,7 +206,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
             if (name == null || name.isEmpty()) {
-                helper.setDescription("Music name cannot be empty!");
+                helper.setDescription("Music name cannot be empty.");
                 return helper;
             }
 
@@ -214,11 +214,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //Don't take file extension for the filename
             fileName = removeExtension(fileName);
             String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_" + fileName + ".wav";
-            System.out.println("file name is " + fileName);
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
 
-            System.out.println("writing to... " + tempMusicURL);
             int nextByte;
             while ((nextByte = fileInputStream.read()) != -1) {
                 fileOutputStream.write(nextByte);
@@ -227,6 +225,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             fileInputStream.close();
 
             File file = new File(tempMusicURL);
+            if (file.length()/1024/1024 > 100) {
+                helper.setDescription("File size is over 100mb and cannot be uploaded");
+                file.delete();
+                return helper;
+            }
 
             //Check if the file meets bitrate requirements
             Encoder encoder = new Encoder();
@@ -262,32 +265,30 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Mp3File mp3file = new Mp3File(tempMusicURL + "_128.mp3");
             ID3v2 id3v2Tag;
             if (mp3file.hasId3v2Tag()) {
-                id3v2Tag = mp3file.getId3v2Tag();
-            } else {
-                id3v2Tag = new ID3v24Tag();
-                mp3file.setId3v2Tag(id3v2Tag);
+                mp3file.removeId3v2Tag();
             }
+            id3v2Tag = new ID3v23Tag();
+            mp3file.setId3v2Tag(id3v2Tag);
             id3v2Tag.setTrack(trackNumber + "");
             id3v2Tag.setArtist(album.getArtistName());
             id3v2Tag.setTitle(name);
             id3v2Tag.setAlbum(album.getName());
             id3v2Tag.setYear(yearReleased + "");
-            mp3file.save(tempMusicURL + "_128.mp3");
+            mp3file.save(tempMusicURL + "_128tagged.mp3");
             //repeat for 320
             mp3file = new Mp3File(tempMusicURL + "_320.mp3");
             if (mp3file.hasId3v2Tag()) {
-                id3v2Tag = mp3file.getId3v2Tag();
-            } else {
-                id3v2Tag = new ID3v24Tag();
-                mp3file.setId3v2Tag(id3v2Tag);
+                mp3file.removeId3v2Tag();
             }
+            id3v2Tag = new ID3v23Tag();
+            mp3file.setId3v2Tag(id3v2Tag);
             id3v2Tag.setTrack(trackNumber + "");
             id3v2Tag.setArtist(album.getArtistName());
             id3v2Tag.setTitle(name);
             id3v2Tag.setAlbum(album.getName());
             id3v2Tag.setYear(yearReleased + "");
-            mp3file.save(tempMusicURL + "_320.mp3");
-            
+            mp3file.save(tempMusicURL + "_320tagged.mp3");
+
             //create music entity
             Music music = new Music();
             music.setAlbum(album);
@@ -316,9 +317,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocation320(musicURL320);
             music.setFileLocationWAV(musicURLwav);
 
-            //end create music
-            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128.mp3", false, true);
-            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "_320.mp3", false, false);
+            //upload music to storage
+            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128tagged.mp3", false, true);
+            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "_320tagged.mp3", false, false);
             ReturnHelper result3 = cibl.uploadFileToGoogleCloudStorage(musicURLwav, tempMusicURL, false, false);
 
             if (result1.getResult() && result2.getResult() && result3.getResult()) {
@@ -330,9 +331,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 em.remove(music);
             }
 
-            System.out.println("deleting file... " + file.delete());
-            System.out.println("deleting file newFile128... " + newFile128.delete());
-            System.out.println("deleting file newFile320... " + newFile320.delete());
+            //Delete away the used files
+            file.delete();
+            newFile128.delete();
+            newFile320.delete();
+            File newFile128tagged = new File(tempMusicURL + "_128tagged.mp3");
+            File newFile320tagged = new File(tempMusicURL + "_320tagged.mp3");
+            newFile128tagged.delete();
+            newFile320tagged.delete();
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
@@ -438,7 +444,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
             artist = (Artist) account;
-            if (artist.getGenre()==null) {
+            if (artist.getGenre() == null) {
                 result.setDescription("Update your profile with a genre first before creating albums.");
                 return result;
             }
