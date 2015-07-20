@@ -35,6 +35,10 @@ import javax.servlet.http.Part;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
@@ -225,7 +229,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             fileInputStream.close();
 
             File file = new File(tempMusicURL);
-            if (file.length()/1024/1024 > 100) {
+            if (file.length() / 1024 / 1024 > 100) {
                 helper.setDescription("File size is over 100mb and cannot be uploaded");
                 file.delete();
                 return helper;
@@ -239,9 +243,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             System.out.println("F:" + multimediaInfo.getFormat());
             if (!multimediaInfo.getFormat().equals("wav")) {
                 helper.setDescription("File uploaded does not appear to be a proper wav format.");
+                file.delete();
                 return helper;
             } else if (multimediaInfo.getAudio().getSamplingRate() < 44100) {
                 helper.setDescription("File uploaded does not meet the minimum sampling rate of at least 44.1kHz ");
+                file.delete();
                 return helper;
             }
             //check if the music >10mins, if more than 10mins return ReturnHelper
@@ -251,6 +257,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             double durationInSeconds = (frames + 0.0) / format.getFrameRate();
             if (durationInSeconds > 600) {
                 helper.setDescription("The track duration cannot be more than 10mins, please upload a shorter duration.");
+                file.delete();
                 return helper;
             }
             audioInputStream.close();
@@ -262,6 +269,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             encodeToMP3(file, newFile320, 320);
 
             //To the tagging for the mp3 files
+//            AudioFile f = AudioFileIO.read(file);
+////            AudioFileIO test = new AudioFileIO();
+////            test.deleteTag(f);
+//            Tag tag = f.getTag();
+//            tag.setField(FieldKey.TRACK, trackNumber + "");
+//            tag.setField(FieldKey.ARTIST, album.getArtistName());
+//            tag.setField(FieldKey.TITLE, name + "");
+//            tag.setField(FieldKey.ALBUM, album.getName() + "");
+//            tag.setField(FieldKey.YEAR, yearReleased + "");
+//            f.commit();
             Mp3File mp3file = new Mp3File(tempMusicURL + "_128.mp3");
             ID3v2 id3v2Tag;
             if (mp3file.hasId3v2Tag()) {
