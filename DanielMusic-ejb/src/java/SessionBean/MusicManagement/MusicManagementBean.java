@@ -615,6 +615,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setDescription("Album has been published and cannot be edited.");
                 helper.setResult(false);
                 return helper;
+            } else if (imagePart.getSize() < 5000000) {
+                helper.setDescription("Album art cannot be larger than 5MB");
+                helper.setResult(false);
+                return helper;
             } else {
                 String text = Double.toString(Math.abs(price));
                 int integerPlaces = text.indexOf('.');
@@ -630,7 +634,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 album.setCredits(credits);
                 album.setPrice(price);
 
-                if (imagePart != null && imagePart.getSize() < 5000000) {
+                if (imagePart != null) {
                     String imageLocation = null;
                     String tempImageURL = null;
                     String fileName = imagePart.getSubmittedFileName();
@@ -668,7 +672,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
                     result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
                     File file = new File(tempImageURL);
-                    System.out.println("deleting file... " + file.delete());
 
                     if (result.getResult()) {
                         album.setImageLocation(imageLocation);
@@ -678,7 +681,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         return helper;
                     }
                 }
-
+                em.merge(album);
                 helper.setDescription("Album details have been updated successfully.");
                 helper.setResult(true);
                 return helper;
@@ -689,6 +692,72 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setDescription("Error while editing album, please try again.");
             helper.setResult(false);
             return helper;
+        }
+    }
+
+    @Override
+    public ReturnHelper editPublishedAlbum(Long albumID, Part imagePart, String description, String credits, Double price) {
+        System.out.println("MusicManagementBean: editAlbumPrice() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            if (imagePart.getSize() < 5000000) {
+                result.setDescription("Album art cannot be larger than 5MB");
+                result.setResult(false);
+                return result;
+            }
+            result = editAlbumPrice(albumID, price);
+            if (!result.getResult()) {
+                return result;
+            }
+            Query q = em.createQuery("SELECT E FROM Album E where E.id=:id");
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            q.setParameter("id", albumID);
+            Album album = (Album) q.getSingleResult();
+            album.setDescription(description);
+            album.setCredits(credits);
+
+            if (imagePart != null) {
+                String imageLocation = null;
+                String tempImageURL = null;
+                String fileName = imagePart.getSubmittedFileName();
+                tempImageURL = "temp/" + fileName + cibl.generateUUID();
+                InputStream fileInputStream = imagePart.getInputStream();
+                OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
+
+                int nextByte;
+                while ((nextByte = fileInputStream.read()) != -1) {
+                    fileOutputStream.write(nextByte);
+                }
+                fileOutputStream.close();
+                fileInputStream.close();
+
+                //check whether album belongs to artist/band
+                if (album.getArtist() != null) {
+                    imageLocation = "image/album/" + album.getId() + "/albumart/" + album.getName() + ".jpg";
+                } else {
+                    imageLocation = "image/album/" + album.getId() + "/albumart/" + album.getName() + ".jpg";
+                }
+
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
+                File file = new File(tempImageURL);
+
+                if (result.getResult()) {
+                    album.setImageLocation(imageLocation);
+                } else {
+                    result.setDescription("Error while editing album, please try again.");
+                    result.setResult(false);
+                    return result;
+                }
+            }
+            em.merge(album);
+            result.setDescription("Album details have been updated successfully.");
+            result.setResult(true);
+            return result;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.setDescription("Internal server error");
+            return result;
         }
     }
 

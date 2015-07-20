@@ -86,6 +86,7 @@ public interface MusicManagementBeanLocal {
     
     public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, String description, Integer yearReleased, String credits, Double price);
+    public ReturnHelper editPublishedAlbum(Long albumID, Part imagePart, String description, String credits, Double price);
     public ReturnHelper publishAlbum(Long albumID);
     public ReturnHelper deleteAlbum(Long albumID);
     
