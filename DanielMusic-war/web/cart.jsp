@@ -83,33 +83,11 @@
                             <%
                                 }
                             %>
-                            <!--tr>
-                                <td>
-                                    <input type="checkbox" name="delete" value="music123" />
-                                </td>
-                                <td class="table-name">
-                                    Herarts
-                                </td>
-                                <td class="table-name">
-                                    Legend of the tales
-                                </td>
-                                <td>
-                                    Lee Siao Long
-                                </td>
-                                <td>
-                                    $5.00
-                                </td>
-                                <td class="actions">
-                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
-                                </td>
-                            </tr-->
                         </tbody>
                     </table>
                     <hr class="divider2" style="margin-right: 0px;">
-
                     <%
                         }
-
                         Set<Album> setOfAlbums = shoppingCart.getListOfAlbums();
                         if (setOfAlbums != null) {
                             List<Album> listOfAlbums = new ArrayList();
@@ -153,23 +131,6 @@
                                 }
 
                             %>
-                            <!--tr>
-                                <td>
-                                    <input type="checkbox" name="delete" value="music123" />
-                                </td>
-                                <td class="table-date">
-                                    Legend of the tales
-                                </td>
-                                <td>
-                                    Lee Siao Long
-                                </td>
-                                <td>
-                                    $5.00
-                                </td>
-                                <td class="actions">
-                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
-                                </td>
-                            </tr-->
                         </tbody>
                     </table>
                     <hr class="divider2" style="margin-right: 0px;">
@@ -179,9 +140,9 @@
                 <p style="float: right;"><strong>Subtotal: $99</strong> </p>
                 <br><br>
                 <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
-                <%}%>
+                <%} else {%>
                 <h2>The cart is empty.</h2>
-
+                <%}%>
                 <div class="md-modal md-effect-1" id="checkout-confirm">
                     <div class="md-content">
                         <h3>Checkout Cart</h3>

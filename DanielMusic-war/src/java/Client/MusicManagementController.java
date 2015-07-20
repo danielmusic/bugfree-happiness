@@ -55,6 +55,7 @@ public class MusicManagementController extends HttpServlet {
         String genreID = request.getParameter("genre");
         Long albumID, trackID;
         ShoppingCart shoppingCart = null;
+        int deleteCounter;
 
         int intTrackNumber = 0;
         if (trackNumber != null && !trackNumber.isEmpty()) {
@@ -339,7 +340,7 @@ public class MusicManagementController extends HttpServlet {
                     account = (Account) session.getAttribute("account");
                     albumID = Long.parseLong(request.getParameter("albumID"));
                     String[] albumIDs = request.getParameterValues("deleteAlbum");
-                    int deleteCounter = 0;
+                    deleteCounter = 0;
                     if (account != null) {
                         for (String s : albumIDs) {
                             returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), false);
@@ -376,24 +377,38 @@ public class MusicManagementController extends HttpServlet {
                 case "RemoveTrackFromShoppingCart":
                     account = (Account) session.getAttribute("account");
                     trackID = Long.parseLong(request.getParameter("trackID"));
+                    String[] trackIDs = request.getParameterValues("deleteTrack");
+                    deleteCounter = 0;
                     if (account != null) {
-                        returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), trackID, true);
-                        if (returnHelper.getResult()) {
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
-                        } else {
-                            jsObj.put("result", false);
-                            jsObj.put("errMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
+                        for (String s : trackIDs) {
+                            returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), true);
+                            if (returnHelper.getResult()) {
+                                deleteCounter++;
+                            }
                         }
                         shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                     } else {
                         shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                        Music music = new Music();
-                        music.setId(trackID);
-                        shoppingCart.getListOfMusics().remove(music);
+                        for (String s : trackIDs) {
+                            track = new Music();
+                            track.setId(Long.parseLong(s));
+                            Boolean result = shoppingCart.getListOfMusics().remove(track);
+                            if (result) {
+                                deleteCounter++;
+                            }
+                        }
                     }
+
+                    if (deleteCounter > 0) {
+                        jsObj.put("result", true);
+                        jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
+                        response.getWriter().write(jsObj.toString());
+                    } else {
+                        jsObj.put("result", false);
+                        jsObj.put("errMsg", "No records were deleted.");
+                        response.getWriter().write(jsObj.toString());
+                    }
+
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
 
@@ -503,7 +518,10 @@ public class MusicManagementController extends HttpServlet {
 
                 case "Checkout":
                     shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                    account = (Account) session.getAttribute("account");
+
                     if (account != null) {
+                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
 //                        ArrayList<Long> trackIDs = new ArrayList();
@@ -517,7 +535,10 @@ public class MusicManagementController extends HttpServlet {
 
                         nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
                     } else {
-
+                        Set<Music> musicSet = shoppingCart.getListOfMusics();
+                        Set<Album> albumSet = shoppingCart.getListOfAlbums();
+                        
+                        nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
                     }
                     break;
             }
