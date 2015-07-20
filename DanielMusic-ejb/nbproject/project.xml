@@ -45,6 +45,7 @@
             <included-library dirs="200">file.reference.mp3agic-0.8.1.jar</included-library>
             <included-library dirs="200">file.reference.paypal-core-1.6.8.jar</included-library>
             <included-library dirs="200">file.reference.sendgrid-java.jar</included-library>
+            <included-library dirs="200">file.reference.jaudiotagger-2.2.3.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

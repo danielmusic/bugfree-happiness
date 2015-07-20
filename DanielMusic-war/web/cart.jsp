@@ -19,6 +19,8 @@
 
         function checkout() {
             window.location.href = "./MusicManagementController?target=Checkout";
+            //window.open("./MusicManagementController?target=Checkout","_blank","width=400, height=600");
+            //window.open("./MusicManagementController?target=Checkout","_blank");
         }
     </script>
     <section class="content section">

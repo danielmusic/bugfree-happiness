@@ -2,17 +2,10 @@
 <section id="page" data-title="Fan Signup">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <div class="container">
-
-            <div class="col-1-2" style="text-align: left;">
-                <h1 class="heading-l">Fan signup</h1>
-                <h3>Fans have given artists $109 million USD using Bandcamp, and $3.3 million in the last 30 days alone.</h3>
-                <h3>Why, dear musician friend, are you not yet yourself twirling with arms spread beneath this gentle shower of silver and gold? Read on and be further convinced, or simply...</h3>
-            </div>
-            <div class="col-1-2 last" style="text-align: right;">
-
-            </div>
-        </div>
+        <h1 class="heading-l">Fan Signup</h1>
+        <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
+        <!-- Overlay -->
+        <span class="overlay dots"></span>
     </section>
     <!-- /intro -->
 
@@ -20,49 +13,94 @@
     <section class="content section">
         <!-- container -->
         <div class="container">
-
-            <!-- ############################# About US ############################# -->
-
             <!-- Article -->
             <article>
-                <div class="col-1-2">
-                    <img src="placeholders/about-img01.jpg" alt="Noisa image" class="inline">
-                    <br>
-                    <!-- Buttons list -->
-                    <ul class="buttons-list">
-                        <li>
-                            <a class="btn small" href="javascript:;" ><i class="icon icon-download"></i> Download Recents Podcasts</a>
-                        </li>
-                        <li>
-                            <a class="btn small dark" href="javascript:;" ><i class="icon icon-download"></i> Download Our Bio</a>
-                        </li>
+                <script>
+                    function loadAjax() {
+                        var v = grecaptcha.getResponse();
+                        if (v.length !== 0) {
+                            var source = "FanSignup";
+                            var name = $('#name').val();
+                            var email = $('#email').val();
+                            var password = $('#password').val();
+                            var chkAgree = $('#chkAgree').val();
 
-                    </ul>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                </div>
-                <div class="col-1-2 last">
-                    <h2>Biography</h2>
-                    <p class="intro-text caps">Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
+                            url = "./ClientAccountManagementController?target=AccountSignup";
+                            $.ajax({
+                                type: "GET",
+                                async: false,
+                                url: url,
+                                data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
+                                dataType: "text",
+                                success: function (val) {
+                                    window.event.returnValue = true;
+                                    var json = JSON.parse(val);
+                                    if (json.result) {
+                                        window.event.returnValue = false;
+                                        window.location.href = "#!/login";
+                                        document.loginForm.getElementById("goodMsg").style.display = "block";
+                                        document.loginForm.getElementById('goodMsg').innerHTML = json.message;
+                                    } else {
+                                        window.event.returnValue = false;
+                                        window.location.href = "#!/fan/signup";
+                                        document.getElementById("chkAgree").checked = false;
+                                        document.getElementById("grecaptcha").reset();
+                                        document.getElementById("errMsg").style.display = "block";
+                                        document.getElementById('errMsg').innerHTML = json.message;
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = error;
+                                    hideLoader();
+                                    ajaxResultsError(xhr, status, error);
+                                }
+                            });
+                        } else {
+                            window.event.returnValue = false;
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
+                        }
+                    }
+                </script>
 
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                    <p>Duis dolor tellus, faucibus non ligula ac, fringilla porttitor eros. Cras sagittis eleifend erat ac fringilla. Proin ac odio et neque vulputate tempus at vel justo. Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
+                <form name="AccountSignupForm" class="form">
+                    <p class="error" id="errMsg" style="display:none;"></p>
+                    <p class="success" id="goodMsg"  style="display:none;"></p>
 
-                    <blockquote>
-                        <p>
-                            Sed pellentesque dapibus tellus in semper. Aenean faucibus aliquet turpis, id fermentum sem consectetur id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus euismod nunc scelerisque tincidunt.
-                        </p>
-                    </blockquote>
-                    <br>
-                    <h3>Videos</h3>
-                    <iframe src="//player.vimeo.com/video/66171813?portrait=0&amp;color=ea4233" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    <h2>Sign up for an artist account</h2>
 
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label for="email"><strong>Email</strong> *</label>
+                            <input type="email" name="email" id="email" required>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-1-2">
+                            <label for="password"><strong>Password</strong> *</label>
+                            <input id="password" type="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  name="password" id="password" required onchange="form.repassword.pattern = this.value;">
+                        </div>
+                        <div class="col-1-2 last">
+                            <label for="repassword"><strong>Re-enter Password</strong> *</label>
+                            <input id="repassword" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="repassword" required>
+                        </div>
+                    </div>
 
-                </div>
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <label><input type="checkbox" id="chkAgree" value="chkAgree" name="option" required> I have read and agree to the Terms of Use.</label>
+                        </div>
+                    </div>
 
-
+                    <div class="row clearfix">
+                        <div class="col-1-1">
+                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                        </div>
+                    </div>
+                    <button class="large invert" onclick="loadAjax()">Sign up now!</button>
+                    <div class="clear"></div>
+                </form>
             </article>
             <!-- /article -->
 
@@ -73,3 +111,4 @@
 
 </section>
 <!-- /page -->
+<script src='https://www.google.com/recaptcha/api.js'></script>

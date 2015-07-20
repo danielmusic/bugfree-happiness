@@ -213,7 +213,6 @@
 
                     <input type="submit" value="Save" class="small invert">
                     <input type="hidden" value="ArtistProfileUpdate" name="target">
-                    <input type="hidden" value="ArtistProfileUpdate" name="target">
                     <div class="clear"></div>
                 </form>
 

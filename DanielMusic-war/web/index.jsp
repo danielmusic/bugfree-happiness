@@ -32,6 +32,5 @@
         <jsp:include page="jspIncludePages/footer.jsp" />
 
         <jsp:include page="jspIncludePages/foot.html" />
-
     </body>
 </html>

@@ -71,7 +71,7 @@ public class ClientAccountManagementController extends HttpServlet {
         Artist artist = (Artist) (session.getAttribute("artist"));
         session.removeAttribute("goodMsg");
         session.removeAttribute("errMsg");
-        ReturnHelper returnHelper;
+        ReturnHelper returnHelper = null;
 
         JSONObject jsObj = new JSONObject();
         response.setContentType("application/json");
@@ -91,7 +91,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             session.setAttribute("listOfGenres", adminManagementBean.listAllGenres());
                             nextPage = "#!/artist/profile";
                         } else if (account instanceof Member) {
-                            session.setAttribute("fan", (Member) account);
+                            session.setAttribute("member", (Member) account);
                             nextPage = "#!/fan/profile";
                         }
                     } else {
@@ -121,8 +121,10 @@ public class ClientAccountManagementController extends HttpServlet {
 
                     if (source.equals("BandSignup")) {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, true);
-                    } else {//normal artist
+                    } else if (source.equals("ArtistSignup")) {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, true, false);
+                    } else if (source.equals("FanSignup")) {
+                        returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, false);
                     }
 
                     if (returnHelper.getResult()) {
@@ -172,7 +174,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                 Date date = null;
 
-                                if (dateFormed != null) {
+                                if (dateFormed != null && !dateFormed.isEmpty()) {
                                     date = formatter.parse(dateFormed);
                                 }
                                 returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, date, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
@@ -299,10 +301,6 @@ public class ClientAccountManagementController extends HttpServlet {
                     }
                     break;
                 case "AccountLogout":
-//                    session.removeAttribute("errMsg");
-//                    session.removeAttribute("artist");
-//                    session.removeAttribute("band");
-//                    session.removeAttribute("fan");
                     request.getSession(false).invalidate();
                     session = request.getSession();
 
@@ -316,6 +314,8 @@ public class ClientAccountManagementController extends HttpServlet {
                             nextPage = "#!/artist/albums";
                         } else if (source.equals("profile")) {
                             nextPage = "#!/artist/profile";
+                        } else if (source.equals("transactionHistory")) {
+                            nextPage = "#!/fan/profile";
                         }
                     }
                     break;

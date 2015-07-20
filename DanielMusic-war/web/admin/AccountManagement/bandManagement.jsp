@@ -7,7 +7,7 @@
     if (session.isNew() || admin == null) {
         response.sendRedirect("../login.jsp?errMsg=Session Expired.");
     } else {
-        List<Artist> band = (List<Artist>) (session.getAttribute("band"));
+        List<Artist> bands = (List<Artist>) (session.getAttribute("bands"));
 %>
 <!doctype html>
 <html class="fixed">
@@ -20,7 +20,7 @@
             function refresh() {
                 window.location.href = "../../AccountManagementController?target=ListAllBand";
             }
-            function viewArtist(id) {
+            function viewBand(id) {
                 window.location.href = "../../AccountManagementController?target=ListBandbyID&id=" + id;
             }
             function disableAccount(id) {
@@ -70,37 +70,37 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th style="width: 300px;">Status</th>
-                                            <th style="width: 300px; text-align: center;">Action</th>
+                                            <th style="width: 100px;">Status</th>
+                                            <th style="width: 100px;">Email</th>
+                                            <th style="width: 100px;">Disabled?</th>
+                                            <th style="width: 200px; text-align: center;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (band != null && band.size() > 0) {
-                                                for (int i = 0; i < band.size(); i++) {
-                                                    if (band.get(i).getIsBand()) {
+                                            if (bands != null && bands.size() > 0) {
+                                                for (int i = 0; i < bands.size(); i++) {
+                                                    if (bands.get(i).getIsBand()) {
                                         %>
                                         <tr>        
-                                            <td><%=band.get(i).getName()%></td>
-                                            <td><%=band.get(i).getEmail()%></td>
+                                            <td><%=bands.get(i).getName()%></td>
+                                            <td><%=bands.get(i).getEmail()%></td>
                                             <td>
                                                 <%
-                                                    if (!band.get(i).getIsDisabled()) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                    if (bands.get(i).getIsApproved() == 0) {
+                                                        out.print("<span class='label label-info' style='font-size: 100%;'>New</span>");
+                                                    } else if (bands.get(i).getIsApproved() == 1) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approved</span>");
+                                                    } else if (bands.get(i).getIsApproved() == -2) {
+                                                        out.print("<span class='label label-warning' style='font-size: 100%;'>Pending</span>");
                                                     } else {
-                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Rejected</span>");
                                                     }
-                                                    if (band.get(i).getIsApproved() == 0) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>New</span>");
-                                                    } else if (band.get(i).getIsApproved() == 1) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Approve</span>");
-                                                    } else if (band.get(i).getIsApproved() == -2) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Pending</span>");
-                                                    } else {
-                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Not approved</span>");
-                                                    }
-
-                                                    if (band.get(i).getEmailIsVerified()) {
+                                                %>
+                                            </td>
+                                            <td>
+                                                <%
+                                                    if (bands.get(i).getEmailIsVerified()) {
                                                         out.print("<span class='label label-success' style='font-size: 100%;'>Verified</span>");
                                                     } else {
                                                         out.print("<span class='label label-success' style='font-size: 100%; background-color:#B8B8B8;'>Not verified</span>");
@@ -108,8 +108,18 @@
                                                 %>
                                             </td>
                                             <td>
-                                                <% if (!band.get(i).getIsDisabled()) {%>
-                                                <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Disable</button>
+                                                <%
+                                                    if (!bands.get(i).getIsDisabled()) {
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                    } else {
+                                                        out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
+                                                    }
+                                                %>
+                                            </td>
+                                            <td>
+                                                <% if (!bands.get(i).getIsDisabled()) {%>
+                                                <button type="button" class="btn btn-default" onclick="viewBand(<%=bands.get(i).getId()%>)">View</button>
+                                                <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove">Disable</button>
                                                 <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
@@ -128,7 +138,7 @@
                                                         <footer class="panel-footer">
                                                             <div class="row">
                                                                 <div class="col-md-12 text-right">
-                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=band.get(i).getId()%>)"  />
+                                                                    <input class="btn btn-primary modal-confirm" name="btnRemove" type="submit" value="Confirm" onclick="disableAccount(<%=bands.get(i).getId()%>)"  />
                                                                     <button class="btn btn-default modal-dismiss">Cancel</button>
                                                                 </div>
                                                             </div>

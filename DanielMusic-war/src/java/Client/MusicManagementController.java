@@ -41,6 +41,7 @@ public class MusicManagementController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
+        String source = request.getParameter("source");
         System.out.println("target " + target);
 
         String id = request.getParameter("id");
@@ -51,6 +52,7 @@ public class MusicManagementController extends HttpServlet {
         String trackNumber = request.getParameter("trackNumber");
         String credits = request.getParameter("credits");
         String price = request.getParameter("price");
+        String genreID = request.getParameter("genre");
         Long albumID, trackID;
         ShoppingCart shoppingCart = null;
         int deleteCounter;
@@ -82,14 +84,18 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
 
-                case "ViewSingles":
+                case "RetrieveSingle":
                     if (artist != null && id != null) {
                         album = musicManagementBean.getAlbum(Long.parseLong(id));
-                        session.setAttribute("singles", album);
-                        session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false));
-                        session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false));
-                        session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false));
-                        nextPage = "#!/artist/add_singles";
+                        session.setAttribute("album", album);
+                        if (source != null && source.equals("editSinglePrice")) {
+                            nextPage = "#!/artist/edit_singles";
+                        } else {
+                            session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false));
+                            session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false));
+                            session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false));
+                            nextPage = "#!/artist/singles";
+                        }
                     }
                     break;
 
@@ -100,7 +106,7 @@ public class MusicManagementController extends HttpServlet {
                             picture = null;
                         }
 
-                        returnHelper = musicManagementBean.createAlbum(false, picture, name, description, artist.getId(), Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
+                        returnHelper = musicManagementBean.createAlbum(false, picture, name, Long.parseLong(genreID), description, artist.getId(), Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                         if (returnHelper.getResult()) {
                             session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
@@ -124,7 +130,7 @@ public class MusicManagementController extends HttpServlet {
                             music = null;
                         }
 
-                        returnHelper = musicManagementBean.createAlbum(true, picture, name, description, artist.getId(), Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
+                        returnHelper = musicManagementBean.createAlbum(true, picture, name, Long.parseLong(genreID), description, artist.getId(), Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                         if (returnHelper.getResult()) {
                             musicManagementBean.createMusic(music, returnHelper.getID(), null, name, Double.parseDouble(price), lyrics, Integer.parseInt(yearReleased));
@@ -150,7 +156,7 @@ public class MusicManagementController extends HttpServlet {
                                 picture = null;
                             }
 
-                            returnHelper = musicManagementBean.editAlbum(Long.parseLong(id), picture, name, description, Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
+                            returnHelper = musicManagementBean.editAlbum(Long.parseLong(id), picture, name, Long.parseLong(genreID), description, Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                             if (returnHelper.getResult()) {
                                 session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
@@ -161,6 +167,27 @@ public class MusicManagementController extends HttpServlet {
                             }
                         }
                         nextPage = "#!/artist/edit_album";
+                    }
+                    break;
+
+                case "EditSinglePrice":
+                    if (artist != null && price != null) {
+                        album = (Album) (session.getAttribute("album"));
+                        if (!musicManagementBean.checkIfAlbumBelongsToArtist(artist.getId(), album.getId())) {
+                            session.setAttribute("errMsg", "Unauthorized action");
+                        } else {
+
+                            returnHelper = musicManagementBean.editAlbumPrice(album.getId(), Double.parseDouble(price));
+
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("album", musicManagementBean.getAlbum(album.getId()));
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                        }
+                        nextPage = "#!/artist/edit_singles";
                     }
                     break;
 
@@ -220,9 +247,34 @@ public class MusicManagementController extends HttpServlet {
                         track = musicManagementBean.getMusic(Long.parseLong(id));
                         session.setAttribute("track", track);
 
-                        session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(Long.parseLong(id), "128", false));
-                        session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(Long.parseLong(id), "320", false));
-                        session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false));
+                        if (source != null && source.equals("editMusicPrice")) {
+                            nextPage = "#!/artist/edit_track";
+                        } else {
+                            session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(Long.parseLong(id), "128", false));
+                            session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(Long.parseLong(id), "320", false));
+                            session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false));
+                            nextPage = "#!/artist/track";
+                        }
+                    }
+                    break;
+
+                case "EditTrackPrice":
+                    if (artist != null && price != null) {
+                        track = (Music) (session.getAttribute("track"));
+                        if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), track.getId())) {
+                            session.setAttribute("errMsg", "Unauthorized action");
+                        } else {
+
+                            returnHelper = musicManagementBean.editMusicPrice(track.getId(), Double.parseDouble(price));
+
+                            if (returnHelper.getResult()) {
+                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("track", musicManagementBean.getMusic(track.getId()));
+                                session.setAttribute("goodMsg", returnHelper.getDescription());
+                            } else {
+                                session.setAttribute("errMsg", returnHelper.getDescription());
+                            }
+                        }
                         nextPage = "#!/artist/edit_track";
                     }
                     break;
@@ -255,34 +307,6 @@ public class MusicManagementController extends HttpServlet {
                     }
                     break;
 
-//                case "EditTrack":
-//                    if (artist != null) {
-//                        album = (Album) (session.getAttribute("album"));
-//                        Music track = (Music) (session.getAttribute("track"));
-//                        if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), track.getId())) {
-//                            session.setAttribute("errMsg", "Unauthorized action");
-//                        } else {
-//                            Part music = request.getPart("music");
-//                            if (music.getSize() == 0) {
-//                                music = null;
-//                            }
-//
-//                            returnHelper = musicManagementBean.editMusic(track.getId(), intTrackNumber, name, Double.parseDouble(price), lyrics, credits);
-//                            if (returnHelper.getResult()) {
-//                                tracks = musicManagementBean.ListAllTracksByAlbumID(album.getId());
-//                                if (tracks == null) {
-//                                    nextPage = "error500.html";
-//                                } else {
-//                                    session.setAttribute("tracks", tracks);
-//                                    session.setAttribute("track", musicManagementBean.getMusic(track.getId()));
-//                                }
-//                                session.setAttribute("goodMsg", returnHelper.getDescription());
-//                            } else {
-//                                session.setAttribute("errMsg", returnHelper.getDescription());
-//                            }
-//                        }
-//                    }
-//                    break;
                 case "DeleteTrack":
                     if (artist != null) {
                         if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), Long.parseLong(id))) {
@@ -300,6 +324,7 @@ public class MusicManagementController extends HttpServlet {
                         }
                     }
                     break;
+
                 case "GetShoppingCart":
                     account = (Account) session.getAttribute("account");
                     shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
@@ -310,6 +335,7 @@ public class MusicManagementController extends HttpServlet {
 
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+
                 case "RemoveAlbumFromShoppingCart":
                     account = (Account) session.getAttribute("account");
                     albumID = Long.parseLong(request.getParameter("albumID"));
@@ -347,6 +373,7 @@ public class MusicManagementController extends HttpServlet {
 
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+
                 case "RemoveTrackFromShoppingCart":
                     account = (Account) session.getAttribute("account");
                     trackID = Long.parseLong(request.getParameter("trackID"));
@@ -384,6 +411,7 @@ public class MusicManagementController extends HttpServlet {
 
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+
                 case "AddAlbumToShoppingCart":
                     account = (Account) session.getAttribute("account");
                     albumID = Long.parseLong(request.getParameter("albumID"));
@@ -431,6 +459,7 @@ public class MusicManagementController extends HttpServlet {
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+
                 case "AddTrackToShoppingCart":
                     account = (Account) session.getAttribute("account");
                     trackID = Long.parseLong(request.getParameter("trackID"));
@@ -478,6 +507,7 @@ public class MusicManagementController extends HttpServlet {
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
+
                 case "GetArtistByID":
                     if (artist != null) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
@@ -485,6 +515,7 @@ public class MusicManagementController extends HttpServlet {
                         nextPage = "#!/artists";
                     }
                     break;
+
                 case "Checkout":
                     shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     account = (Account) session.getAttribute("account");
