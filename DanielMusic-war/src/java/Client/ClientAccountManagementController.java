@@ -172,7 +172,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                 Date date = null;
 
-                                if (dateFormed != null) {
+                                if (dateFormed != null && !dateFormed.isEmpty()) {
                                     date = formatter.parse(dateFormed);
                                 }
                                 returnHelper = accountManagementBean.updateBandProfile(artist.getId(), bandMembers, date, Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);

@@ -337,24 +337,38 @@ public class MusicManagementController extends HttpServlet {
                 case "RemoveAlbumFromShoppingCart":
                     account = (Account) session.getAttribute("account");
                     albumID = Long.parseLong(request.getParameter("albumID"));
+                    String[] albumIDs = request.getParameterValues("deleteAlbum");
+                    int deleteCounter = 0;
                     if (account != null) {
-                        returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), albumID, false);
-                        if (returnHelper.getResult()) {
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
-                        } else {
-                            jsObj.put("result", false);
-                            jsObj.put("errMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
+                        for (String s : albumIDs) {
+                            returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), false);
+                            if (returnHelper.getResult()) {
+                                deleteCounter++;
+                            }
                         }
                         shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                     } else {
                         shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                        album = new Album();
-                        album.setId(albumID);
-                        shoppingCart.getListOfAlbums().remove(album);
+                        for (String s : albumIDs) {
+                            album = new Album();
+                            album.setId(Long.parseLong(s));
+                            Boolean result = shoppingCart.getListOfAlbums().remove(album);
+                            if (result) {
+                                deleteCounter++;
+                            }
+                        }
                     }
+                    
+                    if (deleteCounter > 0) {
+                        jsObj.put("result", true);
+                        jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
+                        response.getWriter().write(jsObj.toString());
+                    } else {
+                        jsObj.put("result", false);
+                        jsObj.put("errMsg", "No records were deleted.");
+                        response.getWriter().write(jsObj.toString());
+                    }
+                    
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
 
