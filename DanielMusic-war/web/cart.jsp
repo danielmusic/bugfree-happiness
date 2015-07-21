@@ -17,6 +17,76 @@
             }
         }
 
+        function removeTrack() {
+            alert("removeTrack");
+            checkboxes = document.getElementsByName('deleteTrack');
+            alert(checkboxes[0]);
+            
+            var numOfTicks = 0;
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                if (checkboxes[i].checked) {
+                    numOfTicks++;
+                }
+            }
+            if (checkboxes.length == 0 || numOfTicks == 0) {
+                alert("removeTrack: 00");
+
+                window.event.returnValue = true;
+                //window.location.href = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
+            } else {
+                alert("removeTrack: no 0");
+
+                url = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {'deleteTrack': checkboxes},
+                    success: function (val) {
+                        window.event.returnValue = false;
+                        window.location.href = "#!/dummy";
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
+        }
+        function removeAlbum() {
+            checkboxes = document.getElementsByName('deleteAlbum');
+            var numOfTicks = 0;
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                if (checkboxes[i].checked) {
+                    numOfTicks++;
+                }
+            }
+            if (checkboxes.length == 0 || numOfTicks == 0) {
+                window.event.returnValue = true;
+                //window.location.href = "./MusicManagementController?target=RemoveAlbumFromShoppingCart";
+            } else {
+                url = "./MusicManagementController?target=RemoveAlbumFromShoppingCart";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {'deleteAlbum': checkboxes},
+                    success: function (val) {
+                        window.event.returnValue = false;
+                        window.location.href = "#!/dummy";
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
+        }
+
         function login() {
             url = "./ClientAccountManagementController?target=SaveCartAndLogin";
             $.ajax({
@@ -88,7 +158,7 @@
                     ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     if (shoppingCart != null) {
                         Set<Music> setOfMusics = shoppingCart.getListOfMusics();
-                        if (setOfMusics != null) {
+                        if (setOfMusics != null && !setOfMusics.isEmpty()) {
                             List<Music> listOfMusics = new ArrayList();
                             listOfMusics.addAll(setOfMusics);
                 %>
@@ -135,11 +205,12 @@
                             %>
                         </tbody>
                     </table>
+                    <button class="medium invert" onclick="removeTrack()">Remove track(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
                     <%
                         }
                         Set<Album> setOfAlbums = shoppingCart.getListOfAlbums();
-                        if (setOfAlbums != null) {
+                        if (setOfAlbums != null && !setOfAlbums.isEmpty()) {
                             List<Album> listOfAlbums = new ArrayList();
                             listOfAlbums.addAll(setOfAlbums);
                     %>
@@ -179,10 +250,10 @@
                             </tr>
                             <%
                                 }
-
                             %>
                         </tbody>
                     </table>
+                    <button class="medium invert" onclick="removeAlbum()">Remove album(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
                 </form>
                 <%                                }
