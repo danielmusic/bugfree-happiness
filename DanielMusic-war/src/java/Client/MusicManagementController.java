@@ -110,7 +110,7 @@ public class MusicManagementController extends HttpServlet {
                         returnHelper = musicManagementBean.createAlbum(false, picture, name, Long.parseLong(genreID), description, artist.getId(), Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                         if (returnHelper.getResult()) {
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
@@ -136,7 +136,7 @@ public class MusicManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             musicManagementBean.createMusic(music, returnHelper.getID(), null, name, Double.parseDouble(price), lyrics, Integer.parseInt(yearReleased));
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             }
                         } else {
@@ -160,7 +160,7 @@ public class MusicManagementController extends HttpServlet {
                             returnHelper = musicManagementBean.editAlbum(Long.parseLong(id), picture, name, Long.parseLong(genreID), description, Integer.parseInt(yearReleased), credits, Double.parseDouble(price));
 
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
@@ -181,7 +181,7 @@ public class MusicManagementController extends HttpServlet {
                             returnHelper = musicManagementBean.editAlbumPrice(album.getId(), Double.parseDouble(price));
 
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("album", musicManagementBean.getAlbum(album.getId()));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
@@ -200,7 +200,7 @@ public class MusicManagementController extends HttpServlet {
                             returnHelper = musicManagementBean.deleteAlbum(Long.parseLong(id));
 
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
@@ -219,7 +219,7 @@ public class MusicManagementController extends HttpServlet {
                             System.out.println("returnHelper.getResult() " + returnHelper.getResult());
 
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
@@ -230,7 +230,7 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "ListAllTracksByAlbumID":
-                    tracks = musicManagementBean.ListAllTracksByAlbumID(Long.parseLong(id));
+                    tracks = musicManagementBean.listAllTracksByAlbumID(Long.parseLong(id));
                     if (tracks == null) {
                         nextPage = "error500.html";
                     } else {
@@ -269,7 +269,7 @@ public class MusicManagementController extends HttpServlet {
                             returnHelper = musicManagementBean.editMusicPrice(track.getId(), Double.parseDouble(price));
 
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("track", musicManagementBean.getMusic(track.getId()));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
@@ -293,7 +293,7 @@ public class MusicManagementController extends HttpServlet {
 
                             returnHelper = musicManagementBean.createMusic(music, album.getId(), intTrackNumber, name, Double.parseDouble(price), lyrics, Integer.parseInt(yearReleased));
                             if (returnHelper.getResult()) {
-                                tracks = musicManagementBean.ListAllTracksByAlbumID(album.getId());
+                                tracks = musicManagementBean.listAllTracksByAlbumID(album.getId());
                                 if (tracks == null) {
                                     nextPage = "error500.html";
                                 } else {
@@ -316,7 +316,7 @@ public class MusicManagementController extends HttpServlet {
                             returnHelper = musicManagementBean.deleteMusic(Long.parseLong(id));
 
                             if (returnHelper.getResult()) {
-                                session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
@@ -513,6 +513,8 @@ public class MusicManagementController extends HttpServlet {
                     if (artist != null) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
                         session.setAttribute("artistDetails", artist);
+                        List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
+                        session.setAttribute("artistAlbumDetails", albums);
                         nextPage = "#!/artists";
                     }
                     break;

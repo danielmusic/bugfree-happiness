@@ -202,7 +202,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     partiesReceivingPayments.add(paymentHelper);
                 }
             }
-
+            
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);
@@ -214,7 +214,6 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 } else {
                     payment.setNonMemberEmail(nonMemberEmail);
                 }
-                payment.setNonMemberEmail(nonMemberEmail);
                 payment.setPaymentCompleted(true);
                 payment.setDateCompleted(new Date());
                 em.persist(payment);
@@ -250,7 +249,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/payment-cancelled.jsp");//Return if payment cancelled
-            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/MusicManagementController?PaymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/MusicManagementController?target=completePayment&PaymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 

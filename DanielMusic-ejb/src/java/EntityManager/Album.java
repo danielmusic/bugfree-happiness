@@ -1,6 +1,7 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -42,6 +43,7 @@ public class Album implements Serializable {
         isDeleted = false;
         isPublished = false;
         numPurchase = 0L;
+        listOfMusics = new ArrayList<>();
     }
 
     public String getArtistName() {

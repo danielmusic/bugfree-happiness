@@ -87,7 +87,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         session.setAttribute("account", account);
                         if (account instanceof Artist) {
                             session.setAttribute("artist", (Artist) account);
-                            session.setAttribute("albums", musicManagementBean.ListAllAlbumByArtistOrBandID(account.getId(), true, true));
+                            session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(account.getId(), true, true));
                             session.setAttribute("listOfGenres", adminManagementBean.listAllGenres());
                             nextPage = "#!/artist/profile";
                         } else if (account instanceof Member) {

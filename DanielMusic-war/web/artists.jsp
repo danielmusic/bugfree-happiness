@@ -1,6 +1,7 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Sound.sg">
     <%@page import="java.util.List"%>
+    <%@page import="java.util.ArrayList"%>
     <%@page import="EntityManager.Album"%>
     <%@page import="EntityManager.Music"%>
     <%@page import="EntityManager.Artist"%>
@@ -8,12 +9,13 @@
     <%@page import="java.text.NumberFormat"%>
     <%
         Artist artist = (Artist) session.getAttribute("artistDetails");
-        if (artist == null) {
+        List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
+        if (artist == null || albums == null) {
             out.print("<p class='warning'>Ops. No results found.</p>");
-        }
-        String jumpToAlbumID = (String) session.getAttribute("jumpToAlbumID");
-        if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
-            System.out.println("INNN");
+        } else {
+            String jumpToAlbumID = (String) session.getAttribute("jumpToAlbumID");
+            if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
+                System.out.println("INNN");
     %>
     <script>
         window.onload = function () {
@@ -105,8 +107,8 @@
                         <!-- tab content -->
                         <div id="tab-releases" class="tab-content">
                             <%
-                                for (int i = 0; i < artist.getListOfAlbums().size(); i++) {
-                                    Album album = artist.getListOfAlbums().get(i);
+                                for (int i = 0; i < albums.size(); i++) {
+                                    Album album = albums.get(i);
                                     String albumArt = album.getImageLocation();
                                     if (albumArt == null || albumArt.isEmpty()) {
                                         albumArt = "/img/cover.png";
@@ -137,6 +139,9 @@
                             <p>Year Released: <%=album.getYearReleased()%></p>
                             <%
                                 List<Music> musics = album.getListOfMusics();
+                                if (musics == null) {
+                                    musics = new ArrayList();
+                                }
                             %>
                             <ul id="release-list" class="tracklist">
                                 <%
@@ -194,7 +199,7 @@
                                                 out.print(repl);
                                             }
                                         %> 
-                                       <br/><br/><a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=<%=music.getId()%>','_blank','width=600,height=760')">Open in new window</a>
+                                        <br/><br/><a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=<%=music.getId()%>', '_blank', 'width=600,height=760')">Open in new window</a>
                                     </div>
 
                                 </div>
@@ -261,4 +266,5 @@
         <script src="js/cssParser.js"></script>
         <script src="js/css-filters-polyfill.js"></script>
     </section>
+    <%}%>
 </section>

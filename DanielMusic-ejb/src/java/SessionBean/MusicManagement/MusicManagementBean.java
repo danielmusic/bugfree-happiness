@@ -433,7 +433,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
     @Override
-    public List<Music> ListAllTracksByAlbumID(Long albumID) {
+    public List<Music> listAllTracksByAlbumID(Long albumID) {
         System.out.println("MusicManagementBean: ListAllTracksByAlbumID() called");
         try {
             Query q = em.createQuery("select a from Music a where a.isDeleted=false AND a.album.id=:albumID");
@@ -558,7 +558,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public List<Album> ListAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
+    public List<Album> listAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
         System.out.println("ListAllAlbumByArtistOrBandID() called");
         try {
             Query q = null;

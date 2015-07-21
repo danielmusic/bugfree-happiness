@@ -1,6 +1,7 @@
 package EntityManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -49,6 +50,7 @@ public class Artist extends Account implements Serializable {
 
     public Artist() {
         isApproved = 0;
+        listOfAlbums = new ArrayList<>();
     }
 
     public Genre getGenre() {

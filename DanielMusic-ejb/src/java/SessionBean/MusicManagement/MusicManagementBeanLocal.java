@@ -81,8 +81,8 @@ public interface MusicManagementBeanLocal {
     public ReturnHelper editAlbumPrice(Long albumID, Double newPrice);
 
     public Album getAlbum(Long albumID);
-    public List<Album> ListAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
-    public List<Music> ListAllTracksByAlbumID(Long albumID);
+    public List<Album> listAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
+    public List<Music> listAllTracksByAlbumID(Long albumID);
     
     public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, Long genreID, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price);
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, Long genreID, String description, Integer yearReleased, String credits, Double price);

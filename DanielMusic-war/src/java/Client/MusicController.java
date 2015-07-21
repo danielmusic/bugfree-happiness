@@ -39,6 +39,7 @@ public class MusicController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Artist artist = null;
+        List<Album> albums = null;
 
         try {
             switch (target) {
@@ -52,6 +53,8 @@ public class MusicController extends HttpServlet {
                 case "GetArtistByID":
                     artist = adminManagementBean.getArtist(Long.parseLong(id));
                     session.setAttribute("artistDetails", artist);
+                    albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
+                    session.setAttribute("artistAlbumDetails", albums);
                     jsObj.put("result", true);
                     response.getWriter().write(jsObj.toString());
                     return;
@@ -59,6 +62,8 @@ public class MusicController extends HttpServlet {
                     Album album = musicManagementBean.getAlbum(Long.parseLong(id));
                     artist = album.getArtist();
                     session.setAttribute("artistDetails", artist);
+                    albums = musicManagementBean.listAllAlbumByArtistOrBandID(album.getArtist().getId(), false, false);
+                    session.setAttribute("artistAlbumDetails", albums);
                     session.setAttribute("jumpToAlbumID", album.getId().toString());
                     System.out.println(album.getId().toString() + "!!!!!");
                     jsObj.put("result", true);
