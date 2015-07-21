@@ -20,6 +20,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.EJB;
@@ -184,6 +186,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         }
     }
 
+    public Boolean verifyEmailFormat(String email) {
+        Pattern pattern;
+        Matcher matcher;
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     @Override
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand) {
         System.out.println("AccountManagementBean: registerAccount() called");
@@ -192,6 +204,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (checkIfEmailExists(email)) {
                 result.setResult(false);
                 result.setDescription("Unable to register, email already in use.");
+                return result;
+            }
+            if (!verifyEmailFormat(email)) {
+                result.setResult(false);
+                result.setDescription("Unable to register, email format appears to be invalid.");
                 return result;
             }
             String passwordSalt = generatePasswordSalt();

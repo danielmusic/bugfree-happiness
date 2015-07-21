@@ -525,21 +525,13 @@ public class MusicManagementController extends HttpServlet {
                         shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
-//                        ArrayList<Long> trackIDs = new ArrayList();
-//                        ArrayList<Long> albumIDs = new ArrayList();
-//                        for(Music m : musicSet){
-//                            trackIDs.add(m.getId());
-//                        }
-//                        for(Album a : albumSet){
-//                            albumIDs.add(a.getId());
-//                        }
 
                         nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
                     } else {
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
-
-                        nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
+                        String email = request.getParameter("email");
+                        nextPage = clientManagementBean.getPaymentLink(null, email, musicSet, albumSet);
                     }
                     break;
                 case "CompletePayment":

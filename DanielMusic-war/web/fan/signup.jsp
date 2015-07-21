@@ -17,50 +17,75 @@
             <article>
                 <script>
                     function loadAjax() {
-                        var v = grecaptcha.getResponse();
-                        if (v.length !== 0) {
-                            var source = "FanSignup";
-                            var name = $('#name').val();
-                            var email = $('#email').val();
-                            var password = $('#password').val();
-                            var chkAgree = $('#chkAgree').val();
+                        if (validatePassword()) {
+                            var v = grecaptcha.getResponse();
+                            if (v.length !== 0) {
+                                var source = "FanSignup";
+                                var name = $('#name').val();
+                                var email = $('#email').val();
+                                var password = $('#password').val();
+                                var chkAgree = $('#chkAgree').val();
 
-                            url = "./ClientAccountManagementController?target=AccountSignup";
-                            $.ajax({
-                                type: "GET",
-                                async: false,
-                                url: url,
-                                data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
-                                dataType: "text",
-                                success: function (val) {
-                                    window.event.returnValue = true;
-                                    var json = JSON.parse(val);
-                                    if (json.result) {
-                                        window.event.returnValue = false;
-                                        window.location.href = "#!/login";
-                                        document.loginForm.getElementById("goodMsg").style.display = "block";
-                                        document.loginForm.getElementById('goodMsg').innerHTML = json.message;
-                                    } else {
-                                        window.event.returnValue = false;
-                                        window.location.href = "#!/fan/signup";
-                                        document.getElementById("chkAgree").checked = false;
-                                        document.getElementById("grecaptcha").reset();
+                                url = "./ClientAccountManagementController?target=AccountSignup";
+                                $.ajax({
+                                    type: "GET",
+                                    async: false,
+                                    url: url,
+                                    data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
+                                    dataType: "text",
+                                    success: function (val) {
+                                        window.event.returnValue = true;
+                                        var json = JSON.parse(val);
+                                        if (json.result) {
+                                            window.event.returnValue = false;
+                                            window.location.href = "#!/login";
+                                            document.loginForm.getElementById("goodMsg").style.display = "block";
+                                            document.loginForm.getElementById('goodMsg').innerHTML = json.message;
+                                        } else {
+                                            window.event.returnValue = false;
+                                            window.location.href = "#!/fan/signup";
+                                            document.getElementById("chkAgree").checked = false;
+                                            document.getElementById("grecaptcha").reset();
+                                            document.getElementById("errMsg").style.display = "block";
+                                            document.getElementById('errMsg').innerHTML = json.message;
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
                                         document.getElementById("errMsg").style.display = "block";
-                                        document.getElementById('errMsg').innerHTML = json.message;
+                                        document.getElementById('errMsg').innerHTML = error;
+                                        hideLoader();
+                                        ajaxResultsError(xhr, status, error);
                                     }
-                                },
-                                error: function (xhr, status, error) {
-                                    document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = error;
-                                    hideLoader();
-                                    ajaxResultsError(xhr, status, error);
-                                }
-                            });
-                        } else {
-                            window.event.returnValue = false;
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
+                                });
+                            } else {
+                                window.event.returnValue = false;
+                                document.getElementById("errMsg").style.display = "block";
+                                document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
+                            }
                         }
+                    }
+
+                    function validatePassword() {
+                        var password = document.getElementById("password").value;
+                        var repassword = document.getElementById("repassword").value;
+                        var ok = true;
+                        if ((password != null && repassword != null) || (password != "" && repassword != "")) {
+                            if (password != repassword) {
+                                //alert("Passwords Do not match");
+                                document.getElementById("password").style.borderColor = "#E34234";
+                                document.getElementById("repassword").style.borderColor = "#E34234";
+                                alert("Passwords do not match. Please key again.");
+                                ok = false;
+                            } else if (password == repassword) {
+                                if (password.length < 8) {
+                                    alert("Passwords too short. At least 8 characters.");
+                                    ok = false;
+                                }
+                            }
+                        } else {
+                            return ok;
+                        }
+                        return ok;
                     }
                 </script>
 

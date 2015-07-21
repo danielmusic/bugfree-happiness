@@ -17,10 +17,60 @@
             }
         }
 
+        function login() {
+            url = "./ClientAccountManagementController?target=SaveCartAndLogin";
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: url,
+                data: {},
+                success: function (val) {
+                    window.event.returnValue = false;
+                    window.location.href = "#!/login";
+                },
+                error: function (xhr, status, error) {
+                    document.getElementById("errMsg").style.display = "block";
+                    document.getElementById('errMsg').innerHTML = error;
+                    hideLoader();
+                    ajaxResultsError(xhr, status, error);
+                }
+            });
+        }
+
+
         function checkout() {
             window.location.href = "./MusicManagementController?target=Checkout";
             //window.open("./MusicManagementController?target=Checkout","_blank","width=400, height=600");
             //window.open("./MusicManagementController?target=Checkout","_blank");
+        }
+
+        function checkout2() {
+            if (validateEmail()) {
+
+
+                window.location.href = "./MusicManagementController?target=Checkout";
+                //window.open("./MusicManagementController?target=Checkout","_blank","width=400, height=600");
+                //window.open("./MusicManagementController?target=Checkout","_blank");
+            }
+        }
+
+
+        function validateEmail() {
+            var email = document.getElementById("email").value;
+            var reemail = document.getElementById("reemail").value;
+            var ok = true;
+            if ((email != null && reemail != null) || (email != "" && reemail != "")) {
+                if (email != reemail) {
+                    //alert("Passwords Do not match");
+                    document.getElementById("email").style.borderColor = "#E34234";
+                    document.getElementById("reemail").style.borderColor = "#E34234";
+                    alert("Email do not match. Please key again.");
+                    ok = false;
+                }
+            } else {
+                return ok;
+            }
+            return ok;
         }
     </script>
     <section class="content section">
@@ -146,15 +196,44 @@
                 <div class="md-modal md-effect-1" id="checkout-confirm">
                     <div class="md-content">
                         <h3>Checkout Cart</h3>
+                        <%
+                            Account account = (Account) session.getAttribute("account");
+                            if (account == null) {
+                        %>
                         <div>
-                            <p>This is a modal window. You can do the following things with it:</p>
-                            <ul>
-                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
-                                <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
-                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
-                            </ul>
+                            <p>*Warning: You are not logged in. Your purchases will be provided to you as download links and they will expire within an hour. If you wish to re-download your purchases in the future, please login before checking out.</p>
+                            <p>Are you sure you want to checkout?</p>
                             <div style="text-align:center;">
-                                <button class="md-close" type="button" onclick="checkout()">Checkout</button>
+                                <button type="button" onclick="login()">Login</button>
+                                <button type="button" class="md-trigger medium" data-modal="enter-email">Continue Checkout</button>
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                        <%} else {%>
+                        <div>
+                            <p>Are you sure you want to checkout?</p>
+                            <p>You will be directed to PayPal to complete your purchase.</p>
+                            <div style="text-align:center;">
+                                <button type="button" onclick="checkout()">Checkout</button>
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                        <%}%>
+
+                    </div>
+                </div>
+                <div class="md-modal md-effect-1" id="enter-email">
+                    <div class="md-content">
+                        <h3>Checkout Cart</h3>
+                        <div>
+                            <p>You will be directed to PayPal to complete your purchase.</p>
+                            <p>Enter the email to receives the download link(s):</p>
+                            <form>
+                                Email:<input type="email" id="email" required/><br/><br/>
+                                Re-enter email:<input type="email" id="reemail" required/>
+                            </form><br/><br/>
+                            <div style="text-align:center;">
+                                <button type="button" onclick="checkout2()">Checkout</button>
                                 <button class="md-close" type="button">Close</button>
                             </div>
                         </div>

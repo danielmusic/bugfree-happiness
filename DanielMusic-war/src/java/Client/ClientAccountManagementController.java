@@ -319,6 +319,10 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                     }
                     break;
+                case "SaveCartAndLogin":
+                    System.out.println("Controller: SaveCartAndLogin");
+                    //TODO future
+                    return;
             }
 
             if (nextPage.equals("")) {
