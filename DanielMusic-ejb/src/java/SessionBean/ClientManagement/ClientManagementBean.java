@@ -250,7 +250,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/payment-cancelled.jsp");//Return if payment cancelled
-            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/#!/Controller?PaymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/MusicManagementController?PaymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 
@@ -287,6 +287,25 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     }
 
     @Override
+    public Payment getPayment(Long paymentID) {
+        System.out.println("getPayment() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT e FROM Payment e WHERE e.id=:id");
+            q.setParameter("id", paymentID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            Payment payment = (Payment) q.getSingleResult();
+            return payment;
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public ReturnHelper completePayment(Long paymentID, String UUID) {
         System.out.println("completePayment() called");
         ReturnHelper result = new ReturnHelper();
@@ -303,11 +322,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             } else {
                 payment.setDateCompleted(new Date());
                 payment.setPaymentCompleted(true);
-                result.setResult(true);
-                result.setDescription("Payment completed successfully. Thank you for your purchase!");
                 em.merge(payment);
-                clearShoppingCart(payment.getAccount().getId());
-                //TODO add the payment to the user list of purchased music
+                result.setResult(true);
+                result.setID(payment.getId());
+                result.setDescription("Payment completed successfully. Thank you for your purchase!");
+                if (payment.getAccount() != null) {
+                    clearShoppingCart(payment.getAccount().getId());
+                    //TODO add the payment to the user list of purchased music
+                }
                 //Increase all the purchased count by +1
             }
         } catch (NoResultException ex) {
@@ -328,7 +350,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             q.setParameter("accountID", accountID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             account = (Account) q.getSingleResult();
-           // account = em.getReference(Account.class, accountID);
+            // account = em.getReference(Account.class, accountID);
 
             cart = account.getShoppingCart();
             System.out.println("ClientManagementBean: getShoppingCart() successfully");

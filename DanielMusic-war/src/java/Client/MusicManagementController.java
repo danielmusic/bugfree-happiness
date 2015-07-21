@@ -4,6 +4,7 @@ import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.Music;
+import EntityManager.Payment;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
@@ -537,8 +538,22 @@ public class MusicManagementController extends HttpServlet {
                     } else {
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
-                        
+
                         nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
+                    }
+                    break;
+                case "CompletePayment":
+                    String paymentID = (String) request.getAttribute("paymentID");
+                    String UUID = (String) request.getAttribute("UUID");
+                    Long paymentIDlong = Long.parseLong(paymentID);
+                    ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
+                    Payment payment = clientManagementBean.getPayment(result.getID());
+                    if (payment.getAccount() != null) {
+                        //todo view past purchaserd music
+                        nextPage = "";
+                    } else {
+                        //todo download music
+                        nextPage = "";
                     }
                     break;
             }
