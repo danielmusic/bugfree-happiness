@@ -338,8 +338,8 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "RemoveAlbumFromShoppingCart":
+                    System.out.println("controller: RemoveAlbumFromShoppingCart");
                     account = (Account) session.getAttribute("account");
-                    albumID = Long.parseLong(request.getParameter("albumID"));
                     String[] albumIDs = request.getParameterValues("deleteAlbum");
                     deleteCounter = 0;
                     if (account != null) {
@@ -371,13 +371,13 @@ public class MusicManagementController extends HttpServlet {
                         jsObj.put("errMsg", "No records were deleted.");
                         response.getWriter().write(jsObj.toString());
                     }
-
+                    session.setAttribute("redirectPage", "#!/cart");
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
 
                 case "RemoveTrackFromShoppingCart":
+                    System.out.println("controller: RemoveTrackFromShoppingCart");
                     account = (Account) session.getAttribute("account");
-                    trackID = Long.parseLong(request.getParameter("trackID"));
                     String[] trackIDs = request.getParameterValues("deleteTrack");
                     deleteCounter = 0;
                     if (account != null) {
@@ -403,6 +403,7 @@ public class MusicManagementController extends HttpServlet {
                     if (deleteCounter > 0) {
                         jsObj.put("result", true);
                         jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
+                        System.out.println("asdfsdfioasjdfoiawje");
                         response.getWriter().write(jsObj.toString());
                     } else {
                         jsObj.put("result", false);
@@ -410,6 +411,7 @@ public class MusicManagementController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                     }
 
+                    session.setAttribute("redirectPage", "#!/cart");
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
 
