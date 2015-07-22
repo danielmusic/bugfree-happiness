@@ -409,12 +409,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return helper;
                 }
             }
-
-            if (numPurchase > 0L) {
-                music.setIsDeleted(true);
-            } else {
-                em.remove(music);
-            }
+            em.remove(music);
             System.out.println("MusicManagementBean: deleteMusic() successfully");
             helper.setDescription("The track has been deleted successfully.");
             helper.setResult(true);
@@ -664,7 +659,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                    }
                     imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
-                    
+
                     File file = new File(tempImageURL);
                     file.delete();
                     if (result.getResult()) {
@@ -800,28 +795,32 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //if album is published, check whether album/music is purchased 
             //if purchased do soft delete
             if (album.getIsPublished()) {
-                //no album purchase yet
-                if (album.getNumPurchase() == 0) {
-                    Boolean trackPurchase = false;
-                    //check for track purchase
-                    List<Music> listOfMusics = album.getListOfMusics();
-                    for (int i = 0; i < listOfMusics.size(); i++) {
-                        Music m = listOfMusics.get(i);
-                        //no track download
-                        if (m.getNumPurchase() == 0) {
-                            cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
-                            cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
-                            em.remove(m);
-                        } else {
-                            trackPurchase = true;
-                        }
+                Boolean trackPurchase = false;
+                //check for track purchase
+                List<Music> listOfMusics = album.getListOfMusics();
+                for (int i = 0; i < listOfMusics.size(); i++) {
+                    Music m = listOfMusics.get(i);
+                    if (m.getNumPurchase() > 0) {
+                        trackPurchase = true;
+                        break;
                     }
-                    //if no track purchase, delete whole album
-                    if (!trackPurchase) {
-                        em.remove(album);
+                }
+                //if no track purchase & album no purchase, hard delete whole album
+                if (!trackPurchase && album.getNumPurchase() == 0) {
+                    for (Music m : album.getListOfMusics()) {
+                        cibl.deleteFileFromGoogleCloudStorage(m.getFileLocationWAV());
+                        cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
+                        cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
+                        em.remove(m);
                     }
                     if (album.getImageLocation() != null) {
                         cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                    }
+                    em.remove(album);
+                } else { //otherwise soft delete
+                    album.setIsDeleted(true);
+                    for (Music m : album.getListOfMusics()) {
+                        m.setIsDeleted(true);
                     }
                 }
             } else {
@@ -830,18 +829,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
                 }
                 for (Music m : album.getListOfMusics()) {
+                    cibl.deleteFileFromGoogleCloudStorage(m.getFileLocationWAV());
                     cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
                     cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
                 }
+                                    if (album.getImageLocation() != null) {
+                        cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                    }
                 em.remove(album);
             }
 
             em.flush();
-
-            album.setIsDeleted(true);
-            for (Music m : album.getListOfMusics()) {
-                m.setIsDeleted(true);
-            }
 
             helper.setDescription("Album has been deleted successfully");
             helper.setResult(true);
