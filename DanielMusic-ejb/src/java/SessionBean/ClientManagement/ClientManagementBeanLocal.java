@@ -21,4 +21,5 @@ public interface ClientManagementBeanLocal {
     public ReturnHelper clearShoppingCart(Long accountID);
     
     public Boolean testPayment(Double totalAmount, Double amount2, Double amount3);
+    public Boolean checkArtistPayPalEmailExists(Long trackOrAlbumID, Boolean isTrack);
 }

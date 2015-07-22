@@ -202,7 +202,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     partiesReceivingPayments.add(paymentHelper);
                 }
             }
-            
+
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);
@@ -510,6 +510,35 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             helper.setResult(false);
             return helper;
         }
+    }
+
+    @Override
+    public Boolean checkArtistPayPalEmailExists(Long trackOrAlbumID, Boolean isTrack) {
+        System.out.println("ClientManagementBean: checkArtistPayPalEmailExists() called");
+        try {
+            Query q;
+            if (isTrack) {
+                q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
+                q.setParameter("trackOrAlbumID", trackOrAlbumID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                Music m = (Music) q.getSingleResult();
+                if (m.getAlbum().getArtist().getPaypalEmail() != null) {
+                    return true;
+                }
+            } else {
+                q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
+                q.setParameter("trackOrAlbumID", trackOrAlbumID);
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                Album a = (Album) q.getSingleResult();
+                if (a.getArtist().getPaypalEmail() != null) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ClientManagementBean: checkArtistPayPalEmailExists() failed");
+        }
+        return false;
     }
 
 }

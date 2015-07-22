@@ -418,47 +418,53 @@ public class MusicManagementController extends HttpServlet {
                 case "AddAlbumToShoppingCart":
                     account = (Account) session.getAttribute("account");
                     albumID = Long.parseLong(request.getParameter("albumID"));
-                    if (account != null) {
-                        returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), albumID, false);
-                        if (returnHelper.getResult()) {
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
-                        } else {
-                            jsObj.put("result", false);
-                            jsObj.put("errMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
-                        }
+                    if (clientManagementBean.checkArtistPayPalEmailExists(albumID, false)) {
+                        if (account != null) {
+                            returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), albumID, false);
+                            if (returnHelper.getResult()) {
+                                jsObj.put("result", true);
+                                jsObj.put("goodMsg", returnHelper.getDescription());
+                                response.getWriter().write(jsObj.toString());
+                            } else {
+                                jsObj.put("result", false);
+                                jsObj.put("errMsg", returnHelper.getDescription());
+                                response.getWriter().write(jsObj.toString());
+                            }
 
-                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                        } else {
+                            shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                            album = musicManagementBean.getAlbum(albumID);
+                            Boolean result;
+                            if (shoppingCart == null) {
+                                shoppingCart = new ShoppingCart();
+
+                                HashSet<Album> albumSet = new HashSet<Album>();
+                                result = albumSet.add(album);
+                                HashSet<Music> musicSet = new HashSet<Music>();
+
+                                shoppingCart.setListOfAlbums(albumSet);
+                                shoppingCart.setListOfMusics(musicSet);
+                            } else {
+                                Set set = shoppingCart.getListOfAlbums();
+                                result = set.add(album);
+                                shoppingCart.setListOfAlbums(set);
+                            }
+
+                            if (result) {
+                                jsObj.put("result", true);
+                                jsObj.put("goodMsg", "Item has been added to cart successfully.");
+                                response.getWriter().write(jsObj.toString());
+                            } else {
+                                jsObj.put("result", false);
+                                jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
+                                response.getWriter().write(jsObj.toString());
+                            }
+                        }
                     } else {
-                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                        album = musicManagementBean.getAlbum(albumID);
-                        Boolean result;
-                        if (shoppingCart == null) {
-                            shoppingCart = new ShoppingCart();
-
-                            HashSet<Album> albumSet = new HashSet<Album>();
-                            result = albumSet.add(album);
-                            HashSet<Music> musicSet = new HashSet<Music>();
-
-                            shoppingCart.setListOfAlbums(albumSet);
-                            shoppingCart.setListOfMusics(musicSet);
-                        } else {
-                            Set set = shoppingCart.getListOfAlbums();
-                            result = set.add(album);
-                            shoppingCart.setListOfAlbums(set);
-                        }
-
-                        if (result) {
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", "Item has been added to cart successfully.");
-                            response.getWriter().write(jsObj.toString());
-                        } else {
-                            jsObj.put("result", false);
-                            jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
-                            response.getWriter().write(jsObj.toString());
-                        }
+                        jsObj.put("result", false);
+                        jsObj.put("errMsg", "Sorry, the track is currently unavailable.");
+                        response.getWriter().write(jsObj.toString());
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
@@ -466,47 +472,53 @@ public class MusicManagementController extends HttpServlet {
                 case "AddTrackToShoppingCart":
                     account = (Account) session.getAttribute("account");
                     trackID = Long.parseLong(request.getParameter("trackID"));
-                    if (account != null) {
-                        returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), trackID, true);
-                        if (returnHelper.getResult()) {
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
-                        } else {
-                            jsObj.put("result", false);
-                            jsObj.put("errMsg", returnHelper.getDescription());
-                            response.getWriter().write(jsObj.toString());
-                        }
+                    if (clientManagementBean.checkArtistPayPalEmailExists(trackID, true)) {
+                        if (account != null) {
+                            returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), trackID, true);
+                            if (returnHelper.getResult()) {
+                                jsObj.put("result", true);
+                                jsObj.put("goodMsg", returnHelper.getDescription());
+                                response.getWriter().write(jsObj.toString());
+                            } else {
+                                jsObj.put("result", false);
+                                jsObj.put("errMsg", returnHelper.getDescription());
+                                response.getWriter().write(jsObj.toString());
+                            }
 
-                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                        } else {
+                            shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                            track = musicManagementBean.getMusic(trackID);
+                            Boolean result;
+                            if (shoppingCart == null) {
+                                shoppingCart = new ShoppingCart();
+
+                                HashSet<Album> albumSet = new HashSet<Album>();
+                                HashSet<Music> musicSet = new HashSet<Music>();
+                                result = musicSet.add(track);
+
+                                shoppingCart.setListOfAlbums(albumSet);
+                                shoppingCart.setListOfMusics(musicSet);
+                            } else {
+                                Set set = shoppingCart.getListOfMusics();
+                                result = set.add(track);
+                                shoppingCart.setListOfMusics(set);
+                            }
+
+                            if (result) {
+                                jsObj.put("result", true);
+                                jsObj.put("goodMsg", "Item has been added to cart successfully.");
+                                response.getWriter().write(jsObj.toString());
+                            } else {
+                                jsObj.put("result", false);
+                                jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
+                                response.getWriter().write(jsObj.toString());
+                            }
+                        }
                     } else {
-                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                        track = musicManagementBean.getMusic(trackID);
-                        Boolean result;
-                        if (shoppingCart == null) {
-                            shoppingCart = new ShoppingCart();
-
-                            HashSet<Album> albumSet = new HashSet<Album>();
-                            HashSet<Music> musicSet = new HashSet<Music>();
-                            result = musicSet.add(track);
-
-                            shoppingCart.setListOfAlbums(albumSet);
-                            shoppingCart.setListOfMusics(musicSet);
-                        } else {
-                            Set set = shoppingCart.getListOfMusics();
-                            result = set.add(track);
-                            shoppingCart.setListOfMusics(set);
-                        }
-
-                        if (result) {
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", "Item has been added to cart successfully.");
-                            response.getWriter().write(jsObj.toString());
-                        } else {
-                            jsObj.put("result", false);
-                            jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
-                            response.getWriter().write(jsObj.toString());
-                        }
+                        jsObj.put("result", false);
+                        jsObj.put("errMsg", "Sorry, the track is currently unavailable.");
+                        response.getWriter().write(jsObj.toString());
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
                     break;
