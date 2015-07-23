@@ -20,7 +20,21 @@
         function removeTrack() {
             alert("removeTrack");
             checkboxes = document.getElementsByName('deleteTrack');
-            
+            var arr = new Array();
+            $("input:checkbox[name=deleteTrack]:checked").each(function () {
+                arr.push($(this).val());
+            });
+            var stringArr = "";
+            for (var i = 0; i < arr.length; i++) {
+                alert(arr[i]);
+                if (i != (arr.length - 1)) {
+                    stringArr += arr[i] + ",";
+                } else {
+                    stringArr += arr[i];
+                    alert("strArr" + stringArr);
+                }
+            }
+
             var numOfTicks = 0;
             for (var i = 0, n = checkboxes.length; i < n; i++) {
                 if (checkboxes[i].checked) {
@@ -28,22 +42,18 @@
                 }
             }
             if (checkboxes.length == 0 || numOfTicks == 0) {
-                alert("removeTrack: 00");
-
                 window.event.returnValue = true;
                 //window.location.href = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
             } else {
-                alert("removeTrack: no 0");
-
                 url = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
                 $.ajax({
                     type: "GET",
                     async: false,
                     url: url,
-                    data: {'deleteTrack': checkboxes},
+                    data: {'deleteTrack': stringArr},
                     success: function (val) {
                         window.event.returnValue = false;
-                        window.location.href = "#!/dummy";
+                        window.location.href = "#!/redirect";
                     },
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
@@ -56,6 +66,22 @@
         }
         function removeAlbum() {
             checkboxes = document.getElementsByName('deleteAlbum');
+            var arr = new Array();
+            $("input:checkbox[name=deleteAlbum]:checked").each(function () {
+                arr.push($(this).val());
+            });
+            var stringArr = "";
+            for (var i = 0; i < arr.length; i++) {
+                alert(arr[i]);
+                if (i != (arr.length - 1)) {
+                    stringArr += arr[i] + ",";
+                } else {
+                    stringArr += arr[i];
+                    alert("strArr" + stringArr);
+                }
+            }
+
+
             var numOfTicks = 0;
             for (var i = 0, n = checkboxes.length; i < n; i++) {
                 if (checkboxes[i].checked) {
@@ -71,10 +97,10 @@
                     type: "GET",
                     async: false,
                     url: url,
-                    data: {'deleteAlbum': checkboxes},
+                    data: {'deleteAlbum': stringArr},
                     success: function (val) {
                         window.event.returnValue = false;
-                        window.location.href = "#!/dummy";
+                        window.location.href = "#!/redirect";
                     },
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
@@ -108,6 +134,7 @@
 
 
         function checkout() {
+            this.disabled=true;
             //window.location.href = "./MusicManagementController?target=Checkout";
             url = "./MusicManagementController?target=Checkout";
             $.ajax({
@@ -126,7 +153,6 @@
                     ajaxResultsError(xhr, status, error);
                 }
             });
-            
         }
 
         function checkout2() {
@@ -134,21 +160,21 @@
                 //window.location.href = "./MusicManagementController?target=Checkout";
                 url = "./MusicManagementController?target=Checkout";
                 $.ajax({
-                type: "GET",
-                async: false,
-                url: url,
-                data: {},
-                success: function (val) {
-                    window.event.returnValue = false;
-                    window.location.href = "#!/checkout";
-                },
-                error: function (xhr, status, error) {
-                    document.getElementById("errMsg").style.display = "block";
-                    document.getElementById('errMsg').innerHTML = error;
-                    hideLoader();
-                    ajaxResultsError(xhr, status, error);
-                }
-            });
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {},
+                    success: function (val) {
+                        window.event.returnValue = false;
+                        window.location.href = "#!/checkout";
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
             }
         }
 
@@ -174,6 +200,8 @@
     <section class="content section">
         <div class="container">
             <article>
+                <jsp:include page="./jspIncludePages/displayMessage.jsp" />
+                <p class="error" id="errMsg" style="display:none;"></p>
                 <%@page import="EntityManager.ShoppingCart"%>
                 <%@page import="EntityManager.Account"%>
                 <%@page import="java.util.ArrayList"%>
@@ -181,10 +209,12 @@
                 <%@page import="java.util.Set"%>
                 <%@page import="EntityManager.Music"%>
                 <%@page import="java.util.List"%>
+                <%@page import="java.text.NumberFormat"%>
                 <h1>Shopping Cart</h1>
                 <%
                     ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                    if (shoppingCart != null) {
+                    Double totalPrice = 0.0;
+                    if (shoppingCart != null && shoppingCart.getListOfAlbums().size() + shoppingCart.getListOfMusics().size() != 0) {
                         Set<Music> setOfMusics = shoppingCart.getListOfMusics();
                         if (setOfMusics != null && !setOfMusics.isEmpty()) {
                             List<Music> listOfMusics = new ArrayList();
@@ -196,21 +226,22 @@
                         <thead>
                             <tr>
                                 <th class="product-remove" style="width: 5%">
-                                    <input type="checkbox" onclick="checkAllTracks(this)" />
+                                    <input type="checkbox" onclick="checkAllTracks(this);" />
                                 </th>     
-                                <th style="width: 20%">Track Name</th>
-                                <th style="width: 20%">Album Name</th>
-                                <th style="width: 20%">Artist Name</th>
+                                <th style="width: 30%">Track Name</th>
+                                <th style="width: 30%">Album Name</th>
+                                <th style="width: 25%">Artist Name</th>
                                 <th style="width: 10%">Price</th>
-                                <th colspan="2" style="width: 15%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%                                for (Music m : listOfMusics) {
+                            <%
+                                for (Music m : listOfMusics) {
+                                    totalPrice = totalPrice + m.getPrice();
                             %>
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="deleteTrack" value="music:<%=m.getId()%>" />
+                                    <input type="checkbox" name="deleteTrack" value="<%=m.getId()%>" />
                                 </td>
                                 <td class="table-date">
                                     <%=m.getName()%>
@@ -222,11 +253,10 @@
                                     <%=m.getArtistName()%>
                                 </td>
                                 <td>
-                                    $<%=m.getPrice()%>0
+                                    <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                        out.print(formatter.format(m.getPrice()));%>
                                 </td>
-                                <td class="actions">
-                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
-                                </td>
+
                             </tr>
                             <%
                                 }
@@ -249,19 +279,19 @@
                                 <th class="product-remove" style="width: 5%">
                                     <input type="checkbox" onclick="checkAllAlbums(this)" />
                                 </th>     
-                                <th style="width: 20%">Album Name</th>
-                                <th style="width: 20%">Artist Name</th>
-                                <th style="width: 10%">Price</th>
-                                <th colspan="2" style="width: 15%"></th>
+                                <th style="width: 30%">Album Name</th>
+                                <th style="width: 30%">Artist Name</th>
+                                <th style="width: 35%">Price</th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
                                 for (Album a : listOfAlbums) {
+                                    totalPrice = totalPrice + a.getPrice();
                             %>
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="deleteAlbum" value="album:<%=a.getId()%>" />
+                                    <input type="checkbox" name="deleteAlbum" value="<%=a.getId()%>" />
                                 </td>
                                 <td class="table-date">
                                     <%=a.getName()%>
@@ -270,10 +300,8 @@
                                     <%=a.getArtistName()%>
                                 </td>
                                 <td>
-                                    $<%=a.getPrice()%>0
-                                </td>
-                                <td class="actions">
-                                    <a href="javascript:;" class="buy-tickets" title="Buy Tickets">Buy Tickets</a>
+                                    <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                        out.print(formatter.format(a.getPrice()));%>
                                 </td>
                             </tr>
                             <%
@@ -286,7 +314,15 @@
                 </form>
                 <%                                }
                 %>
-                <p style="float: right;"><strong>Subtotal: $99</strong> </p>
+                <p style="float: right;">
+                    <strong>
+                        Subtotal:                                   
+                        <%
+                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                            out.print(formatter.format(totalPrice));
+                        %>
+                    </strong>
+                </p>
                 <br><br>
                 <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
                 <%} else {%>
@@ -313,7 +349,7 @@
                             <p>Are you sure you want to checkout?</p>
                             <p>You will be directed to PayPal to complete your purchase.</p>
                             <div style="text-align:center;">
-                                <button type="button" onclick="checkout()">Checkout</button>
+                                <button type="button" onclick="checkout();">Checkout</button>
                                 <button class="md-close" type="button">Close</button>
                             </div>
                         </div>
@@ -343,7 +379,7 @@
 
             <script src="js/classie.js"></script>
             <script src="js/modalEffects.js"></script>
-            <script>var polyfilter_scriptpath = '/js/';</script> 
+            <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
             <script src="js/cssParser.js"></script>
             <script src="js/css-filters-polyfill.js"></script>
         </div>

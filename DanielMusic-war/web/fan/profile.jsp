@@ -11,8 +11,7 @@
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Account account = (Account) session.getAttribute("account");
-                    Member member = (Member) (session.getAttribute("member"));
-                    if (account != null && member != null) {
+                    if (account != null) {
                         if (!account.getEmailIsVerified()) {
                             out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
                         }

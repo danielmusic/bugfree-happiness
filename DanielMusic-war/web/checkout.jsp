@@ -16,6 +16,8 @@
     <section class="content section">
         <div class="container">
             <article>
+                <jsp:include page="./jspIncludePages/displayMessage.jsp" />
+                <p class="error" id="errMsg" style="display:none;"></p>
                 <%@page import="EntityManager.CheckoutHelper"%>
                 <%@page import="EntityManager.Account"%>
                 <%@page import="java.util.ArrayList"%>

@@ -137,6 +137,9 @@
                                 %>
                             </p>
                             <p>Year Released: <%=album.getYearReleased()%></p>
+                            <%if (album.getListOfMusics().size() > 1) {%>
+                            <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Album to Cart</a>
+                            <%}%>
                             <%
                                 List<Music> musics = album.getListOfMusics();
                                 if (musics == null) {
@@ -210,7 +213,7 @@
                             <%}%>
                             <p>
                                 <a href="javascript:;" class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
-                                <a href="javascript:;" class="btn sp-add-list" data-id="release-list">Add All Tracks</a>
+                                <a href="javascript:;" class="btn sp-add-list" data-id="release-list">Add All Tracks to Playlist</a>
                             </p>
                         </div>
                     </div>
@@ -262,7 +265,7 @@
         </script>
         <script src="js/classie.js"></script>
         <script src="js/modalEffects.js"></script>
-        <script>var polyfilter_scriptpath = '/js/';</script> 
+        <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
         <script src="js/cssParser.js"></script>
         <script src="js/css-filters-polyfill.js"></script>
     </section>

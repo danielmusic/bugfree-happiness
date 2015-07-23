@@ -13,8 +13,11 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -42,10 +45,8 @@ public class MusicManagementController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Welcome to client Music Management controller");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
-        System.out.println("target " + target);
 
         String id = request.getParameter("id");
         String name = request.getParameter("name");
@@ -218,8 +219,6 @@ public class MusicManagementController extends HttpServlet {
                             session.setAttribute("errMsg", "Unauthorized action");
                         } else {
                             returnHelper = musicManagementBean.publishAlbum(Long.parseLong(id));
-                            System.out.println("returnHelper.getResult() " + returnHelper.getResult());
-
                             if (returnHelper.getResult()) {
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
@@ -335,14 +334,21 @@ public class MusicManagementController extends HttpServlet {
                         //retrieve from server
                         shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                     }
-
+                    jsObj.put("result", true);
+                    jsObj.put("goodMsg", "Cart");
+                    response.getWriter().write(jsObj.toString());
                     session.setAttribute("ShoppingCart", shoppingCart);
-                    break;
+                    return;
 
                 case "RemoveAlbumFromShoppingCart":
-                    System.out.println("controller: RemoveAlbumFromShoppingCart");
                     account = (Account) session.getAttribute("account");
-                    String[] albumIDs = request.getParameterValues("deleteAlbum");
+                    String strAlbumIDs = request.getParameter("deleteAlbum");
+                    Scanner sc = new Scanner(strAlbumIDs);
+                    ArrayList<String> albumIDs = new ArrayList<>();
+                    while (sc.hasNext()) {
+                        albumIDs.add(sc.next());
+                    }
+
                     deleteCounter = 0;
                     if (account != null) {
                         for (String s : albumIDs) {
@@ -378,9 +384,14 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "RemoveTrackFromShoppingCart":
-                    System.out.println("controller: RemoveTrackFromShoppingCart");
                     account = (Account) session.getAttribute("account");
-                    String[] trackIDs = request.getParameterValues("deleteTrack");
+                    String strTrackIDs = request.getParameter("deleteTrack");
+                    Scanner sc2 = new Scanner(strTrackIDs);
+                    ArrayList<String> trackIDs = new ArrayList<>();
+                    while (sc2.hasNext()) {
+                        trackIDs.add(sc2.next());
+                    }
+
                     deleteCounter = 0;
                     if (account != null) {
                         for (String s : trackIDs) {
@@ -405,7 +416,6 @@ public class MusicManagementController extends HttpServlet {
                     if (deleteCounter > 0) {
                         jsObj.put("result", true);
                         jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
-                        System.out.println("asdfsdfioasjdfoiawje");
                         response.getWriter().write(jsObj.toString());
                     } else {
                         jsObj.put("result", false);
@@ -551,7 +561,7 @@ public class MusicManagementController extends HttpServlet {
                         String email = request.getParameter("email");
                         checkoutHelper = clientManagementBean.getPayKey(null, email, musicSet, albumSet);
                     }
-                    if (checkoutHelper==null){
+                    if (checkoutHelper == null) {
                         session.setAttribute("errMsg", "Internal server error.");
                         jsObj.put("result", false);
                         jsObj.put("errMsg", "Internal server error.");
@@ -572,7 +582,7 @@ public class MusicManagementController extends HttpServlet {
                             session.setAttribute("goodMsg", "Thanks.");
                             jsObj.put("result", true);
                             jsObj.put("goodMsg", "Checkout completed, please wait, redirecting...");
-                            break;
+                            return;
                         case "NO_PAYMENT_REQUIRED_FAILED":
                             session.setAttribute("errMsg", "There was an error completing the checkout request, please try again later.");
                             jsObj.put("result", false);
@@ -583,25 +593,29 @@ public class MusicManagementController extends HttpServlet {
                     jsObj.put("result", true);
                     jsObj.put("goodMsg", "Please verify the following payment details.");
                     response.getWriter().write(jsObj.toString());
+                    //goto checkuot.jsp
                     return;
                 case "CompletePayment":
-                    String paymentID = (String) request.getAttribute("paymentID");
-                    String UUID = (String) request.getAttribute("UUID");
+                    String paymentID = (String) request.getParameter("paymentID");
+                    String UUID = (String) request.getParameter("UUID");
                     Long paymentIDlong = Long.parseLong(paymentID);
                     ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
                     if (!result.getResult()) {//fail to complete payment
                         session.setAttribute("errMsg", result.getDescription());
-                        nextPage = "#!/cart";
+                        session.setAttribute("redirectPage", "#!/checkout");
+                        nextPage = "redirect2.jsp";
                     } else {
                         Payment payment = clientManagementBean.getPayment(result.getID());
                         if (payment.getAccount() != null) {
-                            //todo view past purchaserd music
-                            nextPage = "";
+                            //Logged in user will view list of purchaserd music
+                            session.setAttribute("redirectPage", "#!/fan/profile");
+                            nextPage = "redirect2.jsp";
                         } else {
-                            //todo download music
+                            //Payment not tied to account will access download page directly
                             DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
                             session.setAttribute("downloadLinks", downloadHelper);
-                            nextPage = "#!/download-links";
+                            session.setAttribute("redirectPage", "#!/download-links");
+                            nextPage = "redirect2.jsp";
                         }
                     }
                     break;
