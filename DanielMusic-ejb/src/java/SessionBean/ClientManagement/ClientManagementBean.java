@@ -3,12 +3,15 @@ package SessionBean.ClientManagement;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
+import EntityManager.CheckoutHelper;
+import EntityManager.DownloadHelper;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.PaymentHelper;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
 import com.paypal.svcs.types.ap.PayResponse;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +42,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
+
+    @EJB
+    private MusicManagementBeanLocal mmbl;
 
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
@@ -114,8 +121,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     }
 
     @Override
-    public String getPaymentLink(Long accountID, String nonMemberEmail, Set<Music> tracksInCart, Set<Album> albumInCart) {
-        System.out.println("getPaymentLink() called");
+    public CheckoutHelper getPayKey(Long accountID, String nonMemberEmail, Set<Music> tracksInCart, Set<Album> albumInCart) {
+        CheckoutHelper checkoutHelper = new CheckoutHelper();
+        System.out.println("getPayKey() called");
         try {
             //If accountID is not null, is a registered account purchase. Get it's shopping cart content
             //If null, the other 3 arguments should be filled in
@@ -156,7 +164,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             //Create the list of artist/band to be paid and the amount to be paid for each artist for each music track
             //and calculate the total amount to be paid
+            //Also create the list of pricing in the payment
+            List<Music> listOfMusicsInCart = new ArrayList();
+            List<Double> listOfMusicPrices = new ArrayList();
+            List<Album> listOfAlbumsInCart = new ArrayList();
+            List<Double> listOfAlbumPrices = new ArrayList();
             for (Music music : tracksInCart) {
+                listOfMusicsInCart.add(music);
+                listOfMusicPrices.add(music.getPrice());
                 totalPaymentAmount = totalPaymentAmount + music.getPrice();
                 currentArtist = music.getAlbum().getArtist();
                 //Loop through the helpers to search for the artist
@@ -182,6 +197,8 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //Create the list of artist/band to be paid and the amount to be paid for each artist for each music track
             //and calculate the total amount to be paid
             for (Album album : albumInCart) {
+                listOfAlbumsInCart.add(album);
+                listOfAlbumPrices.add(album.getPrice());
                 totalPaymentAmount = totalPaymentAmount + album.getPrice();
                 currentArtist = album.getArtist();
                 //Loop through the helpers to search for the artist
@@ -202,32 +219,39 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     partiesReceivingPayments.add(paymentHelper);
                 }
             }
+
             
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);
-            payment.setAlbumPurchased(albumInCart);
-            payment.setMusicPurchased(tracksInCart);
+            payment.setAlbumPurchased(listOfAlbumsInCart);
+            payment.setAlbumPrices(listOfAlbumPrices);
+            payment.setMusicPurchased(listOfMusicsInCart);
+            payment.setMusicPrices(listOfMusicPrices);
             if (totalPaymentAmount == 0.0) { //If free
                 if (accountID != null) {
                     payment.setAccount(account);
                 } else {
                     payment.setNonMemberEmail(nonMemberEmail);
                 }
-                payment.setPaymentCompleted(true);
-                payment.setDateCompleted(new Date());
                 em.persist(payment);
-                return "NO_PAYMENT_REQUIRED";
+                checkoutHelper.setPayment(payment);
+                if (completePayment(accountID, UUID).getResult()) {
+                    checkoutHelper.setPayKey("NO_PAYMENT_REQUIRED_PAYMENT_COMPLETE");
+                } else {
+                    checkoutHelper.setPayKey("NO_PAYMENT_REQUIRED_FAILED");
+                }
+                return checkoutHelper;
             }
             em.persist(payment);
-
+            checkoutHelper.setPayment(payment);
             //Create PayPal request
             PayRequest payRequest = new PayRequest();
             List<Receiver> receivers = new ArrayList<Receiver>();
             for (int i = 0; i < partiesReceivingPayments.size(); i++) {
                 //Artist (partial of the total)
                 Receiver secondaryReceiver = new Receiver();
-                secondaryReceiver.setAmount(partiesReceivingPayments.get(i).getTotalPaymentAmount() * ARTISTBAND_CUT_PERCENTAGE);
+                secondaryReceiver.setAmount(Math.round(partiesReceivingPayments.get(i).getTotalPaymentAmount() * ARTISTBAND_CUT_PERCENTAGE * 100.0) / 100.0);
                 secondaryReceiver.setEmail(partiesReceivingPayments.get(i).getArtistOrBandPaypalEmail());
                 secondaryReceiver.setPaymentType("DIGITALGOODS");
                 receivers.add(secondaryReceiver);
@@ -248,7 +272,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
-            payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/payment-cancelled.jsp");//Return if payment cancelled
+            payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/#!/payment-cancelled");//Return if payment cancelled
             payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/MusicManagementController?target=CompletePayment&PaymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
@@ -267,19 +291,15 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
             System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);
-            if (payKey != null) {
-                //TODO remove sandbox
-                return "https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey;
-            } else {
-                return null;
-            }
+            checkoutHelper.setPayKey(payKey);
+            return checkoutHelper;
 
             //open link in browser
             //Accounts (all password is 12345678): 
             //daniel-buyer@hotmail.com, daniel-artist@hotmail.com, danielmusic@hotmail.com
             //Login at https://www.sandbox.paypal.com
         } catch (Exception ex) {
-            System.out.println("getPaymentLink() failed");
+            System.out.println("getPayKey() failed");
             ex.printStackTrace();
             return null;
         }
@@ -305,6 +325,50 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     }
 
     @Override
+    public DownloadHelper getPurchaseDownloadLinks(Long paymentID) {
+        System.out.println("getPurchaseDownloadLinks() called");
+        List<DownloadHelper> purchaseDownloads = new ArrayList();
+        try {
+            Payment payment = getPayment(paymentID);
+            List<Music> listOfPurchasedMusic = new ArrayList();
+            List<String> downloadLinks128 = new ArrayList();
+            List<String> downloadLinks320 = new ArrayList();
+            List<String> downloadLinksWav = new ArrayList();
+
+            Iterator iterator = payment.getAlbumPurchased().iterator();
+            while (iterator.hasNext()) {
+                Album album = (Album) iterator.next();
+                for (Music m : album.getListOfMusics()) {
+                    listOfPurchasedMusic.add(m);
+                    downloadLinksWav.add(mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE));
+                    downloadLinks128.add(mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE));
+                    downloadLinks320.add(mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE));
+                }
+            }
+
+            iterator = payment.getMusicPurchased().iterator();
+            while (iterator.hasNext()) {
+                Music m = (Music) iterator.next();
+                listOfPurchasedMusic.add(m);
+                downloadLinksWav.add(mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE));
+                downloadLinks128.add(mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE));
+                downloadLinks320.add(mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE));
+            }
+            DownloadHelper downloadHelper = new DownloadHelper();
+            downloadHelper.setDownloadLinksWav(downloadLinksWav);
+            downloadHelper.setDownloadLinks128(downloadLinks128);
+            downloadHelper.setDownloadLinks320(downloadLinks320);
+
+            return downloadHelper;
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public ReturnHelper completePayment(Long paymentID, String UUID) {
         System.out.println("completePayment() called");
         ReturnHelper result = new ReturnHelper();
@@ -316,8 +380,11 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             Payment payment = (Payment) q.getSingleResult();
             if (!payment.getUUID().equals(UUID)) {
                 result.setDescription("Payment could not be completed due to invalid UUID. If you have completed your PayPal payment and see this error message, please contact us.");
+                return result;
             } else if (payment.getPaymentCompleted()) {
-                result.setDescription("Payment is already completed.");
+                result.setDescription("Payment completed successfully. Thank you for your purchase!");
+                result.setResult(true);
+                return result;
             } else {
                 payment.setDateCompleted(new Date());
                 payment.setPaymentCompleted(true);
@@ -325,11 +392,35 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 result.setResult(true);
                 result.setID(payment.getId());
                 result.setDescription("Payment completed successfully. Thank you for your purchase!");
-                if (payment.getAccount() != null) {
-                    clearShoppingCart(payment.getAccount().getId());
-                    //TODO add the payment to the user list of purchased music
+                Account account = payment.getAccount();
+                //Increase purchase count
+                //And add the purchased music to the user list of purchased music
+                Iterator iterator = payment.getMusicPurchased().iterator();
+                while (iterator.hasNext()) {
+                    Music music = (Music) iterator.next();
+                    music.setNumPurchase(music.getNumPurchase() + 1);
+                    if (account != null) { //If payment is tied to an account
+                        account.getListOfPurchasedMusics().add(music);
+                    }
                 }
-                //Increase all the purchased count by +1
+                iterator = payment.getAlbumPurchased().iterator();
+                while (iterator.hasNext()) {
+                    Album album = (Album) iterator.next();
+                    album.setNumPurchase(album.getNumPurchase() + 1);
+                    if (account != null) { //If payment is tied to an account
+                        for (Music music : album.getListOfMusics()) {
+                            account.getListOfPurchasedMusics().add(music);
+                        }
+                    }
+                }
+                clearShoppingCart(account.getId());
+                //todo enable this notifyArtistsOfCustomerPurchase(paymentID);
+                payment.setPaymentCompleted(true);
+                payment.setDateCompleted(new Date());
+                em.flush();
+                result.setDescription("Payment completed");
+                result.setResult(true);
+                return result;
             }
         } catch (NoResultException ex) {
             result.setDescription("Unable to find a matching payment record in our system. If you have completed your PayPal payment and see this error message, please contact us.");
@@ -510,6 +601,16 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             helper.setResult(false);
             return helper;
         }
+    }
+
+    @Override
+    public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID) {
+        //todo
+        //1 Figure out the list of artist
+        // for each artist
+        //2 Create the list of albums/musics for each artist
+        //3 Mail the artist
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

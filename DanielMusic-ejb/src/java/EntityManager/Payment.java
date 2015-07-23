@@ -7,6 +7,8 @@ package EntityManager;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,9 +36,11 @@ public class Payment implements Serializable {
     private Date dateCompleted;
     private Boolean paymentCompleted;
     @OneToMany
-    private Set<Music> musicPurchased;
+    private List<Music> musicPurchased;
+    private List<Double> musicPrices;
     @OneToMany
-    private Set<Album> albumPurchased;
+    private List<Album> albumPurchased;
+    private List<Double> albumPrices;
     private String UUID;
 
     public Payment() {
@@ -51,6 +55,22 @@ public class Payment implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public List<Double> getMusicPrices() {
+        return musicPrices;
+    }
+
+    public void setMusicPrices(List<Double> musicPrices) {
+        this.musicPrices = musicPrices;
+    }
+
+    public List<Double> getAlbumPrices() {
+        return albumPrices;
+    }
+
+    public void setAlbumPrices(List<Double> albumPrices) {
+        this.albumPrices = albumPrices;
     }
 
     public String getNonMemberEmail() {
@@ -73,19 +93,19 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public Set<Album> getAlbumPurchased() {
+    public List<Album> getAlbumPurchased() {
         return albumPurchased;
     }
 
-    public void setAlbumPurchased(Set<Album> albumPurchased) {
+    public void setAlbumPurchased(List<Album> albumPurchased) {
         this.albumPurchased = albumPurchased;
     }
 
-    public Set<Music> getMusicPurchased() {
+    public List<Music> getMusicPurchased() {
         return musicPurchased;
     }
 
-    public void setMusicPurchased(Set<Music> musicPurchased) {
+    public void setMusicPurchased(List<Music> musicPurchased) {
         this.musicPurchased = musicPurchased;
     }
 

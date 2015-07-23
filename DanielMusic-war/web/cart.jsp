@@ -109,18 +109,47 @@
 
 
         function checkout() {
-            window.location.href = "./MusicManagementController?target=Checkout";
-            //window.open("./MusicManagementController?target=Checkout","_blank","width=400, height=600");
-            //window.open("./MusicManagementController?target=Checkout","_blank");
+            //window.location.href = "./MusicManagementController?target=Checkout";
+            url = "./MusicManagementController?target=Checkout";
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: url,
+                data: {},
+                success: function (val) {
+                    window.event.returnValue = false;
+                    window.location.href = "#!/checkout";
+                },
+                error: function (xhr, status, error) {
+                    document.getElementById("errMsg").style.display = "block";
+                    document.getElementById('errMsg').innerHTML = error;
+                    hideLoader();
+                    ajaxResultsError(xhr, status, error);
+                }
+            });
+            
         }
 
         function checkout2() {
             if (validateEmail()) {
-
-
-                window.location.href = "./MusicManagementController?target=Checkout";
-                //window.open("./MusicManagementController?target=Checkout","_blank","width=400, height=600");
-                //window.open("./MusicManagementController?target=Checkout","_blank");
+                //window.location.href = "./MusicManagementController?target=Checkout";
+                url = "./MusicManagementController?target=Checkout";
+                $.ajax({
+                type: "GET",
+                async: false,
+                url: url,
+                data: {},
+                success: function (val) {
+                    window.event.returnValue = false;
+                    window.location.href = "#!/checkout";
+                },
+                error: function (xhr, status, error) {
+                    document.getElementById("errMsg").style.display = "block";
+                    document.getElementById('errMsg').innerHTML = error;
+                    hideLoader();
+                    ajaxResultsError(xhr, status, error);
+                }
+            });
             }
         }
 

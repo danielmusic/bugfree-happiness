@@ -3,6 +3,8 @@ package Client;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
+import EntityManager.CheckoutHelper;
+import EntityManager.DownloadHelper;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.ReturnHelper;
@@ -509,7 +511,7 @@ public class MusicManagementController extends HttpServlet {
                         }
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
-                    break;
+                    return;
 
                 case "GetArtistByID":
                     if (artist != null) {
@@ -524,32 +526,71 @@ public class MusicManagementController extends HttpServlet {
                 case "Checkout":
                     shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                     account = (Account) session.getAttribute("account");
+                    CheckoutHelper checkoutHelper = null;
 
                     if (account != null) {
                         shoppingCart = clientManagementBean.getShoppingCart(account.getId());
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
-
-                        nextPage = clientManagementBean.getPaymentLink(account.getId(), null, musicSet, albumSet);
+                        checkoutHelper = clientManagementBean.getPayKey(account.getId(), null, musicSet, albumSet);
                     } else {
                         Set<Music> musicSet = shoppingCart.getListOfMusics();
                         Set<Album> albumSet = shoppingCart.getListOfAlbums();
                         String email = request.getParameter("email");
-                        nextPage = clientManagementBean.getPaymentLink(null, email, musicSet, albumSet);
+                        checkoutHelper = clientManagementBean.getPayKey(null, email, musicSet, albumSet);
                     }
-                    break;
+                    if (checkoutHelper==null){
+                        session.setAttribute("errMsg", "Internal server error.");
+                        jsObj.put("result", false);
+                        jsObj.put("errMsg", "Internal server error.");
+                        response.getWriter().write(jsObj.toString());
+                        return;
+                    }
+                    session.setAttribute("checkoutHelper", checkoutHelper);
+                    if (checkoutHelper.getPayKey() == null) {
+                        session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
+                        jsObj.put("result", false);
+                        jsObj.put("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
+                        response.getWriter().write(jsObj.toString());
+                        return;
+                    }
+                    switch (checkoutHelper.getPayKey()) {
+                        case "NO_PAYMENT_REQUIRED_PAYMENT_COMPLETE":
+                            //todo this one should redirect after going to checkout.jsp
+                            session.setAttribute("goodMsg", "Thanks.");
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", "Checkout completed, please wait, redirecting...");
+                            break;
+                        case "NO_PAYMENT_REQUIRED_FAILED":
+                            session.setAttribute("errMsg", "There was an error completing the checkout request, please try again later.");
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "There was an error completing the checkout request, please try again later.");
+                            response.getWriter().write(jsObj.toString());
+                            return;
+                    }
+                    jsObj.put("result", true);
+                    jsObj.put("goodMsg", "Please verify the following payment details.");
+                    response.getWriter().write(jsObj.toString());
+                    return;
                 case "CompletePayment":
                     String paymentID = (String) request.getAttribute("paymentID");
                     String UUID = (String) request.getAttribute("UUID");
                     Long paymentIDlong = Long.parseLong(paymentID);
                     ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
-                    Payment payment = clientManagementBean.getPayment(result.getID());
-                    if (payment.getAccount() != null) {
-                        //todo view past purchaserd music
-                        nextPage = "";
+                    if (!result.getResult()) {//fail to complete payment
+                        session.setAttribute("errMsg", result.getDescription());
+                        nextPage = "#!/cart";
                     } else {
-                        //todo download music
-                        nextPage = "";
+                        Payment payment = clientManagementBean.getPayment(result.getID());
+                        if (payment.getAccount() != null) {
+                            //todo view past purchaserd music
+                            nextPage = "";
+                        } else {
+                            //todo download music
+                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
+                            session.setAttribute("downloadLinks", downloadHelper);
+                            nextPage = "#!/download-links";
+                        }
                     }
                     break;
             }

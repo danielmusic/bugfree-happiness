@@ -451,19 +451,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             result.setResult(false);
             String imageLocation = null;
             String tempImageURL = null;
-            Boolean isArtist = null;
 
             Account account = em.getReference(Account.class, artistOrBandID);
             Artist artist = null;
             artist = (Artist) account;
-            Genre genre = em.getReference(Genre.class, genreID);
-            String text = Double.toString(Math.abs(price));
-            int integerPlaces = text.indexOf('.');
-            int decimalPlaces = text.length() - integerPlaces - 1;
-            if (decimalPlaces > 1) {
-                result.setDescription("Price must be rounded to the nearest 10 cents.");
-                return result;
-            }
+//            String text = Double.toString(Math.abs(price));
+//            int integerPlaces = text.indexOf('.');
+//            int decimalPlaces = text.length() - integerPlaces - 1;
+//            if (decimalPlaces > 1) {
+//                result.setDescription("Price must be rounded to the nearest 10 cents.");
+//                return result;
+//            }
             Album album = new Album();
 
             album.setArtist(artist);
@@ -615,14 +613,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return helper;
             } else {
                 Genre genre = em.getReference(Genre.class, genreID);
-                String text = Double.toString(Math.abs(price));
-                int integerPlaces = text.indexOf('.');
-                int decimalPlaces = text.length() - integerPlaces - 1;
-                if (decimalPlaces > 1) {
-                    helper.setDescription("Price must be rounded to the nearest 10 cents.");
-                    helper.setResult(false);
-                    return helper;
-                }
+//                String text = Double.toString(Math.abs(price));
+//                int integerPlaces = text.indexOf('.');
+//                int decimalPlaces = text.length() - integerPlaces - 1;
+//                if (decimalPlaces > 1) {
+//                    helper.setDescription("Price must be rounded to the nearest 10 cents.");
+//                    helper.setResult(false);
+//                    return helper;
+//                }
                 album.setName(name);
                 album.setGenreName(genre.getName());
                 album.setDescription(description);
@@ -695,13 +693,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (isDeleted) {
                 result.setDescription("Price cannot be updated as the music has been deleted.");
             } else {
-                String text = Double.toString(Math.abs(newPrice));
-                int integerPlaces = text.indexOf('.');
-                int decimalPlaces = text.length() - integerPlaces - 1;
-                if (decimalPlaces > 1) {
-                    result.setDescription("Price must be rounded to the nearest 10 cents.");
-                    return result;
-                }
+//                String text = Double.toString(Math.abs(newPrice));
+//                int integerPlaces = text.indexOf('.');
+//                int decimalPlaces = text.length() - integerPlaces - 1;
+//                if (decimalPlaces > 1) {
+//                    result.setDescription("Price must be rounded to the nearest 10 cents.");
+//                    return result;
+//                }
                 music.setPrice(newPrice);
                 em.merge(music);
                 result.setDescription("Price updated");
@@ -726,13 +724,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             if (isDeleted) {
                 result.setDescription("Price cannot be updated as the music has been deleted.");
             } else {
-                String text = Double.toString(Math.abs(newPrice));
-                int integerPlaces = text.indexOf('.');
-                int decimalPlaces = text.length() - integerPlaces - 1;
-                if (decimalPlaces > 1) {
-                    result.setDescription("Price must be rounded to the nearest 10 cents.");
-                    return result;
-                }
+//                String text = Double.toString(Math.abs(newPrice));
+//                int integerPlaces = text.indexOf('.');
+//                int decimalPlaces = text.length() - integerPlaces - 1;
+//                if (decimalPlaces > 1) {
+//                    result.setDescription("Price must be rounded to the nearest 10 cents.");
+//                    return result;
+//                }
                 album.setPrice(newPrice);
                 em.merge(album);
                 result.setDescription("Price updated");
