@@ -20,7 +20,6 @@
         function removeTrack() {
             alert("removeTrack");
             checkboxes = document.getElementsByName('deleteTrack');
-            alert(checkboxes[0]);
             
             var numOfTicks = 0;
             for (var i = 0, n = checkboxes.length; i < n; i++) {
