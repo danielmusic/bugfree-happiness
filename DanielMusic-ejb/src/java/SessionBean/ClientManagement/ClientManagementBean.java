@@ -631,4 +631,13 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         return false;
     }
 
+    @Override
+    public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID) {
+        //todo
+        //1 Figure out the list of artist
+        // for each artist
+        //2 Create the list of albums/musics for each artist
+        //3 Mail the artist
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
