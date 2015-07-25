@@ -12,6 +12,10 @@
                         window.location.href = "#!/artist/add_track";
                     }
 
+                    function deleteTrack(id) {
+                        window.location.href = "MusicManagementController?target=DeleteTrack&id=" + id;
+                    }
+
                     function viewTrack(id) {
                         window.location.href = "MusicManagementController?target=ListTrackByID&id=" + id;
                     }
@@ -66,13 +70,13 @@
                                     <a href="javascript:viewTrack(<%=tracks.get(i).getId()%>);" class="buy-tickets">View Track</a>
                                     <a href="javascript:editTrackPrice(<%=tracks.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
                                     <%if (!album.getIsPublished()) {%>
-                                    <a class="md-trigger buy-tickets" data-modal="modal-name">Delete Track</a>
+                                    <a class="md-trigger buy-tickets" data-modal="modal-delete">Delete Track</a>
                                     <div class="md-modal md-effect-1" id="modal-delete">
                                         <div class="md-content">
                                             <h3>Are you sure?</h3>
                                             <div style="text-align:center;">
                                                 <p>Are you sure?</p>
-                                                <button type="button" onclick="javascript:deleteSingle('<%=tracks.get(i).getId()%>')">Confirm</button>
+                                                <button type="button" onclick="javascript:deleteTrack('<%=tracks.get(i).getId()%>')">Confirm</button>
                                                 <button class="md-close" type="button">Cancel</button>
                                             </div>
                                         </div>
@@ -95,6 +99,13 @@
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
+            <div class="md-overlay"></div>
+
+            <script src="js/classie.js"></script>
+            <script src="js/modalEffects.js"></script>
+            <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
+            <script src="js/cssParser.js"></script>
+            <script src="js/css-filters-polyfill.js"></script>
         </div>
     </section>
 </section>

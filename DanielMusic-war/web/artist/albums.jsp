@@ -25,7 +25,7 @@
             window.location.href = "MusicManagementController?target=RetrieveSingle&source=editSinglePrice&id=" + id;
         }
 
-        function deleteSingle(id) {
+        function deleteAlbum(id) {
             window.location.href = "MusicManagementController?target=DeleteAlbum&id=" + id;
         }
 
@@ -103,6 +103,8 @@
                         </tbody>
                     </table>
 
+                    <!--Start looping out Singles-->
+
                     <h2>Singles</h2>
                     <table class="layout display responsive-table">
                         <thead>
@@ -136,17 +138,17 @@
                                     <a href="javascript:editSinglePrice(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
 
                                     <%if (!albums.get(i).getIsPublished()) {%>
-                                    <a class="md-trigger buy-tickets" data-modal="modal-name">Delete Single</a>
+                                    <a class="md-trigger buy-tickets" data-modal="modal-delete">Delete Single</a>
                                     <div class="md-modal md-effect-1" id="modal-delete">
                                         <div class="md-content">
                                             <h3>Are you sure?</h3>
                                             <div style="text-align:center;">
-                                                <p>Are you sure?</p>
-                                                <button type="button" onclick="javascript:deleteSingle('<%=albums.get(i).getId()%>')">Confirm</button>
+                                                <button type="button" onclick="javascript:deleteAlbum('<%=albums.get(i).getId()%>')">Confirm</button>
                                                 <button class="md-close" type="button">Cancel</button>
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
                                     <%}%>
@@ -166,7 +168,13 @@
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
+           
             </article>
-       </div>
+            <script src="js/classie.js"></script>
+            <script src="js/modalEffects.js"></script>
+            <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
+            <script src="js/cssParser.js"></script>
+            <script src="js/css-filters-polyfill.js"></script>
+        </div>
     </section>
 </section>

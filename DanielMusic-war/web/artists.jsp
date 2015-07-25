@@ -37,15 +37,26 @@
 
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
-                    <a style="cursor: default;" class="thumb-glitch">
+
+                    <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
+                    <a href="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view" title="<%=artist.getName()%>">
+                        <span class="hoverlayer"></span>
                         <span class="img">
-                            <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
+                            <%
+                                System.out.print("http://danielmusictest.storage.googleapis.com/" + artist.getImageURL());
+                            %>
                             <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>" />
-                            <%} else {%>
-                            <img src="placeholders/artist01.jpg" />
-                            <%}%>
                         </span>
                     </a>
+                    <%} else {%>
+                    <a href="placeholders/artist01.jpg" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view">
+                        <span class="hoverlayer"></span>
+                        <span class="img">
+                            <img src="placeholders/artist01.jpg" />
+                        </span>
+                    </a>
+                    <%}%>
+
                     <div class="details-meta">
                         <ul class="details-list">
                             <li>
@@ -80,9 +91,9 @@
                     </div>
                 </div>
             </div>
+
             <div id="main" class="release main-left main-medium">
                 <article>
-
                     <!-- tabs -->
                     <div class="tabs-wrap">
                         <!-- tabs navigation -->

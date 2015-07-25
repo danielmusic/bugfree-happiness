@@ -37,23 +37,6 @@
                                 var file = $('#picture');
                                 var fileSize = $('#picture')[0].files[0].size;
 
-                                /*var musicFile = $('#music');
-                                 var musicFileSize = $('#music')[0].files[0].size;
-                                 
-                                 if (!isMusic(musicFile.val())) {
-                                 document.getElementById("errMsg").style.display = "block";
-                                 document.getElementById('errMsg').innerHTML = "Only wav format song is allowed";
-                                 window.scrollTo(0, 0);
-                                 return false;
-                                 }
-                                 
-                                 if (musicFileSize > 50000000) {
-                                 document.getElementById("errMsg").style.display = "block";
-                                 document.getElementById('errMsg').innerHTML = "Image size must be below 50mb.";
-                                 window.scrollTo(0, 0);
-                                 return false;
-                                 }*/
-
                                 if (fileSize > 5000000) {
                                     document.getElementById("errMsg").style.display = "block";
                                     document.getElementById('errMsg').innerHTML = "Image size must be below 5mb.";
@@ -100,7 +83,7 @@
                         </div>                   
                     </div>
 
-                    <h2>Singles details</h2>
+                    <h2>Single details</h2>
 
                     <div class="row clearfix">
                         <div class="col-1-3">
@@ -125,9 +108,8 @@
                             <select name="genre" id="genre" style="width: 100%; height:40px;" required>
                                 <option value="">Select</option>
                                 <%
-                                        for (int i = 0; i < genres.size(); i++) {
-                                            out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
-                                        }
+                                    for (int i = 0; i < genres.size(); i++) {
+                                        out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
                                     }
                                 %>
                             </select>
@@ -135,7 +117,7 @@
 
                         <div class="col-1-2 last">
                             <label for="picture"><strong>Artwork</strong> </label>
-                            <input type="file" id="picture" name="picture">
+                            <input type="file" id="picture" name="picture" style="width: 100%; height:40px;padding-top: 9px;">
                         </div>
                     </div>
 
@@ -169,14 +151,10 @@
 
                     <input type="hidden" value="AddSingles" name="target">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
-                    <button type="submit" class="small invert">Add Singles</button>
+                    <button type="submit" class="small invert">Add Single</button>
                     <div class="clear"></div>
                 </form>
-                <%}
-
-                    
-                    
-                else {%>
+                <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
