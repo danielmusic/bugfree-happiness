@@ -92,6 +92,8 @@ public interface MusicManagementBeanLocal {
     public List<Artist> listAllArtistBandInGenre(Long genreID);
     public List<ExploreHelper> listAllGenreArtist();
     
+    public Long getArtistID(String artistName);
+    
     public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID);
     public Boolean checkIfAlbumBelongsToArtist(Long artistID, Long albumID);
 }

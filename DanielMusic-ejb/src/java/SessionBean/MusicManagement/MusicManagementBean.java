@@ -831,9 +831,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation128());
                     cibl.deleteFileFromGoogleCloudStorage(m.getFileLocation320());
                 }
-                                    if (album.getImageLocation() != null) {
-                        cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
-                    }
+                if (album.getImageLocation() != null) {
+                    cibl.deleteFileFromGoogleCloudStorage(album.getImageLocation());
+                }
                 em.remove(album);
             }
 
@@ -889,6 +889,23 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
 
         return null;
+    }
+
+    @Override
+    public Long getArtistID(String artistName) {
+        System.out.println("getArtist() called.");
+        try {
+            Query q = em.createQuery("SELECT E FROM Artist E WHERE E.name=:artistName");
+            q.setParameter("artistName", artistName);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            Artist artist = (Artist) q.getSingleResult();
+            return artist.getId();
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

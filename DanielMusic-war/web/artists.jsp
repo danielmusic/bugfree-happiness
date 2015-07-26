@@ -271,3 +271,8 @@
     </section>
     <%}%>
 </section>
+<!--Friendly URL urlrewrite-->
+<script>
+            window.history.pushState("", "", "artist/<%=artist.getName()%>");
+</script>
+<!--Friendly URL urlrewrite-->

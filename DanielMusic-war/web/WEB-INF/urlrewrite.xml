@@ -13,16 +13,17 @@
         <from>^/login$</from>
         <to type="redirect">%{context-path}/#!/login</to>
     </rule>
-    <!--rule match-type="regex">
+<!--    <rule match-type="regex">
         <note>Example of redirecting /artist/test1 to /Controller?name=test1</note>
         <from>^/artist/(.+)$</from>
         <to type="redirect">%{context-path}/Controller?name=$1</to>
-    </rule-->
-    <!--rule match-type="regex">
-        <from>^(?!(\/(.+(\.js|\.css|\.jsp|\.html|\.htm|\.jpg|\.png|\.jpeg|\.gif|\.urlrewrite)))|\/#!\/).*</from>
-        <from>^(?!(.*\.(js|css|ico|eot|svg|ttf|woff|jsp|html|htm|jpg|png|jpeg|gif|mp3|wav|urlrewrite))|(.*\/#!\/)|(\/)$).*</from>
-        <to type="redirect">%{context-path}/ControllerName?artistName=$1&amp;type=.urlrewrite</to>
-    </rule-->
+    </rule>-->
+    <rule match-type="regex">
+        <!--<from>^(?!(\/(.+(\.js|\.css|\.jsp|\.html|\.htm|\.jpg|\.png|\.jpeg|\.gif|\.urlrewrite)))|\/#!\/).*</from>-->
+        <!--<from>^/([\w]*)$</from>-->
+        <from>/artist/((.*)$)</from>
+        <to type="redirect">%{context-path}/MusicController?target=LinkToArtist&amp;artistName=$1</to>
+    </rule>
     <rule>
         <note>
             The rule means that requests to /test/status/ will be redirected to /rewrite-status
