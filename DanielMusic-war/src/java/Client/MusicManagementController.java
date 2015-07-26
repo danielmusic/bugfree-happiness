@@ -13,7 +13,6 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -322,7 +321,7 @@ public class MusicManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/artist/albums";
+                            nextPage = "#!/artist/tracks";
                         }
                     }
                     break;

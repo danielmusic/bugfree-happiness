@@ -220,9 +220,7 @@
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
-
             <div class="md-overlay"></div>
-
             <script src="js/classie.js"></script>
             <script src="js/modalEffects.js"></script>
             <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
