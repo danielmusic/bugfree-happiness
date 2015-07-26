@@ -25,7 +25,7 @@
                     }
 
                     function back() {
-                        window.location.href = "#!/artist/albums";
+                        window.location.href = "ClientAccountManagementController?target=albums";
                     }
                 </script>
                 <%

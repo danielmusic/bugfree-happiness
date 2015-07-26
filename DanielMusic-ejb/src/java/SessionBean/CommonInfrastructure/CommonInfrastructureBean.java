@@ -90,6 +90,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 accessControl.setEntity("allUsers");
                 accessControl.setRole("READER");
                 accessControls.add(accessControl);
+                //accessControl.set
                 objectMetadata.setAcl(accessControls);
             }
             Storage.Objects.Insert insertObject = client.objects().insert(BUCKET_NAME, objectMetadata, mediaContent);

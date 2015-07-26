@@ -868,7 +868,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 //Upload to GCS
-                String imageLocation = "/images/artist/profile/profilepictures" + account.getId() + "/" + new Date();
+                String imageLocation = "/images/artist/profile/profilepictures" + account.getId() + "/" + account.getName();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);

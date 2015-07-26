@@ -24,21 +24,41 @@
                         </div>
                     </div>
                 </div>
-                <button class="md-trigger" data-modal="modal-1">Fade in &amp; Scale</button>
-                <div class="md-modal md-effect-1" id="modal-1">
+
+                <div class="md-modal md-effect-1" id="modal-change-email">
                     <div class="md-content">
-                        <h3>Modal Dialog</h3>
+                        <h3>Account Email</h3>
                         <div>
-                            <p>This is a modal window. You can do the following things with it:</p>
+                            <p>This is the email address that you will use to:</p>
                             <ul>
-                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
-                                <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
-                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                                <li><strong>Login:</strong> into Sounds.SG</li>
+                                <li><strong>Reset:</strong> your password if the need arises</li>
+                                <li><strong>Receive:</strong> invoices about your purchases on Sounds.SG</li>
                             </ul>
-                            <button class="md-close">Close me!</button>
+                            <p>Update this field only if you are changing your email. A verification code will be sent to the new email.</p>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="md-modal md-effect-1" id="modal-paypal">
+                    <div class="md-content">
+                        <h3>Payment Details</h3>
+                        <div>
+                            <p>When a fan buys your music, the money will go directly to the above address. Please also be sure to follow the instructions on the Sell Your Music on ?? page!:</p>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Account account = (Account) session.getAttribute("account");
@@ -56,29 +76,8 @@
                     <div class="row clearfix">
                         <div class="col-1-3">
                             <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
-                            <button  type="button" class="md-trigger" data-modal="modal-name">Fade in &amp; Scale</button>
                             <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
                             <a href="#!/change-name">Change Name</a>
-                        </div>
-
-
-
-                        <div class="md-modal md-effect-1" id="modal-change-email">
-                            <div class="md-content">
-                                <h3>Account Email</h3>
-                                <div>
-                                    <p>This is the email address that you will use to:</p>
-                                    <ul>
-                                        <li><strong>Login:</strong> into Sounds.SG</li>
-                                        <li><strong>Reset:</strong> your password if the need arises</li>
-                                        <li><strong>Receive:</strong> invoices about your purchases on Sounds.SG</li>
-                                    </ul>
-                                    <p>Update this field only if you are changing your email. A verification code will be sent to the new email.</p>
-                                    <div style="text-align:center;">
-                                        <button class="md-close" type="button">Close</button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-1-3">
@@ -92,18 +91,6 @@
                             <input type="email" value="<%if (artist.getPaypalEmail() != null) {
                                     out.print(artist.getPaypalEmail());
                                 }%>" name="paypalEmail" id="ppEmail" required>
-                        </div>
-
-                        <div class="md-modal md-effect-1" id="modal-paypal">
-                            <div class="md-content">
-                                <h3>Payment Details</h3>
-                                <div>
-                                    <p>When a fan buys your music, the money will go directly to the above address. Please also be sure to follow the instructions on the Sell Your Music on ?? page!:</p>
-                                    <div style="text-align:center;">
-                                        <button class="md-close" type="button">Close</button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -172,9 +159,9 @@
                         </div>
                         <div class="col-1-2 last">
                             <label for="bandMembers"><strong>Members</strong> </label>
-                            <input type="text" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
-                                           out.print(artist.getBandMembers());
-                                       }%>">
+                                   <input type="text" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
+                                    out.print(artist.getBandMembers());
+                                }%>">
                         </div>
                     </div>
                     <%}%>

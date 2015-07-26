@@ -133,10 +133,6 @@
                     <div class="clear" style="margin-bottom: 20px;"></div>
                 </form>
                 <%} else {%>
-
-
-
-
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>

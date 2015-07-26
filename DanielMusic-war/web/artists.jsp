@@ -274,16 +274,11 @@
                 });
             }
         </script>
-        <script src="js/classie.js"></script>
-        <script src="js/modalEffects.js"></script>
-        <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
-        <script src="js/cssParser.js"></script>
-        <script src="js/css-filters-polyfill.js"></script>
     </section>
     <%}%>
 </section>
 <!--Friendly URL urlrewrite-->
 <script>
-            window.history.pushState("", "", "artist/<%=artist.getName()%>");
+            //window.history.pushState("", "", "music/<%=artist.getName()%>");
 </script>
 <!--Friendly URL urlrewrite-->

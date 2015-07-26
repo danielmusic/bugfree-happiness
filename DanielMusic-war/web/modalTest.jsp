@@ -1,44 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="About |">
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="description" content="Premium theme.">
-    <meta name="keywords" content=""/>
-    <meta name="author" content="Site Author">
-    <!-- Fav icon -->
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-    <!-- <meta name="robots" content="index,follow"> -->
-
-    <!-- ############################# Stylesheets ############################# -->
-    <!-- OWL Carousel -->
-    <link rel="stylesheet" href="css/owl.carousel.css" media="screen" />
-    <link rel="stylesheet" href="css/owl.transitions.css" media="screen" />
-    <!-- /OWL Carousel -->
-    <!-- Scamp Player stylesheets -->
-    <link rel="stylesheet" href="js/scamp_player/css/scamp.player.css" media="screen" />
-    <link rel="stylesheet" href="js/scamp_player/css/scamp.player.light.css" media="screen" />
-    <!-- /Scamp Player stylesheets -->
-    <link rel="stylesheet" href="css/menu.css" media="screen" />
-    <link rel="stylesheet" href="css/style.css" media="screen" />
-    <link rel="stylesheet" href="css/media-queries.css" media="screen" />
-    <!-- Fancybox styles -->
-    <link rel="stylesheet" href="css/fancybox.custom.css" media="screen" />
-    <!-- REVOLUTION BANNER CSS SETTINGS -->
-    <link rel="stylesheet" type="text/css" href="js/rs-plugin/css/settings.css" media="screen" />
-
-    <!-- ############################# Javascripts ############################# -->
-    <!-- jQuery -->
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <!-- Add HTML5 support for older IE browsers -->
-    <!--[if lt IE 9]> 
-            <script src="js/html5.min.js"></script>
-            <script src="js/selectivizr-and-extra-selectors.min.js"></script>
-    <![endif]-->
-    <!-- Modernizr -->
-    <script src="js/modernizr.custom.js"></script>
-    <script src="https://www.paypalobjects.com/js/external/dg.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="css/default.css" />
-    <link rel="stylesheet" type="text/css" href="css/component.css" />
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">About JSP</h1>
         <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
@@ -367,19 +328,9 @@
                     </div>
                 </div><!-- /container -->
                 <div class="md-overlay"></div><!-- the overlay element -->
-
-                <!-- classie.js by @desandro: https://github.com/desandro/classie -->
                 <script src="js/classie.js"></script>
                 <script src="js/modalEffects.js"></script>
-
-                <!-- for the blur effect -->
-                <!-- by @derSchepp https://github.com/Schepp/CSS-Filters-Polyfill -->
-                <script>
-                    // this is important for IEs
-                    var polyfilter_scriptpath = '/js/';
-                </script>
                 <script src="js/cssParser.js"></script>
-                <script src="js/css-filters-polyfill.js"></script>
             </article>
         </div>
     </section>

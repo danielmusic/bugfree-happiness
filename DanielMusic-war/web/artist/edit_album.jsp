@@ -50,7 +50,7 @@
                     });
 
                     function back() {
-                        window.location.href = "#!/artist/albums";
+                        window.location.href = "ClientAccountManagementController?target=albums";
                     }
 
                     function deleteAlbum(id) {
@@ -106,7 +106,7 @@
                     </div>
 
                     <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%>
-                    <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation()+"?"+ new Date()%>">
+                    <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation() + "?" + new Date()%>">
                     <%}%>
 
                     <div class="row clearfix">
@@ -182,10 +182,7 @@
             <div class="md-overlay"></div>
             <script src="js/classie.js"></script>
             <script src="js/modalEffects.js"></script>
-            <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
             <script src="js/cssParser.js"></script>
-            <script src="js/css-filters-polyfill.js"></script>
-
         </div>
     </section>
 </section>

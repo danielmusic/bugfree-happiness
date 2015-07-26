@@ -1,8 +1,13 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Shopping Cart">
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/events-bg.jpg)">
-        <h1 class="heading-l">Upcoming <span class="color">Events</span></h1>
-    </section>
+    <%@page import="EntityManager.ShoppingCart"%>
+    <%@page import="EntityManager.Account"%>
+    <%@page import="java.util.ArrayList"%>
+    <%@page import="EntityManager.Album"%>
+    <%@page import="java.util.Set"%>
+    <%@page import="EntityManager.Music"%>
+    <%@page import="java.util.List"%>
+    <%@page import="java.text.NumberFormat"%>
     <script>
         function checkAllTracks(source) {
             checkboxes = document.getElementsByName('deleteTrack');
@@ -247,14 +252,6 @@
                 </div>
                 <jsp:include page="./jspIncludePages/displayMessage.jsp" />
                 <p class="error" id="errMsg" style="display:none;"></p>
-                <%@page import="EntityManager.ShoppingCart"%>
-                <%@page import="EntityManager.Account"%>
-                <%@page import="java.util.ArrayList"%>
-                <%@page import="EntityManager.Album"%>
-                <%@page import="java.util.Set"%>
-                <%@page import="EntityManager.Music"%>
-                <%@page import="java.util.List"%>
-                <%@page import="java.text.NumberFormat"%>
                 <h1>Shopping Cart</h1>
                 <%
                     ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
@@ -356,9 +353,9 @@
                     </table>
                     <button class="medium invert" onclick="removeAlbum()">Remove album(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
+                    <%                                }
+                    %>
                 </form>
-                <%                                }
-                %>
                 <p style="float: right;">
                     <strong>
                         Subtotal:                                   
@@ -373,9 +370,11 @@
                 <%} else {%>
                 <h2>The cart is empty.</h2>
                 <%}%>
-
+                <div class="md-overlay"></div>
+                <script src="js/classie.js"></script>
+                <script src="js/modalEffects.js"></script>
+                <script src="js/cssParser.js"></script>
             </article>
-            <div class="md-overlay"></div>
         </div>
     </section>
 </section>

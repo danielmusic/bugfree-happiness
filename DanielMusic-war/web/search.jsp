@@ -212,21 +212,6 @@
                                                     <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
                                                 </a>
 
-                                                <%if (music.getLyrics() != null) {%>
-                                                <!--<a class="md-trigger" data-modal="modal-lyrics"><i class="icon icon-eye"></i></a>-->
-                                                <div class="md-modal md-effect-1" id="modal-lyrics">
-                                                    <div class="md-content">
-                                                        <h3>Lyrics</h3>
-                                                        <p>
-                                                            <%
-                                                                String repl = music.getLyrics().replaceAll("\\r", "<br>");
-                                                                out.print(repl);
-                                                            %>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <%}%>
-
                                                 <a onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
                                                     <%
                                                         if (music.getPrice() == 0.0) {
