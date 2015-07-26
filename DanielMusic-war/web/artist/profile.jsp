@@ -8,6 +8,37 @@
     <section class="content section">
         <div class="container">
             <article>
+                <div class="md-modal md-effect-1" id="modal-name">
+                    <div class="md-content">
+                        <h3>Modal Dialog</h3>
+                        <div>
+                            <p>This is a modal window. You can do the following things with it:</p>
+                            <ul>
+                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+                                <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                            </ul>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="md-trigger" data-modal="modal-1">Fade in &amp; Scale</button>
+                <div class="md-modal md-effect-1" id="modal-1">
+                    <div class="md-content">
+                        <h3>Modal Dialog</h3>
+                        <div>
+                            <p>This is a modal window. You can do the following things with it:</p>
+                            <ul>
+                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+                                <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
+                            </ul>
+                            <button class="md-close">Close me!</button>
+                        </div>
+                    </div>
+                </div>
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Account account = (Account) session.getAttribute("account");
@@ -25,26 +56,12 @@
                     <div class="row clearfix">
                         <div class="col-1-3">
                             <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
+                            <button  type="button" class="md-trigger" data-modal="modal-name">Fade in &amp; Scale</button>
                             <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
                             <a href="#!/change-name">Change Name</a>
                         </div>
 
-                        <div class="md-modal md-effect-1" id="modal-name">
-                            <div class="md-content">
-                                <h3>Modal Dialog</h3>
-                                <div>
-                                    <p>This is a modal window. You can do the following things with it:</p>
-                                    <ul>
-                                        <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
-                                        <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
-                                        <li><strong>Close:</strong> click on the button below to close the modal.</li>
-                                    </ul>
-                                    <div style="text-align:center;">
-                                        <button class="md-close" type="button">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <div class="md-modal md-effect-1" id="modal-change-email">
                             <div class="md-content">
@@ -197,7 +214,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-2">
-                            <label for="ig"><strong>Instagram URL</strong></label>
+                            <label for="ig"><strong>Instagram URL</strong></label>  
                             <input type="url" id="ig" name="instagramURL" placeholder="http://" value="<%if (artist.getInstagramURL() != null) {
                                     out.print(artist.getInstagramURL());
                                 }%>">
@@ -219,13 +236,11 @@
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
+                <div class="md-overlay"></div><!-- the overlay element -->
+                <script src="js/classie.js"></script>
+                <script src="js/modalEffects.js"></script>
+                <script src="js/cssParser.js"></script>
             </article>
-            <div class="md-overlay"></div>
-            <script src="js/classie.js"></script>
-            <script src="js/modalEffects.js"></script>
-            <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
-            <script src="js/cssParser.js"></script>
-            <script src="js/css-filters-polyfill.js"></script>
         </div>
     </section>
 </section>

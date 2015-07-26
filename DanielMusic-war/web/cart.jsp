@@ -134,7 +134,7 @@
 
 
         function checkout() {
-            this.disabled=true;
+            this.disabled = true;
             //window.location.href = "./MusicManagementController?target=Checkout";
             url = "./MusicManagementController?target=Checkout";
             $.ajax({
@@ -200,6 +200,51 @@
     <section class="content section">
         <div class="container">
             <article>
+                <div class="md-modal md-effect-1" id="checkout-confirm">
+                    <div class="md-content">
+                        <h3>Checkout Cart</h3>
+                        <%
+                            Account account = (Account) session.getAttribute("account");
+                            if (account == null) {
+                        %>
+                        <div>
+                            <p>*Warning: You are not logged in. Your purchases will be provided to you as download links and they will expire within an hour. If you wish to re-download your purchases in the future, please login before checking out.</p>
+                            <p>Are you sure you want to checkout?</p>
+                            <div style="text-align:center;">
+                                <button type="button" onclick="login()">Login</button>
+                                <button type="button" class="md-trigger medium" data-modal="enter-email">Continue Checkout</button>
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                        <%} else {%>
+                        <div>
+                            <p>Are you sure you want to checkout?</p>
+                            <p>You will be directed to PayPal to complete your purchase.</p>
+                            <div style="text-align:center;">
+                                <button type="button" onclick="checkout();">Checkout</button>
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                        <%}%>
+                    </div>
+                </div>
+                <div class="md-modal md-effect-1" id="enter-email">
+                    <div class="md-content">
+                        <h3>Checkout Cart</h3>
+                        <div>
+                            <p>You will be directed to PayPal to complete your purchase.</p>
+                            <p>Enter the email to receives the download link(s):</p>
+                            <form>
+                                Email:<input type="email" id="email" required/><br/><br/>
+                                Re-enter email:<input type="email" id="reemail" required/>
+                            </form><br/><br/>
+                            <div style="text-align:center;">
+                                <button type="button" onclick="checkout2()">Checkout</button>
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <jsp:include page="./jspIncludePages/displayMessage.jsp" />
                 <p class="error" id="errMsg" style="display:none;"></p>
                 <%@page import="EntityManager.ShoppingCart"%>
@@ -328,60 +373,9 @@
                 <%} else {%>
                 <h2>The cart is empty.</h2>
                 <%}%>
-                <div class="md-modal md-effect-1" id="checkout-confirm">
-                    <div class="md-content">
-                        <h3>Checkout Cart</h3>
-                        <%
-                            Account account = (Account) session.getAttribute("account");
-                            if (account == null) {
-                        %>
-                        <div>
-                            <p>*Warning: You are not logged in. Your purchases will be provided to you as download links and they will expire within an hour. If you wish to re-download your purchases in the future, please login before checking out.</p>
-                            <p>Are you sure you want to checkout?</p>
-                            <div style="text-align:center;">
-                                <button type="button" onclick="login()">Login</button>
-                                <button type="button" class="md-trigger medium" data-modal="enter-email">Continue Checkout</button>
-                                <button class="md-close" type="button">Close</button>
-                            </div>
-                        </div>
-                        <%} else {%>
-                        <div>
-                            <p>Are you sure you want to checkout?</p>
-                            <p>You will be directed to PayPal to complete your purchase.</p>
-                            <div style="text-align:center;">
-                                <button type="button" onclick="checkout();">Checkout</button>
-                                <button class="md-close" type="button">Close</button>
-                            </div>
-                        </div>
-                        <%}%>
 
-                    </div>
-                </div>
-                <div class="md-modal md-effect-1" id="enter-email">
-                    <div class="md-content">
-                        <h3>Checkout Cart</h3>
-                        <div>
-                            <p>You will be directed to PayPal to complete your purchase.</p>
-                            <p>Enter the email to receives the download link(s):</p>
-                            <form>
-                                Email:<input type="email" id="email" required/><br/><br/>
-                                Re-enter email:<input type="email" id="reemail" required/>
-                            </form><br/><br/>
-                            <div style="text-align:center;">
-                                <button type="button" onclick="checkout2()">Checkout</button>
-                                <button class="md-close" type="button">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </article>
             <div class="md-overlay"></div>
-
-            <script src="js/classie.js"></script>
-            <script src="js/modalEffects.js"></script>
-            <script>var polyfilter_scriptpath = '/DanielMusic-war/js/';</script> 
-            <script src="js/cssParser.js"></script>
-            <script src="js/css-filters-polyfill.js"></script>
         </div>
     </section>
 </section>
