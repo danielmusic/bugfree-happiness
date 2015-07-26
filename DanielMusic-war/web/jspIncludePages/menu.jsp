@@ -101,6 +101,8 @@
                         data: {},
                         success: function (val) {
                             window.event.returnValue = false;
+                            //urlrewrite push state before redirecting
+                            window.history.pushState("", "", "/DanielMusic-war/#!/");
                             window.location.href = "#!/cart";
                         },
                         error: function (xhr, status, error) {

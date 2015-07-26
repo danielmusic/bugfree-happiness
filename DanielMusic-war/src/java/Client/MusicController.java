@@ -39,7 +39,6 @@ public class MusicController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Artist artist = null;
-        List<Album> albums = null;
 
         try {
             switch (target) {
@@ -49,39 +48,60 @@ public class MusicController extends HttpServlet {
                     jsObj.put("result", true);
                     response.getWriter().write(jsObj.toString());
                     return;
-
                 case "GetArtistByID":
-                    artist = adminManagementBean.getArtist(Long.parseLong(id));
-                    session.setAttribute("artistDetails", artist);
-                    albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
-                    session.setAttribute("artistAlbumDetails", albums);
-                    jsObj.put("result", true);
-                    response.getWriter().write(jsObj.toString());
-                    return;
+                    if (true) {
+                        artist = adminManagementBean.getArtist(Long.parseLong(id));
+                        session.setAttribute("artistDetails", artist);
+                        List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
+                        session.setAttribute("artistAlbumDetails", albums);
+                        jsObj.put("result", true);
+                        response.getWriter().write(jsObj.toString());
+                        return;
+                    }
                 case "GetAlbumByID":
-                    Album album = musicManagementBean.getAlbum(Long.parseLong(id));
-                    artist = album.getArtist();
-                    session.setAttribute("artistDetails", artist);
-                    albums = musicManagementBean.listAllAlbumByArtistOrBandID(album.getArtist().getId(), false, false);
-                    session.setAttribute("artistAlbumDetails", albums);
-                    session.setAttribute("jumpToAlbumID", album.getId().toString());
-                    System.out.println(album.getId().toString() + "!!!!!");
-                    jsObj.put("result", true);
-                    response.getWriter().write(jsObj.toString());
-                    return;
+                    if (true) {
+                        Album album = musicManagementBean.getAlbum(Long.parseLong(id));
+                        artist = album.getArtist();
+                        session.setAttribute("artistDetails", artist);
+                        List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(album.getArtist().getId(), false, false);
+                        session.setAttribute("artistAlbumDetails", albums);
+                        session.setAttribute("jumpToAlbumID", album.getId().toString());
+                        System.out.println(album.getId().toString() + "!!!!!");
+                        jsObj.put("result", true);
+                        response.getWriter().write(jsObj.toString());
+                        return;
+                    }
                 case "Search":
-                    String searchText = request.getParameter("text");
-                    SearchHelper result = musicManagementBean.search(searchText);
-                    session.setAttribute("searchResult", result);
-                    jsObj.put("result", true);
-                    response.getWriter().write(jsObj.toString());
-                    return;
+                    if (true) {
+                        String searchText = request.getParameter("text");
+                        SearchHelper result = musicManagementBean.search(searchText);
+                        session.setAttribute("searchResult", result);
+                        jsObj.put("result", true);
+                        response.getWriter().write(jsObj.toString());
+                        return;
+                    }
                 case "Lyrics":
-                    Long musicID = Long.parseLong(request.getParameter("id"));
-                    Music music = musicManagementBean.getMusic(musicID);
-                    session.setAttribute("musicLyrics", music);
-                    response.sendRedirect("#!/lyrics");
-                    return;
+                    if (true) {
+                        Long musicID = Long.parseLong(request.getParameter("id"));
+                        Music music = musicManagementBean.getMusic(musicID);
+                        session.setAttribute("musicLyrics", music);
+                        response.sendRedirect("#!/lyrics");
+                        return;
+                    }
+                case "LinkToArtist":
+                    if (true) {
+                        String artistName = request.getParameter("artistName");
+                        Long artistID = musicManagementBean.getArtistID(artistName);
+                        if (artistID != null) {
+                            artist = adminManagementBean.getArtist(artistID);
+                            session.setAttribute("artistDetails", artist);
+                            List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(artistID, false, false);
+                            session.setAttribute("artistAlbumDetails", albums);
+                            response.sendRedirect("#!/artists");
+                        } else {
+                            response.sendRedirect("#!/index");
+                        }
+                    }
             }
         } catch (Exception ex) {
             response.sendRedirect("error500.html");
