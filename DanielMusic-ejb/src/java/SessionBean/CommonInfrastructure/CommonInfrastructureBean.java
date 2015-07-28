@@ -49,16 +49,16 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     private EntityManager em;
 
     //GCS Upload
-    private static final String APPLICATION_NAME = "divine-apogee-96116";
-    private static final String BUCKET_NAME = "danielmusictest";
+    private static final String APPLICATION_NAME = "master-deck-101807";
+    private static final String BUCKET_NAME = "sounds.sg";
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"), ".store/storage_sample");
    private static FileDataStoreFactory dataStoreFactory;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static HttpTransport httpTransport;
     private static Storage client;
     //GCS Download
-    private static final String SERVICE_ACCOUNT_EMAIL = "905886242502-8jv7f7qopknh74kmjb1ka4vdnrvk6no1@developer.gserviceaccount.com";
-    private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = (System.getProperty("user.home")+"/DanielMusic/Credentials/DanielMusic-1536a289ea67.p12");
+    private static final String SERVICE_ACCOUNT_EMAIL = "1059174637321-nthr5hhjfq7qc7979ansq0af0gi76d8q@developer.gserviceaccount.com";
+    private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = (System.getProperty("user.home")+"/DanielMusic/Credentials/SoundsSG-ee074d7c276d.p12");
     //Windows is C:\Users\<user>\...
     //Linux is /home/admin/...
 
