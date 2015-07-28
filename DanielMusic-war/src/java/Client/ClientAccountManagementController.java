@@ -3,6 +3,7 @@ package Client;
 import EntityManager.Account;
 import EntityManager.Artist;
 import EntityManager.Member;
+import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
@@ -10,6 +11,7 @@ import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -323,6 +325,11 @@ public class ClientAccountManagementController extends HttpServlet {
                     System.out.println("Controller: SaveCartAndLogin");
                     //TODO future
                     return;
+                case "GetPastPurchases":
+                    System.out.println("Controller: GetPastPurchases");
+                    List<Music> list = account.getListOfPurchasedMusics();
+                    session.setAttribute("ListOfPurchasedMusics", list);
+                    break;
             }
 
             if (nextPage.equals("")) {
