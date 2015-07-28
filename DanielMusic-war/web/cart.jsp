@@ -217,8 +217,8 @@
                             <p>Are you sure you want to checkout?</p>
                             <div style="text-align:center;">
                                 <button type="button" onclick="login()">Login</button>
-                                <button type="button" class="md-trigger medium" data-modal="enter-email">Continue Checkout</button>
-                                <button class="md-close" type="button">Close</button>
+                                <button type="button" class="md-trigger" data-modal="enter-email">Continue Checkout</button>
+                                <button type="button" class="md-close">Close</button>
                             </div>
                         </div>
                         <%} else {%>
@@ -227,7 +227,7 @@
                             <p>You will be directed to PayPal to complete your purchase.</p>
                             <div style="text-align:center;">
                                 <button type="button" onclick="checkout();">Checkout</button>
-                                <button class="md-close" type="button">Close</button>
+                                <button type="button" class="md-close">Close</button>
                             </div>
                         </div>
                         <%}%>
@@ -239,10 +239,19 @@
                         <div>
                             <p>You will be directed to PayPal to complete your purchase.</p>
                             <p>Enter the email to receives the download link(s):</p>
-                            <form>
-                                Email:<input type="email" id="email" required/><br/><br/>
-                                Re-enter email:<input type="email" id="reemail" required/>
-                            </form><br/><br/>
+                            <br>
+                            <form class="form">
+                                <div class="row clearfix">
+                                    <div class="col-1-1">
+                                        Email: <input type="email" id="email" required/>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-1-1">
+                                        Re-enter email: <input type="email" id="reemail" required/>
+                                    </div>
+                                </div>
+                            </form>
                             <div style="text-align:center;">
                                 <button type="button" onclick="checkout2()">Checkout</button>
                                 <button class="md-close" type="button">Close</button>

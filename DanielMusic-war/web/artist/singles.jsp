@@ -11,7 +11,13 @@
                     function back() {
                         window.location.href = "#!/artist/albums";
                     }
+
+                    function deleteAlbum(id) {
+                        window.location.href = "MusicManagementController?target=DeleteAlbum&id=" + id;
+                    }
                 </script>
+
+
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     Album album = (Album) (session.getAttribute("album"));
@@ -22,7 +28,16 @@
 
                     if (artist != null && album != null && music != null) {
                 %>
-
+                <div class="md-modal md-effect-1" id="modal-delete">
+                    <div class="md-content">
+                        <h3>Are you sure?</h3>
+                        <div style="text-align:center;">
+                            <p>All the associated tracks will also be removed.</p>
+                            <button type="button" onclick="javascript:deleteAlbum('<%=album.getId()%>')">Confirm</button>
+                            <button class="md-close" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="entry-content">
                     <div class="entry-meta">
                         <span class="entry-cat"><a href="#!/artist/albums">Albums</a></span>
@@ -120,8 +135,10 @@
                         </p>
 
                         <br>
-                        <button type="button" class="small invert" onclick="javascript:back();">Back</button>
-
+                        <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
+                        <%if (!album.getIsPublished()) {%>
+                        <button type="button" class="small invert md-trigger" style="margin-right: 10px;" data-modal="modal-delete">Delete Album</button>
+                        <%}%>
                     </article>
                 </div>
 
@@ -129,6 +146,10 @@
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
+                <div class="md-overlay"></div>
+                <script src="js/classie.js"></script>
+                <script src="js/modalEffects.js"></script>
+                <script src="js/cssParser.js"></script>
             </article>
         </div>
     </section>

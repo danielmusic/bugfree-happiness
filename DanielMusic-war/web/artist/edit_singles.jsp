@@ -32,7 +32,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="price"><strong>Price</strong> *</label>
+                            <label for="price"><strong>Price (SGD)</strong> *</label>
                             <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required value="<%if (album.getPrice() != null) {
                                     out.print(album.getPrice());
                                 }%>" />

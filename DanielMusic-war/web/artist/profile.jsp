@@ -55,10 +55,6 @@
                     </div>
                 </div>
 
-
-
-
-
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Account account = (Account) session.getAttribute("account");
@@ -101,7 +97,7 @@
                         </div>
                         <div class="col-1-3">
                             <label for="password"><strong>New Password</strong> *</label>
-                            <input id="password" type="password" name="password"  title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"  onchange="form.repassword.pattern = this.value;">
+                            <input id="password" type="password" name="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.repassword.pattern = this.value;">
                         </div>
                         <div class="col-1-3 last">
                             <label for="repassword"><strong>Re-enter Password</strong> *</label>
@@ -114,10 +110,9 @@
                     <h2>Account Profile</h2>
 
                     <div class="row clearfix">
-
                         <div class="col-1-3">
                             <label for="genre"><strong>Genre</strong> *</label>
-                            <select name="genre" id="genre" style="width: 100%; height:40px;" required>
+                            <select name="genre" id="genre" style="width: 100%; height:42px;" required>
                                 <option value="">Select</option>
                                 <%
                                     for (int i = 0; i < genres.size(); i++) {

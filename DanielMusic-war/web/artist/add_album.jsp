@@ -73,9 +73,7 @@
                         </div>                   
                     </div>
 
-
                     <h2>Album details</h2>
-
                     <div class="row clearfix">
                         <div class="col-1-3">
                             <label for="name"><strong>Title</strong> *</label>
