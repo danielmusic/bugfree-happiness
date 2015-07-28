@@ -313,10 +313,12 @@ public class MusicManagementController extends HttpServlet {
                         if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), Long.parseLong(id))) {
                             session.setAttribute("errMsg", "Unauthorized action");
                         } else {
+                            album = (Album) (session.getAttribute("album"));
                             returnHelper = musicManagementBean.deleteMusic(Long.parseLong(id));
 
                             if (returnHelper.getResult()) {
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                session.setAttribute("tracks", musicManagementBean.listAllTracksByAlbumID(album.getId()));
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
