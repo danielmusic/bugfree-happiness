@@ -7,7 +7,9 @@ import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiv
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.extensions.java6.auth.oauth2.GooglePromptReceiver;
+import com.google.api.services.storage.StorageScopes;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -30,6 +32,7 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,19 +51,16 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     //GCS Upload
     private static final String APPLICATION_NAME = "divine-apogee-96116";
     private static final String BUCKET_NAME = "danielmusictest";
-    //private static final String CLIENT_SECRET_FILENAME = "C:\\Credentials\\client_secret_905886242502-22rdr9lsk2d0k15n193ajssf6fpctlrc.apps.googleusercontent.com.json";
-    private static final String CLIENT_SECRET_FILENAME = "client_secrets.json";
-    private static final boolean AUTH_LOCAL_WEBSERVER = true;
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"), ".store/storage_sample");
-    private static FileDataStoreFactory dataStoreFactory;
+   private static FileDataStoreFactory dataStoreFactory;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static HttpTransport httpTransport;
     private static Storage client;
     //GCS Download
     private static final String SERVICE_ACCOUNT_EMAIL = "905886242502-8jv7f7qopknh74kmjb1ka4vdnrvk6no1@developer.gserviceaccount.com";
-    private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = "C:\\Credentials\\DanielMusic-1536a289ea67.p12";
-
- 
+    private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = (System.getProperty("user.home")+"/DanielMusic/Credentials/DanielMusic-1536a289ea67.p12");
+    //Windows is C:\Users\<user>\...
+    //Linux is /home/admin/...
 
     @Override
     public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage, Boolean publiclyReadable) {
@@ -105,6 +105,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         } catch (GoogleJsonResponseException ex) {
             System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() failed");
             result.setDescription("Unable to communicate with remote file server, please try again later.");
+            System.out.println(ex.getDetails().toString());
             return result;
         } catch (Exception ex) {
             System.out.println("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() failed");
@@ -138,30 +139,16 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
 
     // Google Cloud Storage Functions
     private static Credential authorize() throws Exception {
-        GoogleClientSecrets clientSecrets = null;
-        try {
-            clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
-                    new InputStreamReader(sampleStorageSample.class.getResourceAsStream(CLIENT_SECRET_FILENAME)));
-            if (clientSecrets.getDetails().getClientId() == null || clientSecrets.getDetails().getClientSecret() == null) {
-                throw new Exception("client_secrets not well formed.");
-            }
-        } catch (Exception e) {
-            System.out.println("Problem loading GCS client_secrets.json file. Make sure it exists, you are "
-                    + "loading it with the right path, and a client ID and client secret are "
-                    + "defined in it.\n" + e.getMessage());
-            System.exit(1);
-        }
-        Set<String> scopes = new HashSet<String>();
-        scopes.add(StorageScopes.DEVSTORAGE_FULL_CONTROL);
-        scopes.add(StorageScopes.DEVSTORAGE_READ_ONLY);
-        scopes.add(StorageScopes.DEVSTORAGE_READ_WRITE);
-
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                httpTransport, JSON_FACTORY, clientSecrets, scopes)
-                .setDataStoreFactory(dataStoreFactory)
+        GoogleCredential credential = new GoogleCredential.Builder()
+                .setTransport(httpTransport)
+                .setJsonFactory(JSON_FACTORY)
+                .setServiceAccountId(SERVICE_ACCOUNT_EMAIL)
+                .setServiceAccountPrivateKeyFromP12File(new File(SERVICE_ACCOUNT_PKCS12_FILE_PATH))
+                .setServiceAccountScopes(Collections.singleton(StorageScopes.DEVSTORAGE_FULL_CONTROL))
+                .setServiceAccountUser(null)
                 .build();
-        VerificationCodeReceiver receiver = AUTH_LOCAL_WEBSERVER ? new LocalServerReceiver() : new GooglePromptReceiver();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        return credential;
+
     }
 
     private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
