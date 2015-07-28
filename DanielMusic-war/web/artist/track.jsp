@@ -11,6 +11,9 @@
                     function back() {
                         window.location.href = "#!/artist/tracks";
                     }
+                    function deleteTrack(id) {
+                        window.location.href = "MusicManagementController?target=DeleteTrack&id=" + id;
+                    }
                 </script>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
@@ -22,7 +25,15 @@
 
                     if (artist != null && album != null && music != null) {
                 %>
-
+                <div class="md-modal md-effect-1" id="modal-delete">
+                    <div class="md-content">
+                        <h3>Are you sure?</h3>
+                        <div style="text-align:center;">
+                            <button type="button" onclick="javascript:deleteTrack('<%=music.getId()%>')">Confirm</button>
+                            <button class="md-close" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="entry-content">
                     <div class="entry-meta">
                         <span class="entry-cat"><a href="#!/artist/tracks">Tracks</a></span>
@@ -81,14 +92,10 @@
                 <div id="main" class="release main-left main-medium">
                     <article>
                         <h2 id="album_<%=music.getId()%>">Track TItle: <%=music.getName()%></h2>
-
-
                         <a href="<%=URL_128%>" target="_blank">Click here to download 128 kbps</a><br>
                         <a href="<%=URL_320%>" target="_blank">Click here to download 320 kbps</a><br>
                         <a href="<%=URL_Wav%>" target="_blank">Click here to download Wav</a>
-
                         <br><br>
-
                         <p>
                             <strong>Lyrics:</strong><br>
                             <%
@@ -114,15 +121,19 @@
                         </p>
 
                         <br>
-                        <button type="button" class="small invert" onclick="javascript:back();">Back</button>
-
+                        <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
+                        <%if (!album.getIsPublished()) {%>
+                        <button type="button" class="small invert md-trigger" style="margin-right: 10px;" data-modal="modal-delete">Delete Album</button>
+                        <%}%>
                     </article>
                 </div>
-
-
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
+                <div class="md-overlay"></div>
+                <script src="js/classie.js"></script>
+                <script src="js/modalEffects.js"></script>
+                <script src="js/cssParser.js"></script>
             </article>
         </div>
     </section>

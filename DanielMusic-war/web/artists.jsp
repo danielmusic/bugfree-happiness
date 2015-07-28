@@ -122,7 +122,7 @@
                                     Album album = albums.get(i);
                                     String albumArt = album.getImageLocation();
                                     if (albumArt == null || albumArt.isEmpty()) {
-                                        albumArt = "/img/cover.png";
+                                        albumArt = "img/cover.png";
                                     } else {
                                         albumArt = "http://danielmusictest.storage.googleapis.com/" + albumArt;
                                     }
@@ -162,11 +162,8 @@
                                     for (int j = 0; j < musics.size(); j++) {
                                         Music music = musics.get(j);
                                 %>
-
-
                                 <div class="toggle">
                                     <li>
-
                                         <div class="track-details">
                                             <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                data-artist="<%=music.getArtistName()%>"
@@ -175,13 +172,11 @@
                                                data-shop_url="#!/cart" 
                                                data-shop_target="_blank"
                                                >
-                                                <!-- cover -->
                                                 <img class="track-cover" src="<%=albumArt%>">
-                                                <!-- Title -->
                                                 <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
-                                                <!-- Artists -->
+                                                <span class="track-artists"><%=music.getArtistName()%></span>
                                             </a>
-                                            <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
+                                            <div class="track-buttons" >
                                                 <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="http://artist.com/madoff-freak" 
@@ -203,9 +198,7 @@
                                                     %>
                                             </div>
                                         </div>
-
                                     </li>
-
                                     <div class="toggle-content">
                                         <%
                                             if (music.getLyrics() != null) {
@@ -215,10 +208,7 @@
                                         %> 
                                         <br/><br/><a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=<%=music.getId()%>', '_blank', 'width=600,height=760')">Open in new window</a>
                                     </div>
-
                                 </div>
-
-
                                 <%}%>                                    
                             </ul>
                             <%}%>
@@ -279,6 +269,6 @@
 </section>
 <!--Friendly URL urlrewrite-->
 <script>
-            //window.history.pushState("", "", "music/<%=artist.getName()%>");
+    //window.history.pushState("", "", "music/<%=artist.getName()%>");
 </script>
 <!--Friendly URL urlrewrite-->

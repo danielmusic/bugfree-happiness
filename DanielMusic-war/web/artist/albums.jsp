@@ -25,10 +25,6 @@
             window.location.href = "MusicManagementController?target=RetrieveSingle&source=editSinglePrice&id=" + id;
         }
 
-        function deleteAlbum(id) {
-            window.location.href = "MusicManagementController?target=DeleteAlbum&id=" + id;
-        }
-
         function viewTracks(id) {
             window.location.href = "MusicManagementController?target=ListAllTracksByAlbumID&id=" + id;
         }
@@ -133,21 +129,11 @@
                                         }
                                     %>
                                 </td>
-                                <td class="actions" style="width: 400px;">
+                                <td class="actions">
                                     <a href="javascript:viewSingle(<%=albums.get(i).getId()%>);" class="buy-tickets">View Single</a>
                                     <a href="javascript:editSinglePrice(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
 
                                     <%if (!albums.get(i).getIsPublished()) {%>
-                                    <a class="md-trigger buy-tickets" data-modal="modal-delete">Delete Single</a>
-                                    <div class="md-modal md-effect-1" id="modal-delete">
-                                        <div class="md-content">
-                                            <h3>Are you sure?</h3>
-                                            <div style="text-align:center;">
-                                                <button type="button" onclick="javascript:deleteAlbum('<%=albums.get(i).getId()%>')">Confirm</button>
-                                                <button class="md-close" type="button">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
                                     <%}%>
                                 </td>
