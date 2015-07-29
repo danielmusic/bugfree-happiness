@@ -17,23 +17,22 @@
         <div class="container">
             <script>
                 function loadAjax() {
-                    alert("loadAjax");
                     url = "./MusicController?target=ListGenreArtist";
                     $.ajax({
                         type: "GET",
                         async: false,
                         url: url,
-                        data: {},
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
                             var json = JSON.parse(val);
+                            window.event.returnValue = true;
                             if (json.result) {
                                 window.event.returnValue = false;
                                 window.location.href = "#!/explore";
                             }
                         },
                         error: function (xhr, status, error) {
+                            alert("2");
                             document.getElementById("errMsg").style.display = "block";
                             document.getElementById('errMsg').innerHTML = error;
                             hideLoader();
@@ -118,7 +117,7 @@
 
 
             <a href="#!/home" id="logo">
-                <img src="placeholders/logo.png" alt="Logo">
+                <img src="placeholders/logo.png" alt="Sounds.sg" style="padding-top: 5px;">
             </a>
 
             <!-- ############ icon navigation ############ -->
@@ -173,7 +172,7 @@
                     </li>
                     <%} else {%>
                     <li>
-                        <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>
+                        <a style="cursor: pointer;" onclick="loadAjax();">explore</a>
                     </li>
                     <li>
                         <a href="#!/artist">artist</a>
@@ -195,9 +194,7 @@
                     <li>
                         <a href="#!/login">login</a>
                     </li>
-                    <%
-                        }
-                    %>
+                    <%}%>
                 </ul>
             </nav>
             <!-- /navigation -->

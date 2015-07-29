@@ -3,27 +3,17 @@
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <div class="container">
-
             <div class="col-1-2" style="text-align: left;">
                 <h1 class="heading-l">Bandcamp for artist</h1>
                 <h3>Fans have given artists $109 million USD using Bandcamp, and $3.3 million in the last 30 days alone.</h3>
                 <h3>Why, dear musician friend, are you not yet yourself twirling with arms spread beneath this gentle shower of silver and gold? Read on and be further convinced, or simply...</h3>
             </div>
-            <div class="col-1-2 last" style="text-align: right;">
-
-            </div>
+            <div class="col-1-2 last" style="text-align: right;"></div>
         </div>
     </section>
-    <!-- /intro -->
 
-    <!-- ############################# Content ############################# -->
     <section class="content section">
-        <!-- container -->
         <div class="container">
-
-            <!-- ############################# About US ############################# -->
-
-            <!-- Article -->
             <article>
                 <div class="col-1-2">
                     <img src="placeholders/about-img01.jpg" alt="Noisa image" class="inline">
@@ -58,18 +48,8 @@
                     <br>
                     <h3>Videos</h3>
                     <iframe src="//player.vimeo.com/video/66171813?portrait=0&amp;color=ea4233" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
                 </div>
-
-
             </article>
-            <!-- /article -->
-
         </div>
-        <!-- /container -->
     </section>
-    <!-- /Content -->
-
 </section>
-<!-- /page -->

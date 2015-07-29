@@ -1,19 +1,14 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Artist Signup">
-    <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Artist Signup</h1>
-        <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
-        <!-- Overlay -->
-        <span class="overlay dots"></span>
-    </section>
-    <!-- /intro -->
-
-    <!-- ############################# Content ############################# -->
-    <section class="content section">
-        <!-- container -->
         <div class="container">
-            <!-- Article -->
+            <h1 class="heading-l">Artist Signup</h1>
+            <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
+        </div>
+    </section>
+
+    <section class="content section">
+        <div class="container">
             <article>
                 <script>
                     function loadAjax() {

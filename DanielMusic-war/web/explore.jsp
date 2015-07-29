@@ -14,7 +14,7 @@
             <%@page import="java.util.List"%>
 
             <script>
-                function loadAjax(id) {
+                function loadAjaxExplore(id) {
                     exploreForm.id.value = id;
                     url = "./MusicController?target=GetArtistByID";
                     $.ajax({
@@ -42,23 +42,48 @@
             </script>
 
             <article>
+                <%
+                    List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
+                %>
                 <div class="col-1-1">
                     <form name="exploreForm">
+
+                        <div class="row clearfix filters" data-id="events">
+                            <select class='nice-select filter' name="genres">
+                                <option value="placeholder">All Genres</option>
+                                <option value="*">All Genres</option>
+
+                                <%for (ExploreHelper eh : exploreHelpers) {%>
+                                <option value="<%=eh.getGenre().getName()%>"><%=eh.getGenre().getName()%></option>
+                                <%}%>
+                            </select>
+                        </div>
+
                         <%
-                            List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
                             for (ExploreHelper eh : exploreHelpers) {
-                        %>
-                        <h2> <%=eh.getGenre().getName()%></h2>
-                        <%
-                            for (Artist artist : eh.getArtists()) {
+                                for (Artist artist : eh.getArtists()) {
                         %>
 
-                        <a onclick="javascript:loadAjax(<%=artist.getId()%>)"><%=artist.getName()%></a>
-
-
+                        <div id="events" class="masonry events-grid clearfix">
+                            <div class="col-1-4 item event" data-genres="<%=eh.getGenre().getName()%>" data-artists="<%=artist.getName()%>">
+                                <a onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)">
+                                    <span class="event-meta">
+                                        <span class="event-date"><%=artist.getName()%></span>
+                                        <span class="event-title"><%=eh.getGenre().getName()%></span>
+                                    </span>
+                                    <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
+                                    <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>">
+                                    <%} else {%>
+                                    <img src="placeholders/event01.jpg">
+                                    <%}%>
+                                </a>
+                            </div>
+                        </div>
                         <br/>
-                        <%}%>
-                        <%}%>
+                        <%
+                                }
+                            }
+                        %>
                         <input type="hidden" value="" name="id" id="id">
                     </form>
                 </div>
