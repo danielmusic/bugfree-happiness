@@ -71,14 +71,15 @@
                         var ok = true;
                         if ((password != null && repassword != null) || (password != "" && repassword != "")) {
                             if (password != repassword) {
-                                //alert("Passwords Do not match");
                                 document.getElementById("password").style.borderColor = "#E34234";
                                 document.getElementById("repassword").style.borderColor = "#E34234";
-                                alert("Passwords do not match. Please key again.");
+                                document.getElementById("errMsg").style.display = "block";
+                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
                                 ok = false;
                             } else if (password == repassword) {
                                 if (password.length < 8) {
-                                    alert("Passwords too short. At least 8 characters.");
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
                                     ok = false;
                                 }
                             }
