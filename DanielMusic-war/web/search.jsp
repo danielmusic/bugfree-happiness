@@ -102,7 +102,7 @@
                                             <span class="hoverlayer"></span>
                                             <span class="img">
                                                 <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
-                                                <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>" />
+                                                <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
                                                 <%} else {%>
                                                 <img src="placeholders/artist01.jpg" />
                                                 <%}%>
@@ -142,7 +142,7 @@
                                             if (albumArt == null || albumArt.isEmpty()) {
                                                 albumArt = "/img/cover.png";
                                             } else {
-                                                albumArt = "http://danielmusictest.storage.googleapis.com/" + albumArt;
+                                                albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
                                             }
                                     %>
 
@@ -188,12 +188,12 @@
                                             if (albumArt == null || albumArt.isEmpty()) {
                                                 albumArt = "/img/cover.png";
                                             } else {
-                                                albumArt = "http://danielmusictest.storage.googleapis.com/" + albumArt;
+                                                albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
                                             }
                                     %>
                                     <li>
                                         <div class="track-details">
-                                            <a class="track" data-cover="http://danielmusictest.storage.googleapis.com/<%=albumArt%>">
+                                            <a class="track" data-cover="http://sounds.sg.storage.googleapis.com/<%=albumArt%>">
                                                 <!-- cover -->
                                                 <img class="track-cover" src="<%=albumArt%>">
                                                 <!-- Title -->
@@ -202,7 +202,7 @@
                                                 <span class="track-artists"><%=music.getArtistName()%></span>
                                             </a>
                                             <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
-                                                <a class="track sp-play-track" href="http://danielmusictest.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="http://artist.com/madoff-freak" 
                                                    data-artist_target="_self"

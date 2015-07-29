@@ -72,7 +72,7 @@
                                         <span class="event-title"><%=eh.getGenre().getName()%></span>
                                     </span>
                                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
-                                    <img src="http://danielmusictest.storage.googleapis.com/<%=artist.getImageURL()%>">
+                                    <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>">
                                     <%} else {%>
                                     <img src="placeholders/event01.jpg">
                                     <%}%>
