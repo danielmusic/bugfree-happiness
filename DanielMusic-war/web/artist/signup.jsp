@@ -11,7 +11,7 @@
         <div class="container">
             <article>
                 <script>
-                    function loadAjax() {
+                    function loadAjaxSignupArtist() {
                         if (validatePassword()) {
                             var v = grecaptcha.getResponse();
                             if (v.length !== 0) {
@@ -138,7 +138,7 @@
                             <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
                         </div>
                     </div>
-                    <button class="large invert" onclick="loadAjax()">Sign up now!</button>
+                    <button class="large invert" onclick="loadAjaxSignupArtist()">Sign up now!</button>
                     <div class="clear"></div>
                 </form>
             </article>
