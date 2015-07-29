@@ -140,7 +140,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
                         </div>
                     </div>
                     <button class="large invert" onclick="loadAjax()">Sign up now!</button>

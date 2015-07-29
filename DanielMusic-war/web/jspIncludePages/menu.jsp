@@ -17,6 +17,7 @@
         <div class="container">
             <script>
                 function loadAjax() {
+                    alert("loadAjax");
                     url = "./MusicController?target=ListGenreArtist";
                     $.ajax({
                         type: "GET",

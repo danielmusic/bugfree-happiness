@@ -44,7 +44,6 @@ public class ClientAccountManagementController extends HttpServlet {
         //profile parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
-        String newEmail = request.getParameter("newEmail");
         String contactEmail = request.getParameter("contactEmail");
         String paypalEmail = request.getParameter("paypalEmail");
         String genreID = request.getParameter("genre");
@@ -103,7 +102,6 @@ public class ClientAccountManagementController extends HttpServlet {
                     break;
 
                 case "AccountSignup":
-                    System.out.println("Controller: AccountSignup");
                     if (chkAgree == null) {
                         jsObj.put("result", false);
                         jsObj.put("message", "Sorry. You have not agreed to the terms");
@@ -192,6 +190,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         nextPage = "#!/artist/profile";
                     }
                     break;
+
                 case "SendResetPasswordEmail":
                     returnHelper = accountManagementBean.generateAndSendForgetPasswordEmail(email);
                     if (returnHelper.getResult()) {
@@ -221,6 +220,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         nextPage = "#!/reset-password2";
                     }
                     break;
+
                 case "SendEmailVerification":
                     if (account != null) {
                         returnHelper = accountManagementBean.generateAndSendVerificationEmail(account.getId(), account.getEmail(), false);
@@ -232,6 +232,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         nextPage = "#!/verify-email";
                     }
                     break;
+
                 case "SendNewEmailVerification":
                     if (account != null) {
                         returnHelper = accountManagementBean.generateAndSendVerificationEmail(account.getId(), account.getEmail(), true);
@@ -243,6 +244,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         nextPage = "#!/change-email";
                     }
                     break;
+
                 case "VerifyEmail":
                     if (account != null) {
                         returnHelper = accountManagementBean.enterEmailVerificationCode(account.getEmail(), verifyEmailCode);
@@ -258,6 +260,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                     }
                     break;
+
                 case "CancelUpdateEmail":
                     if (account != null) {
                         returnHelper = accountManagementBean.cancelUpdateAccountEmail(account.getId());
@@ -272,6 +275,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                     }
                     break;
+
                 case "VerifyNewEmail":
                     if (account != null) {
                         returnHelper = accountManagementBean.enterNewEmailVerificationCode(account.getNewEmail(), verifyEmailCode);
@@ -287,6 +291,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         }
                     }
                     break;
+
                 case "ChangeName":
                     if (account != null) {
                         returnHelper = accountManagementBean.updateArtistName(account.getId(), name);
