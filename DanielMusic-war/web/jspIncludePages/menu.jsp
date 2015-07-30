@@ -32,7 +32,6 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert("2");
                             document.getElementById("errMsg").style.display = "block";
                             document.getElementById('errMsg').innerHTML = error;
                             hideLoader();
