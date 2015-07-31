@@ -85,8 +85,7 @@
                             <tr>  
                                 <th style="width: 30%">Album Name</th>
                                 <th style="width: 30%">Artist Name</th>
-                                <th style="width: 30%">Price</th>
-                                <th style="width: 10%">Price</th>
+                                <th style="width: 40%">Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,7 +116,7 @@
                     %>
                 </form>
                 <p style="float: right;">
-                    <strong>Subtotal: <%=payment.getTotalPaymentAmount()%></strong> 
+                    <strong>Subtotal: $<%=payment.getTotalPaymentAmount()%></strong> 
                     <br/><br/>
 
                 </p>

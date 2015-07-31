@@ -23,7 +23,6 @@
         }
 
         function removeTrack() {
-            alert("removeTrack");
             checkboxes = document.getElementsByName('deleteTrack');
             var arr = new Array();
             $("input:checkbox[name=deleteTrack]:checked").each(function () {
@@ -31,12 +30,10 @@
             });
             var stringArr = "";
             for (var i = 0; i < arr.length; i++) {
-                alert(arr[i]);
                 if (i != (arr.length - 1)) {
                     stringArr += arr[i] + ",";
                 } else {
                     stringArr += arr[i];
-                    alert("strArr" + stringArr);
                 }
             }
 
@@ -77,12 +74,10 @@
             });
             var stringArr = "";
             for (var i = 0; i < arr.length; i++) {
-                alert(arr[i]);
                 if (i != (arr.length - 1)) {
                     stringArr += arr[i] + ",";
                 } else {
                     stringArr += arr[i];
-                    alert("strArr" + stringArr);
                 }
             }
 
@@ -190,7 +185,6 @@
             var ok = true;
             if ((email != null && reemail != null) || (email != "" && reemail != "")) {
                 if (email != reemail) {
-                    //alert("Passwords Do not match");
                     document.getElementById("email").style.borderColor = "#E34234";
                     document.getElementById("reemail").style.borderColor = "#E34234";
                     alert("Email do not match. Please key again.");

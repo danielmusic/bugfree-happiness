@@ -195,7 +195,7 @@ public class AccountManagementController extends HttpServlet {
 
                 case "GetDownloadLink":
                     if (checkLogin(response)) {
-                        String url = musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false);
+                        String url = musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false, 300L);
                         System.out.println(url);
                         nextPage = url;
                     }
