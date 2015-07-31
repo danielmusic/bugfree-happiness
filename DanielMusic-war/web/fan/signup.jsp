@@ -68,25 +68,27 @@
                     function validatePassword() {
                         var password = document.getElementById("password").value;
                         var repassword = document.getElementById("repassword").value;
-                        var ok = true;
-                        if ((password != null && repassword != null) || (password != "" && repassword != "")) {
-                            if (password != repassword) {
-                                document.getElementById("password").style.borderColor = "#E34234";
-                                document.getElementById("repassword").style.borderColor = "#E34234";
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
-                                ok = false;
-                            } else if (password == repassword) {
-                                if (password.length < 8) {
+                        if (password !== null && repassword !== null) {
+                            var ok = true;
+                            if ((password !== null && repassword !== null) || (password !== "" && repassword !== "")) {
+                                if (password !== repassword) {
+                                    document.getElementById("password").style.borderColor = "#E34234";
+                                    document.getElementById("repassword").style.borderColor = "#E34234";
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
+                                    document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
                                     ok = false;
+                                } else if (password === repassword) {
+                                    if (password.length < 8) {
+                                        document.getElementById("errMsg").style.display = "block";
+                                        document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
+                                        ok = false;
+                                    }
                                 }
+                            } else {
+                                return ok;
                             }
-                        } else {
                             return ok;
                         }
-                        return ok;
                     }
                 </script>
 
