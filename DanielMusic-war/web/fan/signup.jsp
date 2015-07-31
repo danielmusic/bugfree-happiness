@@ -18,49 +18,49 @@
                 <script>
                     function loadAjaxSignupFan() {
                         if (validatePassword()) {
-                            var v = grecaptcha.getResponse();
-                            if (v.length !== 0) {
-                                var source = "FanSignup";
-                                var name = $('#name').val();
-                                var email = $('#email').val();
-                                var password = $('#password').val();
-                                var chkAgree = $('#chkAgree').val();
+                            if (document.getElementById('chkAgree').checked) {
+                                var v = grecaptcha.getResponse();
+                                if (v.length !== 0) {
+                                    var source = "FanSignup";
+                                    var name = $('#name').val();
+                                    var email = $('#email').val();
+                                    var password = $('#password').val();
+                                    var chkAgree = "checked";
 
-                                url = "./ClientAccountManagementController?target=AccountSignup";
-                                $.ajax({
-                                    type: "GET",
-                                    async: false,
-                                    url: url,
-                                    data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
-                                    dataType: "text",
-                                    success: function (val) {
-                                        window.event.returnValue = true;
-                                        var json = JSON.parse(val);
-                                        if (json.result) {
-                                            window.event.returnValue = false;
-                                            window.location.href = "#!/login";
-                                            document.loginForm.getElementById("goodMsg").style.display = "block";
-                                            document.loginForm.getElementById('goodMsg').innerHTML = json.message;
-                                        } else {
-                                            window.event.returnValue = false;
-                                            window.location.href = "#!/fan/signup";
-                                            document.getElementById("chkAgree").checked = false;
-                                            document.getElementById("grecaptcha").reset();
+                                    url = "./ClientAccountManagementController?target=AccountSignup";
+                                    $.ajax({
+                                        type: "GET",
+                                        async: false,
+                                        url: url,
+                                        data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
+                                        dataType: "text",
+                                        success: function (val) {
+                                            window.event.returnValue = true;
+                                            var json = JSON.parse(val);
+                                            if (json.result) {
+                                                window.event.returnValue = false;
+                                                window.location.href = "#!/login";
+                                            } else {
+                                                window.event.returnValue = false;
+                                                document.getElementById("chkAgree").checked = false;
+                                                document.getElementById("grecaptcha").reset();
+                                                document.getElementById("errMsg").style.display = "block";
+                                                document.getElementById('errMsg').innerHTML = json.message;
+                                                window.location.href = "#!/fan/signup";
+                                            }
+                                        },
+                                        error: function (xhr, status, error) {
                                             document.getElementById("errMsg").style.display = "block";
-                                            document.getElementById('errMsg').innerHTML = json.message;
+                                            document.getElementById('errMsg').innerHTML = error;
+                                            hideLoader();
+                                            ajaxResultsError(xhr, status, error);
                                         }
-                                    },
-                                    error: function (xhr, status, error) {
-                                        document.getElementById("errMsg").style.display = "block";
-                                        document.getElementById('errMsg').innerHTML = error;
-                                        hideLoader();
-                                        ajaxResultsError(xhr, status, error);
-                                    }
-                                });
-                            } else {
-                                window.event.returnValue = false;
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
+                                    });
+                                } else {
+                                    window.event.returnValue = false;
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
+                                }
                             }
                         }
                     }
@@ -117,7 +117,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label><input type="checkbox" id="chkAgree" value="chkAgree" name="option" required> I have read and agree to the Terms of Use.</label>
+                            <label><input type="checkbox" id="chkAgree" name="option" required> I have read and agree to the Terms of Use.</label>
                         </div>
                     </div>
 

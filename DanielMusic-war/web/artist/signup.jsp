@@ -40,8 +40,6 @@
                                             var json = JSON.parse(val);
                                             if (json.result) {
                                                 window.event.returnValue = false;
-                                                document.loginForm.getElementById("goodMsg").style.display = "block";
-                                                document.loginForm.getElementById('goodMsg').innerHTML = json.message;
                                                 window.location.href = "#!/login";
                                             } else {
                                                 window.event.returnValue = false;
