@@ -94,6 +94,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             nextPage = "#!/artist/profile";
                         } else if (account instanceof Member) {
                             session.setAttribute("member", (Member) account);
+                            session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                             nextPage = "#!/fan/profile";
                         }
                     } else {
@@ -327,8 +328,7 @@ public class ClientAccountManagementController extends HttpServlet {
                     return;
                 case "GetPastPurchases":
                     System.out.println("Controller: GetPastPurchases");
-                    List<Music> list = account.getListOfPurchasedMusics();
-                    session.setAttribute("ListOfPurchasedMusics", list);
+                    session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                     break;
             }
 
