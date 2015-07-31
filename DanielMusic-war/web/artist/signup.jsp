@@ -1,22 +1,17 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Artist Signup">
-    <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Artist Signup</h1>
-        <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
-        <!-- Overlay -->
-        <span class="overlay dots"></span>
-    </section>
-    <!-- /intro -->
-
-    <!-- ############################# Content ############################# -->
-    <section class="content section">
-        <!-- container -->
         <div class="container">
-            <!-- Article -->
+            <h1 class="heading-l">Artist Signup</h1>
+            <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
+        </div>
+    </section>
+
+    <section class="content section">
+        <div class="container">
             <article>
                 <script>
-                    function loadAjax() {
+                    function loadAjaxSignupArtist() {
                         if (validatePassword()) {
                             var v = grecaptcha.getResponse();
                             if (v.length !== 0) {
@@ -80,11 +75,13 @@
                                 //alert("Passwords Do not match");
                                 document.getElementById("password").style.borderColor = "#E34234";
                                 document.getElementById("repassword").style.borderColor = "#E34234";
-                                alert("Passwords do not match. Please key again.");
+                                document.getElementById("errMsg").style.display = "block";
+                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
                                 ok = false;
                             } else if (password == repassword) {
                                 if (password.length < 8) {
-                                    alert("Passwords too short. At least 8 characters.");
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
                                     ok = false;
                                 }
                             }
@@ -140,10 +137,10 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
                         </div>
                     </div>
-                    <button class="large invert" onclick="loadAjax()">Sign up now!</button>
+                    <button class="large invert" onclick="loadAjaxSignupArtist()">Sign up now!</button>
                     <div class="clear"></div>
                 </form>
             </article>

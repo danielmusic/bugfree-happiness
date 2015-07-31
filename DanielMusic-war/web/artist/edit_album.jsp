@@ -115,7 +115,7 @@
                     </div>
 
                     <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%>
-                    <img src="http://danielmusictest.storage.googleapis.com/<%=album.getImageLocation() + "?" + new Date()%>">
+                    <img src="http://sounds.sg.storage.googleapis.com/<%=album.getImageLocation() + "?" + new Date()%>">
                     <%}%>
 
                     <div class="row clearfix">

@@ -154,9 +154,9 @@
                         </div>
                         <div class="col-1-2 last">
                             <label for="bandMembers"><strong>Members</strong> </label>
-                                   <input type="text" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
-                                    out.print(artist.getBandMembers());
-                                }%>">
+                            <input type="text" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
+                             out.print(artist.getBandMembers());
+                         }%>">
                         </div>
                     </div>
                     <%}%>

@@ -16,7 +16,7 @@
             <!-- Article -->
             <article>
                 <script>
-                    function loadAjax() {
+                    function loadAjaxSignupFan() {
                         if (validatePassword()) {
                             var v = grecaptcha.getResponse();
                             if (v.length !== 0) {
@@ -71,14 +71,15 @@
                         var ok = true;
                         if ((password != null && repassword != null) || (password != "" && repassword != "")) {
                             if (password != repassword) {
-                                //alert("Passwords Do not match");
                                 document.getElementById("password").style.borderColor = "#E34234";
                                 document.getElementById("repassword").style.borderColor = "#E34234";
-                                alert("Passwords do not match. Please key again.");
+                                document.getElementById("errMsg").style.display = "block";
+                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
                                 ok = false;
                             } else if (password == repassword) {
                                 if (password.length < 8) {
-                                    alert("Passwords too short. At least 8 characters.");
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
                                     ok = false;
                                 }
                             }
@@ -120,10 +121,10 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LdjyvoSAAAAAL2m-7sPPZEtz0BNVRb-A_yY0BB_"></div>
+                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
                         </div>
                     </div>
-                    <button class="large invert" onclick="loadAjax()">Sign up now!</button>
+                    <button class="large invert" onclick="loadAjaxSignupFan()">Sign up now!</button>
                     <div class="clear"></div>
                 </form>
             </article>

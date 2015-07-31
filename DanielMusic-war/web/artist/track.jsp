@@ -51,7 +51,7 @@
                                     if (albumArt == null || albumArt.isEmpty()) {
                                         albumArt = "/img/cover.png";
                                     } else {
-                                        albumArt = "http://danielmusictest.storage.googleapis.com/" + albumArt;
+                                        albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
                                     }
                                 %>
 
