@@ -615,6 +615,7 @@ public class MusicManagementController extends HttpServlet {
                             //Payment not tied to account will access download page directly
 //                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
 //                            session.setAttribute("downloadLinks", downloadHelper);
+                            session.removeAttribute("ShoppingCart");
                             session.setAttribute("redirectPage", "#!/download-links");
                             nextPage = "redirect2.jsp";
                         }

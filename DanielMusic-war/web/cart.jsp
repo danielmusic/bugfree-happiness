@@ -159,11 +159,12 @@
             if (validateEmail()) {
                 //window.location.href = "./MusicManagementController?target=Checkout";
                 url = "./MusicManagementController?target=Checkout";
+                email = $('#email').val();
                 $.ajax({
                     type: "GET",
                     async: false,
                     url: url,
-                    data: {},
+                    data: {'email': email},
                     success: function (val) {
                         window.event.returnValue = false;
                         window.location.href = "#!/checkout";
@@ -237,7 +238,7 @@
                             <form class="form">
                                 <div class="row clearfix">
                                     <div class="col-1-1">
-                                        Email: <input type="email" id="email" required/>
+                                        Email: <input type="email" id="email" name="email" required/>
                                     </div>
                                 </div>
                                 <div class="row clearfix">

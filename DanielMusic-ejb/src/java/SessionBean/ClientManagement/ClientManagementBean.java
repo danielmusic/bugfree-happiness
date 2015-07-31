@@ -422,7 +422,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                         }
                     }
                 }
-                clearShoppingCart(account.getId());
+                //Only clear shopping cart if account not null
+                if (account != null) {
+                    clearShoppingCart(account.getId());
+                }
                 //Notify artists
                 notifyArtistsOfCustomerPurchase(paymentID);
                 //Send buyer an email
@@ -447,6 +450,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             result.setDescription("Unable to find a matching payment record in our system. If you have completed your PayPal payment and see this error message, please contact us.");
         } catch (Exception ex) {
             result.setDescription("Internal server error.");
+            ex.printStackTrace();
         }
         return result;
     }
@@ -655,21 +659,81 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID) {
-        //todo
-        //1 Figure out the list of artist
-        // for each artist
-        //2 Create the list of albums/musics for each artist
-        //3 Mail the artist
         System.out.println("sendDownloadLinkToBuyer() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-            return result;
+            Query q = em.createQuery("Select m from Payment m where m.id=:paymentID");
+            q.setParameter("paymentID", paymentID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            Payment payment = (Payment) q.getSingleResult();
+            List<Album> listOfAlbums = payment.getAlbumPurchased();
+            List<Music> listOfMusics = payment.getMusicPurchased();
+            //1 Figure out the list of artist
+            // for each artist
+            HashSet<Artist> setOfArtists = new HashSet();
+            for (Album a : listOfAlbums) {
+                setOfArtists.add(a.getArtist());
+            }
+            for (Music m : listOfMusics) {
+                setOfArtists.add(m.getAlbum().getArtist());
+            }
+            for (Artist artist : setOfArtists) {
+                String emailTemplate = "";
+                String buyerName = "unregistered user";
+                if (payment.getAccount() != null) {
+                    buyerName = payment.getAccount().getName();
+                }
+                emailTemplate += "Hi there, " + buyerName + " from Sounds.sg has just purchased your album/track(s) listed below on <paymentDate>:";
+
+                //2 Create the list of albums/musics for each artist
+                Boolean first = true;
+                for (Album a : listOfAlbums) {
+                    if (a.getArtist().getId().equals(artist.getId())) {
+                        if (first) {
+                            first = false;
+                            emailTemplate += "<h2>Albums</h2><ol>";
+                        }
+                        emailTemplate += "<li>" + a.getName() + "</li>";
+                    }
+                }
+                if (first = false) {
+                    emailTemplate += "</ol>";
+                }
+                first = true;
+                for (Music m : listOfMusics) {
+                    if (m.getAlbum().getArtist().getId().equals(artist.getId())) {
+                        if (first) {
+                            first = false;
+                            emailTemplate += "<h2>Tracks</h2>";
+                        }
+                        emailTemplate += "<ol><li> " + m.getAlbum().getName() + ": " + m.getName() + "</li></ol>";
+
+                    }
+                }
+                if (first = false) {
+                    emailTemplate += "</ol>";
+                }
+
+                emailTemplate += "P/S: The payment has been credited into your PayPal account. <br/><br/>"
+                        + "Have a great day!<br/>"
+                        + "<a href=\"http://www.sounds.sg\">Sounds.sg</a>";
+                //Send using sendgrid
+                if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "Sounds.SG Fan Purchase", emailTemplate)) {
+                    result.setDescription("Artist notification sent.");
+                    result.setResult(true);
+                } else {
+                    result.setDescription("Failed to notify artists");
+                }
+            }
+
+            result.setResult(true);
+            result.setDescription("Artist notified of the purchase");
         } catch (Exception ex) {
             result.setDescription("Internal server error");
             ex.printStackTrace();
-            return result;
         }
+        return result;
     }
 
     @Override
@@ -697,27 +761,62 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             //Create the email template
             //album first then music
-            String emailTemplate = "Thank you for purchasing from Sounds.sg. To start your download, please click on the following link(s) below:"
-                    + ""
-                    + "<h2>Albums</h2>"
-                    + "<table border=1>"
-                    + "    <thead>"
-                    + "        <tr>  "
-                    + "            <th>Track</th>"
-                    + "            <th>Album</th>"
-                    + "            <th>Artist</th>"
-                    + "            <th>Download</th>"
-                    + "        </tr>"
-                    + "    </thead>"
-                    + "    <tbody>";
-            for (Album a : listOfAlbums) {
-                for (Music m : a.getListOfMusics()) {
+            String emailTemplate = "Thank you for purchasing from Sounds.sg. To start your download, please click on the following link(s) below:";
+            if (listOfAlbums != null && listOfAlbums.size() > 0) {
+                emailTemplate += ""
+                        + "<h2>Albums</h2>"
+                        + "<table border=1>"
+                        + "    <thead>"
+                        + "        <tr>  "
+                        + "            <th>Track</th>"
+                        + "            <th>Album</th>"
+                        + "            <th>Artist</th>"
+                        + "            <th>Download</th>"
+                        + "        </tr>"
+                        + "    </thead>"
+                        + "    <tbody>";
+                for (Album a : listOfAlbums) {
+                    for (Music m : a.getListOfMusics()) {
+                        emailTemplate += "        <tr>"
+                                + "            <td>"
+                                + m.getName()
+                                + "            </td>"
+                                + "            <td>"
+                                + a.getName()
+                                + "            </td>"
+                                + "            <td>"
+                                + m.getArtistName()
+                                + "            </td>"
+                                + "            <td>"
+                                + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE, 43200L) + "'>.mp3(128kbps)</a>&nbsp;&nbsp;"
+                                + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE, 43200L) + "'>.mp3(320kbps)</a>&nbsp;&nbsp;"
+                                + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE, 43200L) + "'>.wav</a> "
+                                + "            </td>"
+                                + "        </tr>";
+                    }
+                }
+                emailTemplate += "    </tbody>"
+                        + "</table>";
+            }
+            if (listOfMusics != null && listOfMusics.size() > 0) {
+                emailTemplate += "<h2>Tracks</h2>"
+                        + "<table border=1>"
+                        + "    <thead>"
+                        + "        <tr>  "
+                        + "            <th>Track</th>"
+                        + "            <th>Album</th>"
+                        + "            <th>Artist</th>"
+                        + "            <th>Download</th>"
+                        + "        </tr>"
+                        + "    </thead>"
+                        + "    <tbody>";
+                for (Music m : listOfMusics) {
                     emailTemplate += "        <tr>"
                             + "            <td>"
                             + m.getName()
                             + "            </td>"
                             + "            <td>"
-                            + a.getName()
+                            + m.getAlbum().getName()
                             + "            </td>"
                             + "            <td>"
                             + m.getArtistName()
@@ -729,42 +828,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                             + "            </td>"
                             + "        </tr>";
                 }
+                emailTemplate += "    </tbody>"
+                        + "</table>";
             }
-            emailTemplate += "    </tbody>"
-                    + "</table>"
-                    + ""
-                    + "<h2>Tracks</h2>"
-                    + "<table border=1>"
-                    + "    <thead>"
-                    + "        <tr>  "
-                    + "            <th>Track</th>"
-                    + "            <th>Album</th>"
-                    + "            <th>Artist</th>"
-                    + "            <th>Download</th>"
-                    + "        </tr>"
-                    + "    </thead>"
-                    + "    <tbody>";
-            for (Music m : listOfMusics) {
-                emailTemplate += "        <tr>"
-                        + "            <td>"
-                        + m.getName()
-                        + "            </td>"
-                        + "            <td>"
-                        + m.getAlbum().getName()
-                        + "            </td>"
-                        + "            <td>"
-                        + m.getArtistName()
-                        + "            </td>"
-                        + "            <td>"
-                        + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE, 43200L) + "'>.mp3(128kbps)</a>&nbsp;&nbsp;"
-                        + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE, 43200L) + "'>.mp3(320kbps)</a>&nbsp;&nbsp;"
-                        + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE, 43200L) + "'>.wav</a> "
-                        + "            </td>"
-                        + "        </tr>";
-            }
-            emailTemplate += "    </tbody>"
-                    + "</table>"
-                    + "Enjoy your downloads!<br/><br/>"
+            emailTemplate += "Enjoy your downloads!<br/><br/>"
                     + "P/S: The download links in this email are only valid for 12hours. If you did not purchased this music, someone else must have entered your email address on our site. You can just ignore this message. <br/><br/>"
                     + "Have a nice day!<br/>"
                     + "<a href=\"http://www.sounds.sg\">Sounds.sg</a>";
