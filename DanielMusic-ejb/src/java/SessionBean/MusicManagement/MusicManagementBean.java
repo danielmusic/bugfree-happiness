@@ -463,7 +463,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                return result;
 //            }
             Album album = new Album();
-
+            Genre genre = em.getReference(Genre.class, genreID);
+            album.setGenreName(genre.getName());
             album.setArtist(artist);
             album.setIsSingle(isSingle);
             album.setDescription(description);
@@ -612,7 +613,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             } else {
-                Genre genre = em.getReference(Genre.class, genreID);
 //                String text = Double.toString(Math.abs(price));
 //                int integerPlaces = text.indexOf('.');
 //                int decimalPlaces = text.length() - integerPlaces - 1;
@@ -622,6 +622,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                    return helper;
 //                }
                 album.setName(name);
+                Genre genre = em.getReference(Genre.class, genreID);
                 album.setGenreName(genre.getName());
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
