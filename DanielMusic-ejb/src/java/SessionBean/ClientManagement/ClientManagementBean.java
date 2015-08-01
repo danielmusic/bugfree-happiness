@@ -11,6 +11,7 @@ import EntityManager.PaymentHelper;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import SessionBean.CommonInfrastructure.SendGridLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
 import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
@@ -45,6 +46,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @EJB
     private MusicManagementBeanLocal mmbl;
+
+    @EJB
+    private SendGridLocal sgl;
 
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
@@ -137,7 +141,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             if (accountID != null) {
                 // If it's a logged in account, get from cart
-                account = em.getReference(Account.class, accountID);
+                Query q = em.createQuery("SELECT E FROM Account E where E.id=:accountID");
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                q.setParameter("accountID", accountID);
+                account = (Account) q.getSingleResult();
                 if (account == null) {
                     return null;
                 }
@@ -227,12 +234,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payment.setAlbumPrices(listOfAlbumPrices);
             payment.setMusicPurchased(listOfMusicsInCart);
             payment.setMusicPrices(listOfMusicPrices);
-            if (totalPaymentAmount == 0.0) { //If free
-                if (accountID != null) {
-                    payment.setAccount(account);
-                } else {
-                    payment.setNonMemberEmail(nonMemberEmail);
-                }
+            //Tie payment to account
+            if (accountID != null) {
+                payment.setAccount(account);
+            } else {
+                payment.setNonMemberEmail(nonMemberEmail);
+            }
+            //Complete payment directly if free
+            if (totalPaymentAmount == 0.0) {
                 em.persist(payment);
                 checkoutHelper.setPayment(payment);
                 if (completePayment(accountID, UUID).getResult()) {
@@ -323,50 +332,49 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         }
     }
 
-    @Override
-    public DownloadHelper getPurchaseDownloadLinks(Long paymentID) {
-        System.out.println("getPurchaseDownloadLinks() called");
-        List<DownloadHelper> purchaseDownloads = new ArrayList();
-        try {
-            Payment payment = getPayment(paymentID);
-            List<Music> listOfPurchasedMusic = new ArrayList();
-            List<String> downloadLinks128 = new ArrayList();
-            List<String> downloadLinks320 = new ArrayList();
-            List<String> downloadLinksWav = new ArrayList();
-
-            Iterator iterator = payment.getAlbumPurchased().iterator();
-            while (iterator.hasNext()) {
-                Album album = (Album) iterator.next();
-                for (Music m : album.getListOfMusics()) {
-                    listOfPurchasedMusic.add(m);
-                    downloadLinksWav.add(mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE));
-                    downloadLinks128.add(mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE));
-                    downloadLinks320.add(mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE));
-                }
-            }
-
-            iterator = payment.getMusicPurchased().iterator();
-            while (iterator.hasNext()) {
-                Music m = (Music) iterator.next();
-                listOfPurchasedMusic.add(m);
-                downloadLinksWav.add(mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE));
-                downloadLinks128.add(mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE));
-                downloadLinks320.add(mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE));
-            }
-            DownloadHelper downloadHelper = new DownloadHelper();
-            downloadHelper.setDownloadLinksWav(downloadLinksWav);
-            downloadHelper.setDownloadLinks128(downloadLinks128);
-            downloadHelper.setDownloadLinks320(downloadLinks320);
-
-            return downloadHelper;
-        } catch (NoResultException ex) {
-            return null;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
+//    @Override
+//    public DownloadHelper getPurchaseDownloadLinks(Long paymentID) {
+//        System.out.println("getPurchaseDownloadLinks() called");
+//        List<DownloadHelper> purchaseDownloads = new ArrayList();
+//        try {
+//            Payment payment = getPayment(paymentID);
+//            List<Music> listOfPurchasedMusic = new ArrayList();
+//            List<String> downloadLinks128 = new ArrayList();
+//            List<String> downloadLinks320 = new ArrayList();
+//            List<String> downloadLinksWav = new ArrayList();
+//
+//            Iterator iterator = payment.getAlbumPurchased().iterator();
+//            while (iterator.hasNext()) {
+//                Album album = (Album) iterator.next();
+//                for (Music m : album.getListOfMusics()) {
+//                    listOfPurchasedMusic.add(m);
+//                    downloadLinksWav.add(mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE));
+//                    downloadLinks128.add(mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE));
+//                    downloadLinks320.add(mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE));
+//                }
+//            }
+//
+//            iterator = payment.getMusicPurchased().iterator();
+//            while (iterator.hasNext()) {
+//                Music m = (Music) iterator.next();
+//                listOfPurchasedMusic.add(m);
+//                downloadLinksWav.add(mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE));
+//                downloadLinks128.add(mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE));
+//                downloadLinks320.add(mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE));
+//            }
+//            DownloadHelper downloadHelper = new DownloadHelper();
+//            downloadHelper.setDownloadLinksWav(downloadLinksWav);
+//            downloadHelper.setDownloadLinks128(downloadLinks128);
+//            downloadHelper.setDownloadLinks320(downloadLinks320);
+//
+//            return downloadHelper;
+//        } catch (NoResultException ex) {
+//            return null;
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//    }
     @Override
     public ReturnHelper completePayment(Long paymentID, String UUID) {
         System.out.println("completePayment() called");
@@ -378,9 +386,11 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             Payment payment = (Payment) q.getSingleResult();
             if (!payment.getUUID().equals(UUID)) {
+                System.out.println("completePayment(): UUID does not match");
                 result.setDescription("Payment could not be completed due to invalid UUID. If you have completed your PayPal payment and see this error message, please contact us.");
                 return result;
             } else if (payment.getPaymentCompleted()) {
+                System.out.println("completePayment(): Payment already completed");
                 result.setDescription("Payment completed successfully. Thank you for your purchase!");
                 result.setResult(true);
                 return result;
@@ -412,11 +422,26 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                         }
                     }
                 }
-                clearShoppingCart(account.getId());
-                //todo enable this notifyArtistsOfCustomerPurchase(paymentID);
+                //Only clear shopping cart if account not null
+                if (account != null) {
+                    clearShoppingCart(account.getId());
+                }
+                //Notify artists
+                notifyArtistsOfCustomerPurchase(paymentID);
+                //Send buyer an email
+                ReturnHelper result2 = sendDownloadLinkToBuyer(paymentID);
                 payment.setPaymentCompleted(true);
                 payment.setDateCompleted(new Date());
                 em.flush();
+                if (!result2.getResult()) {
+                    if (payment.getAccount() != null) {
+                        result.setDescription("Payment completed but our system was unable to email you the download links. Please view your profile to retrieve the download links.");
+                        return result;
+                    } else {
+                        result.setDescription("Payment completed but our system was unable to email you the download links. Contact admin@sounds.sg if you are unable to download your music on this page.");
+                        return result;
+                    }
+                }
                 result.setDescription("Payment completed");
                 result.setResult(true);
                 return result;
@@ -425,6 +450,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             result.setDescription("Unable to find a matching payment record in our system. If you have completed your PayPal payment and see this error message, please contact us.");
         } catch (Exception ex) {
             result.setDescription("Internal server error.");
+            ex.printStackTrace();
         }
         return result;
     }
@@ -633,11 +659,196 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID) {
-        //todo
-        //1 Figure out the list of artist
-        // for each artist
-        //2 Create the list of albums/musics for each artist
-        //3 Mail the artist
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("sendDownloadLinkToBuyer() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("Select m from Payment m where m.id=:paymentID");
+            q.setParameter("paymentID", paymentID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            Payment payment = (Payment) q.getSingleResult();
+            List<Album> listOfAlbums = payment.getAlbumPurchased();
+            List<Music> listOfMusics = payment.getMusicPurchased();
+            //1 Figure out the list of artist
+            // for each artist
+            HashSet<Artist> setOfArtists = new HashSet();
+            for (Album a : listOfAlbums) {
+                setOfArtists.add(a.getArtist());
+            }
+            for (Music m : listOfMusics) {
+                setOfArtists.add(m.getAlbum().getArtist());
+            }
+            for (Artist artist : setOfArtists) {
+                String emailTemplate = "";
+                String buyerName = "unregistered user";
+                if (payment.getAccount() != null) {
+                    buyerName = payment.getAccount().getName();
+                }
+                emailTemplate += "Hi there, " + buyerName + " from Sounds.sg has just purchased your album/track(s) listed below on <paymentDate>:";
+
+                //2 Create the list of albums/musics for each artist
+                Boolean first = true;
+                for (Album a : listOfAlbums) {
+                    if (a.getArtist().getId().equals(artist.getId())) {
+                        if (first) {
+                            first = false;
+                            emailTemplate += "<h2>Albums</h2><ol>";
+                        }
+                        emailTemplate += "<li>" + a.getName() + "</li>";
+                    }
+                }
+                if (first = false) {
+                    emailTemplate += "</ol>";
+                }
+                first = true;
+                for (Music m : listOfMusics) {
+                    if (m.getAlbum().getArtist().getId().equals(artist.getId())) {
+                        if (first) {
+                            first = false;
+                            emailTemplate += "<h2>Tracks</h2>";
+                        }
+                        emailTemplate += "<ol><li> " + m.getAlbum().getName() + ": " + m.getName() + "</li></ol>";
+
+                    }
+                }
+                if (first = false) {
+                    emailTemplate += "</ol>";
+                }
+
+                emailTemplate += "P/S: The payment has been credited into your PayPal account. <br/><br/>"
+                        + "Have a great day!<br/>"
+                        + "<a href=\"http://www.sounds.sg\">Sounds.sg</a>";
+                //Send using sendgrid
+                if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "Sounds.SG Fan Purchase", emailTemplate)) {
+                    result.setDescription("Artist notification sent.");
+                    result.setResult(true);
+                } else {
+                    result.setDescription("Failed to notify artists");
+                }
+            }
+
+            result.setResult(true);
+            result.setDescription("Artist notified of the purchase");
+        } catch (Exception ex) {
+            result.setDescription("Internal server error");
+            ex.printStackTrace();
+        }
+        return result;
     }
+
+    @Override
+    public ReturnHelper sendDownloadLinkToBuyer(Long paymentID) {
+        System.out.println("sendDownloadLinkToBuyer() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            //Retrieve payment
+            Query q = em.createQuery("Select m from Payment m where m.id=:paymentID");
+            q.setParameter("paymentID", paymentID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            Payment payment = (Payment) q.getSingleResult();
+            //Get either member email or email tied to payment
+            String buyerEmail = "";
+            if (payment.getAccount() != null) {
+                buyerEmail = payment.getAccount().getEmail();
+            } else {
+                buyerEmail = payment.getNonMemberEmail();
+            }
+
+            //Retrieve list of musics/albums purchased & generate links for each of them
+            List<Music> listOfMusics = payment.getMusicPurchased();
+            List<Album> listOfAlbums = payment.getAlbumPurchased();
+
+            //Create the email template
+            //album first then music
+            String emailTemplate = "Thank you for purchasing from Sounds.sg. To start your download, please click on the following link(s) below:";
+            if (listOfAlbums != null && listOfAlbums.size() > 0) {
+                emailTemplate += ""
+                        + "<h2>Albums</h2>"
+                        + "<table border=1>"
+                        + "    <thead>"
+                        + "        <tr>  "
+                        + "            <th>Track</th>"
+                        + "            <th>Album</th>"
+                        + "            <th>Artist</th>"
+                        + "            <th>Download</th>"
+                        + "        </tr>"
+                        + "    </thead>"
+                        + "    <tbody>";
+                for (Album a : listOfAlbums) {
+                    for (Music m : a.getListOfMusics()) {
+                        emailTemplate += "        <tr>"
+                                + "            <td>"
+                                + m.getName()
+                                + "            </td>"
+                                + "            <td>"
+                                + a.getName()
+                                + "            </td>"
+                                + "            <td>"
+                                + m.getArtistName()
+                                + "            </td>"
+                                + "            <td>"
+                                + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE, 43200L) + "'>.mp3(128kbps)</a>&nbsp;&nbsp;"
+                                + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE, 43200L) + "'>.mp3(320kbps)</a>&nbsp;&nbsp;"
+                                + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE, 43200L) + "'>.wav</a> "
+                                + "            </td>"
+                                + "        </tr>";
+                    }
+                }
+                emailTemplate += "    </tbody>"
+                        + "</table>";
+            }
+            if (listOfMusics != null && listOfMusics.size() > 0) {
+                emailTemplate += "<h2>Tracks</h2>"
+                        + "<table border=1>"
+                        + "    <thead>"
+                        + "        <tr>  "
+                        + "            <th>Track</th>"
+                        + "            <th>Album</th>"
+                        + "            <th>Artist</th>"
+                        + "            <th>Download</th>"
+                        + "        </tr>"
+                        + "    </thead>"
+                        + "    <tbody>";
+                for (Music m : listOfMusics) {
+                    emailTemplate += "        <tr>"
+                            + "            <td>"
+                            + m.getName()
+                            + "            </td>"
+                            + "            <td>"
+                            + m.getAlbum().getName()
+                            + "            </td>"
+                            + "            <td>"
+                            + m.getArtistName()
+                            + "            </td>"
+                            + "            <td>"
+                            + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "128", Boolean.TRUE, 43200L) + "'>.mp3(128kbps)</a>&nbsp;&nbsp;"
+                            + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "320", Boolean.TRUE, 43200L) + "'>.mp3(320kbps)</a>&nbsp;&nbsp;"
+                            + "                <a href='" + mmbl.generateDownloadLink(m.getId(), "wav", Boolean.TRUE, 43200L) + "'>.wav</a> "
+                            + "            </td>"
+                            + "        </tr>";
+                }
+                emailTemplate += "    </tbody>"
+                        + "</table>";
+            }
+            emailTemplate += "Enjoy your downloads!<br/><br/>"
+                    + "P/S: The download links in this email are only valid for 12hours. If you did not purchased this music, someone else must have entered your email address on our site. You can just ignore this message. <br/><br/>"
+                    + "Have a nice day!<br/>"
+                    + "<a href=\"http://www.sounds.sg\">Sounds.sg</a>";
+            //Send using sendgrid
+            if (sgl.sendEmail(buyerEmail, "no-reply@sounds.sg", "Your Sounds.SG Purchase", emailTemplate)) {
+                result.setDescription("Download links sent.");
+                result.setResult(true);
+            } else {
+                result.setDescription("Failed to send download links to email");
+            }
+        } catch (NoResultException ex) {
+            result.setDescription("Unable to retrieve payment record.");
+        } catch (Exception ex) {
+            result.setDescription("Internal server error");
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
 }

@@ -30,6 +30,7 @@
                 <h1>Shopping Cart</h1>
                 <%
                     CheckoutHelper checkoutHelper = (CheckoutHelper) session.getAttribute("checkoutHelper");
+                    NumberFormat formatter = NumberFormat.getCurrencyInstance();
                     if (checkoutHelper != null) {
                         Payment payment = checkoutHelper.getPayment();
                         List<Music> listOfMusics = payment.getMusicPurchased();
@@ -63,8 +64,7 @@
                                     <%=m.getArtistName()%>
                                 </td>
                                 <td>
-                                    <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                                        out.print(formatter.format(musicPrices.get(i)));%>
+                                    <%=formatter.format(musicPrices.get(i))%>
                                 </td>
                             </tr>
                             <%
@@ -85,8 +85,7 @@
                             <tr>  
                                 <th style="width: 30%">Album Name</th>
                                 <th style="width: 30%">Artist Name</th>
-                                <th style="width: 30%">Price</th>
-                                <th style="width: 10%">Price</th>
+                                <th style="width: 40%">Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,8 +101,7 @@
                                     <%=a.getArtistName()%>
                                 </td>
                                 <td>
-                                    <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                                        out.print(formatter.format(albumPrices.get(i)));%>
+                                    <% out.print(formatter.format(albumPrices.get(i)));%>
                                 </td>
                             </tr>
                             <%
@@ -117,7 +115,7 @@
                     %>
                 </form>
                 <p style="float: right;">
-                    <strong>Subtotal: <%=payment.getTotalPaymentAmount()%></strong> 
+                    <strong>Subtotal: <%=formatter.format(payment.getTotalPaymentAmount())%></strong> 
                     <br/><br/>
 
                 </p>

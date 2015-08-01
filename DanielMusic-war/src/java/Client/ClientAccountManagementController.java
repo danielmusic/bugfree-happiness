@@ -129,7 +129,7 @@ public class ClientAccountManagementController extends HttpServlet {
                         returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, false);
                     }
 
-                    if (returnHelper.getResult()) {
+                    if (returnHelper != null && returnHelper.getResult() != null && returnHelper.getResult()) {
                         session.setAttribute("goodMsg", returnHelper.getDescription());
                     }
 

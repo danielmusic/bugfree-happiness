@@ -7,6 +7,8 @@
         <div class="container">
             <article>
                 <form class="form" name="loginForm" action="ClientAccountManagementController">
+                    <p class="error" id="errMsg" style="display:none;"></p>
+                    <p class="success" id="goodMsg"  style="display:none;"></p>
                     <jsp:include page="jspIncludePages/displayMessage.jsp" />
                     <div class="row clearfix">
                         <div class="col-1-1">

@@ -66,7 +66,6 @@ public class MusicController extends HttpServlet {
                         List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(album.getArtist().getId(), false, false);
                         session.setAttribute("artistAlbumDetails", albums);
                         session.setAttribute("jumpToAlbumID", album.getId().toString());
-                        System.out.println(album.getId().toString() + "!!!!!");
                         jsObj.put("result", true);
                         response.getWriter().write(jsObj.toString());
                         return;
@@ -76,6 +75,7 @@ public class MusicController extends HttpServlet {
                         String searchText = request.getParameter("text");
                         SearchHelper result = musicManagementBean.search(searchText);
                         session.setAttribute("searchResult", result);
+                        session.setAttribute("redirectPage", "#!/search");
                         jsObj.put("result", true);
                         response.getWriter().write(jsObj.toString());
                         return;

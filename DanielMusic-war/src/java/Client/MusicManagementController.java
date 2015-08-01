@@ -94,9 +94,9 @@ public class MusicManagementController extends HttpServlet {
                         if (source != null && source.equals("editSinglePrice")) {
                             nextPage = "#!/artist/edit_singles";
                         } else {
-                            session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false));
-                            session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false));
-                            session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false));
+                            session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false, 300L));
+                            session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false, 300L));
+                            session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false, 300L));
                             nextPage = "#!/artist/singles";
                         }
                     }
@@ -251,9 +251,9 @@ public class MusicManagementController extends HttpServlet {
                         if (source != null && source.equals("editMusicPrice")) {
                             nextPage = "#!/artist/edit_track";
                         } else {
-                            session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(Long.parseLong(id), "128", false));
-                            session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(Long.parseLong(id), "320", false));
-                            session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false));
+                            session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(Long.parseLong(id), "128", false, 300L));
+                            session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(Long.parseLong(id), "320", false, 300L));
+                            session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false, 300L));
                             nextPage = "#!/artist/track";
                         }
                     }
@@ -382,7 +382,7 @@ public class MusicManagementController extends HttpServlet {
                     }
                     session.setAttribute("redirectPage", "#!/cart");
                     session.setAttribute("ShoppingCart", shoppingCart);
-                    break;
+                    return;
 
                 case "RemoveTrackFromShoppingCart":
                     account = (Account) session.getAttribute("account");
@@ -426,7 +426,7 @@ public class MusicManagementController extends HttpServlet {
 
                     session.setAttribute("redirectPage", "#!/cart");
                     session.setAttribute("ShoppingCart", shoppingCart);
-                    break;
+                    return;
 
                 case "AddAlbumToShoppingCart":
                     account = (Account) session.getAttribute("account");
@@ -480,7 +480,7 @@ public class MusicManagementController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                     }
                     session.setAttribute("ShoppingCart", shoppingCart);
-                    break;
+                    return;
 
                 case "AddTrackToShoppingCart":
                     account = (Account) session.getAttribute("account");
@@ -613,8 +613,9 @@ public class MusicManagementController extends HttpServlet {
                             nextPage = "redirect2.jsp";
                         } else {
                             //Payment not tied to account will access download page directly
-                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
-                            session.setAttribute("downloadLinks", downloadHelper);
+//                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
+//                            session.setAttribute("downloadLinks", downloadHelper);
+                            session.removeAttribute("ShoppingCart");
                             session.setAttribute("redirectPage", "#!/download-links");
                             nextPage = "redirect2.jsp";
                         }

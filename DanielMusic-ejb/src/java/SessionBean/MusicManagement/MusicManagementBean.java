@@ -81,7 +81,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public String generateDownloadLink(Long musicID, String type, Boolean isIncreaseDownloadCount) {
+    public String generateDownloadLink(Long musicID, String type, Boolean isIncreaseDownloadCount, Long expiryInSeconds) {
         System.out.println("generateDownloadLink() called");
         try {
             Query q = em.createQuery("select a from Music a where a.id=:id");
@@ -91,13 +91,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String downloadLink = null;
             switch (type) {
                 case "wav":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), 120L);//2mins expiry
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), expiryInSeconds);
                     break;
                 case "320":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), 120L);//2mins expiry
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), expiryInSeconds);
                     break;
                 case "128":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), 120L);//2mins expiry
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), expiryInSeconds);
                     break;
             }
             //generate download link for user
@@ -463,7 +463,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                return result;
 //            }
             Album album = new Album();
-
+            Genre genre = em.getReference(Genre.class, genreID);
+            album.setGenreName(genre.getName());
             album.setArtist(artist);
             album.setIsSingle(isSingle);
             album.setDescription(description);
@@ -607,12 +608,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setDescription("Album has been published and cannot be edited.");
                 helper.setResult(false);
                 return helper;
-            } else if (imagePart.getSize() > 5000000) {
+            } else if (imagePart!=null && imagePart.getSize() > 5000000) {
                 helper.setDescription("Album art cannot be larger than 5MB");
                 helper.setResult(false);
                 return helper;
             } else {
-                Genre genre = em.getReference(Genre.class, genreID);
 //                String text = Double.toString(Math.abs(price));
 //                int integerPlaces = text.indexOf('.');
 //                int decimalPlaces = text.length() - integerPlaces - 1;
@@ -622,6 +622,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                    return helper;
 //                }
                 album.setName(name);
+                Genre genre = em.getReference(Genre.class, genreID);
                 album.setGenreName(genre.getName());
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);

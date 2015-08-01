@@ -44,51 +44,27 @@
                     var text = document.getElementById("search").value;
                     url = "./MusicController?target=Search";
                     var location = window.location + "";
-                    if (location.indexOf("#!/search2") == -1) {
-                        $.ajax({
-                            type: "GET",
-                            async: false,
-                            url: url,
-                            data: {'text': text},
-                            dataType: "text",
-                            success: function (val) {
-                                window.event.returnValue = true;
-                                var json = JSON.parse(val);
-                                if (json.result) {
-                                    window.event.returnValue = false;
-                                    window.location.href = "#!/search2";
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = error;
-                                hideLoader();
-                                ajaxResultsError(xhr, status, error);
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'text': text},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/redirect";
                             }
-                        });
-                    } else {
-                        $.ajax({
-                            type: "GET",
-                            async: false,
-                            url: url,
-                            data: {'text': text},
-                            dataType: "text",
-                            success: function (val) {
-                                window.event.returnValue = true;
-                                var json = JSON.parse(val);
-                                if (json.result) {
-                                    window.event.returnValue = false;
-                                    window.location.href = "#!/search";
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = error;
-                                hideLoader();
-                                ajaxResultsError(xhr, status, error);
-                            }
-                        });
-                    }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
                 }
 
                 function getShoppingCart() {

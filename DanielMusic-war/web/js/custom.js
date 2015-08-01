@@ -90,7 +90,12 @@ jQuery(document).ready(function ($) {
 
         // Init dlmenu() plugin
         if ($.fn.dlmenu)
-            $('#dl-menu').dlmenu();
+            $('#dl-menu').dlmenu({
+                onLinkClick: function (el, ev) {
+                    $('#dl-menu').dlmenu('closeMenu');
+                    return false;
+                }
+            });
 
         // Overflow fix on mobile devices
         $('#dl-menu ul').css('max-height', ($(window).height() - settings.nav_height) + "px");
