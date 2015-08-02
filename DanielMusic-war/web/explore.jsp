@@ -77,8 +77,40 @@
                                     <img src="placeholders/event01.jpg">
                                     <%}%>
                                 </a>
+
+                                <div class="details-social-box">
+                       
+                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%//music.getFileLocation128()%>" data-cover="<%//albumArt%>"
+                                       data-artist="<%//music.getArtistName()%>"
+                                       data-artist_url="http://artist.com/madoff-freak" 
+                                       data-artist_target="_self"
+                                       data-shop_url="#!/cart" 
+                                       data-shop_target="_blank"
+                                       >
+                                        <i class="icon icon-play2"></i>
+                                    </a>
+
+
+                                    <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
+                                    <a href="<%=artist.getFacebookURL()%>"><i class="icon icon-facebook"></i></a>
+                                        <%}%>
+
+                                    <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
+                                    <a href="<%=artist.getTwitterURL()%>"><i class="icon icon-twitter"></i></a>
+                                        <%}%>
+
+                                    <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
+                                    <a href="<%=artist.getInstagramURL()%>"><i class="icon icon-user"></i></a>
+                                        <%}%>
+
+                                    <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
+                                    <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
+                                        <%}%>
+                                </div>
                             </div>
+
                         </div>
+
                         <br/>
                         <%
                                 }
