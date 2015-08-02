@@ -4,20 +4,10 @@
     <%@page import="java.util.List"%>
     <%@page import="EntityManager.Account"%>
     <%@page import="java.text.SimpleDateFormat"%>
-    <script>
-        function checkAllTracks(source) {
-            checkboxes = document.getElementsByName('deleteTrack');
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                checkboxes[i].checked = source.checked;
-            }
-        }
-        function checkAllAlbums(source) {
-            checkboxes = document.getElementsByName('deleteAlbum');
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                checkboxes[i].checked = source.checked;
-            }
-        }
+    <%@page import="EntityManager.Music"%>
+    <%@page import="java.text.NumberFormat"%>
 
+    <script>
         function removeTrack() {
             alert("removeTrack");
             checkboxes = document.getElementsByName('deleteTrack');
@@ -186,6 +176,8 @@
                 <%
                     Account account = (Account) session.getAttribute("account");
                     Member member = (Member) (session.getAttribute("member"));
+                    List<Music> listOfMusics = (List<Music>) session.getAttribute("ListOfPurchasedMusics");
+
                     if (account != null && member != null) {
                         if (!account.getEmailIsVerified()) {
                             out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
@@ -208,25 +200,39 @@
                                     <th style="width: 30%">Album Name</th>
                                     <th style="width: 25%">Artist Name</th>
                                     <th style="width: 10%">Price</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <%
+                                        for (Music m : listOfMusics) {
+                                    %>
                                     <td>
-                                        <input type="checkbox" name="deleteTrack" value="" />
+                                        <input type="checkbox" name="deleteTrack" value="<%=m.getId()%>" />
                                     </td>
                                     <td class="table-date">
+                                        <%=m.getName()%>
                                     </td>
                                     <td class="table-name">
+                                        <%=m.getAlbum().getName()%>
                                     </td>
                                     <td>
+                                        <%=m.getArtistName()%>
                                     </td>
                                     <td>
+                                        <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                            out.print(formatter.format(m.getPrice()));%>
                                     </td>
-                                </tr>
+                                    </td>
+                            <span class="icon icon-download" onclick="generateDownloadLink(<%=m.getId()%>)"></span>  
+                            </td>
+                            <%}%>
+                            </tr>
                             </tbody>
                         </table>
-                        <button class="medium invert" onclick="removeTrack()">Remove track(s)</button>
+
+
                         <hr class="divider2" style="margin-right: 0px;">
 
                         <h2>Albums</h2>
@@ -249,6 +255,7 @@
                                     <td class="table-date">
                                     </td>
                                     <td>
+                                        <span class="icon icon-download" onclick="alert('hello')"></span>  
                                     </td>
                                     <td>
                                     </td>
