@@ -6,113 +6,17 @@
     <%@page import="java.text.SimpleDateFormat"%>
     <%@page import="EntityManager.Music"%>
     <%@page import="java.text.NumberFormat"%>
-
     <script>
-        function removeTrack() {
-            alert("removeTrack");
-            checkboxes = document.getElementsByName('deleteTrack');
-            var arr = new Array();
-            $("input:checkbox[name=deleteTrack]:checked").each(function () {
-                arr.push($(this).val());
-            });
-            var stringArr = "";
-            for (var i = 0; i < arr.length; i++) {
-                alert(arr[i]);
-                if (i != (arr.length - 1)) {
-                    stringArr += arr[i] + ",";
-                } else {
-                    stringArr += arr[i];
-                    alert("strArr" + stringArr);
-                }
-            }
-
-            var numOfTicks = 0;
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                if (checkboxes[i].checked) {
-                    numOfTicks++;
-                }
-            }
-            if (checkboxes.length == 0 || numOfTicks == 0) {
-                window.event.returnValue = true;
-                //window.location.href = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
-            } else {
-                url = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'deleteTrack': stringArr},
-                    success: function (val) {
-                        window.event.returnValue = false;
-                        window.location.href = "#!/redirect";
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-        }
-        function removeAlbum() {
-            checkboxes = document.getElementsByName('deleteAlbum');
-            var arr = new Array();
-            $("input:checkbox[name=deleteAlbum]:checked").each(function () {
-                arr.push($(this).val());
-            });
-            var stringArr = "";
-            for (var i = 0; i < arr.length; i++) {
-                alert(arr[i]);
-                if (i != (arr.length - 1)) {
-                    stringArr += arr[i] + ",";
-                } else {
-                    stringArr += arr[i];
-                    alert("strArr" + stringArr);
-                }
-            }
-
-
-            var numOfTicks = 0;
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                if (checkboxes[i].checked) {
-                    numOfTicks++;
-                }
-            }
-            if (checkboxes.length == 0 || numOfTicks == 0) {
-                window.event.returnValue = true;
-                //window.location.href = "./MusicManagementController?target=RemoveAlbumFromShoppingCart";
-            } else {
-                url = "./MusicManagementController?target=RemoveAlbumFromShoppingCart";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'deleteAlbum': stringArr},
-                    success: function (val) {
-                        window.event.returnValue = false;
-                        window.location.href = "#!/redirect";
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-        }
-
-        function login() {
-            url = "./ClientAccountManagementController?target=SaveCartAndLogin";
+        function generateDownloadLink128(musicID) {
+            url = "./MusicManagementController?target=downloadMusic";
             $.ajax({
                 type: "GET",
                 async: false,
                 url: url,
-                data: {},
+                data: {'musicID': musicID, 'bitrate':"128"},
                 success: function (val) {
                     window.event.returnValue = false;
-                    window.location.href = "#!/login";
+                    window.location.href = "#!/redirect";
                 },
                 error: function (xhr, status, error) {
                     document.getElementById("errMsg").style.display = "block";
@@ -173,8 +77,7 @@
                     </div>
                 </div>
 
-                <%
-                    Account account = (Account) session.getAttribute("account");
+                <%                    Account account = (Account) session.getAttribute("account");
                     Member member = (Member) (session.getAttribute("member"));
                     List<Music> listOfMusics = (List<Music>) session.getAttribute("ListOfPurchasedMusics");
 
@@ -200,7 +103,9 @@
                                     <th style="width: 30%">Album Name</th>
                                     <th style="width: 25%">Artist Name</th>
                                     <th style="width: 10%">Price</th>
-                                    <th>Action</th>
+                                    <th>128kbps</th>
+                                    <th>320kbps</th>
+                                    <th>wav</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -224,135 +129,59 @@
                                         <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
                                             out.print(formatter.format(m.getPrice()));%>
                                     </td>
-                                    </td>
-                            <span class="icon icon-download" onclick="generateDownloadLink(<%=m.getId()%>)"></span>  
-                            </td>
-                            <%}%>
-                            </tr>
-                            </tbody>
-                        </table>
-
-
-                        <hr class="divider2" style="margin-right: 0px;">
-
-                        <h2>Albums</h2>
-                        <table class="layout display responsive-table">
-                            <thead>
-                                <tr>
-                                    <th class="product-remove" style="width: 5%">
-                                        <input type="checkbox" onclick="checkAllAlbums(this)" />
-                                    </th>     
-                                    <th style="width: 30%">Album Name</th>
-                                    <th style="width: 30%">Artist Name</th>
-                                    <th style="width: 35%">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
                                     <td>
-                                        <input type="checkbox" name="deleteAlbum" value="" />
-                                    </td>
-                                    <td class="table-date">
+                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink128(<%=m.getId()%>)"></span>  
                                     </td>
                                     <td>
-                                        <span class="icon icon-download" onclick="alert('hello')"></span>  
+                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink320(<%=m.getId()%>)"></span>  
                                     </td>
                                     <td>
+                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLinkwav(<%=m.getId()%>)"></span>  
                                     </td>
+                                    <%}%>
                                 </tr>
                             </tbody>
                         </table>
-                        <button class="medium invert" onclick="">Remove album(s)</button>
                         <hr class="divider2" style="margin-right: 0px;">
+
+                        <!--                        <h2>Albums</h2>
+                                                <table class="layout display responsive-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="product-remove" style="width: 5%">
+                                                                <input type="checkbox" onclick="checkAllAlbums(this)" />
+                                                            </th>     
+                                                            <th style="width: 30%">Album Name</th>
+                                                            <th style="width: 30%">Artist Name</th>
+                                                            <th style="width: 35%">Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="checkbox" name="deleteAlbum" value="" />
+                                                            </td>
+                                                            <td class="table-date">
+                                                            </td>
+                                                            <td>
+                                                                <span class="icon icon-download"style="cursor: pointer;" onclick=""></span>  
+                                                            </td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <button class="medium invert" onclick="">Remove album(s)</button>
+                                                <hr class="divider2" style="margin-right: 0px;">-->
                     </form>
 
-                    <hr class="divider">
-
-                    <h2>Account Profile</h2>
-
-                    <div class="row clearfix">
-
-                        <div class="col-1-3">
-                            <label for="genre"><strong>Genre</strong> *</label>
-                            <select name="genre" id="genre" style="width: 100%; height:40px;" required>
-                                <option value="">Select</option>
-
-                            </select>
-                        </div>
-
-                        <div class="col-1-3"> 
-                            <label for="contactEmail"><strong>Contact Email</strong></label>
-                            <input type="email" id="contactEmail" name="contactEmail" value="">
-                        </div>
-
-                        <div class="col-1-3 last">  
-                            <label for="pic"><strong>Change Profile Picture</strong></label>
-                            <input type="file" id="pic" name="picture" style="height: 40px;padding-top: 8px;padding-bottom: 8px;">
-                        </div>
-                    </div>
-
-
-                    <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="dateFormed"><strong>Date Formed</strong> </label>
-
-                            <input type="date" id="dateFormed" name="dateFormed" value="">
-                        </div>
-                        <div class="col-1-2 last">
-                            <label for="bandMembers"><strong>Members</strong> </label>
-                            <input type="text" id="bandMembers" name="bandMembers" value="">
-                        </div>
-                    </div>
-
-                    <div class="row clearfix">
-                        <div class="col-1-2" style="margin-bottom: 24px;">
-                            <label for="bio"><strong>Biography</strong> </label>
-                            <textarea name="bio" id="bio" style="min-height:120px;"></textarea>
-                            <label>200 words max</label>
-                        </div>
-
-                        <div class="col-1-2 last">
-                            <label for="influences"><strong>Influences</strong> </label>
-                            <textarea name="influences" id="influences" style="min-height:120px;"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="fb"><strong>Facebook URL</strong></label>
-                            <input type="url" id="fb" name="facebookURL" placeholder="http://" value="">
-                        </div>
-
-                        <div class="col-1-2 last">
-                            <label for="twitter"><strong>Twitter URL</strong></label>
-                            <input type="url" id="twitter" name="twitterURL" placeholder="http://" value="">
-                        </div>
-                    </div>
-
-                    <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="ig"><strong>Instagram URL</strong></label>  
-                            <input type="url" id="ig" name="instagramURL" placeholder="http://" value="">
-                        </div>
-
-                        <div class="col-1-2 last">
-                            <label for="websiteURL"><strong>Website</strong></label>
-                            <input type="url" id="websiteURL" name="websiteURL" placeholder="http://" value="">
-                        </div>
-                    </div>
-
-                    <input type="submit" value="Save" class="small invert">
-                    <input type="hidden" value="ArtistProfileUpdate" name="target">
-                    <div class="clear"></div>
-                </form>
-
-                <%} else {%>
-                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
-                <%}%>
-                <div class="md-overlay"></div><!-- the overlay element -->
-                <script src="js/classie.js"></script>
-                <script src="js/modalEffects.js"></script>
-                <script src="js/cssParser.js"></script>
+                    <%} else {%>
+                    <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+                    <%}%>
+                    <div class="md-overlay"></div><!-- the overlay element -->
+                    <script src="js/classie.js"></script>
+                    <script src="js/modalEffects.js"></script>
+                    <script src="js/cssParser.js"></script>
             </article>
         </div>
     </section>
