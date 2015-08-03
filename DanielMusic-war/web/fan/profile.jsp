@@ -7,13 +7,13 @@
     <%@page import="EntityManager.Music"%>
     <%@page import="java.text.NumberFormat"%>
     <script>
-        function generateDownloadLink128(musicID) {
-            url = "./MusicManagementController?target=downloadMusic";
+        function generateDownloadLink(musicID, bitrateType) {
+            url = "./MusicManagementController?target=GenerateDownloadLink";
             $.ajax({
                 type: "GET",
                 async: false,
                 url: url,
-                data: {'musicID': musicID, 'bitrate':"128"},
+                data: {'musicID': musicID, 'bitrateType': bitrateType},
                 success: function (val) {
                     window.event.returnValue = false;
                     window.location.href = "#!/redirect";
@@ -27,6 +27,17 @@
             });
         }
     </script>
+    <%
+        String downloadLink = (String) session.getAttribute("DownloadTrack");
+        session.removeAttribute("DownloadTrack");
+        if (downloadLink != null) {
+    %>
+    <script>
+        window.open(<%=downloadLink%>);
+    </script>
+    <%
+        }
+    %>
     <section class="content section">
         <div class="container">
             <article>
@@ -77,7 +88,8 @@
                     </div>
                 </div>
 
-                <%                    Account account = (Account) session.getAttribute("account");
+                <%
+                    Account account = (Account) session.getAttribute("account");
                     Member member = (Member) (session.getAttribute("member"));
                     List<Music> listOfMusics = (List<Music>) session.getAttribute("ListOfPurchasedMusics");
 
@@ -130,13 +142,13 @@
                                             out.print(formatter.format(m.getPrice()));%>
                                     </td>
                                     <td>
-                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink128(<%=m.getId()%>)"></span>  
+                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink(<%=m.getId()%>, '128')"></span>  
                                     </td>
                                     <td>
-                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink320(<%=m.getId()%>)"></span>  
+                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink(<%=m.getId()%>, '320')"></span>  
                                     </td>
                                     <td>
-                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLinkwav(<%=m.getId()%>)"></span>  
+                                        <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLink(<%=m.getId()%>, 'wav')"></span>  
                                     </td>
                                     <%}%>
                                 </tr>

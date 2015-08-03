@@ -621,6 +621,13 @@ public class MusicManagementController extends HttpServlet {
                         }
                     }
                     break;
+
+                case "GenerateDownloadLink":
+                    String bitrateType = request.getParameter("bitrateType");
+                    String musicID = request.getParameter("musicID");
+                    session.setAttribute("DownloadTrack", musicManagementBean.generateDownloadLink(Long.parseLong(musicID), bitrateType, true, 300L));
+                    session.setAttribute("redirectPage", "#!/profile");
+                    return;
             }
 
             if (nextPage.equals("")) {
