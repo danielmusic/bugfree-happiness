@@ -161,7 +161,6 @@
                         </div>
                     </div>
 
-
                     <input type="hidden" value="UpdateAlbum" name="target">
                     <input type="hidden" value="<%=album.getId()%>" name="id">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>

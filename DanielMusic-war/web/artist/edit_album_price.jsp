@@ -1,12 +1,11 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Track">
-
+<section id="page" data-title="Album">
     <section class="content section">
         <div class="container">
             <article>
                 <script>
                     function back() {
-                        window.location.href = "#!/artist/tracks";
+                        window.location.href = "#!/artist/albums";
                     }
                 </script>
                 <%@page import="EntityManager.Album"%>
@@ -14,8 +13,8 @@
                 <%@page import="EntityManager.Artist"%>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
-                    Music track = (Music) (session.getAttribute("track"));
-                    if (artist != null && track != null) {
+                    Album album = (Album) (session.getAttribute("album"));
+                    if (artist != null && album != null) {
                 %>
                 <form action="MusicManagementController" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
@@ -24,30 +23,30 @@
                     <div class="entry-content">
                         <div class="entry-meta" style="float: right;">
                             <span class="entry-cat"><a href="#!/artist/albums">Albums</a></span>
-                            <span class="entry-cat"><a href="#!/artist/tracks">Tracks</a></span>
-                            <span class="entry-comments">Edit Track Price</span>
+                            <span class="entry-comments">Edit Album Price</span>
                         </div>                   
                     </div>
 
-                    <h2>Track <%=track.getName()%></h2>
+                    <h2>Album <%=album.getName()%></h2>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="price"><strong>Price</strong> *</label>
-                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required value="<%if (track.getPrice() != null && track.getPrice() != 0) {
-                                    out.print(track.getPrice());
+                            <input type="number" id="price" name="price" min="0" max="9999" step="0.01" size="4" title="CDA Currency Format - no dollar sign and no comma(s) - cents (.##) are optional" required value="<%if (album.getPrice() != null && album.getPrice() != 0) {
+                                    out.print(album.getPrice());
                                 }%>"/>
                         </div>               
                     </div>
 
-                    <input type="hidden" value="EditTrackPrice" name="target">
+                    <input type="hidden" value="EditSinglePrice" name="target">
+                    <input type="hidden" value="editAlbumPrice" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="submit" class="small invert" style="margin-right: 10px;">Save Changes</button>
                     <div class="clear"></div>
                 </form>
 
-                <%} else if (artist != null && track == null) {%>
-                <p class="warning" id="errMsg">Ops. An error has occurred. <a href="#!/artist/tracks">Click here to try again.</a></p>
+                <%} else if (artist != null && album == null) {%>
+                <p class="warning" id="errMsg">Ops. An error has occurred. <a href="#!/artist/albums">Click here to try again.</a></p>
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
