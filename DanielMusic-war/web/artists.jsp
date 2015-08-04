@@ -165,8 +165,6 @@
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-                                            <img style="margin-right: 5px; max-width: "src="<%=albumArt%>">
-                                            <span  data-artist_url="artist_url"><%=music.getName()%></span>
                                             <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                data-artist="<%=music.getArtistName()%>"
                                                data-artist_url="http://artist.com/madoff-freak" 
