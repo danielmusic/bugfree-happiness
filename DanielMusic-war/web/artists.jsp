@@ -165,10 +165,19 @@
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-                                            <img style="margin-right: 5px;"src="<%=albumArt%>">
+                                            <img style="margin-right: 5px; max-width: "src="<%=albumArt%>">
                                             <span  data-artist_url="artist_url"><%=music.getName()%></span>
-
-                                            <div class="track-buttons" style="margin-top: 5px;">
+                                            <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                               data-artist="<%=music.getArtistName()%>"
+                                               data-artist_url="http://artist.com/madoff-freak" 
+                                               data-artist_target="_self"
+                                               data-shop_url="#!/cart" 
+                                               data-shop_target="_blank"
+                                               >
+                                                <img class="track-cover" src="<%=albumArt%>">
+                                                <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
+                                            </a>
+                                            <div class="track-buttons" >
                                                 <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="http://artist.com/madoff-freak" 
