@@ -172,10 +172,10 @@
                                                data-shop_url="#!/cart" 
                                                data-shop_target="_blank"
                                                >
-                                                <img class="track-cover" src="<%=albumArt%>">
-                                                <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
+                                                <img class="track-cover" src="<%=albumArt%>" style="padding-bottom: 5px;">
+                                                <span class="track-title" data-artist_url="artist_url" style="margin-top: 2px;"><%=music.getName()%></span>
                                             </a>
-                                            <div class="track-buttons" >
+                                            <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
                                                 <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="http://artist.com/madoff-freak" 
