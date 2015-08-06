@@ -4,7 +4,6 @@ import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.CheckoutHelper;
-import EntityManager.DownloadHelper;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.ReturnHelper;
@@ -83,7 +82,13 @@ public class MusicManagementController extends HttpServlet {
                 case "ListAlbumByID":
                     if (artist != null && id != null) {
                         session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
-                        nextPage = "#!/artist/edit_album";
+                        if (source != null && source.equals("viewAlbum")) {
+                            nextPage = "#!/artist/album";
+                        } else if (source != null && source.equals("editAlbumPrice")) {
+                            nextPage = "#!/artist/edit_album_price";
+                        } else {
+                            nextPage = "#!/artist/edit_album";
+                        }
                     }
                     break;
 
@@ -265,7 +270,6 @@ public class MusicManagementController extends HttpServlet {
                         if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), track.getId())) {
                             session.setAttribute("errMsg", "Unauthorized action");
                         } else {
-
                             returnHelper = musicManagementBean.editMusicPrice(track.getId(), Double.parseDouble(price));
 
                             if (returnHelper.getResult()) {
@@ -276,7 +280,11 @@ public class MusicManagementController extends HttpServlet {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
                         }
-                        nextPage = "#!/artist/edit_track";
+                        if (source != null && source.equals("editAlbumPrice")) {
+                            nextPage = "#!/artist/edit_album_price";
+                        } else {
+                            nextPage = "#!/artist/edit_track";
+                        }
                     }
                     break;
 

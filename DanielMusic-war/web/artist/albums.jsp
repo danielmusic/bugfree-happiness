@@ -13,12 +13,20 @@
             window.location.href = "#!/artist/add_singles";
         }
 
-        function viewAlbum(id) {
+        function editAlbum(id) {
             window.location.href = "MusicManagementController?target=ListAlbumByID&id=" + id;
+        }
+
+        function viewAlbum(id) {
+            window.location.href = "MusicManagementController?target=ListAlbumByID&id=" + id + "&source=viewAlbum";
         }
 
         function viewSingle(id) {
             window.location.href = "MusicManagementController?target=RetrieveSingle&id=" + id;
+        }
+
+        function editAlbumPrice(id) {
+            window.location.href = "MusicManagementController?target=ListAlbumByID&id=" + id + "&source=editAlbumPrice";
         }
 
         function editSinglePrice(id) {
@@ -36,7 +44,6 @@
     <section class="content section">
         <div class="container">
             <article>
-
                 <%
                     Account account = (Account) (session.getAttribute("account"));
                     Artist artist = (Artist) (session.getAttribute("artist"));
@@ -83,11 +90,15 @@
                                         }
                                     %>
                                 </td>
-                                <td class="actions" style="width: 300px;">
-                                    <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit album</a>
-                                    <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View tracks</a>
+                                <td class="actions">
                                     <%if (!albums.get(i).getIsPublished()) {%>
-                                    <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
+                                    <a href="javascript:editAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Album</a>
+                                    <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View Tracks</a>
+                                    <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish Album</a>
+                                    <%} else {%>
+                                    <a href="javascript:viewAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">View Album</a>
+                                    <a href="javascript:editAlbumPrice(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
+                                    <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View Tracks</a>
                                     <%}%>
                                 </td>
                             </tr>
@@ -134,7 +145,7 @@
                                     <a href="javascript:editSinglePrice(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Price</a>
 
                                     <%if (!albums.get(i).getIsPublished()) {%>
-                                    <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish</a>
+                                    <a href="javascript:publishAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Publish Single</a>
                                     <%}%>
                                 </td>
                             </tr>

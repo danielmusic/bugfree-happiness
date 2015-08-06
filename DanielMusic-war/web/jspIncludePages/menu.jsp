@@ -25,10 +25,8 @@
                         dataType: "text",
                         success: function (val) {
                             var json = JSON.parse(val);
-                            window.event.returnValue = true;
                             if (json.result) {
-                                window.event.returnValue = false;
-                                window.location.href = "#!/explore";
+                                window.location.assign("#!/explore");
                             }
                         },
                         error: function (xhr, status, error) {
@@ -107,6 +105,9 @@
             <!-- ############ navigation ############ -->
             <nav id="nav">
                 <ul>
+                    <li>
+                        <a style="cursor: pointer;" onclick="loadAjax();">explore</a>
+                    </li>
                     <%
                         Account account = (Account) (session.getAttribute("artist"));
                         Artist artist = (Artist) (session.getAttribute("artist"));
@@ -114,9 +115,6 @@
 
                         if (artist != null) {
                     %>
-                    <li>
-                        <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>
-                    </li>
                     <li class="submenu">
                         <a href="ClientAccountManagementController?target=PageRedirect&source=profile">manage</a>
                         <ul>
@@ -136,9 +134,6 @@
                     </li>
                     <%} else if (fan != null) {%>
                     <li>
-                        <a style="cursor: pointer;" onclick="javascript:loadAjax();">explore</a>
-                    </li>
-                    <li>
                         <a href=""></a>
                         <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">transaction history</a>
                     </li> 
@@ -146,9 +141,6 @@
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
                     </li>
                     <%} else {%>
-                    <li>
-                        <a style="cursor: pointer;" onclick="loadAjax();">explore</a>
-                    </li>
                     <li>
                         <a href="#!/artist">artist</a>
                     </li>

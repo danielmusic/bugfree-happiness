@@ -7,7 +7,7 @@
         <title></title>
         <script>
             if (window != top) {
-                top.location.replace("http://localhost:8080/DanielMusic-war/redirect.jsp");
+                top.location.replace("/DanielMusic-war/redirect.jsp");
             }
         </script>
     </head>

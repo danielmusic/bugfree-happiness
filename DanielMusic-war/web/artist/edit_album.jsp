@@ -82,6 +82,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="md-modal md-effect-1" id="modal-albumArt">
+                    <div class="md-content">
+                        <h3>Album Art</h3>
+                        <div style="text-align:center;">
+                            <img src="http://sounds.sg.storage.googleapis.com/<%=album.getImageLocation() + "?" + new Date()%>">
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
@@ -114,10 +127,6 @@
                         </div>
                     </div>
 
-                    <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%>
-                    <img src="http://sounds.sg.storage.googleapis.com/<%=album.getImageLocation() + "?" + new Date()%>">
-                    <%}%>
-
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="genre"><strong>Genre</strong> *</label>
@@ -125,8 +134,6 @@
                                 <option value="">Select</option>
                                 <%
                                     for (int i = 0; i < genres.size(); i++) {
-                                        System.out.print("genres.get(i).getId() " + genres.get(i).getId());
-                                        System.out.print("album.getGenreName() " + album.getGenreName());
                                         if (album.getGenreName() != null && genres.get(i).getName().equals(album.getGenreName())) {
                                             out.write("<option selected value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
                                         } else {
@@ -137,8 +144,8 @@
                             </select>
                         </div>
 
-                        <div class="col-1-2 last">
-                            <label for="picture"><strong>Album Artwork</strong> </label>
+                        <div class="col-1-2 last">  
+                            <label><strong>Album Artwork</strong> <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%><a class="md-trigger" data-modal="modal-albumArt">(Click here to view album art)</a><%}%></label> 
                             <input type="file" id="picture" name="picture" <%=disableFlag%> style="width: 100%; height:40px;padding-top: 9px;">
                         </div>
                     </div>
@@ -160,7 +167,6 @@
                                 }%></textarea>
                         </div>
                     </div>
-
 
                     <input type="hidden" value="UpdateAlbum" name="target">
                     <input type="hidden" value="<%=album.getId()%>" name="id">
