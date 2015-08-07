@@ -176,10 +176,10 @@
                                         </div>
                                         <!-- /release social -->
                                     </div>
+                                    <%}%>
                                 </div>
                             </div>
                             <!-- /tab content -->
-                            <%}%>
                             <!-- tab content -->
                             <div id="tab-music" class="tab-content">
                                 <ul id="release-list" class="tracklist">
