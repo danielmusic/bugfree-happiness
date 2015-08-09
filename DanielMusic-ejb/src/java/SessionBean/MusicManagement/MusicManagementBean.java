@@ -499,7 +499,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
-                imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
+                imageLocation = "images/album/" + album.getId() + "/albumart/" + name + ".jpg";
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
 
                 File file = new File(tempImageURL);

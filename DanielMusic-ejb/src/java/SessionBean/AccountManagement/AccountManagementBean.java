@@ -732,7 +732,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 //Upload to GCS
-                String imageLocation = "/images/member/profile/profilepictures_" + account.getId();
+                String imageLocation = "images/member/profile/profilepictures_" + account.getId();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);
@@ -868,7 +868,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 //Upload to GCS
-                String imageLocation = "/images/artist/profile/profilepictures_" + account.getId();
+                String imageLocation = "images/artist/profile/profilepictures_" + account.getId();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);
