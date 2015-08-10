@@ -38,9 +38,7 @@
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
-                    <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="asd">
-                    <!--a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view" title="<%=artist.getName()%>"-->
-                        <span class="hoverlayer"></span>
+                    <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
                         <span class="img">
                             <%
                                 System.out.print("http://sounds.sg.storage.googleapis.com/" + artist.getImageURL());

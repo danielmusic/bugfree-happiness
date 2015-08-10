@@ -12,7 +12,7 @@
             <%@page import="EntityManager.ExploreHelper"%>
             <%@page import="EntityManager.Genre"%>
             <%@page import="java.util.List"%>
-
+            <%@page import="EntityManager.Music"%>
             <script>
                 function loadAjaxExplore(id) {
                     exploreForm.id.value = id;
@@ -40,33 +40,35 @@
                     });
                 }
             </script>
-
             <article>
                 <%
                     List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
                 %>
                 <div class="col-1-1">
                     <form name="exploreForm">
-
                         <div class="row clearfix filters" data-id="events">
                             <select class='nice-select filter' name="genres">
                                 <option value="placeholder">All Genres</option>
                                 <option value="*">All Genres</option>
-
                                 <%for (ExploreHelper eh : exploreHelpers) {%>
                                 <option value="<%=eh.getGenre().getName()%>"><%=eh.getGenre().getName()%></option>
                                 <%}%>
                             </select>
                         </div>
-
                         <%
-                            for (ExploreHelper eh : exploreHelpers) {
-                                for (Artist artist : eh.getArtists()) {
+                            for (int i = 0; i < exploreHelpers.size(); i++) {
+                                ExploreHelper eh = exploreHelpers.get(i);
+                                for (int j = 0; j < eh.getArtists().size(); j++) {
+                                    Artist artist = eh.getArtists().get(j);
+                                    Music artistFeaturedMusic = eh.getFeaturedMusic().get(j);
                         %>
 
+                        <%System.out.print("a");%>
+
                         <div id="events" class="masonry events-grid clearfix">
+
                             <div class="col-1-4 item event" data-genres="<%=eh.getGenre().getName()%>" data-artists="<%=artist.getName()%>">
-                                <a onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)">
+                                <a onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" style="cursor: pointer;">
                                     <span class="event-meta">
                                         <span class="event-date"><%=artist.getName()%></span>
                                         <span class="event-title"><%=eh.getGenre().getName()%></span>
@@ -78,17 +80,19 @@
                                     <%}%>
                                 </a>
 
-                                <div class="details-social-box">
-                       
-                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%//music.getFileLocation128()%>" data-cover="<%//albumArt%>"
-                                       data-artist="<%//music.getArtistName()%>"
+                                <div class="details-social-box" style=" padding: 0px 0px;">
+                                    <%if (artistFeaturedMusic != null) {%>
+                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                       data-artist="<%=artistFeaturedMusic.getArtistName()%>"
                                        data-artist_url="http://artist.com/madoff-freak" 
                                        data-artist_target="_self"
                                        data-shop_url="#!/cart" 
                                        data-shop_target="_blank"
                                        >
-                                        <i class="icon icon-play2"></i>
+                                        <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
                                     </a>
+                                    <%}%>
+
 
 
                                     <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
@@ -107,6 +111,8 @@
                                     <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
                                         <%}%>
                                 </div>
+
+
                             </div>
 
                         </div>

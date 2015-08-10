@@ -20,6 +20,14 @@
                         window.location.href = "MusicManagementController?target=ListTrackByID&source=editMusicPrice&id=" + id;
                     }
 
+                    function setFeaturedTrack(trackID, id) {
+                        window.location.href = "MusicManagementController?target=FeatureMusic&source=tracks&trackID=" + trackID + "&id=" + id;
+                    }
+
+                    function setUnfeaturedTrack(trackID, id) {
+                        window.location.href = "MusicManagementController?target=UnfeatureMusic&source=tracks&trackID=" + trackID + "&id=" + id;
+                    }
+
                     function back() {
                         window.location.href = "ClientAccountManagementController?target=albums";
                     }
@@ -32,7 +40,6 @@
                 %>
                 <form name="trackManagement">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
-
                     <div class="entry-content">
                         <div class="entry-meta" style="float: right;">
                             <span class="entry-cat"><a href="#!/artist/albums">Albums</a></span>
@@ -45,6 +52,7 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Track No</th>
                                 <th>Track Title</th>
                                 <th>Total Downloads</th>
@@ -58,10 +66,17 @@
                                     for (int i = 0; i < tracks.size(); i++) {
                             %>    
                             <tr>
+                                <td>
+                                    <%if (tracks.get(i).getIsFeatured()) {%>
+                                    <a href="javascript:setUnfeaturedTrack('<%=tracks.get(i).getId()%>','<%=album.getId()%>');"><span class="icon icon-star3"></span></a>
+                                        <%} else {%>
+                                    <a href="javascript:setFeaturedTrack('<%=tracks.get(i).getId()%>','<%=album.getId()%>');"><span class="icon icon-star"></span></a>
+                                        <%}%>
+                                </td>
                                 <td class="table-date"><%=tracks.get(i).getTrackNumber()%></td>
                                 <td class="table-name"><%=tracks.get(i).getName()%></td>   
                                 <td class="table-date"><%=tracks.get(i).getNumDownloaded()%></td>
-                                <td class="table-date"><%=tracks.get(i).getNumPurchase()%></td>            
+                                <td class="table-date"><%=tracks.get(i).getNumPurchase()%></td>    
                                 <td class="actions">
                                     <a href="javascript:viewTrack(<%=tracks.get(i).getId()%>);" class="buy-tickets">View Track</a>
                                     <a href="javascript:editTrackPrice(<%=tracks.get(i).getId()%>);" class="buy-tickets">Edit Price</a>

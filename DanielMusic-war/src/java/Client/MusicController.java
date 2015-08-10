@@ -4,7 +4,6 @@ import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.ExploreHelper;
 import EntityManager.Music;
-import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
@@ -29,9 +28,9 @@ public class MusicController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Welcome to MusicController");
         String target = request.getParameter("target");
         String id = request.getParameter("id");
-        ReturnHelper returnHelper;
 
         session = request.getSession();
         JSONObject jsObj = new JSONObject();
@@ -43,6 +42,7 @@ public class MusicController extends HttpServlet {
         try {
             switch (target) {
                 case "ListGenreArtist":
+                    System.out.println("ListGenreArtist ");
                     List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
                     session.setAttribute("genres", genres);
                     jsObj.put("result", true);

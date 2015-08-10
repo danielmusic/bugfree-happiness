@@ -13,7 +13,7 @@
                 type: "GET",
                 async: false,
                 url: url,
-                data: {'musicID': musicID, 'bitrate':"128"},
+                data: {'musicID': musicID, 'bitrate': "128"},
                 success: function (val) {
                     window.event.returnValue = false;
                     window.location.href = "#!/redirect";
@@ -109,10 +109,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+
+                                <%
+                                    for (Music m : listOfMusics) {
+                                %>
                                 <tr>
-                                    <%
-                                        for (Music m : listOfMusics) {
-                                    %>
                                     <td>
                                         <input type="checkbox" name="deleteTrack" value="<%=m.getId()%>" />
                                     </td>
@@ -138,8 +139,9 @@
                                     <td>
                                         <span class="icon icon-download"  style="cursor: pointer;" onclick="generateDownloadLinkwav(<%=m.getId()%>)"></span>  
                                     </td>
-                                    <%}%>
                                 </tr>
+                                <%}%>
+
                             </tbody>
                         </table>
                         <hr class="divider2" style="margin-right: 0px;">

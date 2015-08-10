@@ -16,7 +16,7 @@
         <!-- navigation container -->
         <div class="container">
             <script>
-                function loadAjax() {
+                function retrieveGenre() {
                     url = "./MusicController?target=ListGenreArtist";
                     $.ajax({
                         type: "GET",
@@ -24,9 +24,11 @@
                         url: url,
                         dataType: "text",
                         success: function (val) {
+                            window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.location.assign("#!/explore");
+                                window.event.returnValue = false;
+                                window.location.href = "#!/explore";
                             }
                         },
                         error: function (xhr, status, error) {
@@ -41,7 +43,6 @@
                 function searchAjax() {
                     var text = document.getElementById("search").value;
                     url = "./MusicController?target=Search";
-                    var location = window.location + "";
                     $.ajax({
                         type: "GET",
                         async: false,
@@ -106,7 +107,7 @@
             <nav id="nav">
                 <ul>
                     <li>
-                        <a style="cursor: pointer;" onclick="loadAjax();">explore</a>
+                        <a style="cursor: pointer;" onclick="javascript:retrieveGenre();">explore</a>
                     </li>
                     <%
                         Account account = (Account) (session.getAttribute("artist"));
@@ -134,7 +135,6 @@
                     </li>
                     <%} else if (fan != null) {%>
                     <li>
-                        <a href=""></a>
                         <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">transaction history</a>
                     </li> 
                     <li>

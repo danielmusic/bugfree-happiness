@@ -40,6 +40,14 @@
         function publishAlbum(id) {
             window.location.href = "MusicManagementController?source=artist&target=PublishAlbum&id=" + id;
         }
+
+        function setFeaturedTrack(trackID, id) {
+            window.location.href = "MusicManagementController?target=FeatureMusic&trackID=" + trackID + "&id=" + id;
+        }
+
+        function setUnfeaturedTrack(trackID, id) {
+            window.location.href = "MusicManagementController?target=UnfeatureMusic&trackID=" + trackID + "&id=" + id;
+        }
     </script> 
     <section class="content section">
         <div class="container">
@@ -116,6 +124,7 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>no</th>
                                 <th>Single Title</th>
                                 <th>Status</th>
@@ -129,6 +138,13 @@
                                         if (albums.get(i).getIsSingle()) {
                             %>    
                             <tr>
+                                <td>
+                                    <%if (albums.get(i).getListOfMusics().get(0).getIsFeatured()) {%>
+                                    <a href="javascript:setUnfeaturedTrack('<%=albums.get(i).getListOfMusics().get(0).getId()%>','<%=albums.get(i).getId()%>');"><span class="icon icon-star3"></span></a>
+                                        <%} else {%>
+                                    <a href="javascript:setFeaturedTrack('<%=albums.get(i).getListOfMusics().get(0).getId()%>','<%=albums.get(i).getId()%>');"><span class="icon icon-star"></span></a>
+                                        <%}%>
+                                </td>
                                 <td class="table-date"><%=(i + 1)%></td>
                                 <td class="table-name"><%=albums.get(i).getName()%></td>         
                                 <td class="table-date">
