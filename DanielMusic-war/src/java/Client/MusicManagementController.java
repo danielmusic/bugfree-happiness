@@ -55,7 +55,7 @@ public class MusicManagementController extends HttpServlet {
         String credits = request.getParameter("credits");
         String price = request.getParameter("price");
         String genreID = request.getParameter("genre");
-        Long albumID, trackID;
+        Long albumID;
         ShoppingCart shoppingCart = null;
         int deleteCounter;
 
@@ -66,7 +66,6 @@ public class MusicManagementController extends HttpServlet {
 
         session = request.getSession();
         Artist artist = (Artist) session.getAttribute("artist");
-        Account account = (Account) session.getAttribute("account");
         List<Music> tracks = null;
         Album album = null;
         Music track = null;
@@ -337,213 +336,220 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "GetShoppingCart":
-                    account = (Account) session.getAttribute("account");
-                    shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                    if (account != null) {
-                        //retrieve from server
-                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
-                    }
-                    jsObj.put("result", true);
-                    jsObj.put("goodMsg", "Cart");
-                    response.getWriter().write(jsObj.toString());
-                    session.setAttribute("ShoppingCart", shoppingCart);
-                    return;
-
-                case "RemoveAlbumFromShoppingCart":
-                    account = (Account) session.getAttribute("account");
-                    String strAlbumIDs = request.getParameter("deleteAlbum");
-                    Scanner sc = new Scanner(strAlbumIDs);
-                    ArrayList<String> albumIDs = new ArrayList<>();
-                    while (sc.hasNext()) {
-                        albumIDs.add(sc.next());
-                    }
-
-                    deleteCounter = 0;
-                    if (account != null) {
-                        for (String s : albumIDs) {
-                            returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), false);
-                            if (returnHelper.getResult()) {
-                                deleteCounter++;
-                            }
-                        }
-                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
-                    } else {
+                    if (true) {
+                        Account account = (Account) session.getAttribute("account");
                         shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                        for (String s : albumIDs) {
-                            album = new Album();
-                            album.setId(Long.parseLong(s));
-                            Boolean result = shoppingCart.getListOfAlbums().remove(album);
-                            if (result) {
-                                deleteCounter++;
+                        if (account != null) {
+                            //retrieve from server
+                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                        }
+                        jsObj.put("result", true);
+                        jsObj.put("goodMsg", "Cart");
+                        response.getWriter().write(jsObj.toString());
+                        session.setAttribute("ShoppingCart", shoppingCart);
+                        return;
+                    }
+                case "RemoveAlbumFromShoppingCart":
+                    if (true) {
+                        Account account = (Account) session.getAttribute("account");
+                        String strAlbumIDs = request.getParameter("deleteAlbum");
+                        Scanner sc = new Scanner(strAlbumIDs);
+                        ArrayList<String> albumIDs = new ArrayList<>();
+                        while (sc.hasNext()) {
+                            albumIDs.add(sc.next());
+                        }
+
+                        deleteCounter = 0;
+                        if (account != null) {
+                            for (String s : albumIDs) {
+                                returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), false);
+                                if (returnHelper.getResult()) {
+                                    deleteCounter++;
+                                }
+                            }
+                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                        } else {
+                            shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                            for (String s : albumIDs) {
+                                album = new Album();
+                                album.setId(Long.parseLong(s));
+                                Boolean result = shoppingCart.getListOfAlbums().remove(album);
+                                if (result) {
+                                    deleteCounter++;
+                                }
                             }
                         }
-                    }
 
-                    if (deleteCounter > 0) {
-                        jsObj.put("result", true);
-                        jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
-                        response.getWriter().write(jsObj.toString());
-                    } else {
-                        jsObj.put("result", false);
-                        jsObj.put("errMsg", "No records were deleted.");
-                        response.getWriter().write(jsObj.toString());
+                        if (deleteCounter > 0) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "No records were deleted.");
+                            response.getWriter().write(jsObj.toString());
+                        }
+                        session.setAttribute("redirectPage", "#!/cart");
+                        session.setAttribute("ShoppingCart", shoppingCart);
                     }
-                    session.setAttribute("redirectPage", "#!/cart");
-                    session.setAttribute("ShoppingCart", shoppingCart);
                     return;
 
                 case "RemoveTrackFromShoppingCart":
-                    account = (Account) session.getAttribute("account");
-                    String strTrackIDs = request.getParameter("deleteTrack");
-                    Scanner sc2 = new Scanner(strTrackIDs);
-                    ArrayList<String> trackIDs = new ArrayList<>();
-                    while (sc2.hasNext()) {
-                        trackIDs.add(sc2.next());
-                    }
+                    if (true) {
+                        Account account = (Account) session.getAttribute("account");
+                        String strTrackIDs = request.getParameter("deleteTrack");
+                        Scanner sc2 = new Scanner(strTrackIDs);
+                        ArrayList<String> trackIDs = new ArrayList<>();
+                        while (sc2.hasNext()) {
+                            trackIDs.add(sc2.next());
+                        }
 
-                    deleteCounter = 0;
-                    if (account != null) {
-                        for (String s : trackIDs) {
-                            returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), true);
-                            if (returnHelper.getResult()) {
-                                deleteCounter++;
+                        deleteCounter = 0;
+                        if (account != null) {
+                            for (String s : trackIDs) {
+                                returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), true);
+                                if (returnHelper.getResult()) {
+                                    deleteCounter++;
+                                }
+                            }
+                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                        } else {
+                            shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                            for (String s : trackIDs) {
+                                track = new Music();
+                                track.setId(Long.parseLong(s));
+                                Boolean result = shoppingCart.getListOfMusics().remove(track);
+                                if (result) {
+                                    deleteCounter++;
+                                }
                             }
                         }
-                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
-                    } else {
-                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                        for (String s : trackIDs) {
-                            track = new Music();
-                            track.setId(Long.parseLong(s));
-                            Boolean result = shoppingCart.getListOfMusics().remove(track);
-                            if (result) {
-                                deleteCounter++;
-                            }
+
+                        if (deleteCounter > 0) {
+                            jsObj.put("result", true);
+                            jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
+                            response.getWriter().write(jsObj.toString());
+                        } else {
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "No records were deleted.");
+                            response.getWriter().write(jsObj.toString());
                         }
-                    }
 
-                    if (deleteCounter > 0) {
-                        jsObj.put("result", true);
-                        jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
-                        response.getWriter().write(jsObj.toString());
-                    } else {
-                        jsObj.put("result", false);
-                        jsObj.put("errMsg", "No records were deleted.");
-                        response.getWriter().write(jsObj.toString());
+                        session.setAttribute("redirectPage", "#!/cart");
+                        session.setAttribute("ShoppingCart", shoppingCart);
                     }
-
-                    session.setAttribute("redirectPage", "#!/cart");
-                    session.setAttribute("ShoppingCart", shoppingCart);
                     return;
 
                 case "AddAlbumToShoppingCart":
-                    account = (Account) session.getAttribute("account");
-                    albumID = Long.parseLong(request.getParameter("albumID"));
-                    if (clientManagementBean.checkArtistPayPalEmailExists(albumID, false)) {
-                        if (account != null) {
-                            returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), albumID, false);
-                            if (returnHelper.getResult()) {
-                                jsObj.put("result", true);
-                                jsObj.put("goodMsg", returnHelper.getDescription());
-                                response.getWriter().write(jsObj.toString());
-                            } else {
-                                jsObj.put("result", false);
-                                jsObj.put("errMsg", returnHelper.getDescription());
-                                response.getWriter().write(jsObj.toString());
-                            }
+                    if (true) {
+                        Account account = (Account) session.getAttribute("account");
+                        albumID = Long.parseLong(request.getParameter("albumID"));
+                        if (clientManagementBean.checkArtistPayPalEmailExists(albumID, false)) {
+                            if (account != null) {
+                                returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), albumID, false);
+                                if (returnHelper.getResult()) {
+                                    jsObj.put("result", true);
+                                    jsObj.put("goodMsg", returnHelper.getDescription());
+                                    response.getWriter().write(jsObj.toString());
+                                } else {
+                                    jsObj.put("result", false);
+                                    jsObj.put("errMsg", returnHelper.getDescription());
+                                    response.getWriter().write(jsObj.toString());
+                                }
 
-                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                                shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                            } else {
+                                shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                                album = musicManagementBean.getAlbum(albumID);
+                                Boolean result;
+                                if (shoppingCart == null) {
+                                    shoppingCart = new ShoppingCart();
+
+                                    HashSet<Album> albumSet = new HashSet<Album>();
+                                    result = albumSet.add(album);
+                                    HashSet<Music> musicSet = new HashSet<Music>();
+
+                                    shoppingCart.setListOfAlbums(albumSet);
+                                    shoppingCart.setListOfMusics(musicSet);
+                                } else {
+                                    Set set = shoppingCart.getListOfAlbums();
+                                    result = set.add(album);
+                                    shoppingCart.setListOfAlbums(set);
+                                }
+
+                                if (result) {
+                                    jsObj.put("result", true);
+                                    jsObj.put("goodMsg", "Item has been added to cart successfully.");
+                                    response.getWriter().write(jsObj.toString());
+                                } else {
+                                    jsObj.put("result", false);
+                                    jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
+                                    response.getWriter().write(jsObj.toString());
+                                }
+                            }
                         } else {
-                            shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                            album = musicManagementBean.getAlbum(albumID);
-                            Boolean result;
-                            if (shoppingCart == null) {
-                                shoppingCart = new ShoppingCart();
-
-                                HashSet<Album> albumSet = new HashSet<Album>();
-                                result = albumSet.add(album);
-                                HashSet<Music> musicSet = new HashSet<Music>();
-
-                                shoppingCart.setListOfAlbums(albumSet);
-                                shoppingCart.setListOfMusics(musicSet);
-                            } else {
-                                Set set = shoppingCart.getListOfAlbums();
-                                result = set.add(album);
-                                shoppingCart.setListOfAlbums(set);
-                            }
-
-                            if (result) {
-                                jsObj.put("result", true);
-                                jsObj.put("goodMsg", "Item has been added to cart successfully.");
-                                response.getWriter().write(jsObj.toString());
-                            } else {
-                                jsObj.put("result", false);
-                                jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
-                                response.getWriter().write(jsObj.toString());
-                            }
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "Sorry, the track is currently unavailable.");
+                            response.getWriter().write(jsObj.toString());
                         }
-                    } else {
-                        jsObj.put("result", false);
-                        jsObj.put("errMsg", "Sorry, the track is currently unavailable.");
-                        response.getWriter().write(jsObj.toString());
+                        session.setAttribute("ShoppingCart", shoppingCart);
+                        return;
                     }
-                    session.setAttribute("ShoppingCart", shoppingCart);
-                    return;
-
                 case "AddTrackToShoppingCart":
-                    account = (Account) session.getAttribute("account");
-                    trackID = Long.parseLong(request.getParameter("trackID"));
-                    if (clientManagementBean.checkArtistPayPalEmailExists(trackID, true)) {
-                        if (account != null) {
-                            returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), trackID, true);
-                            if (returnHelper.getResult()) {
-                                jsObj.put("result", true);
-                                jsObj.put("goodMsg", returnHelper.getDescription());
-                                response.getWriter().write(jsObj.toString());
-                            } else {
-                                jsObj.put("result", false);
-                                jsObj.put("errMsg", returnHelper.getDescription());
-                                response.getWriter().write(jsObj.toString());
-                            }
+                    if (true) {
+                        Account account = (Account) session.getAttribute("account");
+                        Long trackID = Long.parseLong(request.getParameter("trackID"));
+                        if (clientManagementBean.checkArtistPayPalEmailExists(trackID, true)) {
+                            if (account != null) {
+                                returnHelper = clientManagementBean.addItemToShoppingCart(account.getId(), trackID, true);
+                                if (returnHelper.getResult()) {
+                                    jsObj.put("result", true);
+                                    jsObj.put("goodMsg", returnHelper.getDescription());
+                                    response.getWriter().write(jsObj.toString());
+                                } else {
+                                    jsObj.put("result", false);
+                                    jsObj.put("errMsg", returnHelper.getDescription());
+                                    response.getWriter().write(jsObj.toString());
+                                }
 
-                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                                shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                            } else {
+                                shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                                track = musicManagementBean.getMusic(trackID);
+                                Boolean result;
+                                if (shoppingCart == null) {
+                                    shoppingCart = new ShoppingCart();
+
+                                    HashSet<Album> albumSet = new HashSet<Album>();
+                                    HashSet<Music> musicSet = new HashSet<Music>();
+                                    result = musicSet.add(track);
+
+                                    shoppingCart.setListOfAlbums(albumSet);
+                                    shoppingCart.setListOfMusics(musicSet);
+                                } else {
+                                    Set set = shoppingCart.getListOfMusics();
+                                    result = set.add(track);
+                                    shoppingCart.setListOfMusics(set);
+                                }
+
+                                if (result) {
+                                    jsObj.put("result", true);
+                                    jsObj.put("goodMsg", "Item has been added to cart successfully.");
+                                    response.getWriter().write(jsObj.toString());
+                                } else {
+                                    jsObj.put("result", false);
+                                    jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
+                                    response.getWriter().write(jsObj.toString());
+                                }
+                            }
                         } else {
-                            shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                            track = musicManagementBean.getMusic(trackID);
-                            Boolean result;
-                            if (shoppingCart == null) {
-                                shoppingCart = new ShoppingCart();
-
-                                HashSet<Album> albumSet = new HashSet<Album>();
-                                HashSet<Music> musicSet = new HashSet<Music>();
-                                result = musicSet.add(track);
-
-                                shoppingCart.setListOfAlbums(albumSet);
-                                shoppingCart.setListOfMusics(musicSet);
-                            } else {
-                                Set set = shoppingCart.getListOfMusics();
-                                result = set.add(track);
-                                shoppingCart.setListOfMusics(set);
-                            }
-
-                            if (result) {
-                                jsObj.put("result", true);
-                                jsObj.put("goodMsg", "Item has been added to cart successfully.");
-                                response.getWriter().write(jsObj.toString());
-                            } else {
-                                jsObj.put("result", false);
-                                jsObj.put("errMsg", "Failed to add item to cart, please try again. Note that duplicate item cannot be added.");
-                                response.getWriter().write(jsObj.toString());
-                            }
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "Sorry, the track is currently unavailable.");
+                            response.getWriter().write(jsObj.toString());
                         }
-                    } else {
-                        jsObj.put("result", false);
-                        jsObj.put("errMsg", "Sorry, the track is currently unavailable.");
-                        response.getWriter().write(jsObj.toString());
+                        session.setAttribute("ShoppingCart", shoppingCart);
+                        return;
                     }
-                    session.setAttribute("ShoppingCart", shoppingCart);
-                    return;
-
                 case "GetArtistByID":
                     if (artist != null) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
@@ -553,79 +559,130 @@ public class MusicManagementController extends HttpServlet {
                         nextPage = "#!/artists";
                     }
                     break;
-
+                case "FeatureMusic":
+                    if (true) {
+                        if (artist != null) {
+                            String trackID = request.getParameter("trackID");
+                            if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), track.getId())) {
+                                session.setAttribute("errMsg", "Unauthorized action");
+                            } else {
+                                returnHelper = musicManagementBean.featureMusic(track.getId());
+                                if (returnHelper.getResult()) {
+                                    session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                    session.setAttribute("track", musicManagementBean.getMusic(track.getId()));
+                                    session.setAttribute("goodMsg", returnHelper.getDescription());
+                                } else {
+                                    session.setAttribute("errMsg", returnHelper.getDescription());
+                                }
+                            }
+                            if (source != null && source.equals("editAlbumPrice")) {
+                                nextPage = "#!/artist/edit_album_price";
+                            } else {
+                                nextPage = "#!/artist/edit_track";
+                            }
+                        }
+                    }
+                    break;
+                case "UnfeatureMusic":
+                    if (true) {
+                        if (artist != null) {
+                            String trackID = request.getParameter("trackID");
+                            if (!musicManagementBean.checkIfMusicBelongsToArtist(artist.getId(), track.getId())) {
+                                session.setAttribute("errMsg", "Unauthorized action");
+                            } else {
+                                returnHelper = musicManagementBean.unfeatureMusic(track.getId());
+                                if (returnHelper.getResult()) {
+                                    session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
+                                    session.setAttribute("track", musicManagementBean.getMusic(track.getId()));
+                                    session.setAttribute("goodMsg", returnHelper.getDescription());
+                                } else {
+                                    session.setAttribute("errMsg", returnHelper.getDescription());
+                                }
+                            }
+                            if (source != null && source.equals("editAlbumPrice")) {
+                                nextPage = "#!/artist/edit_album_price";
+                            } else {
+                                nextPage = "#!/artist/edit_track";
+                            }
+                        }
+                    }
+                    break;
                 case "Checkout":
-                    shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
-                    account = (Account) session.getAttribute("account");
-                    CheckoutHelper checkoutHelper = null;
+                    if (true) {
+                        shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
+                        Account account = (Account) session.getAttribute("account");
+                        CheckoutHelper checkoutHelper = null;
 
-                    if (account != null) {
-                        shoppingCart = clientManagementBean.getShoppingCart(account.getId());
-                        Set<Music> musicSet = shoppingCart.getListOfMusics();
-                        Set<Album> albumSet = shoppingCart.getListOfAlbums();
-                        checkoutHelper = clientManagementBean.getPayKey(account.getId(), null, musicSet, albumSet);
-                    } else {
-                        Set<Music> musicSet = shoppingCart.getListOfMusics();
-                        Set<Album> albumSet = shoppingCart.getListOfAlbums();
-                        String email = request.getParameter("email");
-                        checkoutHelper = clientManagementBean.getPayKey(null, email, musicSet, albumSet);
-                    }
-                    if (checkoutHelper == null) {
-                        session.setAttribute("errMsg", "Internal server error.");
-                        jsObj.put("result", false);
-                        jsObj.put("errMsg", "Internal server error.");
-                        response.getWriter().write(jsObj.toString());
-                        return;
-                    }
-                    session.setAttribute("checkoutHelper", checkoutHelper);
-                    if (checkoutHelper.getPayKey() == null) {
-                        session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
-                        jsObj.put("result", false);
-                        jsObj.put("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
-                        response.getWriter().write(jsObj.toString());
-                        return;
-                    }
-                    switch (checkoutHelper.getPayKey()) {
-                        case "NO_PAYMENT_REQUIRED_PAYMENT_COMPLETE":
-                            //todo this one should redirect after going to checkout.jsp
-                            session.setAttribute("goodMsg", "Thanks.");
-                            jsObj.put("result", true);
-                            jsObj.put("goodMsg", "Checkout completed, please wait, redirecting...");
-                            return;
-                        case "NO_PAYMENT_REQUIRED_FAILED":
-                            session.setAttribute("errMsg", "There was an error completing the checkout request, please try again later.");
+                        if (account != null) {
+                            shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+                            Set<Music> musicSet = shoppingCart.getListOfMusics();
+                            Set<Album> albumSet = shoppingCart.getListOfAlbums();
+                            checkoutHelper = clientManagementBean.getPayKey(account.getId(), null, musicSet, albumSet);
+                        } else {
+                            Set<Music> musicSet = shoppingCart.getListOfMusics();
+                            Set<Album> albumSet = shoppingCart.getListOfAlbums();
+                            String email = request.getParameter("email");
+                            checkoutHelper = clientManagementBean.getPayKey(null, email, musicSet, albumSet);
+                        }
+                        if (checkoutHelper == null) {
+                            session.setAttribute("errMsg", "Internal server error.");
                             jsObj.put("result", false);
-                            jsObj.put("errMsg", "There was an error completing the checkout request, please try again later.");
+                            jsObj.put("errMsg", "Internal server error.");
                             response.getWriter().write(jsObj.toString());
                             return;
+                        }
+                        session.setAttribute("checkoutHelper", checkoutHelper);
+                        if (checkoutHelper.getPayKey() == null) {
+                            session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
+                            jsObj.put("result", false);
+                            jsObj.put("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
+                            response.getWriter().write(jsObj.toString());
+                            return;
+                        }
+                        switch (checkoutHelper.getPayKey()) {
+                            case "NO_PAYMENT_REQUIRED_PAYMENT_COMPLETE":
+                                //todo this one should redirect after going to checkout.jsp
+                                session.setAttribute("goodMsg", "Thanks.");
+                                jsObj.put("result", true);
+                                jsObj.put("goodMsg", "Checkout completed, please wait, redirecting...");
+                                return;
+                            case "NO_PAYMENT_REQUIRED_FAILED":
+                                session.setAttribute("errMsg", "There was an error completing the checkout request, please try again later.");
+                                jsObj.put("result", false);
+                                jsObj.put("errMsg", "There was an error completing the checkout request, please try again later.");
+                                response.getWriter().write(jsObj.toString());
+                                return;
+                        }
+                        jsObj.put("result", true);
+                        jsObj.put("goodMsg", "Please verify the following payment details.");
+                        response.getWriter().write(jsObj.toString());
+                        //goto checkuot.jsp
                     }
-                    jsObj.put("result", true);
-                    jsObj.put("goodMsg", "Please verify the following payment details.");
-                    response.getWriter().write(jsObj.toString());
-                    //goto checkuot.jsp
                     return;
                 case "CompletePayment":
-                    String paymentID = (String) request.getParameter("paymentID");
-                    String UUID = (String) request.getParameter("UUID");
-                    Long paymentIDlong = Long.parseLong(paymentID);
-                    ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
-                    if (!result.getResult()) {//fail to complete payment
-                        session.setAttribute("errMsg", result.getDescription());
-                        session.setAttribute("redirectPage", "#!/checkout");
-                        nextPage = "redirect2.jsp";
-                    } else {
-                        Payment payment = clientManagementBean.getPayment(result.getID());
-                        if (payment.getAccount() != null) {
-                            //Logged in user will view list of purchaserd music
-                            session.setAttribute("redirectPage", "#!/fan/profile");
+                    if (true) {
+                        String paymentID = (String) request.getParameter("paymentID");
+                        String UUID = (String) request.getParameter("UUID");
+                        Long paymentIDlong = Long.parseLong(paymentID);
+                        ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
+                        if (!result.getResult()) {//fail to complete payment
+                            session.setAttribute("errMsg", result.getDescription());
+                            session.setAttribute("redirectPage", "#!/checkout");
                             nextPage = "redirect2.jsp";
                         } else {
-                            //Payment not tied to account will access download page directly
+                            Payment payment = clientManagementBean.getPayment(result.getID());
+                            if (payment.getAccount() != null) {
+                                //Logged in user will view list of purchaserd music
+                                session.setAttribute("redirectPage", "#!/fan/profile");
+                                nextPage = "redirect2.jsp";
+                            } else {
+                                //Payment not tied to account will access download page directly
 //                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
 //                            session.setAttribute("downloadLinks", downloadHelper);
-                            session.removeAttribute("ShoppingCart");
-                            session.setAttribute("redirectPage", "#!/download-links");
-                            nextPage = "redirect2.jsp";
+                                session.removeAttribute("ShoppingCart");
+                                session.setAttribute("redirectPage", "#!/download-links");
+                                nextPage = "redirect2.jsp";
+                            }
                         }
                     }
                     break;
