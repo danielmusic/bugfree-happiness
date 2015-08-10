@@ -79,6 +79,10 @@ public interface MusicManagementBeanLocal {
    // public ReturnHelper editMusic(Long musicID, Integer trackNumber, String name, Double price, String lyrics, String credits);
     public ReturnHelper editMusicPrice(Long musicID, Double newPrice);
     public ReturnHelper editAlbumPrice(Long albumID, Double newPrice);
+    
+    public ReturnHelper featureMusic(Long musicID);
+    public ReturnHelper unfeatureMusic(Long musicID);
+    public Music getFeaturedMusic(Long artistID);
 
     public Album getAlbum(Long albumID);
     public List<Album> listAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
