@@ -50,6 +50,9 @@
         <servlet-name>MusicController</servlet-name>
         <url-pattern>/MusicController</url-pattern>
     </servlet-mapping>
+    <listener>
+        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
+    </listener>
     <session-config>
         <session-timeout>
             30

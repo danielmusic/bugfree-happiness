@@ -1,0 +1,26 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 10, 2015, 1:21:26 PM
+    Author     : Jason
+*/
+
+.frame {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+.progress-bar {
+    height: 20px;
+    width: 500px;
+    display: block;
+    border: 2px solid red;
+}
+.progress {
+    background-color: red;
+    height: 100%;
+    width: 50px;
+}
