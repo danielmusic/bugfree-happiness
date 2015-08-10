@@ -659,7 +659,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID) {
-        System.out.println("sendDownloadLinkToBuyer() called");
+        System.out.println("notifyArtistsOfCustomerPurchase() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
