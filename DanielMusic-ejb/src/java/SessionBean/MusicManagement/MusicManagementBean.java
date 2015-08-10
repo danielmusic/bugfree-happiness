@@ -746,6 +746,53 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
+    public ReturnHelper featureMusic(Long musicID){
+        System.out.println("MusicManagementBean: featureMusic() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Music music = em.getReference(Music.class, musicID);
+            Boolean isDeleted = music.getIsDeleted();
+            if (isDeleted) {
+                result.setDescription("Music cannot be featured as it has been deleted.");
+            } else {
+                music.setIsFeatured(true);
+                em.merge(music);
+                result.setDescription("Music featured.");
+                result.setResult(true);
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to featureMusic()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+        }
+        return result;
+    }
+    
+    @Override
+    public ReturnHelper unfeatureMusic(Long musicID) {
+        System.out.println("MusicManagementBean: unfeatureMusic() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Music music = em.getReference(Music.class, musicID);
+            Boolean isDeleted = music.getIsDeleted();
+            if (isDeleted) {
+                result.setDescription("Music cannot be featured as it has been deleted.");
+            } else {
+                music.setIsFeatured(false);
+                em.merge(music);
+                result.setDescription("Music no longer featured.");
+                result.setResult(true);
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to unfeatureMusic()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+        }
+        return result;
+    }
+    @Override
     public ReturnHelper publishAlbum(Long albumID) {
         System.out.println("publishAlbum() called.");
         ReturnHelper helper = new ReturnHelper();

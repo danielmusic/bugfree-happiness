@@ -36,11 +36,13 @@ public class Music implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Album album;
     private Long numPurchase;
+    private Boolean isFeatured;
     @Lob
     private String credits;
 
     public Music() {
         isDeleted = false;
+        isFeatured = false;
         numDownloaded = 0L;
         numPurchase = 0L;
         listOfGenres = new ArrayList();
@@ -172,6 +174,14 @@ public class Music implements Serializable {
 
     public void setLyrics(String lyrics) {
         this.lyrics = lyrics;
+    }
+
+    public Boolean getIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(Boolean isFeatured) {
+        this.isFeatured = isFeatured;
     }
 
     @Override
