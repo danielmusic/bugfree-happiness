@@ -338,6 +338,7 @@ public class ClientAccountManagementController extends HttpServlet {
                     return;
                 case "GetPastPurchases":
                     System.out.println("Controller: GetPastPurchases");
+                    account = accountManagementBean.getAccount(account.getId());
                     session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                     break;
             }
