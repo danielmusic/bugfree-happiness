@@ -11,13 +11,16 @@ import EntityManager.ShoppingCart;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import javax.ejb.EJB;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.apache.commons.fileupload.ProgressListener;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
+import org.apache.commons.io.FileCleaningTracker;
 import org.json.JSONObject;
 
 @MultipartConfig
@@ -653,19 +660,55 @@ public class MusicManagementController extends HttpServlet {
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * doGet report upload progress
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // get upload time
+        String time = req.getParameter("time");
+        // get progress
+        // null: already finished
+        Object o = req.getSession().getAttribute(time);
+        String progress = o == null ? "100.0" : o + "";
+
+        if (progress.startsWith("100")) { // just done
+            req.getSession().removeAttribute(time);
+        }
+        // build response
+        StringBuilder sb = new StringBuilder("");
+        sb.append("{progress: {")
+                .append(time).append(":").append(progress)
+                .append("}}");
+        System.out.println(sb.toString());
+        PrintWriter out = resp.getWriter();
+        // response data
+        out.println(sb.toString());
+        out.close();
+    }
+
+    // create DiskFileItemFactory with fileCleaningTracker
+    private static DiskFileItemFactory newDiskFileItemFactory(ServletContext context,
+            File repository) {
+        FileCleaningTracker fileCleaningTracker
+                = FileCleanerCleanup.getFileCleaningTracker(context);
+        DiskFileItemFactory factory
+                = new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD,
+                        repository);
+        factory.setFileCleaningTracker(fileCleaningTracker);
+        return factory;
+    }
+    // progress listener
+    // put progress into session with the given id
+
+    private static ProgressListener getProgressListener(final String id, final HttpSession sess) {
+        ProgressListener progressListener = new ProgressListener() {
+            public void update(long pBytesRead, long pContentLength, int pItems) {
+                // put progress into session
+                sess.setAttribute(id, ((double) pBytesRead / (double) pContentLength) * 100);
+            }
+        };
+        return progressListener;
     }
 
     /**

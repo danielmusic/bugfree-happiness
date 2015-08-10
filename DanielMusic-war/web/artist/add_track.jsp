@@ -5,6 +5,50 @@
         <div class="container">
             <article>
                 <script>
+                    var progress;
+                    function upload() {
+                        // avoid concurrent processing
+                        if (progress)
+                            return;
+                        var uploadform = document.getElementById('uploadform'),
+                                time = new Date().getTime();
+                        uploadform.action = 'MusicManagementController?target=AddTrack&time=' + time;
+                        uploadform.target = 'target-frame';
+                        uploadform.submit();
+                        startProgressbar(time);
+                    }
+                    function startProgressbar(startTime) {
+                        // display progress bar
+                        $('.progress-bar').css('display', 'block');
+                        // start timer
+                        progress = setInterval(function () {
+                            // ask progress
+                            $.ajax({
+                                type: "GET",
+                                url: "MusicManagementController",
+                                data: {time: startTime},
+                                success: function (data, textStatus, jqXHR) {
+                                    // get progress from response data
+                                    var d = eval('(' + data + ')'),
+                                            uploadprogress = parseInt(d.progress[startTime]);
+                                    // change progress width
+                                    $('.progress').css('width', uploadprogress + 'px');
+                                    if (uploadprogress == 100) { // upload finished
+                                        // stop timer
+                                        clearInterval(progress);
+                                        setTimeout(function () {
+                                            // hide progress bar
+                                            $('.progress-bar').css('display', '');
+                                            $('.progress').css('width', '');
+                                            // clear timer variable
+                                            progress = null;
+                                        }, 1000);
+                                    }
+                                }
+                            });
+                        }, 1000);
+                    }
+
                     function getExtension(filename) {
                         var parts = filename.split('.');
                         return parts[parts.length - 1];
@@ -20,7 +64,8 @@
                     }
 
                     $(function () {
-                        $('form').submit(function () {
+                        $('#submit').click(function () {
+                            alert("hello");
                             if (window.File && window.FileReader && window.FileList && window.Blob) {
                                 var musicFile = $('#music');
                                 var musicFileSize = $('#music')[0].files[0].size;
@@ -32,12 +77,15 @@
                                     return false;
                                 }
 
-                                if (musicFileSize > 50000000) {
+                                if (musicFileSize > 100000000) {
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Image size must be below 50mb.";
+                                    document.getElementById('errMsg').innerHTML = "Music size must be below 100mb.";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
+                                
+                                //successful
+                                upload();
                             } else {
                                 document.getElementById("errMsg").style.display = "block";
                                 document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
@@ -56,7 +104,7 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
-                <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
+                <form id="uploadform" method="POST" enctype="multipart/form-data" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
 
@@ -116,10 +164,14 @@
                         </div>
                     </div>
 
-                    <input type="hidden" value="AddTrack" name="target">
+<!--                    <input type="hidden" value="AddTrack" name="target">-->
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
-                    <button type="submit" class="small invert" style="margin-right: 10px;">Add Track</button>
+                    <button type="button" name="submit" id="submit" class="small invert" style="margin-right: 10px;">Add Track</button>
+                    <!-- progress bar -->
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
                     <div class="clear"></div>
                 </form>
                 <%} else {%>
