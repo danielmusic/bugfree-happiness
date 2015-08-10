@@ -50,6 +50,7 @@ public class MusicManagementController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("!!!!");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
 
@@ -718,19 +719,27 @@ public class MusicManagementController extends HttpServlet {
                                 //Payment not tied to account will access download page directly
 //                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
 //                            session.setAttribute("downloadLinks", downloadHelper);
-                                session.removeAttribute("ShoppingCart");
+
                                 session.setAttribute("redirectPage", "#!/download-links");
                                 nextPage = "redirect2.jsp";
                             }
+                            session.removeAttribute("ShoppingCart");
                         }
                     }
                     break;
 
                 case "GenerateDownloadLink":
+                    System.out.println("im innnnnnnnnnnnnnn");
                     String bitrateType = request.getParameter("bitrateType");
                     String musicID = request.getParameter("musicID");
-                    session.setAttribute("DownloadTrack", musicManagementBean.generateDownloadLink(Long.parseLong(musicID), bitrateType, true, 300L));
-                    session.setAttribute("redirectPage", "#!/profile");
+                    String downloadLink = musicManagementBean.generateDownloadLink(Long.parseLong(musicID), bitrateType, true, 300L);
+//                    session.setAttribute("DownloadTrack", downloadLink);
+//                    //session.setAttribute("redirectPage", "#!/fan/profile");
+//                    //jsObj.put("result", true);
+//                    jsObj.put("result", true);
+//                    jsObj.put("downloadLink", downloadLink);
+//                    response.getWriter().write(jsObj.toString());
+                    response.sendRedirect(downloadLink);
                     return;
             }
 
@@ -752,28 +761,29 @@ public class MusicManagementController extends HttpServlet {
     /**
      * doGet report upload progress
      */
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // get upload time
-        String time = req.getParameter("time");
-        // get progress
-        // null: already finished
-        Object o = req.getSession().getAttribute(time);
-        String progress = o == null ? "100.0" : o + "";
-
-        if (progress.startsWith("100")) { // just done
-            req.getSession().removeAttribute(time);
-        }
-        // build response
-        StringBuilder sb = new StringBuilder("");
-        sb.append("{progress: {")
-                .append(time).append(":").append(progress)
-                .append("}}");
-        System.out.println(sb.toString());
-        PrintWriter out = resp.getWriter();
-        // response data
-        out.println(sb.toString());
-        out.close();
+        processRequest(request, response);
+//        // get upload time
+//        String time = req.getParameter("time");
+//        // get progress
+//        // null: already finished
+//        Object o = req.getSession().getAttribute(time);
+//        String progress = o == null ? "100.0" : o + "";
+//
+//        if (progress.startsWith("100")) { // just done
+//            req.getSession().removeAttribute(time);
+//        }
+//        // build response
+//        StringBuilder sb = new StringBuilder("");
+//        sb.append("{progress: {")
+//                .append(time).append(":").append(progress)
+//                .append("}}");
+//        System.out.println(sb.toString());
+//        PrintWriter out = resp.getWriter();
+//        // response data
+//        out.println(sb.toString());
+//        out.close();
     }
 
     // create DiskFileItemFactory with fileCleaningTracker

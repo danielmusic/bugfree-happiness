@@ -8,36 +8,32 @@
     <%@page import="java.text.NumberFormat"%>
     <script>
         function generateDownloadLink(musicID, bitrateType) {
-            url = "./MusicManagementController?target=GenerateDownloadLink";
-            $.ajax({
-                type: "GET",
-                async: false,
-                url: url,
-                data: {'musicID': musicID, 'bitrateType': bitrateType},
-                success: function (val) {
-                    window.event.returnValue = false;
-                    window.location.href = "#!/redirect";
-                },
-                error: function (xhr, status, error) {
-                    document.getElementById("errMsg").style.display = "block";
-                    document.getElementById('errMsg').innerHTML = error;
-                    hideLoader();
-                    ajaxResultsError(xhr, status, error);
-                }
-            });
+            window.open("./MusicManagementController?target=GenerateDownloadLink&musicID=" + musicID + "&bitrateType=" + bitrateType);
+//            url = "./MusicManagementController?target=GenerateDownloadLink";
+//            $.ajax({
+//                type: "POST",
+//                async: false,
+//                url: url,
+//                data: {'musicID': musicID, 'bitrateType': bitrateType},
+//                success: function (val) {
+//                    window.event.returnValue = false;
+//                    alert("success!");
+//                    //window.location.href = "#!/redirect";
+//                    var json = JSON.parse(val);
+//                    alert(json.downloadLink);
+//                    window.open(json.downloadLink);
+//                },
+//                error: function (xhr, status, error) {
+//                    alert("error!");
+//                    document.getElementById("errMsg").style.display = "block";
+//                    document.getElementById('errMsg').innerHTML = error;
+//                    hideLoader();
+//                    ajaxResultsError(xhr, status, error);
+//                }
+//            });
         }
     </script>
-    <%
-        String downloadLink = (String) session.getAttribute("DownloadTrack");
-        session.removeAttribute("DownloadTrack");
-        if (downloadLink != null) {
-    %>
-    <script>
-        window.open(<%=downloadLink%>);
-    </script>
-    <%
-        }
-    %>
+
     <section class="content section">
         <div class="container">
             <article>
@@ -108,9 +104,6 @@
                         <table class="layout display responsive-table">
                             <thead>
                                 <tr>
-                                    <th class="product-remove" style="width: 5%">
-                                        <input type="checkbox" onclick="checkAllTracks(this);" />
-                                    </th>     
                                     <th style="width: 30%">Track Name</th>
                                     <th style="width: 30%">Album Name</th>
                                     <th style="width: 25%">Artist Name</th>
@@ -126,9 +119,6 @@
                                     for (Music m : listOfMusics) {
                                 %>
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" name="deleteTrack" value="<%=m.getId()%>" />
-                                    </td>
                                     <td class="table-date">
                                         <%=m.getName()%>
                                     </td>
