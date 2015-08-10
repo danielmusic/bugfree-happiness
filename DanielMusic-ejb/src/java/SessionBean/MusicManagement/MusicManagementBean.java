@@ -608,7 +608,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 helper.setDescription("Album has been published and cannot be edited.");
                 helper.setResult(false);
                 return helper;
-            } else if (imagePart!=null && imagePart.getSize() > 5000000) {
+            } else if (imagePart != null && imagePart.getSize() > 5000000) {
                 helper.setDescription("Album art cannot be larger than 5MB");
                 helper.setResult(false);
                 return helper;
@@ -746,7 +746,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper featureMusic(Long musicID){
+    public ReturnHelper featureMusic(Long musicID) {
         System.out.println("MusicManagementBean: featureMusic() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
@@ -755,7 +755,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Boolean isDeleted = music.getIsDeleted();
             if (isDeleted) {
                 result.setDescription("Music cannot be featured as it has been deleted.");
+                return result;
             } else {
+                //Check if artist has any other featured music
+                Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true");
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+                List<Music> musics = q.getResultList();
+                if (musics.size() > 0) {
+                    result.setDescription("You already have other featured music. Only one music can be set as featured.");
+                    return result;
+                }
                 music.setIsFeatured(true);
                 em.merge(music);
                 result.setDescription("Music featured.");
@@ -768,7 +777,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return result;
     }
-    
+
     @Override
     public ReturnHelper unfeatureMusic(Long musicID) {
         System.out.println("MusicManagementBean: unfeatureMusic() called");
@@ -792,6 +801,30 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return result;
     }
+
+    @Override
+    public Music getFeaturedMusic(Long artistID) {
+        System.out.println("MusicManagementBean: getFeaturedMusic() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID");
+            q.setParameter("artistID", artistID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            List<Music> musics = q.getResultList();
+            if (musics.size() > 0) {
+                return (Music) q.getResultList().get(0);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("MusicManagementBean: Error occurred while trying to getFeaturedMusic()");
+            e.printStackTrace();
+            result.setDescription("Internal server error");
+            return null;
+        }
+    }
+
     @Override
     public ReturnHelper publishAlbum(Long albumID) {
         System.out.println("publishAlbum() called.");
@@ -921,13 +954,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         try {
             Query q;
             q = em.createQuery("select a from Genre a  ORDER BY a.name ASC");
-
             List<Genre> genres = q.getResultList();
             List<ExploreHelper> exploreHelpers = new ArrayList();
             for (Genre genre : genres) {
                 ExploreHelper exploreHelper = new ExploreHelper();
                 exploreHelper.setGenre(genre);
-                exploreHelper.setArtists(listAllArtistBandInGenre(genre.getId()));
+                List<Artist> artists = listAllArtistBandInGenre(genre.getId());
+                exploreHelper.setArtists(artists);
+                List<Music> musics = new ArrayList();
+                for (Artist artist : artists) {
+                    Music music = getFeaturedMusic(artist.getId());
+                    musics.add(music);
+                }
+                exploreHelper.setFeaturedMusic(musics);
                 exploreHelpers.add(exploreHelper);
             }
             return exploreHelpers;

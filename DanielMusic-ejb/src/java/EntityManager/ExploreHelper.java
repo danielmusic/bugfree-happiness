@@ -10,6 +10,7 @@ import java.util.List;
 public class ExploreHelper {
     private Genre genre;
     private List<Artist> artists;
+    private List<Music> featuredMusic;
 
     public Genre getGenre() {
         return genre;
@@ -26,7 +27,12 @@ public class ExploreHelper {
     public void setArtists(List<Artist> artists) {
         this.artists = artists;
     }
-    
-    
-    
+
+    public List<Music> getFeaturedMusic() {
+        return featuredMusic;
+    }
+
+    public void setFeaturedMusic(List<Music> featuredMusic) {
+        this.featuredMusic = featuredMusic;
+    }
 }
