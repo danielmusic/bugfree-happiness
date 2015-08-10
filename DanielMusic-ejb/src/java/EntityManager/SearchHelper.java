@@ -6,6 +6,7 @@ import java.util.List;
 public class SearchHelper {
     private List<Album> listOfAlbums;
     private List<Artist> listOfArtists;
+    private List<Music> featuredMusics;
     private List<Music> listOfMusics;
 
     public List<Album> getListOfAlbums() {
@@ -14,6 +15,14 @@ public class SearchHelper {
 
     public void setListOfAlbums(List<Album> listOfAlbums) {
         this.listOfAlbums = listOfAlbums;
+    }
+
+    public List<Music> getFeaturedMusics() {
+        return featuredMusics;
+    }
+
+    public void setFeaturedMusics(List<Music> featuredMusics) {
+        this.featuredMusics = featuredMusics;
     }
 
     public List<Artist> getListOfArtists() {

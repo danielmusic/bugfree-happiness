@@ -82,6 +82,7 @@ public interface MusicManagementBeanLocal {
     
     public ReturnHelper featureMusic(Long musicID);
     public ReturnHelper unfeatureMusic(Long musicID);
+    public Music getFeaturedMusic(Long artistID);
 
     public Album getAlbum(Long albumID);
     public List<Album> listAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved);
