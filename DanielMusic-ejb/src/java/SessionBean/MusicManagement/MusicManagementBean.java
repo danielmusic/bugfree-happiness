@@ -512,7 +512,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         em.merge(album);
                     } else {
                         em.remove(album);
-                        helper.setDescription("Image failed to upload, please check the file uploaded is an image and create album again.");
+                        helper.setDescription("We are unable to connect to our cloud storage provider, please try again later");
                         helper.setResult(false);
                         return helper;
                     }
@@ -734,6 +734,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                }
                 album.setPrice(newPrice);
                 em.merge(album);
+                if(album.getIsSingle()) {
+                    Long musicID = album.getListOfMusics().get(0).getId();
+                    editMusicPrice(musicID, newPrice);
+                }
                 result.setDescription("Price updated");
                 result.setResult(true);
             }
