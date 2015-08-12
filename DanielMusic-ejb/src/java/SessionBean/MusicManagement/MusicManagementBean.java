@@ -812,7 +812,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-            Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID");
+            Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID AND E.album.isPublished=true");
             q.setParameter("artistID", artistID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             List<Music> musics = q.getResultList();
