@@ -40,9 +40,6 @@
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
                     <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
                         <span class="img">
-                            <%
-                                System.out.print("http://sounds.sg.storage.googleapis.com/" + artist.getImageURL());
-                            %>
                             <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
                         </span>
                     </a>
