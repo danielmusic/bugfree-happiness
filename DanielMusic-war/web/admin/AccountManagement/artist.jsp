@@ -28,11 +28,11 @@
             }
 
             function approveArtist(id) {
-                window.location.href = "../../AccountManagementController?target=ApproveArtist&id=" + id;
+                window.location.href = "../../AccountManagementController?target=ApproveArtist&source=artist&id=" + id;
             }
 
             function rejectArtist(id) {
-                window.location.href = "../../AccountManagementController?target=RejectArtist&id=" + id;
+                window.location.href = "../../AccountManagementController?target=RejectArtist&source=artist&id=" + id;
             }
         </script>
         <jsp:include page="../jspIncludePages/displayNotification.jsp" />

@@ -108,13 +108,13 @@ public class AccountManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             if (source.equals("band")) {
                                 nextPage = "admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
-                            } else {
+                            } else if (source.equals("artist")){
                                 nextPage = "admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                             }
                         } else {
                             if (source.equals("band")) {
                                 nextPage = "admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
-                            } else {
+                            } else if (source.equals("artist")){
                                 nextPage = "admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                             }
                         }
