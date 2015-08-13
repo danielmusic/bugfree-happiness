@@ -44,21 +44,21 @@
                 <%
                     List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
                 %>
-                <div class="col-1-1">
-                    <form name="exploreForm">
 
 
-                        <div class="row clearfix filters" data-id="musicListing">
+                <form name="exploreForm">
+                    <div class="row clearfix filters" data-id="musicListing">
+                        <select class='nice-select filter' name="genres">
+                            <option value="placeholder">All Genres</option>
+                            <option value="*">All Genres</option>
+                            <%for (ExploreHelper eh : exploreHelpers) {%>
+                            <option value="<%=eh.getGenre().getName()%>"><%=eh.getGenre().getName()%></option>
+                            <%}%>
+                        </select>
+                    </div>
 
-                            <select class='nice-select filter' name="genres">
-                                <option value="placeholder">All Genres</option>
-                                <option value="*">All Genres</option>
-                                <%for (ExploreHelper eh : exploreHelpers) {%>
-                                <option value="<%=eh.getGenre().getName()%>"><%=eh.getGenre().getName()%></option>
-                                <%}%>
-                            </select>
-                        </div>
 
+                    <div id="musicListing" class="masonry clearfix">
 
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
@@ -68,56 +68,61 @@
                                     Music artistFeaturedMusic = eh.getFeaturedMusic().get(j);
                         %>
 
-                        <div id="musicListing" class="masonry clearfix">
-                            <div class="col-1-1 item tracklist" data-genres="<%=eh.getGenre().getName()%>">
+                        <div class="col-1-1 item tracklist" data-genres="<%=eh.getGenre().getName()%>">
+                            <%if (artistFeaturedMusic != null) {%>
 
-                                <span style="">
-                                    <%if (artistFeaturedMusic != null) {%>
+                            <div class="track-details">
 
-                                    <img style="margin-left: 10px; margin-top: 10px;  max-width: 50px !important; max-height: 50px !important; vertical-align: middle;"
-                                         src="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>">
+                                <a class="track sp-play-track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                   data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                   data-artist_url="http://artist.com/madoff-freak" 
+                                   data-artist_target="_self"
+                                   data-shop_url="#!/cart" 
+                                   data-shop_target="_blank"
+                                   >
 
-                                    <span style="margin-left: 30px;"><%=artistFeaturedMusic.getName()%></span> by
-                                    <span><%=artist.getName()%></span>
+                                    <img class="track-cover" alt="Track Cover" src="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>" style="top: 2px;">
+                                    <span class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                    <span class="track-artists"><%=artist.getName()%></span>
+                                </a>
 
+                                <div class="track-buttons">
+                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                       data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                       data-artist_url="http://artist.com/madoff-freak" 
+                                       data-artist_target="_self"
+                                       data-shop_url="#!/cart" 
+                                       data-shop_target="_blank"
+                                       >
+                                        <i class="icon icon-plus"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
+                                    </a>
 
-                                    <span style="float: right; margin-right: 30px; margin-top: 15px;">
-                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                           data-artist="<%=artistFeaturedMusic.getArtistName()%>"
-                                           data-artist_url="http://artist.com/madoff-freak" 
-                                           data-artist_target="_self"
-                                           data-shop_url="#!/cart" 
-                                           data-shop_target="_blank"
-                                           >
-                                            <i class="icon icon-plus"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
-                                        </a>
-
-                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                           data-artist="<%=artistFeaturedMusic.getArtistName()%>"
-                                           data-artist_url="http://artist.com/madoff-freak" 
-                                           data-artist_target="_self"
-                                           data-shop_url="#!/cart" 
-                                           data-shop_target="_blank"
-                                           >
-                                            <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
-                                        </a>
-
-                                    </span>
-                                    <%}%>
-
-
-                                </span>
+                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                       data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                       data-artist_url="http://artist.com/madoff-freak" 
+                                       data-artist_target="_self"
+                                       data-shop_url="#!/cart" 
+                                       data-shop_target="_blank"
+                                       style="margin-left: 0px;"
+                                       >
+                                        <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
+                                    </a>
+                                </div>
                             </div>
+
+                            <%}%>
+
                         </div>
+
 
                         <br/>
                         <%
                                 }
                             }
                         %>
-                        <input type="hidden" value="" name="id" id="id">
-                    </form>
-                </div>
+                    </div>
+                </form>
+
 
 
             </article>

@@ -59,11 +59,15 @@ Scamp Player Stylesheet
     line-height: 20px;
 }
 #sp-toggle:after {
-    content: "\002B";
+    content: "\f106";
+    font-family: FontAwesome;
+    font-size: 20px;
     display: inline-block;
 }
 #scamp_player.sp-show-player #sp-toggle:after {
-    content: "\00D7";
+    content: "\f107";
+    font-family: FontAwesome;
+    font-size: 20px;
     display: inline-block;
 }
 
@@ -222,6 +226,7 @@ Scamp Player Stylesheet
 }
 #scamp_player.sp-queue-loading .sp-buttons-container a.sp-queue-button:before {
     content: "\e620";
+    font-family: 'Scamp-Player';
     font-size: 42px;
     display: inline-block;
     -webkit-animation:spin 2s linear infinite;
