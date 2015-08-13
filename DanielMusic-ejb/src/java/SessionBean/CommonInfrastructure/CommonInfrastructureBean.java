@@ -2,14 +2,7 @@ package SessionBean.CommonInfrastructure;
 
 import EntityManager.ReturnHelper;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.extensions.java6.auth.oauth2.GooglePromptReceiver;
-import com.google.api.services.storage.StorageScopes;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -21,10 +14,10 @@ import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.StorageScopes;
 import com.google.api.services.storage.model.ObjectAccessControl;
 import com.google.api.services.storage.model.StorageObject;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -33,11 +26,10 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.commons.codec.binary.Base64;
@@ -52,13 +44,13 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     private static final String APPLICATION_NAME = "master-deck-101807";
     private static final String BUCKET_NAME = "sounds.sg";
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"), ".store/storage_sample");
-   private static FileDataStoreFactory dataStoreFactory;
+    private static FileDataStoreFactory dataStoreFactory;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static HttpTransport httpTransport;
     private static Storage client;
     //GCS Download
     private static final String SERVICE_ACCOUNT_EMAIL = "1059174637321-nthr5hhjfq7qc7979ansq0af0gi76d8q@developer.gserviceaccount.com";
-    private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = (System.getProperty("user.home")+"/DanielMusic/Credentials/SoundsSG-ee074d7c276d.p12");
+    private static final String SERVICE_ACCOUNT_PKCS12_FILE_PATH = (System.getProperty("user.home") + "/DanielMusic/Credentials/SoundsSG-ee074d7c276d.p12");
     //Windows is C:\Users\<user>\...
     //Linux is /home/admin/...
 
@@ -207,5 +199,28 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             ex.printStackTrace();
             return result;
         }
+    }
+
+    @Override
+    public ReturnHelper checkIfImageFitsRequirement(String filename) {
+        System.out.println("checkIfImageFitsRequirement() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        try {
+        BufferedImage bimg = ImageIO.read(new File(filename));
+        int width = bimg.getWidth();
+        int height = bimg.getHeight();
+        if (width!=height) {
+            result.setDescription("Image must be a square.");
+        } else if (width<300 || height<300) {
+            result.setDescription("Image resolution must be at least 300x300px.");
+        } else {
+            result.setDescription("Image fits requirements");
+            result.setResult(true);
+        }
+        } catch (Exception ex) {
+        result.setDescription("Unable to check image requirements due to internal server error.");
+        }
+        return result;
     }
 }

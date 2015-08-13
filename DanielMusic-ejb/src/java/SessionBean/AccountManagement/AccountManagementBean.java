@@ -867,6 +867,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
+                //Check image
+                ReturnHelper checkImageResult = cibl.checkIfImageFitsRequirement(tempFileLocation);
+                if (!checkImageResult.getResult()) {
+                    result.setDescription("Profile picture does not meet image requirements. "+checkImageResult.getDescription());
+                    return result;
+                }
                 //Upload to GCS
                 String imageLocation = "images/artist/profile/profilepictures_" + account.getId();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
