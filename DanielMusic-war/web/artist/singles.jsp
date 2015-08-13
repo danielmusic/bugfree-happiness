@@ -83,6 +83,10 @@
                                     <span class="label">Year Released</span>
                                     <div class="data"><b><%=album.getYearReleased()%></b></div>
                                 </li>
+                                <li>
+                                    <span class="label">Genre</span>
+                                    <div class="data"><b><%=album.getGenreName()%></b></div>
+                                </li>
                             </ul>
                         </div>
                     </div>

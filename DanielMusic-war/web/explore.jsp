@@ -46,7 +46,10 @@
                 %>
                 <div class="col-1-1">
                     <form name="exploreForm">
-                        <div class="row clearfix filters" data-id="events">
+
+
+                        <div class="row clearfix filters" data-id="musicListing">
+
                             <select class='nice-select filter' name="genres">
                                 <option value="placeholder">All Genres</option>
                                 <option value="*">All Genres</option>
@@ -55,6 +58,8 @@
                                 <%}%>
                             </select>
                         </div>
+
+
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
                                 ExploreHelper eh = exploreHelpers.get(i);
@@ -63,58 +68,46 @@
                                     Music artistFeaturedMusic = eh.getFeaturedMusic().get(j);
                         %>
 
-                        <%System.out.print("a");%>
+                        <div id="musicListing" class="masonry clearfix">
+                            <div class="col-1-1 item tracklist" data-genres="<%=eh.getGenre().getName()%>">
 
-                        <div id="events" class="masonry events-grid clearfix">
-
-                            <div class="col-1-4 item event" data-genres="<%=eh.getGenre().getName()%>" data-artists="<%=artist.getName()%>">
-                                <a onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" style="cursor: pointer;">
-                                    <span class="event-meta">
-                                        <span class="event-date"><%=artist.getName()%></span>
-                                        <span class="event-title"><%=eh.getGenre().getName()%></span>
-                                    </span>
-                                    <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
-                                    <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>">
-                                    <%} else {%>
-                                    <img src="placeholders/event01.jpg">
-                                    <%}%>
-                                </a>
-
-                                <div class="details-social-box" style=" padding: 0px 0px;">
+                                <span style="">
                                     <%if (artistFeaturedMusic != null) {%>
-                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                       data-artist="<%=artistFeaturedMusic.getArtistName()%>"
-                                       data-artist_url="http://artist.com/madoff-freak" 
-                                       data-artist_target="_self"
-                                       data-shop_url="#!/cart" 
-                                       data-shop_target="_blank"
-                                       >
-                                        <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
-                                    </a>
+
+                                    <img style="margin-left: 10px; margin-top: 10px;  max-width: 50px !important; max-height: 50px !important; vertical-align: middle;"
+                                         src="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>">
+
+                                    <span style="margin-left: 30px;"><%=artistFeaturedMusic.getName()%></span> by
+                                    <span><%=artist.getName()%></span>
+
+
+                                    <span style="float: right; margin-right: 30px; margin-top: 15px;">
+                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                           data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                           data-artist_url="http://artist.com/madoff-freak" 
+                                           data-artist_target="_self"
+                                           data-shop_url="#!/cart" 
+                                           data-shop_target="_blank"
+                                           >
+                                            <i class="icon icon-plus"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
+                                        </a>
+
+                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                           data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                           data-artist_url="http://artist.com/madoff-freak" 
+                                           data-artist_target="_self"
+                                           data-shop_url="#!/cart" 
+                                           data-shop_target="_blank"
+                                           >
+                                            <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
+                                        </a>
+
+                                    </span>
                                     <%}%>
 
 
-
-                                    <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
-                                    <a href="<%=artist.getFacebookURL()%>"><i class="icon icon-facebook"></i></a>
-                                        <%}%>
-
-                                    <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
-                                    <a href="<%=artist.getTwitterURL()%>"><i class="icon icon-twitter"></i></a>
-                                        <%}%>
-
-                                    <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
-                                    <a href="<%=artist.getInstagramURL()%>"><i class="icon icon-user"></i></a>
-                                        <%}%>
-
-                                    <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
-                                    <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
-                                        <%}%>
-                                </div>
-
-
+                                </span>
                             </div>
-
                         </div>
 
                         <br/>
