@@ -134,8 +134,6 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //Calculate the total amount to be paid
             Account account = null;
             Double totalPaymentAmount = 0.0;
-//            Set<Music> tracksInCart = null;
-//            Set<Album> albumInCart = null;
             List<PaymentHelper> partiesReceivingPayments = new ArrayList();
             Artist currentArtist = null;
 
@@ -146,27 +144,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 q.setParameter("accountID", accountID);
                 account = (Account) q.getSingleResult();
                 if (account == null) {
+                    checkoutHelper.setMessage("Youra account does not appear to be valid. Try logging out and login again before checking out.");
                     return null;
                 }
-//                // Get his shopping cart
-//                ShoppingCart shoppingCart = account.getShoppingCart();
-//                tracksInCart = shoppingCart.getListOfMusics();
-//                albumInCart = shoppingCart.getListOfAlbums();
-//            } else { // if it's a non logged in user, retrieve the list of IDs into the actual entities
-//                for (Long current : trackIDs) {
-//                    Music music = em.getReference(Music.class, current);
-//                    if (music == null) {
-//                        return null;
-//                    }
-//                    tracksInCart.add(music);
-//                }
-//                for (Long current : albumIDs) {
-//                    Album album = em.getReference(Album.class, current);
-//                    if (album == null) {
-//                        return null;
-//                    }
-//                    albumInCart.add(album);
-//                }
             }
 
             //Create the list of artist/band to be paid and the amount to be paid for each artist for each music track
@@ -227,6 +207,19 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 }
             }
 
+            //Check if items has been purchased before
+            if (account!=null) {
+                List<Music> purchasedMusic = account.getListOfPurchasedMusics();
+                for (Music music : listOfMusicsInCart) {
+                    System.out.println("music"+music.getName());
+                    if (purchasedMusic.contains(music)) {
+                        System.out.println("asdasd");
+                        checkoutHelper.setMessage("Unable to checkout as you have already purchased the music \""+music.getName()+"\" by the artist \""+music.getArtistName()+"\" before.");
+                        return checkoutHelper;
+                    }
+                }
+            }
+            
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);

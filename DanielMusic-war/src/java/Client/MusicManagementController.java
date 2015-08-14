@@ -672,9 +672,14 @@ public class MusicManagementController extends HttpServlet {
                         }
                         session.setAttribute("checkoutHelper", checkoutHelper);
                         if (checkoutHelper.getPayKey() == null) {
-                            session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
                             jsObj.put("result", false);
+                            if (checkoutHelper.getMessage().isEmpty()) {
+                            session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
                             jsObj.put("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
+                            } else {
+                            session.setAttribute("errMsg", checkoutHelper.getMessage());
+                            jsObj.put("errMsg", checkoutHelper.getMessage());    
+                            }
                             response.getWriter().write(jsObj.toString());
                             return;
                         }
@@ -695,7 +700,6 @@ public class MusicManagementController extends HttpServlet {
                         jsObj.put("result", true);
                         jsObj.put("goodMsg", "Please verify the following payment details.");
                         response.getWriter().write(jsObj.toString());
-                        //goto checkuot.jsp
                     }
                     return;
 

@@ -172,14 +172,6 @@ public abstract class Account implements Serializable {
         this.isDisabled = isDisabled;
     }
 
-    public List<Music> getListOfMusics() {
-        return listOfPurchasedMusics;
-    }
-
-    public void setListOfMusics(List<Music> listOfMusics) {
-        this.listOfPurchasedMusics = listOfMusics;
-    }
-
     public String getEmail() {
         return email;
     }

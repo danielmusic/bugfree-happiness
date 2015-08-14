@@ -8,6 +8,7 @@ package EntityManager;
 public class CheckoutHelper {
     private String payKey;
     private Payment payment;
+    private String message;
 
     public String getPayKey() {
         return payKey;
@@ -23,6 +24,14 @@ public class CheckoutHelper {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
     
 }
