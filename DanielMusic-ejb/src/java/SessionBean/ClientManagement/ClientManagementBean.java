@@ -677,13 +677,13 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 if (payment.getAccount() != null) {
                     buyerName = payment.getAccount().getName();
                 }
-                emailTemplate += "Hi there, " + buyerName + " from Sounds.sg has just purchased your album/track(s) listed below on <paymentDate>:";
+                emailTemplate += "Hi there, " + buyerName + " from Sounds.sg has just purchased your album/track(s) listed below:";
 
                 //2 Create the list of albums/musics for each artist
                 Boolean first = true;
                 for (Album a : listOfAlbums) {
                     if (a.getArtist().getId().equals(artist.getId())) {
-                        if (first) {
+                        if (first) { 
                             first = false;
                             emailTemplate += "<h2>Albums</h2><ol>";
                         }
@@ -698,9 +698,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     if (m.getAlbum().getArtist().getId().equals(artist.getId())) {
                         if (first) {
                             first = false;
-                            emailTemplate += "<h2>Tracks</h2>";
+                            emailTemplate += "<h2>Tracks</h2><ol>";
                         }
-                        emailTemplate += "<ol><li> " + m.getAlbum().getName() + ": " + m.getName() + "</li></ol>";
+                        emailTemplate += "<li> " + m.getAlbum().getName() + ": " + m.getName() + "</li>";
 
                     }
                 }
