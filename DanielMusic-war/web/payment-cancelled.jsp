@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%session.setAttribute("redirectPage","/DanielMusic-war/#!/checkout");%>
+<%session.setAttribute("redirectPage","#!/checkout");%>
 <%session.setAttribute("errMsg","Your checkout is not yet complete, click on the Pay Now button to do so.");%>
 <html>
 <head>
