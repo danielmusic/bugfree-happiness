@@ -499,6 +499,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
                 fileOutputStream.close();
                 fileInputStream.close();
+                ReturnHelper checkImageResult = cibl.checkIfImageFitsRequirement(tempImageURL);
+                if (!checkImageResult.getResult()) {
+                    result.setDescription("Album art does not meet image requirements. " + checkImageResult.getDescription());
+                    return result;
+                }
                 imageLocation = "images/album/" + album.getId() + "/albumart/" + name + ".jpg";
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
 
@@ -512,7 +517,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         em.merge(album);
                     } else {
                         em.remove(album);
-                        helper.setDescription("Image failed to upload, please check the file uploaded is an image and create album again.");
+                        helper.setDescription("We are unable to connect to our cloud storage provider, please try again later");
                         helper.setResult(false);
                         return helper;
                     }
@@ -586,6 +591,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, Long genreID, String description, Integer yearReleased, String credits, Double price) {
         System.out.println("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
+        helper.setResult(false);
         try {
             Album album = null;
             //Check if album is published
@@ -643,19 +649,16 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     }
                     fileOutputStream.close();
                     fileInputStream.close();
-                    ReturnHelper result = new ReturnHelper();
 
-                    //check whether there is previous image
-                    //YG- no need to delete before upload
-//                    if (album.getImageLocation() != null) {
-//                        result = commonInfrastructureBean.deleteFileFromGoogleCloudStorage(album.getImageLocation());
-//                        if (!result.getResult()) {
-//                            album.setImageLocation(null);
-//                            helper.setDescription("Error while editing album, please try again.");
-//                            helper.setResult(false);
-//                            return helper;
-//                        }
-//                    }
+                    ReturnHelper result = new ReturnHelper();
+                    result.setResult(false);
+
+                    ReturnHelper checkImageResult = cibl.checkIfImageFitsRequirement(tempImageURL);
+                    if (!checkImageResult.getResult()) {
+                        result.setDescription("Album art does not meet image requirements. " + checkImageResult.getDescription());
+                        return result;
+                    }
+                    
                     imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
 
@@ -734,6 +737,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                }
                 album.setPrice(newPrice);
                 em.merge(album);
+                if (album.getIsSingle()) {
+                    Long musicID = album.getListOfMusics().get(0).getId();
+                    editMusicPrice(musicID, newPrice);
+                }
                 result.setDescription("Price updated");
                 result.setResult(true);
             }
@@ -808,7 +815,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-            Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID");
+            Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID AND E.album.isPublished=true");
             q.setParameter("artistID", artistID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             List<Music> musics = q.getResultList();

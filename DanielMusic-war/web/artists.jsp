@@ -40,9 +40,6 @@
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
                     <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
                         <span class="img">
-                            <%
-                                System.out.print("http://sounds.sg.storage.googleapis.com/" + artist.getImageURL());
-                            %>
                             <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
                         </span>
                     </a>
@@ -173,8 +170,19 @@
                                                 <img class="track-cover" src="<%=albumArt%>" style="padding-bottom: 5px;">
                                                 <span class="track-title" data-artist_url="artist_url" style="margin-top: 2px;"><%=music.getName()%></span>
                                             </a>
+
                                             <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
-                                                <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                   data-artist="<%=music.getArtistName()%>"
+                                                   data-artist_url="http://artist.com/madoff-freak" 
+                                                   data-artist_target="_self"
+                                                   data-shop_url="#!/cart" 
+                                                   data-shop_target="_blank"
+                                                   >
+                                                    <i class="icon icon-plus"><span style='display: none;'><%=music.getName()%></span></i>
+                                                </a>
+
+                                                <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="http://artist.com/madoff-freak" 
                                                    data-artist_target="_self"
@@ -183,8 +191,12 @@
                                                    >
                                                     <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
                                                 </a>
+
                                                 <i style="cursor: pointer;" class="icon icon-menu2 toggle-title"><span style='display: none;'></span></i>
+
                                                 <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
+
+                                                <span style="margin-left: 6px;">
                                                     <%
                                                         if (music.getPrice() == 0.0) {
                                                             out.print("Free");
@@ -193,6 +205,7 @@
                                                             out.print(formatter.format(music.getPrice()));
                                                         }
                                                     %>
+                                                </span>
                                             </div>
                                         </div>
                                     </li>
@@ -269,3 +282,17 @@
     //window.history.pushState("", "", "music/<%=artist.getName()%>");
 </script>
 <!--Friendly URL urlrewrite-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-66150326-1']);
+  var d = document.location.pathname + document.location.search + document.location.hash;
+  _gaq.push(['_trackPageview', d]);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

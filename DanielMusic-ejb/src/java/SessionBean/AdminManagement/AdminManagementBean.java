@@ -50,6 +50,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 if (account instanceof Artist) {
                     q = em.createQuery("SELECT s FROM Artist s where s.id=:id");
                     q.setParameter("id", artistOrBandID);
+                    q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
                     Artist artist = (Artist) q.getSingleResult();
                     artist.setIsApproved(1);
                     em.merge(artist);

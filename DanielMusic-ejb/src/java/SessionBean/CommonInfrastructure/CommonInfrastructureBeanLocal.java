@@ -9,4 +9,6 @@ public interface CommonInfrastructureBeanLocal {
     public ReturnHelper deleteFileFromGoogleCloudStorage(String remoteDestinationFile);
     public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds); //filename: eg music/artistID/albumID/musicName.mp3
     public String generateUUID();
+    
+    public ReturnHelper checkIfImageFitsRequirement(String filename);
 }

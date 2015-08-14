@@ -57,7 +57,8 @@
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-66150326-1']);
-  _gaq.push(['_trackPageview']);
+  var d = document.location.pathname + document.location.search + document.location.hash;
+  _gaq.push(['_trackPageview', d]);
 
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

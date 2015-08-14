@@ -66,7 +66,7 @@
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Profile Pic</label>
                                             <div class="col-md-6">
-                                                <img src="<%=artist.getImageURL()%>">
+                                                <img style="max-width: 300px;max-height: 150px" src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>">
                                             </div>
                                         </div>
 
