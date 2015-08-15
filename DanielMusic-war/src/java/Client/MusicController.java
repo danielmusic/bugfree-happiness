@@ -41,13 +41,25 @@ public class MusicController extends HttpServlet {
 
         try {
             switch (target) {
-                case "ListGenreArtist":
-                    System.out.println("ListGenreArtist ");
-                    List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
-                    session.setAttribute("genres", genres);
-                    jsObj.put("result", true);
-                    response.getWriter().write(jsObj.toString());
+                case "GrabASong":
+                    if (true) {
+                        System.out.println("GrabASong ");
+                        List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
+                        session.setAttribute("genres", genres);
+                        jsObj.put("result", true);
+                        response.getWriter().write(jsObj.toString());
+                    }
                     return;
+
+                case "ListGenreArtist":
+                    if (true) {
+                        List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
+                        session.setAttribute("genres", genres);
+                        jsObj.put("result", true);
+                        response.getWriter().write(jsObj.toString());
+                    }
+                    return;
+
                 case "GetArtistByID":
                     if (true) {
                         artist = adminManagementBean.getArtist(Long.parseLong(id));
@@ -58,6 +70,7 @@ public class MusicController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                         return;
                     }
+
                 case "GetAlbumByID":
                     if (true) {
                         Album album = musicManagementBean.getAlbum(Long.parseLong(id));
@@ -70,6 +83,7 @@ public class MusicController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                         return;
                     }
+
                 case "Search":
                     if (true) {
                         String searchText = request.getParameter("text");
@@ -80,6 +94,7 @@ public class MusicController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                         return;
                     }
+
                 case "Lyrics":
                     if (true) {
                         Long musicID = Long.parseLong(request.getParameter("id"));
@@ -88,6 +103,7 @@ public class MusicController extends HttpServlet {
                         response.sendRedirect("#!/lyrics");
                         return;
                     }
+
                 case "LinkToArtist":
                     if (true) {
                         String artistName = request.getParameter("artistName");
