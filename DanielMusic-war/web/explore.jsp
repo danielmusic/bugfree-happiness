@@ -2,7 +2,12 @@
 <section id="page" data-title="Sounds.sg | Explore">
     <style>
         .track-details:before{
-            top: 2px;
+            display: none;
+        }
+
+        .track-details{
+            border-left: none;
+            margin-left: 0;
         }
     </style>
     <!-- ############################# Intro ############################# -->
@@ -50,7 +55,6 @@
                     List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
                 %>
 
-
                 <form name="exploreForm">
                     <div class="row clearfix filters" data-id="musicListing">
                         <select class='nice-select filter' name="genres">
@@ -63,7 +67,6 @@
                     </div>
 
                     <div id="musicListing" class="masonry clearfix">
-
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
                                 ExploreHelper artists = exploreHelpers.get(i);
@@ -80,22 +83,16 @@
                         %>
 
                         <!-- Start looping out songs -->
-                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>">
+                        <div class="col-1-1 tracklist" data-genres="<%=artists.getGenre().getName()%>">
                             <div class="track-details">
                                 <!-- Hack -->
-                                <%if (artistFeaturedMusic != null) {%>
-                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)">
-                                    <img class="track-cover" style="padding-bottom: 5px;" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
-                                    <span class="track-title" style="margin-top: 3px;"><%=artist.getName()%></span>
+                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" >
+                                    <img class="track-cover" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
+                                    <span class="track-title"><%=artist.getName()%></span>
+                                    <span class="track-artists"><%=artists.getGenre().getName()%></span>
                                 </a> 
-                                <%} else {%>
-                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" style="margin: 4px 0 4px 15px;">
-                                    <img class="track-cover" style="padding-bottom: 5px;" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
-                                    <span class="track-title" style="margin-top: 3px;"><%=artist.getName()%></span>
-                                </a> 
-                                <%}%>
 
-                                <div class="track-buttons" style="margin: 5px 0 5px 0;">
+                                <div class="track-buttons">
                                     <%if (artistFeaturedMusic != null) {%>
                                     <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
                                        data-artist="<%=artist.getName()%>"
