@@ -101,7 +101,10 @@
                                        data-shop_url="#!/cart" 
                                        data-shop_target="_blank"
                                        >
-                                        <i class="icon icon-plus"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
+                                        <i class="icon icon-plus">
+                                            <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                            <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                        </i>
                                     </a>
 
                                     <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
@@ -112,7 +115,10 @@
                                        data-shop_target="_blank"
                                        style="margin-left: 0px;"
                                        >
-                                        <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
+                                        <i class="icon icon-play2">
+                                            <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                            <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                        </i>
                                     </a>
                                     <%}%>
                                 </div>
