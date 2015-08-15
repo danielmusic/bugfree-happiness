@@ -166,11 +166,13 @@
                                     <li>
                                         <div class="track-details">
                                             <span class="track">
-                                                <img class="track-cover" src="<%=albumArt%>" style="padding-bottom: 5px;">
-                                                <span style="margin-top: 2px; display: block; margin-left: 55px; "><%=music.getName()%></span>
+                                                <img class="track-cover" src="<%=albumArt%>">
+                                                <span style="display: block; margin-left: 55px;"><%=music.getName()%></span>
+                                                <span class="track-artists"><%=album.getGenreName()%></span>
                                             </span>
 
-                                            <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
+
+                                            <div class="track-buttons">
                                                 <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="http://artist.com/madoff-freak" 
@@ -178,7 +180,10 @@
                                                    data-shop_url="#!/cart" 
                                                    data-shop_target="_blank"
                                                    >
-                                                    <i class="icon icon-plus"><span style='display: none;'><%=music.getName()%></span></i>
+                                                    <i class="icon icon-plus">
+                                                        <span style='display: none;' class="track-title"><%=music.getName()%></span>
+                                                        <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                    </i>
                                                 </a>
 
                                                 <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
@@ -188,12 +193,19 @@
                                                    data-shop_url="#!/cart" 
                                                    data-shop_target="_blank"
                                                    >
-                                                    <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                                    <i class="icon icon-play2">
+                                                        <span style='display: none;' class="track-title"><%=music.getName()%></span>
+                                                        <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                    </i>
                                                 </a>
 
-                                                <i style="cursor: pointer;" class="icon icon-menu2 toggle-title"><span style='display: none;'></span></i>
+                                                <i style="cursor: pointer;" class="icon icon-menu2 toggle-title">
+                                                    <span style='display: none;'></span>
+                                                </i>
 
-                                                <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
+                                                <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)">
+                                                    <i class="icon icon-cart"></i>
+                                                </a>
 
                                                 <span style="margin-left: 6px;">
                                                     <%
@@ -207,23 +219,38 @@
                                                 </span>
                                             </div>
                                         </div>
+
+                                        <div class="toggle-content">
+                                            <%
+                                                if (music.getLyrics() != null) {
+                                                    String repl = music.getLyrics().replaceAll("\\r", "<br>");
+                                                    out.print(repl);
+                                                }
+                                            %> 
+                                            <br/><br/><a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=<%=music.getId()%>', '_blank', 'width=600,height=760')">Open in new window</a>
+                                        </div>
                                     </li>
+                                </div>
+
+                                <div class="toggle">
+                                    <h4 class="toggle-title"> Maecenas tristique imperdiet</h4>
                                     <div class="toggle-content">
-                                        <%
-                                            if (music.getLyrics() != null) {
-                                                String repl = music.getLyrics().replaceAll("\\r", "<br>");
-                                                out.print(repl);
-                                            }
-                                        %> 
-                                        <br/><br/><a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=<%=music.getId()%>', '_blank', 'width=600,height=760')">Open in new window</a>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc felis, scelerisque at sagittis volutpat, viverra eu odio. Integer tempus elementum rutrum. Praesent auctor faucibus libero a egestas.</p>
                                     </div>
                                 </div>
+                                <div class="toggle">
+                                    <h4 class="toggle-title"> Dictum bibendum tortor</h4>
+                                    <div class="toggle-content">
+                                        <p>Vestibulum et velit nec metus ultricies dapibus quis ut eros. Etiam in lorem a eros congue fermentum lacinia eu felis. Donec iaculis nisl quis risus congue viverra.</p>
+                                    </div>
+                                </div>
+
                                 <%}%>                                    
                             </ul>
                             <%}%>
                             <p>
-                                <a href="javascript:;" class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
-                                <a href="javascript:;" class="btn sp-add-list" data-id="release-list">Add All Tracks to Playlist</a>
+                                <a class="btn invert sp-play-list" data-id="release-list" style="margin-right: 10px;">Play All Tracks</a>
+                                <a class="btn sp-add-list" data-id="release-list">Add All Tracks to Playlist</a>
                             </p>
                         </div>
                     </div>
