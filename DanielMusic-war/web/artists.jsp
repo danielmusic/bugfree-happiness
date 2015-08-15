@@ -20,11 +20,10 @@
         } else {
             String jumpToAlbumID = (String) session.getAttribute("jumpToAlbumID");
             if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
-                System.out.println("INNN");
     %>
     <script>
         window.onload = function () {
-            alert("WYVB");
+            alert("TODO WHY NOT WORKING");
             document.getElementById("album_<%=jumpToAlbumID%>").focus();
         }
     </script>
@@ -39,7 +38,32 @@
     </section>
     <section class="content section">
         <div class="container">
-
+            <script>
+                function loadArtist2(id) {
+                    url = "./MusicController?target=GetArtistByID";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'id': id},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+            </script>
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
@@ -175,9 +199,9 @@
                                             <div class="track-buttons">
                                                 <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
-                                                   data-artist_url="http://artist.com/madoff-freak" 
-                                                   data-artist_target="_self"
-                                                   data-shop_url="#!/cart" 
+                                                   data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                                   data-artist_target="_blank"
+                                                   data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                                    data-shop_target="_blank"
                                                    >
                                                     <i class="icon icon-plus">
@@ -188,9 +212,9 @@
 
                                                 <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
-                                                   data-artist_url="http://artist.com/madoff-freak" 
-                                                   data-artist_target="_self"
-                                                   data-shop_url="#!/cart" 
+                                                   data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                                   data-artist_target="_blank"
+                                                   data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                                    data-shop_target="_blank"
                                                    >
                                                     <i class="icon icon-play2">

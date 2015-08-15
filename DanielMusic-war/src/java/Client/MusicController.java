@@ -44,9 +44,15 @@ public class MusicController extends HttpServlet {
                 case "GrabASong":
                     if (true) {
                         System.out.println("GrabASong ");
-                        List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
-                        session.setAttribute("genres", genres);
-                        jsObj.put("result", true);
+                        // Music music = musicManagementBean.getNextMusic(Long artistID, Long genreID, Boolean byGenre);
+                        Music music = musicManagementBean.getNextMusic();
+                        jsObj.put("title", music.getName());
+                        jsObj.put("url", music.getFileLocation128());
+                        jsObj.put("artist", music.getArtistName());
+                        jsObj.put("artistID", music.getAlbum().getArtist().getId());
+                        jsObj.put("musicID", music.getId());
+                        jsObj.put("album", music.getAlbum().getName());
+                        jsObj.put("cover", music.getAlbum().getImageLocation());
                         response.getWriter().write(jsObj.toString());
                     }
                     return;
@@ -104,7 +110,7 @@ public class MusicController extends HttpServlet {
                         return;
                     }
 
-                case "LinkToArtist":
+                case "LinkToArtistByName":
                     if (true) {
                         String artistName = request.getParameter("artistName");
                         Long artistID = musicManagementBean.getArtistID(artistName);
@@ -118,6 +124,7 @@ public class MusicController extends HttpServlet {
                             response.sendRedirect("#!/index");
                         }
                     }
+                    return;
             }
         } catch (Exception ex) {
             response.sendRedirect("error500.html");

@@ -1037,5 +1037,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         }
         return false;
     }
+    
+    @Override
+    public Music getNextMusic() {
+        System.out.println("getNextMusic() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.isPublished=true and e.isDeleted=false");
+            List<Music> musics = q.getResultList();
+            return musics.get(0);
+        } catch (Exception ex) {
+            System.out.println("getNextMusic() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
 }
