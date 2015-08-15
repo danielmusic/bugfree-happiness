@@ -49,7 +49,7 @@
                     <%if (account.getNewEmailVerificationCode() != null && account.getNewEmailVerificationCode().length() > 0) {%>
                     <button type="submit" class="medium invert">Submit Code</button>
                     <%} else {%>
-                    <button type="button" class="medium invert" onclick="window.location.href = ''">Back to Home</button>
+                    <button type="button" class="medium invert" onclick="window.location.href = '#!/artist/profile'">Back to Home</button>
                     <%}%>
                     <div class="clear"></div>
                 </form>
