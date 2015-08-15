@@ -1,5 +1,10 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Sounds.sg | Explore">
+    <style>
+        .track-details:before{
+            top: 2px;
+        }
+    </style>
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/blog-bg.jpg)">
         <h1 class="heading-l">Explore</h1>
@@ -51,44 +56,49 @@
                         <select class='nice-select filter' name="genres">
                             <option value="placeholder">All Genres</option>
                             <option value="*">All Genres</option>
-                            <%for (ExploreHelper eh : exploreHelpers) {%>
-                            <option value="<%=eh.getGenre().getName()%>"><%=eh.getGenre().getName()%></option>
+                            <%for (ExploreHelper artists : exploreHelpers) {%>
+                            <option value="<%=artists.getGenre().getName()%>"><%=artists.getGenre().getName()%></option>
                             <%}%>
                         </select>
                     </div>
-
 
                     <div id="musicListing" class="masonry clearfix">
 
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
-                                ExploreHelper eh = exploreHelpers.get(i);
-                                for (int j = 0; j < eh.getArtists().size(); j++) {
-                                    Artist artist = eh.getArtists().get(j);
-                                    Music artistFeaturedMusic = eh.getFeaturedMusic().get(j);
+                                ExploreHelper artists = exploreHelpers.get(i);
+                                for (int j = 0; j < artists.getArtists().size(); j++) {
+                                    Artist artist = artists.getArtists().get(j);
+                                    Music artistFeaturedMusic = artists.getFeaturedMusic().get(j);
+
+                                    String profilePicURL;
+                                    if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {
+                                        profilePicURL = "http://sounds.sg.storage.googleapis.com/" + artist.getImageURL();
+                                    } else {
+                                        profilePicURL = "placeholders/artist01.jpg";
+                                    }
                         %>
 
-                        <div class="col-1-1 item tracklist" data-genres="<%=eh.getGenre().getName()%>">
-                            <%if (artistFeaturedMusic != null) {%>
-
+                        <!-- Start looping out songs -->
+                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>">
                             <div class="track-details">
+                                <!-- Hack -->
+                                <%if (artistFeaturedMusic != null) {%>
+                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)">
+                                    <img class="track-cover" style="padding-bottom: 5px;" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
+                                    <span class="track-title" style="margin-top: 3px;"><%=artist.getName()%></span>
+                                </a> 
+                                <%} else {%>
+                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" style="margin: 4px 0 4px 15px;">
+                                    <img class="track-cover" style="padding-bottom: 5px;" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
+                                    <span class="track-title" style="margin-top: 3px;"><%=artist.getName()%></span>
+                                </a> 
+                                <%}%>
 
-                                <a class="track sp-play-track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                   data-artist="<%=artistFeaturedMusic.getArtistName()%>"
-                                   data-artist_url="http://artist.com/madoff-freak" 
-                                   data-artist_target="_self"
-                                   data-shop_url="#!/cart" 
-                                   data-shop_target="_blank"
-                                   >
-
-                                    <img class="track-cover" alt="Track Cover" src="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>" style="top: 2px;">
-                                    <span class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                    <span class="track-artists"><%=artist.getName()%></span>
-                                </a>
-
-                                <div class="track-buttons">
+                                <div class="track-buttons" style="margin: 5px 0 5px 0;">
+                                    <%if (artistFeaturedMusic != null) {%>
                                     <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                       data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                       data-artist="<%=artist.getName()%>"
                                        data-artist_url="http://artist.com/madoff-freak" 
                                        data-artist_target="_self"
                                        data-shop_url="#!/cart" 
@@ -98,7 +108,7 @@
                                     </a>
 
                                     <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                       data-artist="<%=artistFeaturedMusic.getArtistName()%>"
+                                       data-artist="<%=artist.getName()%>"
                                        data-artist_url="http://artist.com/madoff-freak" 
                                        data-artist_target="_self"
                                        data-shop_url="#!/cart" 
@@ -107,14 +117,10 @@
                                        >
                                         <i class="icon icon-play2"><span style='display: none;'><%=artistFeaturedMusic.getName()%></span></i>
                                     </a>
+                                    <%}%>
                                 </div>
                             </div>
-
-                            <%}%>
-
                         </div>
-
-
                         <br/>
                         <%
                                 }
@@ -122,17 +128,12 @@
                         %>
                     </div>
                 </form>
-
-
-
             </article>
             <!-- /article -->
-
         </div>
         <!-- /container -->
     </section>
     <!-- /Content -->
-
 </section>
 <!-- /page -->
 
@@ -142,16 +143,17 @@
     //window.history.replaceState("object or string", "Title", "Discover");
 </script>
 <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 </script>

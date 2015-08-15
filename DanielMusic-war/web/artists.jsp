@@ -1,5 +1,10 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Sound.sg">
+    <style>
+        .track-details:before{
+            top: 5px;
+        }
+    </style>
     <%@page import="java.util.List"%>
     <%@page import="java.util.ArrayList"%>
     <%@page import="EntityManager.Album"%>
@@ -160,16 +165,10 @@
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-                                            <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                               data-artist="<%=music.getArtistName()%>"
-                                               data-artist_url="http://artist.com/madoff-freak" 
-                                               data-artist_target="_self"
-                                               data-shop_url="#!/cart" 
-                                               data-shop_target="_blank"
-                                               >
+                                            <span class="track">
                                                 <img class="track-cover" src="<%=albumArt%>" style="padding-bottom: 5px;">
-                                                <span class="track-title" data-artist_url="artist_url" style="margin-top: 2px;"><%=music.getName()%></span>
-                                            </a>
+                                                <span style="margin-top: 2px; display: block; margin-left: 55px; "><%=music.getName()%></span>
+                                            </span>
 
                                             <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
                                                 <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
