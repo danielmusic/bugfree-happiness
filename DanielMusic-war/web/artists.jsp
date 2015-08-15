@@ -77,7 +77,7 @@
                             <%}%>
 
                         <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
-                        <a href="<%=artist.getInstagramURL()%>"><i class="icon icon-user"></i></a>
+                        <a href="<%=artist.getInstagramURL()%>"><i class="fa fa-instagram "></i></a>
                             <%}%>
 
                         <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
@@ -284,15 +284,18 @@
 <!--Friendly URL urlrewrite-->
 <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 
 </script>

@@ -101,7 +101,7 @@
                         <div class="col-1-1">
                             <label for="name"><strong>I am signing up as a </strong></label>
                             <div id="options">
-                                <label><input type="radio" id="r1" value="ArtistSignup" name="option" required> Artist</label>
+                                <label><input type="radio" id="r1" value="ArtistSignup" name="option" required> Solo Artist</label>
                                 <label><input type="radio" id="r2" value="BandSignup" name="option" required> Band</label>
                             </div>
                         </div>

@@ -67,41 +67,105 @@
 
                 <form action="ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
+
                     <h2>Account Details</h2>
 
-                    <div class="row clearfix">
-                        <div class="col-1-3">
-                            <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
-                            <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
-                            <a href="#!/change-name">Change Name</a>
-                        </div>
+                    <div class="sidebar main-left main-medium">
+                        <div class="widget details-widget">
+                            <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
+                            <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
+                                <span class="img">
+                                    <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
+                                </span>
+                            </a>
+                            <%} else {%>
+                            <a href="placeholders/artist01.jpg" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view">
+                                <span class="hoverlayer"></span>
+                                <span class="img">
+                                    <img src="placeholders/artist01.jpg" />
+                                </span>
+                            </a>
+                            <%}%>
 
-                        <div class="col-1-3">
-                            <label for="email"><strong>Current Email</strong> <a class="md-trigger" data-modal="modal-change-email">(?)</a></label>
-                            <input type="email" id="email" name="email" value="<%=account.getEmail()%>">
-                            <%if (account.getNewEmail() != null && account.getNewEmail().length() > 0) {%><a href="#!/change-email">Email change in progress...</a><%}%>
-                        </div>
+                            <div class="details-meta">
+                                <ul class="details-list">
+                                    <li>
+                                        <span class="label">Name</span>
+                                        <div class="data"><b><%=artist.getName()%></b></div>
+                                    </li>
+                                    <li>
+                                        <span class="label">Genres</span>
+                                        <div class="data"><%if (artist.getGenre() != null) {
+                                                out.print(artist.getGenre().getName());
+                                            }%></div>
+                                    </li>
+                                </ul>
+                            </div>
 
-                        <div class="col-1-3 last">
-                            <label for="ppEmail"><strong>PayPay email address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
-                            <input type="email" value="<%if (artist.getPaypalEmail() != null) {
-                                    out.print(artist.getPaypalEmail());
-                                }%>" name="paypalEmail" id="ppEmail" required>
+                            <div class="details-social-box">
+                                <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
+                                <a href="<%=artist.getFacebookURL()%>"><i class="icon icon-facebook"></i></a>
+                                    <%}%>
+
+                                <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
+                                <a href="<%=artist.getTwitterURL()%>"><i class="icon icon-twitter"></i></a>
+                                    <%}%>
+
+                                <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
+                                <a href="<%=artist.getInstagramURL()%>"><i class="fa fa-instagram "></i></a>
+                                    <%}%>
+
+                                <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
+                                <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
+                                    <%}%>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row clearfix">
-                        <div class="col-1-3">
-                            <label for="oldpassword"><strong>Old Password</strong> *</label>
-                            <input id="oldpassword" type="password" name="oldpassword" placeholder="Leave blank unless setting a new password">
+                    <div id="main" class="release main-left main-medium">
+                        <div class="row clearfix">
+                            <div class="col-1-3" style="margin: 0 20px 24px 0;">
+                                <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
+                                <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
+                                <a href="#!/change-name">Change Name</a>
+                            </div>
+
+                            <div class="col-1-3" style="margin: 0 0 0 0;">
+                                <label for="email"><strong>Current Email</strong> <a class="md-trigger" data-modal="modal-change-email">(?)</a></label>
+                                <input type="email" id="email" name="email" value="<%=account.getEmail()%>">
+                                <%if (account.getNewEmail() != null && account.getNewEmail().length() > 0) {%><a href="#!/change-email">Email change in progress...</a><%}%>
+                            </div>
+
+                            <div class="col-1-3 last"></div>
                         </div>
-                        <div class="col-1-3">
-                            <label for="password"><strong>New Password</strong> *</label>
-                            <input id="password" type="password" name="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.repassword.pattern = this.value;">
+
+                        <div class="row clearfix">
+                            <div class="col-1-3">
+                                <label for="ppEmail"><strong>PayPay Email Address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
+                                <input type="email" value="<%if (artist.getPaypalEmail() != null) {
+                                        out.print(artist.getPaypalEmail());
+                                    }%>" name="paypalEmail" id="ppEmail" required>
+                            </div>
                         </div>
-                        <div class="col-1-3 last">
-                            <label for="repassword"><strong>Re-enter Password</strong> *</label>
-                            <input id="repassword" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="repassword">
+
+                        <hr class="divider">
+
+                        <div class="row clearfix">
+                            <div class="col-1-3" style="margin: 0 20px 24px 0;">
+                                <label for="oldpassword"><strong>Old Password</strong> *</label>
+                                <input id="oldpassword" type="password" name="oldpassword" placeholder="Leave blank unless setting a new password">
+                            </div>
+                            <div class="col-1-3" style="margin: 0 0 0 0;">
+                                <label for="password"><strong>New Password</strong> *</label>
+                                <input id="password" type="password" name="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.repassword.pattern = this.value;">
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-1-3 last">
+                                <label for="repassword"><strong>Re-enter Password</strong> *</label>
+                                <input id="repassword" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="repassword">
+                            </div>
                         </div>
                     </div>
 
@@ -155,8 +219,8 @@
                         <div class="col-1-2 last">
                             <label for="bandMembers"><strong>Members</strong> </label>
                             <input type="text" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
-                             out.print(artist.getBandMembers());
-                         }%>">
+                                    out.print(artist.getBandMembers());
+                                }%>">
                         </div>
                     </div>
                     <%}%>
