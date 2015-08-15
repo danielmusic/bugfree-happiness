@@ -144,7 +144,7 @@
                 data: {},
                 success: function (val) {
                     window.event.returnValue = false;
-                    window.location.href = "#!/checkout";
+                    window.location.href = "#!/redirect";
                 },
                 error: function (xhr, status, error) {
                     document.getElementById("errMsg").style.display = "block";
