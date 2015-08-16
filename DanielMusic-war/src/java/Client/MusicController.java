@@ -41,6 +41,11 @@ public class MusicController extends HttpServlet {
             switch (target) {
                 case "GrabASong":
                     if (true) {
+                        String pageURL = request.getParameter("pageURL");
+                        String mp3URL = request.getParameter("mp3URL");
+
+                        System.out.println("pageURL " + pageURL);
+                        System.out.println("mp3URL " + mp3URL);
                         // Music music = musicManagementBean.getNextMusic(Long artistID, Long genreID, Boolean byGenre);
                         Music music = musicManagementBean.getNextMusic();
                         jsObj.put("title", music.getName());
