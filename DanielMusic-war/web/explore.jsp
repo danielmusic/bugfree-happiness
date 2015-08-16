@@ -34,10 +34,10 @@
                         data: {'id': id},
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
+                            //window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.event.returnValue = false;
+                                //window.event.returnValue = false;
                                 window.location.href = "#!/artists";
                             }
                         },
@@ -59,10 +59,10 @@
                         data: {'id': id},
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
+                            //window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.event.returnValue = false;
+                                //window.event.returnValue = false;
                                 window.location.href = "#!/artists";
                             }
                         },
@@ -83,7 +83,7 @@
                         url: url,
                         data: {'trackID': trackID},
                         success: function (val) {
-                            window.event.returnValue = false;
+                            //window.event.returnValue = false;
                             window.location.href = "#!/cart";
                         },
                         error: function (xhr, status, error) {
@@ -142,11 +142,12 @@
                                     }
                         %>
                         <!-- Release -->
+
                         <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>">
                             <div class="track-details">
 
-                                <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox" style="margin-right: 20px;">
-                                    <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
+                                <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox" >
+                                    <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
                                     <span>&nbsp;&nbsp;</span>
                                 </a>
 
@@ -165,8 +166,10 @@
                                        data-shop_target="_blank"
                                        >
                                         <i class="icon icon-plus">
-                                            <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                            <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                            <span style="display: none;">
+                                                <span  class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                <span class="track-artists"><%=artist.getName()%></span>
+                                            </span>
                                         </i>
                                     </a>
 
@@ -180,8 +183,10 @@
                                            style="margin-left: 0px;"
                                            >
                                             <i class="icon icon-play2">
-                                                <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                                <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                <span style="display: none;">
+                                                    <span  class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                    <span class="track-artists"><%=artist.getName()%></span>
+                                                </span>
                                             </i>
                                         </a>
                                     </span>
@@ -196,8 +201,10 @@
                                            style="margin-left: 0px;"
                                            >
                                             <i class="icon icon-pause">
-                                                <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                                <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                <span style="display: none;">
+                                                    <span  class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                    <span class="track-artists"><%=artist.getName()%></span>
+                                                </span>
                                             </i>
                                         </a>
                                     </span>
