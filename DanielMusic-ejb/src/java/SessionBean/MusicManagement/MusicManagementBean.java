@@ -307,7 +307,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Music music = new Music();
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
-            ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
+            List<Genre> listOfGenres = new ArrayList<Genre>();
             listOfGenres.add(album.getListOfGenres().get(0));
             music.setLyrics(lyrics);
             music.setListOfGenres(listOfGenres);
@@ -460,7 +460,11 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                return result;
 //            }
             Album album = new Album();
+            //Update album genre
             Genre genre = em.getReference(Genre.class, genreID);
+            List<Genre> genres = new ArrayList();
+            genres.add(genre);
+            album.setListOfGenres(genres);
             album.setGenreName(genre.getName());
             album.setArtist(artist);
             album.setIsSingle(isSingle);
@@ -632,7 +636,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 album.setListOfGenres(genres);
                 album.setGenreName(genre.getName());
                 //Update the list of music genres
-                for (Music music:album.getListOfMusics()) {
+                for (Music music : album.getListOfMusics()) {
                     music.setListOfGenres(genres);
                     em.merge(music);
                 }
