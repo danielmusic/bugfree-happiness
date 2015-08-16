@@ -94,13 +94,17 @@
                 }
 
                 function switchToPauseButtonFromSearch() {
-                    document.getElementById("btnPause").style.display = "inline";
-                    document.getElementById("btnPlay").style.display = "none";
+                    var spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "none";
                 }
 
-                function switchToPlayButtonFromSearch() {
-                    document.getElementById("btnPlay").style.display = "inline";
-                    document.getElementById("btnPause").style.display = "none";
+                function switchToPlayButtonFromSearch(id) {
+                    var spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "none";
                 }
             </script>
             <!-- Article -->
@@ -234,8 +238,8 @@
 
 
                                             <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
-                                                <span id='btnPlay'>
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch();" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                <span id='btnPlay<%=music.getId()%>'>
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch(<%=music.getId()%>);" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                        data-artist_target="_blank"
                                                        data-artist_url="javascript:loadArtist(<%=music.getAlbum().getArtist().getId()%>);"
                                                        data-shop_target="_blank"
@@ -246,8 +250,8 @@
                                                     </a>
                                                 </span>
 
-                                                <span id='btnPause' style="display: none;">
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch();" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                <span id='btnPause<%=music.getId()%>' style="display: none;">
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch(<%=music.getId()%>);" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                        data-artist_target="_blank"
                                                        data-artist_url="javascript:loadArtist(<%=music.getAlbum().getArtist().getId()%>);"
                                                        data-shop_target="_blank"

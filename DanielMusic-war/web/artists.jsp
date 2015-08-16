@@ -104,14 +104,18 @@
                     });
                 }
 
-                function switchToPauseButtonFromArtists() {
-                    document.getElementById("btnPause").style.display = "inline";
-                    document.getElementById("btnPlay").style.display = "none";
+                function switchToPauseButtonFromArtists(id) {
+                    var spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "none";
                 }
 
-                function switchToPlayButtonFromArtists() {
-                    document.getElementById("btnPlay").style.display = "inline";
-                    document.getElementById("btnPause").style.display = "none";
+                function switchToPlayButtonFromArtists(id) {
+                    var spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "none";
                 }
             </script>
             <div class="sidebar main-left main-medium">
@@ -268,8 +272,8 @@
                                                     </i>
                                                 </a>
 
-                                                <span id='btnPlay'>
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromArtists();" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                <span id='btnPlay<%=music.getId()%>'>
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromArtists(<%=music.getId()%>);" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                        data-artist="<%=music.getArtistName()%>"
                                                        data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                                        data-artist_target="_blank"
@@ -283,8 +287,8 @@
                                                     </a>
                                                 </span>
 
-                                                <span id='btnPause' style="display: none;">
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPlayButtonFromArtists();" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                <span id='btnPause<%=music.getId()%>' style="display: none;">
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPlayButtonFromArtists(<%=music.getId()%>);" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                        data-artist="<%=music.getArtistName()%>"
                                                        data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                                        data-artist_target="_blank"
@@ -359,7 +363,6 @@
     _gaq.push(['_setAccount', 'UA-66150326-1']);
     var d = document.location.pathname + document.location.search + document.location.hash;
     _gaq.push(['_trackPageview', d]);
-
     (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';
