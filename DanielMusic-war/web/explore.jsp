@@ -127,12 +127,6 @@
                                         profilePicURL = "placeholders/artist01.jpg";
                                     }
                         %>
-
-
-                        <%
-                            System.out.print(">>>>>>>>>>>>" + artists.getGenre().getName());
-                        %>
-
                         <!-- Release -->
                         <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>">
                             <div class="track-details">
