@@ -95,14 +95,18 @@
                     });
                 }
 
-                function switchToPauseButton() {
-                    document.getElementById("btnPause").style.display = "inline";
-                    document.getElementById("btnPlay").style.display = "none";
+                function switchToPauseButton(id) {
+                    var spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "none";
                 }
 
-                function switchToPlayButton() {
-                    document.getElementById("btnPlay").style.display = "inline";
-                    document.getElementById("btnPause").style.display = "none";
+                function switchToPlayButton(id) {
+                    var spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "none";
                 }
             </script>
             <article>
@@ -166,8 +170,8 @@
                                         </i>
                                     </a>
 
-                                    <span id='btnPlay'>
-                                        <a class="track sp-play-track" onclick='javascript:switchToPauseButton();' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                    <span id='btnPlay<%=artistFeaturedMusic.getId()%>'>
+                                        <a class="track sp-play-track" onclick='javascript:switchToPauseButton(<%=artistFeaturedMusic.getId()%>);' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
                                            data-artist="<%=artist.getName()%>"
                                            data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                            data-artist_target="_blank"
@@ -182,8 +186,8 @@
                                         </a>
                                     </span>
 
-                                    <span id='btnPause' style="display: none;">
-                                        <a class="track sp-play-track" onclick='javascript:switchToPlayButton();' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                    <span id='btnPause<%=artistFeaturedMusic.getId()%>' style="display: none;">
+                                        <a class="track sp-play-track" onclick='javascript:switchToPlayButton(<%=artistFeaturedMusic.getId()%>);' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
                                            data-artist="<%=artist.getName()%>"
                                            data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                            data-artist_target="_blank"
