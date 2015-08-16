@@ -92,6 +92,16 @@
                         }
                     });
                 }
+
+                function switchToPauseButtonFromSearch() {
+                    document.getElementById("btnPause").style.display = "inline";
+                    document.getElementById("btnPlay").style.display = "none";
+                }
+
+                function switchToPlayButtonFromSearch() {
+                    document.getElementById("btnPlay").style.display = "inline";
+                    document.getElementById("btnPause").style.display = "none";
+                }
             </script>
             <!-- Article -->
             <article>
@@ -221,16 +231,32 @@
                                                 <!-- Artists -->
                                                 <span class="track-artists"><%=music.getArtistName()%></span>
                                             </a>
+
+
                                             <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
-                                                <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                   data-artist_target="_blank"
-                                                   data-artist_url="javascript:loadArtist(<%=music.getAlbum().getArtist().getId()%>);"
-                                                   data-shop_target="_blank"
-                                                   data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
-                                                   data-shop_target="_blank"
-                                                   >
-                                                    <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
-                                                </a>
+                                                <span id='btnPlay'>
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch();" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                       data-artist_target="_blank"
+                                                       data-artist_url="javascript:loadArtist(<%=music.getAlbum().getArtist().getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       >
+                                                        <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                                    </a>
+                                                </span>
+
+                                                <span id='btnPause' style="display: none;">
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch();" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                       data-artist_target="_blank"
+                                                       data-artist_url="javascript:loadArtist(<%=music.getAlbum().getArtist().getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       >
+                                                        <i class="icon icon-pause"><span style='display: none;'><%=music.getName()%></span></i>
+                                                    </a>
+                                                </span>
 
                                                 <a onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
                                                     <%

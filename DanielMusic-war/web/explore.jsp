@@ -94,6 +94,16 @@
                         }
                     });
                 }
+
+                function switchToPauseButton() {
+                    document.getElementById("btnPause").style.display = "inline";
+                    document.getElementById("btnPlay").style.display = "none";
+                }
+
+                function switchToPlayButton() {
+                    document.getElementById("btnPlay").style.display = "inline";
+                    document.getElementById("btnPause").style.display = "none";
+                }
             </script>
             <article>
                 <%
@@ -156,19 +166,39 @@
                                         </i>
                                     </a>
 
-                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                       data-artist="<%=artist.getName()%>"
-                                       data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
-                                       data-artist_target="_blank"
-                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
-                                       data-shop_target="_blank"
-                                       style="margin-left: 0px;"
-                                       >
-                                        <i class="icon icon-play2">
-                                            <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                            <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
-                                        </i>
-                                    </a>
+                                    <span id='btnPlay'>
+                                        <a class="track sp-play-track" onclick='javascript:switchToPauseButton();' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                           data-artist="<%=artist.getName()%>"
+                                           data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
+                                           data-artist_target="_blank"
+                                           data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
+                                           data-shop_target="_blank"
+                                           style="margin-left: 0px;"
+                                           >
+                                            <i class="icon icon-play2">
+                                                <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                            </i>
+                                        </a>
+                                    </span>
+
+                                    <span id='btnPause' style="display: none;">
+                                        <a class="track sp-play-track" onclick='javascript:switchToPlayButton();' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                           data-artist="<%=artist.getName()%>"
+                                           data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
+                                           data-artist_target="_blank"
+                                           data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
+                                           data-shop_target="_blank"
+                                           style="margin-left: 0px;"
+                                           >
+                                            <i class="icon icon-pause">
+                                                <span style='display: none;' class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                            </i>
+                                        </a>
+                                    </span>
+
+
                                     <%}%>
                                 </div>
                             </div>

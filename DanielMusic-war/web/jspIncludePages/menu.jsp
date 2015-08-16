@@ -24,10 +24,10 @@
                         url: url,
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
+                          //  window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.event.returnValue = false;
+                              //  window.event.returnValue = false;
                                 window.location.href = "#!/explore";
                             }
                         },
