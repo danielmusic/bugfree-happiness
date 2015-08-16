@@ -261,19 +261,6 @@
                                     </li>
                                 </div>
 
-                                <div class="toggle">
-                                    <h4 class="toggle-title"> Maecenas tristique imperdiet</h4>
-                                    <div class="toggle-content">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc felis, scelerisque at sagittis volutpat, viverra eu odio. Integer tempus elementum rutrum. Praesent auctor faucibus libero a egestas.</p>
-                                    </div>
-                                </div>
-                                <div class="toggle">
-                                    <h4 class="toggle-title"> Dictum bibendum tortor</h4>
-                                    <div class="toggle-content">
-                                        <p>Vestibulum et velit nec metus ultricies dapibus quis ut eros. Etiam in lorem a eros congue fermentum lacinia eu felis. Donec iaculis nisl quis risus congue viverra.</p>
-                                    </div>
-                                </div>
-
                                 <%}%>                                    
                             </ul>
                             <%}%>
