@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -33,6 +34,8 @@ public class Album implements Serializable {
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Music> listOfMusics;
     private Long numPurchase;
+    @ManyToMany(mappedBy = "listOfAlbums", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Genre> listOfGenres;
     @Lob
     private String genreName;
     @Lob
@@ -44,6 +47,7 @@ public class Album implements Serializable {
         isPublished = false;
         numPurchase = 0L;
         listOfMusics = new ArrayList<>();
+        listOfGenres = new ArrayList<>();
     }
 
     public String getArtistName() {
@@ -52,6 +56,14 @@ public class Album implements Serializable {
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
+    }
+
+    public List<Genre> getListOfGenres() {
+        return listOfGenres;
+    }
+
+    public void setListOfGenres(List<Genre> listOfGenres) {
+        this.listOfGenres = listOfGenres;
     }
 
     public Boolean getIsSingle() {

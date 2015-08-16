@@ -22,10 +22,13 @@ public class Genre implements Serializable {
     @OneToMany(mappedBy = "genre", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Artist> listOfArtists;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Album> listOfAlbums;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Music> listOfMusics;
 
     public Genre() {
         this.listOfArtists = new ArrayList();
+        this.listOfAlbums = new ArrayList();
         this.listOfMusics = new ArrayList();
     }
 
@@ -43,6 +46,14 @@ public class Genre implements Serializable {
 
     public void setListOfMusics(List<Music> listOfMusics) {
         this.listOfMusics = listOfMusics;
+    }
+
+    public List<Album> getListOfAlbums() {
+        return listOfAlbums;
+    }
+
+    public void setListOfAlbums(List<Album> listOfAlbums) {
+        this.listOfAlbums = listOfAlbums;
     }
 
     public String getName() {

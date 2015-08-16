@@ -101,7 +101,7 @@ public interface MusicManagementBeanLocal {
     public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID);
     public Boolean checkIfAlbumBelongsToArtist(Long artistID, Long albumID);
     
-    public Music getNextMusic();
+    public Music getNextMusic(String musicURL, String currentPage);
     public Music getNextMusicByArtist(Long artistID);
     public Music getNextMusicByGenre(Long genreID);
 }

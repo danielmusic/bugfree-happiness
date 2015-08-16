@@ -308,7 +308,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
             ArrayList<Genre> listOfGenres = new ArrayList<Genre>();
-            listOfGenres.add(album.getArtist().getGenre());
+            listOfGenres.add(album.getListOfGenres().get(0));
             music.setLyrics(lyrics);
             music.setListOfGenres(listOfGenres);
             music.setName(name);
@@ -625,8 +625,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                    return helper;
 //                }
                 album.setName(name);
+                //Update album genre
                 Genre genre = em.getReference(Genre.class, genreID);
+                List<Genre> genres = new ArrayList();
+                genres.add(genre);
+                album.setListOfGenres(genres);
                 album.setGenreName(genre.getName());
+                //Update the list of music genres
+                for (Music music:album.getListOfMusics()) {
+                    music.setListOfGenres(genres);
+                    em.merge(music);
+                }
                 album.setDescription(description);
                 album.setYearReleased(yearReleased);
                 album.setCredits(credits);
@@ -1072,15 +1081,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public Music getNextMusic() {
+    public Music getNextMusic(String musicURL, String currentPage) {
         System.out.println("getNextMusic() called");
         try {
-            Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.isPublished=true and e.isDeleted=false");
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.fileLocation128:=musicURL and e.isDeleted=false");
+            q.setParameter("musicURL", musicURL);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-            List<Music> musics = q.getResultList();
-            Random random = new Random();
-            int musicNum = random.nextInt(musics.size() + 1);
-            return musics.get(musicNum);
+            Music music = (Music) q.getSingleResult();
+            switch (currentPage) {
+                case "/#!/explore":
+                    return getNextMusicByGenre(music.getListOfGenres().get(0).getId());
+                default:
+                    return getNextMusicByArtist(music.getAlbum().getArtist().getId());
+            }
         } catch (Exception ex) {
             System.out.println("getNextMusic() failed");
             ex.printStackTrace();
