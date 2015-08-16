@@ -246,7 +246,12 @@
                                                        data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
                                                        data-shop_target="_blank"
                                                        >
-                                                        <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                                        <i class="icon icon-play2">
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
+                                                            </span>
+                                                        </i>
                                                     </a>
                                                 </span>
 
@@ -258,7 +263,12 @@
                                                        data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
                                                        data-shop_target="_blank"
                                                        >
-                                                        <i class="icon icon-pause"><span style='display: none;'><%=music.getName()%></span></i>
+                                                        <i class="icon icon-pause">
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
+                                                            </span>
+                                                        </i>
                                                     </a>
                                                 </span>
 

@@ -242,10 +242,10 @@
                                     for (int j = 0; j < musics.size(); j++) {
                                         Music music = musics.get(j);
                                 %>
+
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-
                                             <a class="track" href="<%=albumArt%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
                                                 <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=albumArt%>">
                                                 <span>&nbsp;&nbsp;</span>
@@ -267,8 +267,10 @@
                                                    data-shop_target="_blank"
                                                    >
                                                     <i class="icon icon-plus">
-                                                        <span style='display: none;' class="track-title"><%=music.getName()%></span>
-                                                        <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                        <span style="display: none;">
+                                                            <span  class="track-title"><%=music.getName()%></span>
+                                                            <span class="track-artists"><%=artist.getName()%></span>
+                                                        </span>
                                                     </i>
                                                 </a>
 
@@ -281,8 +283,10 @@
                                                        data-shop_target="_blank"
                                                        >
                                                         <i class="icon icon-play2">
-                                                            <span style='display: none;' class="track-title"><%=music.getName()%></span>
-                                                            <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=artist.getName()%></span>
+                                                            </span>
                                                         </i>
                                                     </a>
                                                 </span>
@@ -296,8 +300,10 @@
                                                        data-shop_target="_blank"
                                                        >
                                                         <i class="icon icon-pause">
-                                                            <span style='display: none;' class="track-title"><%=music.getName()%></span>
-                                                            <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=artist.getName()%></span>
+                                                            </span>
                                                         </i>
                                                     </a>
                                                 </span>
