@@ -3,99 +3,97 @@
 <%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
     <div id="main-nav">
+        <script>
+            function TriggeredKey(e) {
+                if (e.keyCode === 13) {
+                    searchAjax();
+                }
+            }
+
+            function retrieveGenre() {
+                url = "./MusicController?target=ListGenreArtist";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    dataType: "text",
+                    success: function (val) {
+                        //  window.event.returnValue = true;
+                        var json = JSON.parse(val);
+                        if (json.result) {
+                            //  window.event.returnValue = false;
+                            window.location.href = "#!/explore";
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
+
+            function searchAjax() {
+                var text = document.getElementById("search").value;
+                url = "./MusicController?target=Search";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {'text': text},
+                    dataType: "text",
+                    success: function (val) {
+                        //window.event.returnValue = true;
+                        var json = JSON.parse(val);
+                        if (json.result) {
+                            //window.event.returnValue = false;
+                            window.location.href = "#!/redirect";
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
+
+            function getShoppingCart() {
+                url = "./MusicManagementController?target=GetShoppingCart";
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: url,
+                    data: {},
+                    success: function (val) {
+                        //window.event.returnValue = false;
+                        //urlrewrite push state before redirecting
+                        window.history.pushState("", "", "/#!/");
+                        window.location.href = "#!/cart";
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById("errMsg").style.display = "block";
+                        document.getElementById('errMsg').innerHTML = error;
+                        hideLoader();
+                        ajaxResultsError(xhr, status, error);
+                    }
+                });
+            }
+        </script>
+
+
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
-                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="javascript:showUser();"/>
-                <input type="hidden" id="btnSearch" value="Search" onclick="searchAjax()" />
+                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="TriggeredKey(event);"/>
                 <span id="close-search"><i class="icon icon-close"></i></span>
             </div>
         </div>
         <!-- /search -->
         <!-- navigation container -->
         <div class="container">
-            <script>
-                function showUser(e) {
-                    var keycode = (window.event) ? window.event.keyCode : e.keyCode;
-                    if (keycode == 13) {
-                        document.getElementById('btnSearch').click();
-                    }
-                }
-
-                function retrieveGenre() {
-                    url = "./MusicController?target=ListGenreArtist";
-                    $.ajax({
-                        type: "GET",
-                        async: false,
-                        url: url,
-                        dataType: "text",
-                        success: function (val) {
-                            //  window.event.returnValue = true;
-                            var json = JSON.parse(val);
-                            if (json.result) {
-                                //  window.event.returnValue = false;
-                                window.location.href = "#!/explore";
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = error;
-                            hideLoader();
-                            ajaxResultsError(xhr, status, error);
-                        }
-                    });
-                }
-
-                function searchAjax() {
-                    var text = document.getElementById("search").value;
-                    url = "./MusicController?target=Search";
-                    $.ajax({
-                        type: "GET",
-                        async: false,
-                        url: url,
-                        data: {'text': text},
-                        dataType: "text",
-                        success: function (val) {
-                            window.event.returnValue = true;
-                            var json = JSON.parse(val);
-                            if (json.result) {
-                                window.event.returnValue = false;
-                                window.location.href = "#!/redirect";
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = error;
-                            hideLoader();
-                            ajaxResultsError(xhr, status, error);
-                        }
-                    });
-                }
-
-                function getShoppingCart() {
-                    url = "./MusicManagementController?target=GetShoppingCart";
-                    $.ajax({
-                        type: "GET",
-                        async: false,
-                        url: url,
-                        data: {},
-                        success: function (val) {
-                            window.event.returnValue = false;
-                            //urlrewrite push state before redirecting
-                            window.history.pushState("", "", "/#!/");
-                            window.location.href = "#!/cart";
-                        },
-                        error: function (xhr, status, error) {
-                            document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = error;
-                            hideLoader();
-                            ajaxResultsError(xhr, status, error);
-                        }
-                    });
-                }
-            </script>
-
-
             <a href="#!/home" id="logo">
                 <img src="placeholders/logo.png" alt="Sounds.sg" style="padding-top: 5px;">
             </a>
