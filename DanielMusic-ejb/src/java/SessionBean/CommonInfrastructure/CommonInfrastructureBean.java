@@ -32,11 +32,12 @@ import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import net.sf.jmimemagic.Magic;
 import org.apache.commons.codec.binary.Base64;
 
 @Stateless
 public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
-
+    
     @PersistenceContext
     private EntityManager em;
 
@@ -106,7 +107,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             return result;
         }
     }
-
+    
     @Override
     public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds) {
         System.out.println("CommonInfrastructureBean: getMusicFileURLFromGoogleCloudStorage() called");
@@ -122,7 +123,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             return null;
         }
     }
-
+    
     @Override
     public String generateUUID() {
         UUID id = UUID.randomUUID();
@@ -140,9 +141,9 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 .setServiceAccountUser(null)
                 .build();
         return credential;
-
+        
     }
-
+    
     private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
         String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expirationInSeconds) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
@@ -151,14 +152,14 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 + "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
         return signed_url;
     }
-
+    
     private static PrivateKey loadKeyFromPkcs12(String filename, char[] password) throws Exception {
         FileInputStream fis = new FileInputStream(filename);
         KeyStore ks = KeyStore.getInstance("PKCS12");
         ks.load(fis, password);
         return (PrivateKey) ks.getKey("privatekey", password);
     }
-
+    
     private String signString(String stringToSign, PrivateKey privateKey) throws Exception {
         if (privateKey == null) {
             throw new Exception("Private Key not initalized");
@@ -169,7 +170,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         byte[] rawSignature = signer.sign();
         return new String(Base64.encodeBase64(rawSignature, false), "UTF-8");
     }
-
+    
     @Override
     public ReturnHelper deleteFileFromGoogleCloudStorage(String remoteDestinationFile) {
         System.out.println("CommonInfrastructureBean: deleteFileFromGoogleCloudStorage() called");
@@ -200,26 +201,32 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             return result;
         }
     }
-
+    
     @Override
     public ReturnHelper checkIfImageFitsRequirement(String filename) {
         System.out.println("checkIfImageFitsRequirement() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-        BufferedImage bimg = ImageIO.read(new File(filename));
-        int width = bimg.getWidth();
-        int height = bimg.getHeight();
-        if (width!=height) {
-            result.setDescription("Image must be a square.");
-        } else if (width<300 || height<300) {
-            result.setDescription("Image resolution must be at least 300x300px.");
-        } else {
-            result.setDescription("Image fits requirements");
-            result.setResult(true);
-        }
+            File file = new File(filename);
+            BufferedImage bimg = ImageIO.read(file);
+            int width = bimg.getWidth();
+            int height = bimg.getHeight();
+            if (width != height) {
+                result.setDescription("Image must be a square.");
+            } else if (width < 300 || height < 300) {
+                result.setDescription("Image resolution must be at least 300x300px.");
+            } else {
+                String mimeType = Magic.getMagicMatch(file, false).getMimeType();
+                if (!mimeType.equals("image/png") && !mimeType.equals("image/jpeg")) {
+                    result.setDescription("Image must be in either PNG or JPEG format.");
+                } else {
+                    result.setDescription("Image fits requirements");
+                    result.setResult(true);
+                }
+            }
         } catch (Exception ex) {
-        result.setDescription("Unable to check image requirements due to internal server error.");
+            result.setDescription("Unable to check image requirements due to internal server error.");
         }
         return result;
     }
