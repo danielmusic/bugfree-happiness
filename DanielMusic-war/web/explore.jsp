@@ -49,6 +49,51 @@
                         }
                     });
                 }
+
+                function loadArtistFromExplore(id) {
+                    url = "./MusicController?target=GetArtistByID";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'id': id},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+                function addTrackToCartFromExplore(trackID) {
+                    url = "./MusicManagementController?target=AddTrackToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'trackID': trackID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
             </script>
             <article>
                 <%
@@ -66,6 +111,7 @@
                         </select>
                     </div>
 
+                    <!-- Releases -->
                     <div id="musicListing" class="masonry clearfix">
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
@@ -82,8 +128,13 @@
                                     }
                         %>
 
-                        <!-- Start looping out songs -->
-                        <div class="col-1-1 tracklist" data-genres="<%=artists.getGenre().getName()%>">
+
+                        <%
+                            System.out.print(">>>>>>>>>>>>" + artists.getGenre().getName());
+                        %>
+
+                        <!-- Release -->
+                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>">
                             <div class="track-details">
 
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox" style="margin-right: 20px;">
@@ -100,9 +151,9 @@
                                     <%if (artistFeaturedMusic != null) {%>
                                     <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
                                        data-artist="<%=artist.getName()%>"
-                                       data-artist_url="http://artist.com/madoff-freak" 
-                                       data-artist_target="_self"
-                                       data-shop_url="#!/cart" 
+                                       data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
+                                       data-artist_target="_blank"
+                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
                                        data-shop_target="_blank"
                                        >
                                         <i class="icon icon-plus">
@@ -113,9 +164,9 @@
 
                                     <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
                                        data-artist="<%=artist.getName()%>"
-                                       data-artist_url="http://artist.com/madoff-freak" 
-                                       data-artist_target="_self"
-                                       data-shop_url="#!/cart" 
+                                       data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
+                                       data-artist_target="_blank"
+                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
                                        data-shop_target="_blank"
                                        style="margin-left: 0px;"
                                        >

@@ -72,6 +72,26 @@
                         }
                     });
                 }
+
+                function addTrackToCartFromSearch(trackID) {
+                    url = "./MusicManagementController?target=AddTrackToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'trackID': trackID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
             </script>
             <!-- Article -->
             <article>
@@ -203,10 +223,10 @@
                                             </a>
                                             <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
                                                 <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                   data-artist="<%=music.getArtistName()%>"
-                                                   data-artist_url="http://artist.com/madoff-freak" 
-                                                   data-artist_target="_self"
-                                                   data-shop_url="#!/cart" 
+                                                   data-artist_target="_blank"
+                                                   data-artist_url="javascript:loadArtist(<%=music.getAlbum().getArtist().getId()%>);"
+                                                   data-shop_target="_blank"
+                                                   data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
                                                    data-shop_target="_blank"
                                                    >
                                                     <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
@@ -251,15 +271,18 @@
 <!-- /page -->
 <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 
 </script>

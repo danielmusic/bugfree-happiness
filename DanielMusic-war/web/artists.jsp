@@ -63,6 +63,46 @@
                         }
                     });
                 }
+
+                function addTrackToCart(trackID) {
+                    url = "./MusicManagementController?target=AddTrackToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'trackID': trackID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+                function addAlbumToCart(albumID) {
+                    url = "./MusicManagementController?target=AddAlbumToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'albumID': albumID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
             </script>
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
@@ -275,47 +315,6 @@
         </div>
 
         <div class="md-overlay"></div>
-        <script>
-            function addTrackToCart(trackID) {
-                url = "./MusicManagementController?target=AddTrackToShoppingCart";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'trackID': trackID},
-                    success: function (val) {
-                        window.event.returnValue = false;
-                        window.location.href = "#!/cart";
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-
-            function addAlbumToCart(albumID) {
-                url = "./MusicManagementController?target=AddAlbumToShoppingCart";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'albumID': albumID},
-                    success: function (val) {
-                        window.event.returnValue = false;
-                        window.location.href = "#!/cart";
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-        </script>
     </section>
     <%}%>
 </section>
