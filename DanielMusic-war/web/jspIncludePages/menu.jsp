@@ -181,7 +181,7 @@
                                     </div>
                                     <div class="row clearfix">
                                         <div class="col-1-1" style="margin: 0 0 0 10px;">
-                                            <button type="submit" class="medium invert" style="margin-bottom: 0px;">Login</button>
+                                            <input type='submit' value="Login" class="medium invert">
                                         </div>
                                     </div>
                                     <input type="hidden" value="AccountLogin" name="target">

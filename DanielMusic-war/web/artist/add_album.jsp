@@ -1,9 +1,23 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Albums">
-
     <section class="content section">
         <div class="container">
             <article>
+                <div class="md-modal md-effect-1" id="modal-profilePic">
+                    <div class="md-content">
+                        <h3>Standard Requirement</h3>
+                        <div>
+                            <p>Profile picture file requirement:</p>
+                            <ul>
+                                <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
+                                <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
+                            </ul>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <script>
                     function getExtension(filename) {
                         var parts = filename.split('.');
@@ -105,7 +119,7 @@
                         </div>
 
                         <div class="col-1-2 last">
-                            <label for="picture"><strong>Album Artwork</strong> </label>
+                            <label><strong>Album Artwork</strong> <a class="md-trigger" data-modal="modal-profilePic">(?)</a></label>
                             <input type="file" id="picture" name="picture" style="width: 100%; height:40px;padding-top: 9px;">
                         </div>
                     </div>
@@ -133,6 +147,10 @@
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
+                <div class="md-overlay"></div><!-- the overlay element -->
+                <script src="js/classie.js"></script>
+                <script src="js/modalEffects.js"></script>
+                <script src="js/cssParser.js"></script>
             </article>
         </div>
     </section>

@@ -8,6 +8,22 @@
     <section class="content section">
         <div class="container">
             <article>
+                <div class="md-modal md-effect-1" id="modal-profilePic">
+                    <div class="md-content">
+                        <h3>Standard Requirement</h3>
+                        <div>
+                            <p>Profile picture file requirement:</p>
+                            <ul>
+                                <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
+                                <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
+                            </ul>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="md-modal md-effect-1" id="modal-name">
                     <div class="md-content">
                         <h3>Modal Dialog</h3>
@@ -197,7 +213,7 @@
                         </div>
 
                         <div class="col-1-3 last">  
-                            <label for="pic"><strong>Change Profile Picture</strong></label>
+                            <label><strong>Change Profile Picture</strong> <a class="md-trigger" data-modal="modal-profilePic">(?)</a></label>
                             <input type="file" id="pic" name="picture" style="height: 40px;padding-top: 8px;padding-bottom: 8px;">
                         </div>
                     </div>
