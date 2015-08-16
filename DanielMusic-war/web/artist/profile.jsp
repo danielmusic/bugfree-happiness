@@ -79,8 +79,7 @@
                                 </span>
                             </a>
                             <%} else {%>
-                            <a href="placeholders/artist01.jpg" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view">
-                                <span class="hoverlayer"></span>
+                            <a href="placeholders/artist01.jpg" title="<%=artist.getName()%>" class="thumb-glitch" data-lightbox="lightbox">
                                 <span class="img">
                                     <img src="placeholders/artist01.jpg" />
                                 </span>

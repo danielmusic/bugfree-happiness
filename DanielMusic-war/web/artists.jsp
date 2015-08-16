@@ -73,8 +73,7 @@
                         </span>
                     </a>
                     <%} else {%>
-                    <a href="placeholders/artist01.jpg" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view">
-                        <span class="hoverlayer"></span>
+                    <a href="placeholders/artist01.jpg" title="<%=artist.getName()%>" class="thumb-glitch" data-lightbox="lightbox">
                         <span class="img">
                             <img src="placeholders/artist01.jpg" />
                         </span>
@@ -189,10 +188,16 @@
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-                                            <span class="track">
-                                                <img class="track-cover" src="<%=albumArt%>">
-                                                <span style="display: block; margin-left: 55px;"><%=music.getName()%></span>
-                                                <span class="track-artists"><%=album.getGenreName()%></span>
+
+                                            <a class="track" href="<%=albumArt%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
+                                                <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=albumArt%>">
+                                                <span>&nbsp;&nbsp;</span>
+                                            </a>
+
+                                            <span class="track"> 
+                                             <!--     <img class="track-cover" src="<%=albumArt%>">-->
+                                                <span style="display: block; margin-left: 40px;"><%=music.getName()%></span>
+                                                <span class="track-artists" style="margin-left: 40px;"><%=album.getGenreName()%></span>
                                             </span>
 
 

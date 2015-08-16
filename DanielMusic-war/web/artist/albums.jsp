@@ -87,7 +87,7 @@
                                         if (!albums.get(i).getIsSingle()) {
                             %>    
                             <tr>
-                                <td class="table-date"><%=(i + 1)%></td>
+                                <td class="table-name"><%=(i + 1)%></td>
                                 <td class="table-name"><%=albums.get(i).getName()%></td>         
                                 <td class="table-date">
                                     <%
@@ -98,7 +98,7 @@
                                         }
                                     %>
                                 </td>
-                                <td class="actions">
+                                <td class="table-date">
                                     <%if (!albums.get(i).getIsPublished()) {%>
                                     <a href="javascript:editAlbum(<%=albums.get(i).getId()%>);" class="buy-tickets">Edit Album</a>
                                     <a href="javascript:viewTracks(<%=albums.get(i).getId()%>);" class="buy-tickets">View Tracks</a>
