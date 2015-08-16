@@ -6,8 +6,7 @@
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
-                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="if (event.keyCode == 13)
-                            document.getElementById('btnSearch').click()"/>
+                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="javascript:showUser();"/>
                 <input type="hidden" id="btnSearch" value="Search" onclick="searchAjax()" />
                 <span id="close-search"><i class="icon icon-close"></i></span>
             </div>
@@ -16,6 +15,13 @@
         <!-- navigation container -->
         <div class="container">
             <script>
+                function showUser(e) {
+                    var keycode = (window.event) ? window.event.keyCode : e.keyCode;
+                    if (keycode == 13) {
+                        document.getElementById('btnSearch').click();
+                    }
+                }
+
                 function retrieveGenre() {
                     url = "./MusicController?target=ListGenreArtist";
                     $.ajax({
@@ -24,10 +30,10 @@
                         url: url,
                         dataType: "text",
                         success: function (val) {
-                          //  window.event.returnValue = true;
+                            //  window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                              //  window.event.returnValue = false;
+                                //  window.event.returnValue = false;
                                 window.location.href = "#!/explore";
                             }
                         },
