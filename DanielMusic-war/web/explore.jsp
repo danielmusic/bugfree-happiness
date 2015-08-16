@@ -86,7 +86,7 @@
                         <div class="col-1-1 tracklist" data-genres="<%=artists.getGenre().getName()%>">
                             <div class="track-details">
                                 <!-- Hack -->
-                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" >
+                                <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)">
                                     <img class="track-cover" title="<%=artist.getName()%>" data-lightbox="lightbox" alt="Track Cover" src="<%=profilePicURL%>" style="top: 2px;">
                                     <span class="track-title"><%=artist.getName()%></span>
                                     <span class="track-artists"><%=artists.getGenre().getName()%></span>

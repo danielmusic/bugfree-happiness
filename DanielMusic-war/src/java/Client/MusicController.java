@@ -37,13 +37,10 @@ public class MusicController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Artist artist = null;
-
         try {
             switch (target) {
                 case "GrabASong":
                     if (true) {
-                        System.out.println("GrabASong ");
                         // Music music = musicManagementBean.getNextMusic(Long artistID, Long genreID, Boolean byGenre);
                         Music music = musicManagementBean.getNextMusic();
                         jsObj.put("title", music.getName());
@@ -68,7 +65,7 @@ public class MusicController extends HttpServlet {
 
                 case "GetArtistByID":
                     if (true) {
-                        artist = adminManagementBean.getArtist(Long.parseLong(id));
+                        Artist artist = adminManagementBean.getArtist(Long.parseLong(id));
                         session.setAttribute("artistDetails", artist);
                         List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
                         session.setAttribute("artistAlbumDetails", albums);
@@ -80,7 +77,7 @@ public class MusicController extends HttpServlet {
                 case "GetAlbumByID":
                     if (true) {
                         Album album = musicManagementBean.getAlbum(Long.parseLong(id));
-                        artist = album.getArtist();
+                        Artist artist = album.getArtist();
                         session.setAttribute("artistDetails", artist);
                         List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(album.getArtist().getId(), false, false);
                         session.setAttribute("artistAlbumDetails", albums);
@@ -115,7 +112,7 @@ public class MusicController extends HttpServlet {
                         String artistName = request.getParameter("artistName");
                         Long artistID = musicManagementBean.getArtistID(artistName);
                         if (artistID != null) {
-                            artist = adminManagementBean.getArtist(artistID);
+                            Artist artist = adminManagementBean.getArtist(artistID);
                             session.setAttribute("artistDetails", artist);
                             List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(artistID, false, false);
                             session.setAttribute("artistAlbumDetails", albums);
