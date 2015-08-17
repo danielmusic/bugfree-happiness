@@ -33,10 +33,8 @@
                         data: {'id': id},
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.event.returnValue = false;
                                 window.location.href = "#!/artists";
                             }
                         },
@@ -57,10 +55,8 @@
                         data: {'id': id},
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.event.returnValue = false;
                                 window.location.href = "#!/artists";
                             }
                         },
@@ -81,7 +77,6 @@
                         url: url,
                         data: {'trackID': trackID},
                         success: function (val) {
-                            window.event.returnValue = false;
                             window.location.href = "#!/cart";
                         },
                         error: function (xhr, status, error) {

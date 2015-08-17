@@ -81,6 +81,8 @@ public class ClientAccountManagementController extends HttpServlet {
                         String email = request.getParameter("email");
                         String chkAgree = request.getParameter("chkAgree");
                         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
+                        String password = request.getParameter("password");
+                        String repassword = request.getParameter("repassword");
 
                         JSONObject jsObj = new JSONObject();
                         response.setContentType("application/json");
@@ -89,6 +91,11 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (chkAgree == null) {
                             jsObj.put("result", false);
                             jsObj.put("message", "Sorry. You have not agreed to the terms");
+                            response.getWriter().write(jsObj.toString());
+                            return;
+                        } else if (password == null) {
+                            jsObj.put("result", false);
+                            jsObj.put("message", "Sorry, Password can not be empty");
                             response.getWriter().write(jsObj.toString());
                             return;
                         } else if (grecaptcharesponse == null || !VerifyRecaptcha.verify(grecaptcharesponse)) {
@@ -102,8 +109,6 @@ public class ClientAccountManagementController extends HttpServlet {
                             response.getWriter().write(jsObj.toString());
                             return;
                         }
-
-                        String password = request.getParameter("password");
 
                         if (source.equals("BandSignup")) {
                             returnHelper = accountManagementBean.registerAccount(name, email, password, false, false, true);

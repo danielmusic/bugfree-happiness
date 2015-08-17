@@ -16,7 +16,6 @@
 //                url: url,
 //                data: {'musicID': musicID, 'bitrateType': bitrateType},
 //                success: function (val) {
-//                    window.event.returnValue = false;
 //                    alert("success!");
 //                    //window.location.href = "#!/redirect";
 //                    var json = JSON.parse(val);

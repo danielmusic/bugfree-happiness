@@ -26,10 +26,8 @@
                         data: {'id': id},
                         dataType: "text",
                         success: function (val) {
-                            window.event.returnValue = true;
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.event.returnValue = false;
                                 window.location.href = "#!/artists";
                             }
                         },

@@ -44,7 +44,6 @@
                 }
             }
             if (checkboxes.length == 0 || numOfTicks == 0) {
-                window.event.returnValue = true;
                 //window.location.href = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
             } else {
                 url = "./MusicManagementController?target=RemoveTrackFromShoppingCart";
@@ -53,8 +52,7 @@
                     async: false,
                     url: url,
                     data: {'deleteTrack': stringArr},
-                    success: function (val) {
-                        window.event.returnValue = false;
+                    success: function () {
                         window.location.href = "#!/redirect";
                     },
                     error: function (xhr, status, error) {
@@ -66,6 +64,7 @@
                 });
             }
         }
+
         function removeAlbum() {
             checkboxes = document.getElementsByName('deleteAlbum');
             var arr = new Array();
@@ -81,7 +80,6 @@
                 }
             }
 
-
             var numOfTicks = 0;
             for (var i = 0, n = checkboxes.length; i < n; i++) {
                 if (checkboxes[i].checked) {
@@ -89,7 +87,6 @@
                 }
             }
             if (checkboxes.length == 0 || numOfTicks == 0) {
-                window.event.returnValue = true;
                 //window.location.href = "./MusicManagementController?target=RemoveAlbumFromShoppingCart";
             } else {
                 url = "./MusicManagementController?target=RemoveAlbumFromShoppingCart";
@@ -99,7 +96,6 @@
                     url: url,
                     data: {'deleteAlbum': stringArr},
                     success: function (val) {
-                        window.event.returnValue = false;
                         window.location.href = "#!/redirect";
                     },
                     error: function (xhr, status, error) {
@@ -119,8 +115,7 @@
                 async: false,
                 url: url,
                 data: {},
-                success: function (val) {
-                    window.event.returnValue = false;
+                success: function () {
                     window.location.href = "#!/login";
                 },
                 error: function (xhr, status, error) {
@@ -142,8 +137,7 @@
                 async: false,
                 url: url,
                 data: {},
-                success: function (val) {
-                    window.event.returnValue = false;
+                success: function () {
                     window.location.href = "#!/redirect";
                 },
                 error: function (xhr, status, error) {
@@ -165,8 +159,7 @@
                     async: false,
                     url: url,
                     data: {'email': email},
-                    success: function (val) {
-                        window.event.returnValue = false;
+                    success: function () {
                         window.location.href = "#!/checkout";
                     },
                     error: function (xhr, status, error) {
@@ -384,15 +377,18 @@
 </section>
 <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
+                        var _gaq = _gaq || [];
+                        _gaq.push(['_setAccount', 'UA-66150326-1']);
+                        var d = document.location.pathname + document.location.search + document.location.hash;
+                        _gaq.push(['_trackPageview', d]);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+                        (function () {
+                            var ga = document.createElement('script');
+                            ga.type = 'text/javascript';
+                            ga.async = true;
+                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                            var s = document.getElementsByTagName('script')[0];
+                            s.parentNode.insertBefore(ga, s);
+                        })();
 
 </script>

@@ -25,7 +25,7 @@
                                     var name = $('#name').val();
                                     var email = $('#email').val();
                                     var password = $('#password').val();
-                                    var chkAgree = "checked";
+                                    var chkAgree = document.getElementById('chkAgree').value;
 
                                     url = "./ClientAccountManagementController?target=AccountSignup";
                                     $.ajax({
@@ -35,13 +35,10 @@
                                         data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
                                         dataType: "text",
                                         success: function (val) {
-                                            window.event.returnValue = true;
                                             var json = JSON.parse(val);
                                             if (json.result) {
-                                                window.event.returnValue = false;
                                                 window.location.href = "#!/login";
                                             } else {
-                                                window.event.returnValue = false;
                                                 document.getElementById("chkAgree").checked = false;
                                                 document.getElementById("grecaptcha").reset();
                                                 document.getElementById("errMsg").style.display = "block";
@@ -57,7 +54,8 @@
                                         }
                                     });
                                 } else {
-                                    window.event.returnValue = false;
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Sorry, Password can not be empty.";
                                     document.getElementById("errMsg").style.display = "block";
                                     document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
                                 }
@@ -68,27 +66,31 @@
                     function validatePassword() {
                         var password = document.getElementById("password").value;
                         var repassword = document.getElementById("repassword").value;
-                        if (password !== null && repassword !== null) {
-                            var ok = true;
-                            if ((password !== null && repassword !== null) || (password !== "" && repassword !== "")) {
-                                if (password !== repassword) {
-                                    document.getElementById("password").style.borderColor = "#E34234";
-                                    document.getElementById("repassword").style.borderColor = "#E34234";
-                                    document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
-                                    ok = false;
-                                } else if (password === repassword) {
-                                    if (password.length < 8) {
-                                        document.getElementById("errMsg").style.display = "block";
-                                        document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
-                                        ok = false;
-                                    }
-                                }
-                            } else {
-                                return ok;
-                            }
-                            return ok;
+                        if (repassword == null || repassword == "", password == null || password == "") {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = "Sorry, Password can not be empty.";
+                            document.getElementById("chkAgree").checked = false;
+                            document.getElementById("grecaptcha").reset();
+                            return false;
                         }
+                        if ((password !== null && repassword !== null) && (password !== "" && repassword !== "")) {
+                            if (password !== repassword) {
+                                document.getElementById("chkAgree").checked = false;
+                                document.getElementById("grecaptcha").reset();
+                                document.getElementById("errMsg").style.display = "block";
+                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
+                                return false;
+                            } else if (password === repassword) {
+                                if (password.length < 8) {
+                                    document.getElementById("chkAgree").checked = false;
+                                    document.getElementById("grecaptcha").reset();
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
+                                    return false;
+                                }
+                            }
+                        }
+                        return true;
                     }
                 </script>
 

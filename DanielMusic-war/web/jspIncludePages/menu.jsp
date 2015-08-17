@@ -18,10 +18,8 @@
                     url: url,
                     dataType: "text",
                     success: function (val) {
-                        //  window.event.returnValue = true;
                         var json = JSON.parse(val);
                         if (json.result) {
-                            //  window.event.returnValue = false;
                             window.location.href = "#!/explore";
                         }
                     },
@@ -44,10 +42,8 @@
                     data: {'text': text},
                     dataType: "text",
                     success: function (val) {
-                        //window.event.returnValue = true;
                         var json = JSON.parse(val);
                         if (json.result) {
-                            //window.event.returnValue = false;
                             window.location.href = "#!/redirect";
                         }
                     },
@@ -68,7 +64,6 @@
                     url: url,
                     data: {},
                     success: function (val) {
-                        //window.event.returnValue = false;
                         //urlrewrite push state before redirecting
                         window.history.pushState("", "", "/#!/");
                         window.location.href = "#!/cart";
@@ -139,7 +134,7 @@
                     </li>
                     <%} else if (fan != null) {%>
                     <li>
-                        <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">my purchases</a>
+                        <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">transaction history</a>
                     </li> 
                     <li>
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
