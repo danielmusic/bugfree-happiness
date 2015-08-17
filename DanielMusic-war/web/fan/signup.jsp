@@ -29,7 +29,7 @@
 
                                     url = "./ClientAccountManagementController?target=AccountSignup";
                                     $.ajax({
-                                        type: "GET",
+                                        method: "POST",
                                         async: false,
                                         url: url,
                                         data: {'source': source, 'name': name, 'email': email, 'password': password, 'chkAgree': chkAgree, 'g-recaptcha-response': v},
@@ -128,7 +128,7 @@
                             <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
                         </div>
                     </div>
-                    <button class="large invert" onclick="loadAjaxSignupFan()">Sign up now!</button>
+                    <button type="button" class="large invert" onclick="loadAjaxSignupFan()">Sign up now!</button>
                     <div class="clear"></div>
                 </form>
             </article>
