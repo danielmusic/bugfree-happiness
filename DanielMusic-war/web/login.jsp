@@ -1,5 +1,4 @@
 <section id="page" data-title="Account Login">
-
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Account Login</h1>
     </section>
@@ -9,6 +8,7 @@
                 <form class="form" name="loginForm" action="ClientAccountManagementController">
                     <p class="error" id="errMsg" style="display:none;"></p>
                     <p class="success" id="goodMsg"  style="display:none;"></p>
+
                     <jsp:include page="jspIncludePages/displayMessage.jsp" />
                     <div class="row clearfix">
                         <div class="col-1-1">
@@ -32,16 +32,17 @@
     </section>
 </section>
 <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 </script>

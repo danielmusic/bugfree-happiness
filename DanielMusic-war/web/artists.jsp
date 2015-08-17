@@ -20,11 +20,10 @@
         } else {
             String jumpToAlbumID = (String) session.getAttribute("jumpToAlbumID");
             if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
-                System.out.println("INNN");
     %>
     <script>
         window.onload = function () {
-            alert("WYVB");
+            alert("TODO WHY NOT WORKING");
             document.getElementById("album_<%=jumpToAlbumID%>").focus();
         }
     </script>
@@ -39,7 +38,86 @@
     </section>
     <section class="content section">
         <div class="container">
+            <script>
+                function loadArtist2(id) {
+                    url = "./MusicController?target=GetArtistByID";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'id': id},
+                        dataType: "text",
+                        success: function (val) {
+                            window.event.returnValue = true;
+                            var json = JSON.parse(val);
+                            if (json.result) {
+                                window.event.returnValue = false;
+                                window.location.href = "#!/artists";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
 
+                function addTrackToCart(trackID) {
+                    url = "./MusicManagementController?target=AddTrackToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'trackID': trackID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+                function addAlbumToCart(albumID) {
+                    url = "./MusicManagementController?target=AddAlbumToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'albumID': albumID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+                function switchToPauseButtonFromArtists(id) {
+                    var spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "none";
+                }
+
+                function switchToPlayButtonFromArtists(id) {
+                    var spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "none";
+                }
+            </script>
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
@@ -49,8 +127,7 @@
                         </span>
                     </a>
                     <%} else {%>
-                    <a href="placeholders/artist01.jpg" class="thumb-glitch imagebox details-widget-img" data-thumbicon="view">
-                        <span class="hoverlayer"></span>
+                    <a href="placeholders/artist01.jpg" title="<%=artist.getName()%>" class="thumb-glitch" data-lightbox="lightbox">
                         <span class="img">
                             <img src="placeholders/artist01.jpg" />
                         </span>
@@ -94,6 +171,9 @@
 
             <div id="main" class="release main-left main-medium">
                 <article>
+                    <p class="error" id="errMsg" style="display:none;"></p>
+                    <p class="success" id="goodMsg"  style="display:none;"></p>
+
                     <!-- tabs -->
                     <div class="tabs-wrap">
                         <!-- tabs navigation -->
@@ -162,42 +242,71 @@
                                     for (int j = 0; j < musics.size(); j++) {
                                         Music music = musics.get(j);
                                 %>
+
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-                                            <span class="track">
-                                                <img class="track-cover" src="<%=albumArt%>">
-                                                <span style="display: block; margin-left: 55px;"><%=music.getName()%></span>
-                                                <span class="track-artists"><%=album.getGenreName()%></span>
+                                            <a class="track" href="<%=albumArt%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
+                                                <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=albumArt%>">
+                                                <span>&nbsp;&nbsp;</span>
+                                            </a>
+
+                                            <span class="track"> 
+                                             <!--     <img class="track-cover" src="<%=albumArt%>">-->
+                                                <span style="display: block; margin-left: 40px;"><%=music.getName()%></span>
+                                                <span class="track-artists" style="margin-left: 40px;"><%=album.getGenreName()%></span>
                                             </span>
 
 
                                             <div class="track-buttons">
                                                 <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
-                                                   data-artist_url="http://artist.com/madoff-freak" 
-                                                   data-artist_target="_self"
-                                                   data-shop_url="#!/cart" 
+                                                   data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                                   data-artist_target="_blank"
+                                                   data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                                    data-shop_target="_blank"
                                                    >
                                                     <i class="icon icon-plus">
-                                                        <span style='display: none;' class="track-title"><%=music.getName()%></span>
-                                                        <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
+                                                        <span style="display: none;">
+                                                            <span  class="track-title"><%=music.getName()%></span>
+                                                            <span class="track-artists"><%=artist.getName()%></span>
+                                                        </span>
                                                     </i>
                                                 </a>
 
-                                                <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                   data-artist="<%=music.getArtistName()%>"
-                                                   data-artist_url="http://artist.com/madoff-freak" 
-                                                   data-artist_target="_self"
-                                                   data-shop_url="#!/cart" 
-                                                   data-shop_target="_blank"
-                                                   >
-                                                    <i class="icon icon-play2">
-                                                        <span style='display: none;' class="track-title"><%=music.getName()%></span>
-                                                        <span style='display: none;' class="track-artists"><%=artist.getName()%></span>
-                                                    </i>
-                                                </a>
+                                                <span id='btnPlay<%=music.getId()%>'>
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromArtists(<%=music.getId()%>);" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                       data-artist="<%=music.getArtistName()%>"
+                                                       data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                                       data-artist_target="_blank"
+                                                       data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       >
+                                                        <i class="icon icon-play2">
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=artist.getName()%></span>
+                                                            </span>
+                                                        </i>
+                                                    </a>
+                                                </span>
+
+                                                <span id='btnPause<%=music.getId()%>' style="display: none;">
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPlayButtonFromArtists(<%=music.getId()%>);" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                       data-artist="<%=music.getArtistName()%>"
+                                                       data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                                       data-artist_target="_blank"
+                                                       data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       >
+                                                        <i class="icon icon-pause">
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=artist.getName()%></span>
+                                                            </span>
+                                                        </i>
+                                                    </a>
+                                                </span>
 
                                                 <i style="cursor: pointer;" class="icon icon-menu2 toggle-title">
                                                     <span style='display: none;'></span>
@@ -232,19 +341,6 @@
                                     </li>
                                 </div>
 
-                                <div class="toggle">
-                                    <h4 class="toggle-title"> Maecenas tristique imperdiet</h4>
-                                    <div class="toggle-content">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc felis, scelerisque at sagittis volutpat, viverra eu odio. Integer tempus elementum rutrum. Praesent auctor faucibus libero a egestas.</p>
-                                    </div>
-                                </div>
-                                <div class="toggle">
-                                    <h4 class="toggle-title"> Dictum bibendum tortor</h4>
-                                    <div class="toggle-content">
-                                        <p>Vestibulum et velit nec metus ultricies dapibus quis ut eros. Etiam in lorem a eros congue fermentum lacinia eu felis. Donec iaculis nisl quis risus congue viverra.</p>
-                                    </div>
-                                </div>
-
                                 <%}%>                                    
                             </ul>
                             <%}%>
@@ -259,47 +355,6 @@
         </div>
 
         <div class="md-overlay"></div>
-        <script>
-            function addTrackToCart(trackID) {
-                url = "./MusicManagementController?target=AddTrackToShoppingCart";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'trackID': trackID},
-                    success: function (val) {
-                        window.event.returnValue = false;
-                        window.location.href = "#!/cart";
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-
-            function addAlbumToCart(albumID) {
-                url = "./MusicManagementController?target=AddAlbumToShoppingCart";
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: url,
-                    data: {'albumID': albumID},
-                    success: function (val) {
-                        window.event.returnValue = false;
-                        window.location.href = "#!/cart";
-                    },
-                    error: function (xhr, status, error) {
-                        document.getElementById("errMsg").style.display = "block";
-                        document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
-                        ajaxResultsError(xhr, status, error);
-                    }
-                });
-            }
-        </script>
     </section>
     <%}%>
 </section>
@@ -314,7 +369,6 @@
     _gaq.push(['_setAccount', 'UA-66150326-1']);
     var d = document.location.pathname + document.location.search + document.location.hash;
     _gaq.push(['_trackPageview', d]);
-
     (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';

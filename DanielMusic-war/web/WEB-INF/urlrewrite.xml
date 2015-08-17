@@ -22,7 +22,7 @@
         <!--<from>^(?!(\/(.+(\.js|\.css|\.jsp|\.html|\.htm|\.jpg|\.png|\.jpeg|\.gif|\.urlrewrite)))|\/#!\/).*</from>-->
         <!--<from>^/([\w]*)$</from>-->
         <from>/music/((.*)$)</from>
-        <to type="redirect">%{context-path}/MusicController?target=LinkToArtist&amp;artistName=$1</to>
+        <to type="redirect">%{context-path}/MusicController?target=LinkToArtistByName&amp;artistName=$1</to>
     </rule>
     <rule>
         <note>

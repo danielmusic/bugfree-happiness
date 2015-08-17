@@ -24,7 +24,7 @@
             %>
             <!-- ############################# About US ############################# -->
             <script>
-                function loadArtist(id) {
+                function loadArtistFromSearch(id) {
                     url = "./MusicController?target=GetArtistByID";
                     $.ajax({
                         type: "GET",
@@ -72,6 +72,40 @@
                         }
                     });
                 }
+
+                function addTrackToCartFromSearch(trackID) {
+                    url = "./MusicManagementController?target=AddTrackToShoppingCart";
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: url,
+                        data: {'trackID': trackID},
+                        success: function (val) {
+                            window.event.returnValue = false;
+                            window.location.href = "#!/cart";
+                        },
+                        error: function (xhr, status, error) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = error;
+                            hideLoader();
+                            ajaxResultsError(xhr, status, error);
+                        }
+                    });
+                }
+
+                function switchToPauseButtonFromSearch() {
+                    var spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "none";
+                }
+
+                function switchToPlayButtonFromSearch(id) {
+                    var spanLabel = "btnPlay" + id;
+                    document.getElementById(spanLabel).style.display = "inline";
+                    spanLabel = "btnPause" + id;
+                    document.getElementById(spanLabel).style.display = "none";
+                }
             </script>
             <!-- Article -->
             <article>
@@ -98,7 +132,7 @@
                                             }
                                     %>
                                     <div class="col-1-4 item" data-genres="">
-                                        <a style="cursor: pointer;" onclick="javascript:loadArtist(<%=artist.getId()%>)" class="thumb-glitch artist" data-thumbicon="plus">
+                                        <a style="cursor: pointer;" onclick="javascript:loadArtistFromSearch(<%=artist.getId()%>)" class="thumb-glitch artist" data-thumbicon="plus">
                                             <span class="hoverlayer"></span>
                                             <span class="img">
                                                 <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
@@ -109,7 +143,7 @@
                                             </span>
                                         </a>
                                         <div class="artist-footer">
-                                            <h2 class="artist-title"><a style="cursor: pointer;" onclick="javascript:loadArtist(<%=artist.getId()%>)"><%=artist.getName()%></a></h2>
+                                            <h2 class="artist-title"><a style="cursor: pointer;" onclick="javascript:loadArtistFromSearch(<%=artist.getId()%>)"><%=artist.getName()%></a></h2>
                                             <span class="artist-genres"><%=genre%></span>
                                         </div>
                                         <div class="artist-social">
@@ -136,7 +170,7 @@
                             <!-- /tab content -->
                             <!-- tab content -->
                             <div id="tab-album" class="tab-content">
-                                <div id="releases" class="masonry clearfix">
+                                <div class="masonry clearfix">
                                     <%for (Album album : result.getListOfAlbums()) {
                                             String albumArt = album.getImageLocation();
                                             if (albumArt == null || albumArt.isEmpty()) {
@@ -146,7 +180,7 @@
                                             }
                                     %>
 
-                                    <div class="col-1-4 item" data-genres="glitch" data-artists="dj-nando" data-categories="new-tracks">
+                                    <div class="col-1-4 item">
                                         <!-- Thumbnail -->
                                         <a style="cursor: pointer;" onclick="javascript:loadAlbum(<%=album.getId()%>)" class="thumb-glitch release tip" data-thumbicon="plus">
                                             <span class="hoverlayer"></span>
@@ -167,14 +201,6 @@
                                             <span class="release-artists"><%=album.getArtistName()%></span>
                                         </div>
                                         <!-- /release footer -->
-                                        <!-- Release social -->
-                                        <div class="release-social">
-                                            <a href="javascript:;" class="facebook-share"><i class="icon icon-facebook"></i></a>
-                                            <a href="javascript:;" class="twitter-share"><i class="icon icon-twitter"></i></a>
-                                            <a href="javascript:;" class="googleplus-share"><i class="icon icon-googleplus"></i></a>
-                                            <a href="javascript:;" class="googleplus-share floatright"><i class="icon icon-download"></i></a>
-                                        </div>
-                                        <!-- /release social -->
                                     </div>
                                     <%}%>
                                 </div>
@@ -193,26 +219,74 @@
                                     %>
                                     <li>
                                         <div class="track-details">
-                                            <a class="track" data-cover="http://sounds.sg.storage.googleapis.com/<%=albumArt%>">
-                                                <!-- cover -->
-                                                <img class="track-cover" src="<%=albumArt%>">
-                                                <!-- Title -->
-                                                <span class="track-title" data-artist_url="artist_url"><%=music.getName()%></span>
-                                                <!-- Artists -->
-                                                <span class="track-artists"><%=music.getArtistName()%></span>
+
+                                            <a class="track" href="<%=albumArt%>" title="<%=music.getName()%>" data-lightbox="lightbox" >
+                                                <img class="track-cover" title="<%=music.getArtistName()%>" alt="Track Cover" src="<%=albumArt%>">
+                                                <span>&nbsp;&nbsp;</span>
                                             </a>
-                                            <div class="track-buttons" style="margin-top: 5px; margin-bottom: 5px;">
-                                                <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                   data-artist="<%=music.getArtistName()%>"
-                                                   data-artist_url="http://artist.com/madoff-freak" 
-                                                   data-artist_target="_self"
-                                                   data-shop_url="#!/cart" 
+
+                                            <a class="track" onclick="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>)" style="cursor: pointer;">
+                                                <span class="track-title" style="margin-left: 40px;"><%=music.getName()%></span>
+                                                <span class="track-artists" style="margin-left: 40px;"><%=music.getArtistName()%></span>
+                                            </a> 
+
+
+                                            <div class="track-buttons">
+                                                <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                   data-artist_target="_blank"
+                                                   data-artist_url="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>);"
+                                                   data-shop_target="_blank"
+                                                   data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
                                                    data-shop_target="_blank"
                                                    >
-                                                    <i class="icon icon-play2"><span style='display: none;'><%=music.getName()%></span></i>
+                                                    <i class="icon icon-play2">
+                                                        <span style="display: none;">
+                                                            <span  class="track-title"><%=music.getName()%></span>
+                                                            <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
+                                                        </span>
+                                                    </i>
                                                 </a>
 
-                                                <a onclick="addTrackToCart(<%=music.getId()%>)"><i class="icon icon-cart"></i></a>
+                                                <span id='btnPlay<%=music.getId()%>'>
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch(<%=music.getId()%>);" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                       data-artist_target="_blank"
+                                                       data-artist_url="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       style="margin-left: 0px;"
+                                                       >
+                                                        <i class="icon icon-play2">
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
+                                                            </span>
+                                                        </i>
+                                                    </a>
+                                                </span>
+
+                                                <span id='btnPause<%=music.getId()%>' style="display: none;">
+                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch(<%=music.getId()%>);" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                       data-artist_target="_blank"
+                                                       data-artist_url="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
+                                                       data-shop_target="_blank"
+                                                       >
+                                                        <i class="icon icon-pause">
+                                                            <span style="display: none;">
+                                                                <span  class="track-title"><%=music.getName()%></span>
+                                                                <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
+                                                            </span>
+                                                        </i>
+                                                    </a>
+                                                </span>
+
+                                                <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)">
+                                                    <i class="icon icon-cart"></i>
+                                                </a>
+
+                                                <span style="margin-left: 6px;">
                                                     <%
                                                         if (music.getPrice() == 0.0) {
                                                             out.print("Free");
@@ -221,6 +295,7 @@
                                                             out.print(formatter.format(music.getPrice()));
                                                         }
                                                     %>
+                                                </span>
                                             </div>
                                         </div>
                                     </li>
@@ -251,15 +326,18 @@
 <!-- /page -->
 <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 
 </script>

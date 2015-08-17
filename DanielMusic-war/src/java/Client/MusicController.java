@@ -37,20 +37,40 @@ public class MusicController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Artist artist = null;
-
         try {
             switch (target) {
-                case "ListGenreArtist":
-                    System.out.println("ListGenreArtist ");
-                    List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
-                    session.setAttribute("genres", genres);
-                    jsObj.put("result", true);
-                    response.getWriter().write(jsObj.toString());
+                case "GrabASong":
+                    if (true) {
+                        String pageURL = request.getParameter("pageURL");
+                        String mp3URL = request.getParameter("mp3URL");
+
+                        System.out.println("pageURL " + pageURL);
+                        System.out.println("mp3URL " + mp3URL);
+                        // Music music = musicManagementBean.getNextMusic(Long artistID, Long genreID, Boolean byGenre);
+                        Music music = musicManagementBean.getNextMusic();
+                        jsObj.put("title", music.getName());
+                        jsObj.put("url", music.getFileLocation128());
+                        jsObj.put("artist", music.getArtistName());
+                        jsObj.put("artistID", music.getAlbum().getArtist().getId());
+                        jsObj.put("musicID", music.getId());
+                        jsObj.put("album", music.getAlbum().getName());
+                        jsObj.put("cover", music.getAlbum().getImageLocation());
+                        response.getWriter().write(jsObj.toString());
+                    }
                     return;
+
+                case "ListGenreArtist":
+                    if (true) {
+                        List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
+                        session.setAttribute("genres", genres);
+                        jsObj.put("result", true);
+                        response.getWriter().write(jsObj.toString());
+                    }
+                    return;
+
                 case "GetArtistByID":
                     if (true) {
-                        artist = adminManagementBean.getArtist(Long.parseLong(id));
+                        Artist artist = adminManagementBean.getArtist(Long.parseLong(id));
                         session.setAttribute("artistDetails", artist);
                         List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
                         session.setAttribute("artistAlbumDetails", albums);
@@ -58,10 +78,11 @@ public class MusicController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                         return;
                     }
+
                 case "GetAlbumByID":
                     if (true) {
                         Album album = musicManagementBean.getAlbum(Long.parseLong(id));
-                        artist = album.getArtist();
+                        Artist artist = album.getArtist();
                         session.setAttribute("artistDetails", artist);
                         List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(album.getArtist().getId(), false, false);
                         session.setAttribute("artistAlbumDetails", albums);
@@ -70,6 +91,7 @@ public class MusicController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                         return;
                     }
+
                 case "Search":
                     if (true) {
                         String searchText = request.getParameter("text");
@@ -80,6 +102,7 @@ public class MusicController extends HttpServlet {
                         response.getWriter().write(jsObj.toString());
                         return;
                     }
+
                 case "Lyrics":
                     if (true) {
                         Long musicID = Long.parseLong(request.getParameter("id"));
@@ -88,12 +111,13 @@ public class MusicController extends HttpServlet {
                         response.sendRedirect("#!/lyrics");
                         return;
                     }
-                case "LinkToArtist":
+
+                case "LinkToArtistByName":
                     if (true) {
                         String artistName = request.getParameter("artistName");
                         Long artistID = musicManagementBean.getArtistID(artistName);
                         if (artistID != null) {
-                            artist = adminManagementBean.getArtist(artistID);
+                            Artist artist = adminManagementBean.getArtist(artistID);
                             session.setAttribute("artistDetails", artist);
                             List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(artistID, false, false);
                             session.setAttribute("artistAlbumDetails", albums);
@@ -102,6 +126,7 @@ public class MusicController extends HttpServlet {
                             response.sendRedirect("#!/index");
                         }
                     }
+                    return;
             }
         } catch (Exception ex) {
             response.sendRedirect("error500.html");

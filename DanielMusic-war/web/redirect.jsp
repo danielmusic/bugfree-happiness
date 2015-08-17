@@ -8,7 +8,7 @@
         %>
         <script>
             (function () {
-                window.location.href = "/DanielMusic-war/<%=nextPage%>";
+                window.location.href = "/<%=nextPage%>";
             })();
         </script>
         <%
@@ -16,7 +16,7 @@
         %>
         <script>
             (function () {
-                window.location.href = "/DanielMusic-war/#!/index";
+                window.location.href = "/#!/index";
             })();
         </script>
         <%

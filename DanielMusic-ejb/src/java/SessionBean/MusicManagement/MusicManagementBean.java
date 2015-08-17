@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
@@ -35,10 +36,6 @@ import javax.servlet.http.Part;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
@@ -658,7 +655,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                         result.setDescription("Album art does not meet image requirements. " + checkImageResult.getDescription());
                         return result;
                     }
-                    
+
                     imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
                     result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
 
@@ -1038,4 +1035,56 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         return false;
     }
 
+    @Override
+    public Music getNextMusicByArtist(Long artistID) {
+        System.out.println("getNextMusicByArtist() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.artist.id=:artistID and e.album.isPublished=true and e.isDeleted=false");
+            q.setParameter("artistID", artistID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            List<Music> musics = q.getResultList();
+            Random random = new Random();
+            int musicNum = random.nextInt(musics.size() + 1);
+            return musics.get(musicNum);
+        } catch (Exception ex) {
+            System.out.println("getNextMusicByArtist() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Music getNextMusicByGenre(Long genreID) {
+        System.out.println("getNextMusicByGenre() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.artist.genre.id=:genreID and e.album.isPublished=true and e.isDeleted=false");
+            q.setParameter("genreID", genreID);
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            List<Music> musics = q.getResultList();
+            Random random = new Random();
+            int musicNum = random.nextInt(musics.size() + 1);
+            return musics.get(musicNum);
+        } catch (Exception ex) {
+            System.out.println("getNextMusicByGenre() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Music getNextMusic() {
+        System.out.println("getNextMusic() called");
+        try {
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.isPublished=true and e.isDeleted=false");
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            List<Music> musics = q.getResultList();
+            Random random = new Random();
+            int musicNum = random.nextInt(musics.size() + 1);
+            return musics.get(musicNum);
+        } catch (Exception ex) {
+            System.out.println("getNextMusic() failed");
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }

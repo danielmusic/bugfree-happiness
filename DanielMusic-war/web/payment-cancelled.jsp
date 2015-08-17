@@ -6,7 +6,7 @@
 <title></title>
 <script>
 if (window != top) {
-top.location.replace("/DanielMusic-war/redirect.jsp");
+top.location.replace("/redirect.jsp");
 }
 </script>
 </head>
