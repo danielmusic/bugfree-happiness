@@ -10,6 +10,11 @@
                 }
             }
 
+
+            function disableClick(e) {
+                e.stopPropagation();
+            }
+
             function retrieveGenre() {
                 url = "./MusicController?target=ListGenreArtist";
                 $.ajax({
@@ -167,8 +172,8 @@
                         <a>login</a>
                         <ul>
                             <li>
-                                <span onclick="e.stopPropagation();">
-                                      <form class="form" action="ClientAccountManagementController" style="margin-bottom: 10px;">
+                                <span onclick="disableClick(event);">
+                                    <form class="form" action="ClientAccountManagementController" style="margin-bottom: 10px;">
                                         <div class="row clearfix">
                                             <div class="col-1-1" style="width: 90%; margin: 20px 10px 20px 10px;">
                                                 <input type="email" name="email" placeholder="email" required >

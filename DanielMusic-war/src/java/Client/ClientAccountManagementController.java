@@ -82,7 +82,6 @@ public class ClientAccountManagementController extends HttpServlet {
                         String chkAgree = request.getParameter("chkAgree");
                         String grecaptcharesponse = request.getParameter("g-recaptcha-response");
                         String password = request.getParameter("password");
-                        String repassword = request.getParameter("repassword");
 
                         JSONObject jsObj = new JSONObject();
                         response.setContentType("application/json");
