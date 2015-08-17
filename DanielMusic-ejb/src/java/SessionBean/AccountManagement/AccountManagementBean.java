@@ -417,17 +417,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (changingEmail) {
                 verificationInstructions = "You have request for a change of account email.<br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
-                        + "Visit this link to key in the code: todo <br/><br/>"
+                        + "Visit this link to key in the code: <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a> <br/><br/>"
                         // need to login first before they can key
-                        + "If this email change was not initated by you, please ignore this email."
-                        + "TODO";
+                        + "If this email change was not initated by you, please ignore this email.";
                 emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "Sounds.SG Account Verification", verificationInstructions);
             } else {
                 verificationInstructions = "Thank you for registering at Sounds.SG <br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
-                        + "Visit this link to key in the code: todo <br/><br/>"
-                        + "If you did not sign up for an account at Sounds.SG, please ignore this email."
-                        + "TODO";
+                        + "Visit this link to key in the code: <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a> <br/><br/>"
+                        + "If you did not sign up for an account at Sounds.SG, please ignore this email.";
                 emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Sounds.SG Account Verification", verificationInstructions);
             }
             if (emailSent) {
@@ -526,7 +524,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     @Override
     public ReturnHelper generateAndSendForgetPasswordEmail(String email) {
         System.out.println("AccountManagementBean: generateAndSendForgetPasswordEmail() called");
-        //todo
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -548,9 +545,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             //Send the verification code
             String resetInstructions = "You have request for a password reset.<br/><br/>"
                     + "Your password reset code is: <b>" + resetCode + "</b><br/>"
-                    + "Visit this link to key in the code: todo <br/><br/>"
-                    + "If this password reset was not initated by you, please ignore this email."
-                    + "TODO";
+                    + "Visit this link to key in the code: <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
+                    + "If this password reset was not initated by you, please ignore this email.";
             Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Sounds.SG Password Reset", resetInstructions);
             if (emailSent) {
                 result.setResult(true);

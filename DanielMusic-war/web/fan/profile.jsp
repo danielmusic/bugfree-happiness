@@ -91,7 +91,7 @@
 
                     if (account != null && member != null) {
                         if (!account.getEmailIsVerified()) {
-                            out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>resend verification code</a>.</p>");
+                            out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>enter or resend your verification code</a>.</p>");
                         }
                 %>
 
