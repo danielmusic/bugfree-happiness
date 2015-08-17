@@ -63,7 +63,7 @@
                     async: false,
                     url: url,
                     data: {},
-                    success: function (val) {
+                    success: function () {
                         //urlrewrite push state before redirecting
                         window.history.pushState("", "", "/#!/");
                         window.location.href = "#!/cart";
@@ -167,24 +167,26 @@
                         <a>login</a>
                         <ul>
                             <li>
-                                <form class="form" action="ClientAccountManagementController" style="margin-bottom: 10px;">
-                                    <div class="row clearfix">
-                                        <div class="col-1-1" style="width: 90%; margin: 20px 10px 20px 10px;">
-                                            <input type="email" name="email" placeholder="email" required >
+                                <span onclick="e.stopPropagation();">
+                                      <form class="form" action="ClientAccountManagementController" style="margin-bottom: 10px;">
+                                        <div class="row clearfix">
+                                            <div class="col-1-1" style="width: 90%; margin: 20px 10px 20px 10px;">
+                                                <input type="email" name="email" placeholder="email" required >
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row clearfix">
-                                        <div class="col-1-1" style="width: 90%; margin: 0 10px 20px 10px;">
-                                            <input type="password" name="password" placeholder="password" required>
+                                        <div class="row clearfix">
+                                            <div class="col-1-1" style="width: 90%; margin: 0 10px 20px 10px;">
+                                                <input type="password" name="password" placeholder="password" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row clearfix">
-                                        <div class="col-1-1" style="margin: 0 0 0 10px;">
-                                            <input type='submit' value="Login" class="medium invert">
+                                        <div class="row clearfix">
+                                            <div class="col-1-1" style="margin: 0 0 0 10px;">
+                                                <input type='submit' value="Login" class="medium invert">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <input type="hidden" value="AccountLogin" name="target">
-                                </form>
+                                        <input type="hidden" value="AccountLogin" name="target">
+                                    </form>
+                                </span>
                             </li>
                         </ul>
                         <%}%>
