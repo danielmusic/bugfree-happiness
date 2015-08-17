@@ -43,8 +43,6 @@ public class MusicController extends HttpServlet {
                     if (true) {
                         String pageURL = request.getParameter("pageURL");
                         String mp3URL = request.getParameter("mp3URL");
-                        System.out.println("pageURL " + pageURL);
-                        System.out.println("mp3URL " + mp3URL);
                         Music music = musicManagementBean.getNextMusic(mp3URL, pageURL);
                         jsObj.put("title", music.getName());
                         jsObj.put("url", music.getFileLocation128());

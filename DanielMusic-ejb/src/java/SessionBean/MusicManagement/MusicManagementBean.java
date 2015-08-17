@@ -308,7 +308,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setAlbum(album);
             music.setArtistName(album.getArtist().getName());
             List<Genre> listOfGenres = new ArrayList<Genre>();
-            listOfGenres.add(album.getListOfGenres().get(0));
+            Genre genre = album.getListOfGenres().get(0);
+            listOfGenres.add(genre);
             music.setLyrics(lyrics);
             music.setListOfGenres(listOfGenres);
             music.setName(name);
@@ -316,6 +317,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setTrackNumber(trackNumber);
             music.setYearReleased(yearReleased);
             em.persist(music);
+            List<Music> genresMusic = genre.getListOfMusics();
+            genresMusic.add(music);
+            em.merge(genre);
             em.flush();
 
             String musicURL128;
@@ -476,6 +480,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             album.setCredits(credits);
             album.setPrice(price);
             em.persist(album);
+            List<Album> genresAlbums = genre.getListOfAlbums();
+            genresAlbums.add(album);
+            em.merge(genre);
             em.flush();
             System.out.println("MusicManagementBean: em.flush(). Album has been persisted.");
             em.refresh(album);
@@ -1057,7 +1064,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             List<Music> musics = q.getResultList();
             Random random = new Random();
-            int musicNum = random.nextInt(musics.size() + 1);
+            int musicNum = random.nextInt(musics.size());
             return musics.get(musicNum);
         } catch (Exception ex) {
             System.out.println("getNextMusicByArtist() failed");
@@ -1075,7 +1082,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             List<Music> musics = q.getResultList();
             Random random = new Random();
-            int musicNum = random.nextInt(musics.size() + 1);
+            int musicNum = random.nextInt(musics.size());
             return musics.get(musicNum);
         } catch (Exception ex) {
             System.out.println("getNextMusicByGenre() failed");
@@ -1088,12 +1095,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public Music getNextMusic(String musicURL, String currentPage) {
         System.out.println("getNextMusic() called");
         try {
-            Query q = em.createQuery("SELECT e FROM Music e WHERE e.fileLocation128:=musicURL and e.isDeleted=false");
+            Query q = em.createQuery("SELECT e FROM Music e WHERE e.fileLocation128=:musicURL and e.isDeleted=false");
+            musicURL = musicURL.substring(40);
             q.setParameter("musicURL", musicURL);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             Music music = (Music) q.getSingleResult();
             switch (currentPage) {
-                case "/#!/explore":
+                case "#!/explore":
                     return getNextMusicByGenre(music.getListOfGenres().get(0).getId());
                 default:
                     return getNextMusicByArtist(music.getAlbum().getArtist().getId());
