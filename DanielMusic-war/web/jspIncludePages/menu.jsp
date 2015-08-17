@@ -139,7 +139,7 @@
                     </li>
                     <%} else if (fan != null) {%>
                     <li>
-                        <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">transaction history</a>
+                        <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">my purchases</a>
                     </li> 
                     <li>
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
