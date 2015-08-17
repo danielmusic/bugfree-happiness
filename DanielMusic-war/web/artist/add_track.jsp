@@ -6,46 +6,40 @@
             <article>
                 <script>
                     var progress;
-                    function upload() {
+                    function upload(musicFileSize) {
+                        var secs = musicFileSize / 500000;
+                        var space = 100 / secs;
                         // avoid concurrent processing
                         if (progress)
                             return;
-                        var uploadform = document.getElementById('uploadform'),
-                                time = new Date().getTime();
-                        uploadform.action = 'MusicManagementController?target=AddTrack&time=' + time;
-                        uploadform.target = 'target-frame';
-                        uploadform.submit();
-                        startProgressbar(time);
+                        //uploadform.action = 'MusicManagementController?target=AddTrack&time=' + time;
+                        //uploadform.target = 'target-frame';
+                        //uploadform.submit();
+                        startProgressbar(space);
                     }
-                    function startProgressbar(startTime) {
+                    function startProgressbar(space) {
                         // display progress bar
+                        var uploadprogress = 0;
                         $('.progress-bar').css('display', 'block');
                         // start timer
                         progress = setInterval(function () {
                             // ask progress
-                            $.ajax({
-                                type: "GET",
-                                url: "MusicManagementController",
-                                data: {time: startTime},
-                                success: function (data, textStatus, jqXHR) {
-                                    // get progress from response data
-                                    var d = eval('(' + data + ')'),
-                                            uploadprogress = parseInt(d.progress[startTime]);
-                                    // change progress width
-                                    $('.progress').css('width', uploadprogress + 'px');
-                                    if (uploadprogress == 100) { // upload finished
-                                        // stop timer
-                                        clearInterval(progress);
-                                        setTimeout(function () {
-                                            // hide progress bar
-                                            $('.progress-bar').css('display', '');
-                                            $('.progress').css('width', '');
-                                            // clear timer variable
-                                            progress = null;
-                                        }, 1000);
-                                    }
-                                }
-                            });
+                            // get progress from response data
+                            uploadprogress += space;
+                            // change progress width
+                            if (uploadprogress < 100) {
+                                $('.progress').css('width', uploadprogress + 'px');
+                            } else { // upload finished
+                                // stop timer
+                                clearInterval(progress);
+                                setTimeout(function () {
+                                    // hide progress bar
+                                    $('.progress-bar').css('display', '');
+                                    $('.progress').css('width', '');
+                                    // clear timer variable
+                                    progress = null;
+                                }, 1000);
+                            }
                         }, 1000);
                     }
 
@@ -83,9 +77,9 @@
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
-                                
+
                                 //successful
-                                upload();
+                                upload(musicFileSize);
                             } else {
                                 document.getElementById("errMsg").style.display = "block";
                                 document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
@@ -164,7 +158,7 @@
                         </div>
                     </div>
 
-<!--                    <input type="hidden" value="AddTrack" name="target">-->
+                    <!--                    <input type="hidden" value="AddTrack" name="target">-->
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="button" name="submit" id="submit" class="small invert" style="margin-right: 10px;">Add Track</button>
