@@ -36,6 +36,7 @@ import javax.servlet.http.Part;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
@@ -306,13 +307,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //create music entity
             Music music = new Music();
             music.setAlbum(album);
-            music.setArtistName(album.getArtist().getName());
+            music.setArtistName(StringEscapeUtils.escapeHtml4(album.getArtist().getName()));
             List<Genre> listOfGenres = new ArrayList<Genre>();
             Genre genre = album.getListOfGenres().get(0);
             listOfGenres.add(genre);
-            music.setLyrics(lyrics);
+            music.setLyrics(StringEscapeUtils.escapeHtml4(lyrics));
             music.setListOfGenres(listOfGenres);
-            music.setName(name);
+            music.setName(StringEscapeUtils.escapeHtml4(name));
             music.setPrice(price);
             music.setTrackNumber(trackNumber);
             music.setYearReleased(yearReleased);
@@ -469,15 +470,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             List<Genre> genres = new ArrayList();
             genres.add(genre);
             album.setListOfGenres(genres);
-            album.setGenreName(genre.getName());
+            album.setGenreName(StringEscapeUtils.escapeHtml4(genre.getName()));
             album.setArtist(artist);
             album.setIsSingle(isSingle);
-            album.setDescription(description);
-            album.setName(name);
-            album.setGenreName(album.getGenreName());
-            album.setArtistName(account.getName());
+            album.setDescription(StringEscapeUtils.escapeHtml4(description));
+            album.setName(StringEscapeUtils.escapeHtml4(name));
+            album.setGenreName(StringEscapeUtils.escapeHtml4(album.getGenreName()));
+            album.setArtistName(StringEscapeUtils.escapeHtml4(account.getName()));
             album.setYearReleased(yearReleased);
-            album.setCredits(credits);
+            album.setCredits(StringEscapeUtils.escapeHtml4(credits));
             album.setPrice(price);
             em.persist(album);
             List<Album> genresAlbums = genre.getListOfAlbums();
@@ -647,9 +648,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     music.setListOfGenres(genres);
                     em.merge(music);
                 }
-                album.setDescription(description);
+                album.setDescription(StringEscapeUtils.escapeHtml4(description));
                 album.setYearReleased(yearReleased);
-                album.setCredits(credits);
+                album.setCredits(StringEscapeUtils.escapeHtml4(credits));
                 album.setPrice(price);
 
                 if (imagePart != null) {

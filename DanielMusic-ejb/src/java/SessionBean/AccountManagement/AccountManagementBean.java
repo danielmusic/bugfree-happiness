@@ -1050,7 +1050,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("New email is in used by another user.");
                 return result;
             }
-            account.setNewEmail(newEmail);
+            account.setNewEmail(StringEscapeUtils.escapeHtml4(newEmail));
             account.setNewEmailIsVerified(false);
             em.merge(account);
             ReturnHelper verificationCodeResult = generateAndSendVerificationEmail(accountID, newEmail, true);
