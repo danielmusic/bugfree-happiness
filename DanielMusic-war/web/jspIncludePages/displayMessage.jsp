@@ -10,5 +10,12 @@
         if (!goodMsg.equals("")) {
             out.println("<p class='success' id='goodMsg'>" + goodMsg + "</p>");
         }
+    } else if ((errMsg != null && goodMsg != null)) {
+        if (!goodMsg.equals("")) {
+            out.println("<p class='success' id='goodMsg'>" + goodMsg + "</p>");
+        }
+        if (!errMsg.equals("")) {
+            out.println("<p class='error' id='errMsg'>" + errMsg + "</p>");
+        }
     }
 %>

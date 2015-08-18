@@ -65,9 +65,9 @@ public class ClientAccountManagementController extends HttpServlet {
                                 nextPage = "#!/artist/profile";
                             } else if (account instanceof Member) {
                                 session.setAttribute("member", (Member) account);
-                                session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                                 nextPage = "#!/fan/profile";
                             }
+                            session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
                             nextPage = "#!/login";

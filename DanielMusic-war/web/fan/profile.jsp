@@ -1,6 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Profile Page">
-    <%@page import="EntityManager.Member"%>
     <%@page import="java.util.List"%>
     <%@page import="EntityManager.Account"%>
     <%@page import="java.text.SimpleDateFormat"%>
@@ -85,10 +84,9 @@
 
                 <%
                     Account account = (Account) session.getAttribute("account");
-                    Member member = (Member) (session.getAttribute("member"));
                     List<Music> listOfMusics = (List<Music>) session.getAttribute("ListOfPurchasedMusics");
 
-                    if (account != null && member != null) {
+                    if (account != null) {
                         if (!account.getEmailIsVerified()) {
                             out.print("<p class='warning'>Your email address has not been verified. Click here to <a href='#!/verify-email'>enter or resend your verification code</a>.</p>");
                         }

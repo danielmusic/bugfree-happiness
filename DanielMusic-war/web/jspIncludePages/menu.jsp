@@ -10,7 +10,6 @@
                 }
             }
 
-
             function disableClick(e) {
                 e.stopPropagation();
             }
@@ -128,6 +127,9 @@
                             </li> 
                             <li>
                                 <a href="ClientAccountManagementController?target=PageRedirect&source=albums">albums</a>
+                            </li>
+                            <li>
+                                <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">my purchases</a>
                             </li>
                         </ul>
                     </li>

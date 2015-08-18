@@ -38,7 +38,7 @@
         }
 
         function publishAlbum(id) {
-            window.location.href = "MusicManagementController?source=artist&target=PublishAlbum&id=" + id;
+            window.location.href = "MusicManagementController?target=PublishAlbum&id=" + id;
         }
 
         function setFeaturedTrack(trackID, id) {
