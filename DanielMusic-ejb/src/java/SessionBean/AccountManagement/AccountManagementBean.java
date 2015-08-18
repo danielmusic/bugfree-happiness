@@ -31,6 +31,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.servlet.http.Part;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class AccountManagementBean implements AccountManagementBeanLocal {
@@ -200,14 +201,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand) {
         System.out.println("AccountManagementBean: registerAccount() called");
         ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
         try {
-            if (checkIfEmailExists(email)) {
-                result.setResult(false);
+            if (name==null || email==null || name.isEmpty() || email.isEmpty() || password==null || password.isEmpty()) {
+                result.setDescription("Name, email, password cannot be empty.");
+                return result;
+            } else if (checkIfEmailExists(email)) {
                 result.setDescription("Unable to register, email already in use.");
                 return result;
-            }
-            if (!verifyEmailFormat(email)) {
-                result.setResult(false);
+            } else if (!verifyEmailFormat(email)) {
                 result.setDescription("Unable to register, email format appears to be invalid.");
                 return result;
             }
@@ -215,7 +217,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             String passwordHash = generatePasswordHash(passwordSalt, password);
             if (isAdmin) {
                 Admin admin = new Admin();
-                admin.setEmail(email);
+                admin.setEmail(StringEscapeUtils.escapeHtml4(email));
                 admin.setPassword(passwordHash);
                 admin.setName(name);
                 em.persist(admin);
@@ -675,7 +677,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         try {
             Account account = (Account) q.getSingleResult();
             if (newName != null && !newName.equals("")) {
-                account.setName(newName);
+                account.setName(StringEscapeUtils.escapeHtml4(newName));
             } else {
                 result.setDescription("Name cannot be empty.");
             }
@@ -783,14 +785,14 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             //Update artist genre
             artist.setGenre(newGenre);
             //Update other fields
-            artist.setBiography(biography);
-            artist.setInfluences(influences);
-            artist.setContactEmail(contactEamil);
-            artist.setPaypalEmail(paypalEmail);
-            artist.setFacebookURL(facebookURL);
-            artist.setInstagramURL(instagramURL);
-            artist.setTwitterURL(twitterURL);
-            artist.setWebsiteURL(websiteURL);
+            artist.setBiography(StringEscapeUtils.escapeHtml4(biography));
+            artist.setInfluences(StringEscapeUtils.escapeHtml4(influences));
+            artist.setContactEmail(StringEscapeUtils.escapeHtml4(contactEamil));
+            artist.setPaypalEmail(StringEscapeUtils.escapeHtml4(paypalEmail));
+            artist.setFacebookURL(StringEscapeUtils.escapeHtml4(facebookURL));
+            artist.setInstagramURL(StringEscapeUtils.escapeHtml4(instagramURL));
+            artist.setTwitterURL(StringEscapeUtils.escapeHtml4(twitterURL));
+            artist.setWebsiteURL(StringEscapeUtils.escapeHtml4(websiteURL));
             em.merge(artist);
             if (profilePicture != null) {
                 result = updateArtistProfilePicture(artistID, profilePicture);
@@ -820,7 +822,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             q.setParameter("id", artistID);
             Artist artist = (Artist) q.getSingleResult();
             artist.setIsApproved(-2);//Pending
-            artist.setName(newName);
+            artist.setName(StringEscapeUtils.escapeHtml4(newName));
             em.merge(artist);
             result.setResult(true);
             result.setDescription("Name updated and is now pending approval.");
@@ -925,16 +927,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             //Update band genre
             band.setGenre(newGenre);
             //Update other fields
-            band.setBandMembers(members);
+            band.setBandMembers(StringEscapeUtils.escapeHtml4(members));
             band.setBandDateFormed(dateFormed);
-            band.setBiography(biography);
-            band.setInfluences(influences);
-            band.setContactEmail(contactEamil);
-            band.setPaypalEmail(paypalEmail);
-            band.setFacebookURL(facebookURL);
-            band.setInstagramURL(instagramURL);
-            band.setTwitterURL(twitterURL);
-            band.setWebsiteURL(websiteURL);
+            band.setBiography(StringEscapeUtils.escapeHtml4(biography));
+            band.setInfluences(StringEscapeUtils.escapeHtml4(influences));
+            band.setContactEmail(StringEscapeUtils.escapeHtml4(contactEamil));
+            band.setPaypalEmail(StringEscapeUtils.escapeHtml4(paypalEmail));
+            band.setFacebookURL(StringEscapeUtils.escapeHtml4(facebookURL));
+            band.setInstagramURL(StringEscapeUtils.escapeHtml4(instagramURL));
+            band.setTwitterURL(StringEscapeUtils.escapeHtml4(twitterURL));
+            band.setWebsiteURL(StringEscapeUtils.escapeHtml4(websiteURL));
             em.merge(band);
             if (profilePicture != null) {
                 result = updateArtistProfilePicture(bandID, profilePicture);
