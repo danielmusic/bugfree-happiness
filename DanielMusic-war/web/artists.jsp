@@ -99,20 +99,6 @@
                         }
                     });
                 }
-
-                function switchToPauseButtonFromArtists(id) {
-                    var spanLabel = "btnPause" + id;
-                    document.getElementById(spanLabel).style.display = "inline";
-                    spanLabel = "btnPlay" + id;
-                    document.getElementById(spanLabel).style.display = "none";
-                }
-
-                function switchToPlayButtonFromArtists(id) {
-                    var spanLabel = "btnPlay" + id;
-                    document.getElementById(spanLabel).style.display = "inline";
-                    spanLabel = "btnPause" + id;
-                    document.getElementById(spanLabel).style.display = "none";
-                }
             </script>
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
@@ -271,7 +257,7 @@
                                                 </a>
 
                                                 <span id='btnPlay<%=music.getId()%>'>
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromArtists(<%=music.getId()%>);" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                    <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                        data-artist="<%=music.getArtistName()%>"
                                                        data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                                        data-artist_target="_blank"
@@ -284,23 +270,7 @@
                                                                 <span class="track-artists"><%=artist.getName()%></span>
                                                             </span>
                                                         </i>
-                                                    </a>
-                                                </span>
-
-                                                <span id='btnPause<%=music.getId()%>' style="display: none;">
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPlayButtonFromArtists(<%=music.getId()%>);" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                       data-artist="<%=music.getArtistName()%>"
-                                                       data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
-                                                       data-artist_target="_blank"
-                                                       data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
-                                                       data-shop_target="_blank"
-                                                       >
-                                                        <i class="icon icon-pause">
-                                                            <span style="display: none;">
-                                                                <span  class="track-title"><%=music.getName()%></span>
-                                                                <span class="track-artists"><%=artist.getName()%></span>
-                                                            </span>
-                                                        </i>
+                                                        btnPlay<%=music.getId()%>
                                                     </a>
                                                 </span>
 
