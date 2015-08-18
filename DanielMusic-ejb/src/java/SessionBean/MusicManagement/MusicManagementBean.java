@@ -789,6 +789,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 if (musics.size() > 0) {
                     result.setDescription("You already have other featured music. Only one music can be set as featured.");
                     return result;
+                } else if (!music.getAlbum().getIsPublished()) {
+                    result.setDescription("You can only feature a music from a published album/single");
+                    return result;
                 }
                 music.setIsFeatured(true);
                 em.merge(music);
