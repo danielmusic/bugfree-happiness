@@ -12,15 +12,13 @@
 
     <section class="content section">
         <div class="container">
+            <jsp:include page="jspIncludePages/displayMessage.jsp" />
             <article>
-                <div class="col-1-2">
                     <p>
                         Thank you so much for your purchase. Do note and read the terms and conditions.
-                    </p>
-                    <p>
+                        <br/><br/>
                         <a href="#!/home">Click here to return to home</a>
                     </p>
-                </div>
             </article>
         </div>
     </section>

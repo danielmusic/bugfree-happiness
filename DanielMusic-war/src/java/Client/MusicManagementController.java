@@ -8,6 +8,7 @@ import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
+import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
@@ -43,6 +44,9 @@ public class MusicManagementController extends HttpServlet {
     private AdminManagementBeanLocal adminManagementBean;
 
     @EJB
+    private AccountManagementBeanLocal accountManagementBean;
+
+    @EJB
     private MusicManagementBeanLocal musicManagementBean;
 
     String nextPage = "", goodMsg = "", errMsg = "";
@@ -52,7 +56,7 @@ public class MusicManagementController extends HttpServlet {
         String target = request.getParameter("target");
         String source = request.getParameter("source");
         String id = request.getParameter("id");
-        
+
         ShoppingCart shoppingCart = null;
 
         session = request.getSession();
@@ -700,6 +704,7 @@ public class MusicManagementController extends HttpServlet {
                         }
                         session.setAttribute("checkoutHelper", checkoutHelper);
                         if (checkoutHelper.getPayKey() == null) {
+                            System.out.println("subsubs");
                             jsObj.put("result", false);
                             if (checkoutHelper.getMessage().isEmpty()) {
                                 session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
@@ -714,16 +719,25 @@ public class MusicManagementController extends HttpServlet {
                         }
                         switch (checkoutHelper.getPayKey()) {
                             case "NO_PAYMENT_REQUIRED_PAYMENT_COMPLETE":
-                                //todo this one should redirect after going to checkout.jsp
-                                session.setAttribute("goodMsg", "Thanks.");
-                                jsObj.put("result", true);
-                                jsObj.put("goodMsg", "Checkout completed, please wait, redirecting...");
-                                return;
+                                session.removeAttribute("ShoppingCart");
+                                jsObj.put("goodMsg", "Thank you for your purchase, no payment is neccessary");
+                                session.setAttribute("goodMsg", "Thank you for your purchase, no payment is neccessary.");
+                                response.getWriter().write(jsObj.toString());
+                                if (account != null) {
+                                    account = accountManagementBean.getAccount(account.getId());
+                                    session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
+                                    session.setAttribute("redirectPage", "#!/fan/profile");
+                                    return;
+                                } else {
+                                    session.setAttribute("redirectPage", "#!/download-links");
+                                    return;
+                                }
                             case "NO_PAYMENT_REQUIRED_FAILED":
                                 session.setAttribute("errMsg", "There was an error completing the checkout request, please try again later.");
                                 jsObj.put("result", false);
                                 jsObj.put("errMsg", "There was an error completing the checkout request, please try again later.");
                                 response.getWriter().write(jsObj.toString());
+                                session.setAttribute("redirectPage", "#!/cart");
                                 return;
                         }
                         jsObj.put("result", true);
@@ -747,6 +761,7 @@ public class MusicManagementController extends HttpServlet {
                             Payment payment = clientManagementBean.getPayment(result.getID());
                             if (payment.getAccount() != null) {
                                 //Logged in user will view list of purchaserd music
+                                session.setAttribute("ListOfPurchasedMusics", payment.getAccount().getListOfPurchasedMusics());
                                 session.setAttribute("redirectPage", "#!/fan/profile");
                                 nextPage = "redirect2.jsp";
                             } else {

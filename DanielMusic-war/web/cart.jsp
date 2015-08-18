@@ -160,7 +160,7 @@
                     url: url,
                     data: {'email': email},
                     success: function () {
-                        window.location.href = "#!/checkout";
+                        window.location.href = "#!/redirect";
                     },
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";

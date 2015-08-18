@@ -237,7 +237,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             if (totalPaymentAmount == 0.0) {
                 em.persist(payment);
                 checkoutHelper.setPayment(payment);
-                if (completePayment(accountID, UUID).getResult()) {
+                if (completePayment(payment.getId(), UUID).getResult()) {
                     checkoutHelper.setPayKey("NO_PAYMENT_REQUIRED_PAYMENT_COMPLETE");
                 } else {
                     checkoutHelper.setPayKey("NO_PAYMENT_REQUIRED_FAILED");
@@ -273,8 +273,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
             payRequest.setFeesPayer("PRIMARYRECEIVER");
-            payRequest.setCancelUrl("http://sounds.sg/payment-cancelled.jsp");//Return if payment cancelled
-            payRequest.setReturnUrl("http://sounds.sg/MusicManagementController?target=CompletePayment&paymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
+//            payRequest.setCancelUrl("http://sounds.sg/payment-cancelled.jsp");//Return if payment cancelled
+//            payRequest.setReturnUrl("http://sounds.sg/MusicManagementController?target=CompletePayment&paymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
+            payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/payment-cancelled.jsp");//Return if payment cancelled
+            payRequest.setReturnUrl("http://localhost:8080/DanielMusic-war/MusicManagementController?target=CompletePayment&paymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
             payRequest.setCurrencyCode("SGD");
             //payRequest.setIpnNotificationUrl("http://replaceIpnUrl.com");
 
