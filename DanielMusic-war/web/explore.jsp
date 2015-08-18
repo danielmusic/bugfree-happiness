@@ -89,20 +89,6 @@
                         }
                     });
                 }
-
-                function switchToPauseButton(id) {
-                    var spanLabel = "btnPause" + id;
-                    document.getElementById(spanLabel).style.display = "inline";
-                    spanLabel = "btnPlay" + id;
-                    document.getElementById(spanLabel).style.display = "none";
-                }
-
-                function switchToPlayButton(id) {
-                    var spanLabel = "btnPlay" + id;
-                    document.getElementById(spanLabel).style.display = "inline";
-                    spanLabel = "btnPause" + id;
-                    document.getElementById(spanLabel).style.display = "none";
-                }
             </script>
             <article>
                 <%
@@ -169,7 +155,7 @@
                                     </a>
 
                                     <span id='btnPlay<%=artistFeaturedMusic.getId()%>'>
-                                        <a class="track sp-play-track" onclick='javascript:switchToPauseButton(<%=artistFeaturedMusic.getId()%>);' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
                                            data-artist="<%=artist.getName()%>"
                                            data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                            data-artist_target="_blank"
@@ -179,31 +165,12 @@
                                            >
                                             <i class="icon icon-play2">
                                                 <span style="display: none;">
-                                                    <span  class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                    <span class="track-title"><%=artistFeaturedMusic.getName()%></span>
                                                     <span class="track-artists"><%=artist.getName()%></span>
                                                 </span>
                                             </i>
                                         </a>
                                     </span>
-
-                                    <span id='btnPause<%=artistFeaturedMusic.getId()%>' style="display: none;">
-                                        <a class="track sp-play-track" onclick='javascript:switchToPlayButton(<%=artistFeaturedMusic.getId()%>);' href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
-                                           data-artist="<%=artist.getName()%>"
-                                           data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
-                                           data-artist_target="_blank"
-                                           data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
-                                           data-shop_target="_blank"
-                                           style="margin-left: 0px;"
-                                           >
-                                            <i class="icon icon-pause">
-                                                <span style="display: none;">
-                                                    <span  class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                                    <span class="track-artists"><%=artist.getName()%></span>
-                                                </span>
-                                            </i>
-                                        </a>
-                                    </span>
-
 
                                     <%}%>
                                 </div>
