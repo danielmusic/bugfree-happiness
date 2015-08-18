@@ -263,6 +263,7 @@
                                                        data-artist_target="_blank"
                                                        data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                                        data-shop_target="_blank"
+                                                       style="margin-left: 6px;margin-right: 6px;"
                                                        >
                                                         <i class="icon icon-play2">
                                                             <span style="display: none;">
@@ -270,7 +271,6 @@
                                                                 <span class="track-artists"><%=artist.getName()%></span>
                                                             </span>
                                                         </i>
-                                                        btnPlay<%=music.getId()%>
                                                     </a>
                                                 </span>
 

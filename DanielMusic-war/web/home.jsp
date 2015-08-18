@@ -31,9 +31,9 @@
     <!-- ############################# Countdown ############################# -->
     <section class="countdown section">
         <div class="container">
-            <h5 class="countdown-title">Heineken Music Hall, Warsaw, PL</h5>
+            <h5 class="countdown-title">Singapore</h5>
             <!-- countdown -->
-            <div class="countdown-wrap" data-event-date="2014/12/18 20:20:00">
+            <div class="countdown-wrap" data-event-date="2015/10/18 20:20:00">
                 <div class="days" data-label="Days">000</div>
                 <div class="hours" data-label="Hours">00</div>
                 <div class="minutes" data-label="Minutes">00</div>

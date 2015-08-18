@@ -18,4 +18,6 @@
             out.println("<p class='error' id='errMsg'>" + errMsg + "</p>");
         }
     }
+    session.removeAttribute("goodMsg");
+    session.removeAttribute("errMsg");
 %>
