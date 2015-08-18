@@ -15,6 +15,7 @@ import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class AdminManagementBean implements AdminManagementBeanLocal {
@@ -186,7 +187,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
         result.setResult(false);
         try {
             Genre genre = new Genre();
-            genre.setName(name);
+            genre.setName(StringEscapeUtils.escapeHtml4(name));
             em.persist(genre);
             result.setID(genre.getId());
             result.setResult(true);
@@ -211,7 +212,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             q.setParameter("id", genreID);
             Genre genre = (Genre) q.getSingleResult();
 
-            genre.setName(newName);
+            genre.setName(StringEscapeUtils.escapeHtml4(newName));
             em.merge(genre);
             result.setResult(true);
             result.setDescription("Genre updated.");
