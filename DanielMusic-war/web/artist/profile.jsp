@@ -71,6 +71,31 @@
                     </div>
                 </div>
 
+                <script>
+                    $(document).ready(function () {
+                        $("#fb").change(function () {
+                            if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
+                                this.value = "http://" + this.value;
+                            }
+                        });
+                        $("#twitter").change(function () {
+                            if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
+                                this.value = "http://" + this.value;
+                            }
+                        });
+                        $("#ig").change(function () {
+                            if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
+                                this.value = "http://" + this.value;
+                            }
+                        });
+                        $("#websiteURL").change(function () {
+                            if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
+                                this.value = "http://" + this.value;
+                            }
+                        });
+                    });
+                </script>
+
                 <%
                     List<Genre> genres = (List<Genre>) (session.getAttribute("listOfGenres"));
                     Account account = (Account) session.getAttribute("account");
