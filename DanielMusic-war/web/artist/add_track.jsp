@@ -169,7 +169,7 @@
                             <div class="md-content">
                                 <h3>Uploading...</h3>
                                 <div>
-                                    <p>Please be patient while we receive your music and process it.</p>
+                                    <p>Please wait while we process your music...</p>
                                     <div class="chart">
                                         <div class="bar bar-0 white">
                                             <div class="face top">
