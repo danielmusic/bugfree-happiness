@@ -8,10 +8,7 @@
                 <script>
                     var progress;
                     function upload(musicFileSize) {
-                        alert(musicFileSize);
-
-                        var secs = musicFileSize / 500000;
-                        alert(secs);
+                        var secs = musicFileSize / 100000;
                         var space = 100 / secs;
                         // avoid concurrent processing
                         if (progress) {
@@ -26,23 +23,25 @@
                     function startProgressbar(space) {
                         // display progress bar
                         var uploadprogress = 0;
+                        $('#modal-upload').modal('show');
                         $('#uploadProgress').css('display', 'block');
                         $('.progress-bar').css('display', 'block');
                         // start timer
                         progress = setInterval(function () {
                             // ask progress
                             // get progress from response data
-                            uploadprogress += space;
+                            uploadprogress += (Math.random() * 5) + space - 5;
                             // change progress width
                             if (uploadprogress < 100) {
-                                $('.progress').css('width', uploadprogress + '%');
+//                                $('.progress').css('width', uploadprogress + '%');
+                                $('.growing-bar').css('width', uploadprogress + '%');
                             } else { // upload finished
                                 // stop timer
                                 clearInterval(progress);
                                 setTimeout(function () {
                                     // hide progress bar
-                                    $('.progress-bar').css('display', '');
-                                    $('.progress').css('width', '100%');
+//                                    $('.progress-bar').css('display', '');
+                                    $('.growing-bar').css('width', '100%');
                                     // clear timer variable
                                     progress = null;
                                 }, 1000);
@@ -81,8 +80,6 @@
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
-                                $('#uploadform').submit();
-
                                 //successful
                                 upload(musicFileSize);
                             } else {
@@ -96,6 +93,15 @@
                     function back() {
                         window.location.href = "#!/artist/tracks";
                     }
+
+                    window.onbeforeunload = function () {
+                        $('.growing-bar').css('width', 100 + '%');
+                        clearInterval(progress);
+                        setTimeout(function () {
+                            $('.growing-bar').css('width', '100%');
+                            progress = null;
+                        }, 1000);
+                    };
                 </script>
 
                 <%@page import="EntityManager.Artist"%>
@@ -103,7 +109,7 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
-                <form id="uploadform" method="GET" action="MusicManagementController?target=AddTrack" enctype="multipart/form-data" class="form">
+                <form id="uploadform" method="POST" action="MusicManagementController?target=AddTrack" enctype="multipart/form-data" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
 
@@ -166,16 +172,44 @@
                     <!--                    <input type="hidden" value="AddTrack" name="target">-->
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
-                    <button type="button" name="submit" id="submit" class="small invert" style="margin-right: 10px;">Add Track</button>
+                    <button type="submit" name="submit" id="submit" class="small invert md-trigger" data-modal="modal-upload" style="margin-right: 10px;">Add Track</button>
+                    <article>
+                        <div class="md-modal md-effect-1" id="modal-upload">
+                            <div class="md-content">
+                                <h3>Uploading...</h3>
+                                <div>
+                                    <p>Please be patient while we receive your music and process it.</p>
+                                    <div class="chart">
+                                        <div class="bar bar-0 white">
+                                            <div class="face top">
+                                                <div class="growing-bar"></div>
+                                            </div>
+                                            <div class="face side-0">
+                                                <div class="growing-bar"></div>
+                                            </div>
+                                            <div class="face floor">
+                                                <div class="growing-bar"></div>
+                                            </div>
+                                            <div class="face side-a"></div>
+                                            <div class="face side-b"></div>
+                                            <div class="face side-1">
+                                                <div class="growing-bar"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
                     <div class="clear"></div>
                     <!--<iframe id="target-frame" name="target-frame" class="frame"></iframe>-->
                     <!-- progress bar -->
-                    <div id="uploadProgress" style="display: none">
-                        Uploading in progress...
-                        <div class="progress-bar">
-                            <div class="progress"></div>
-                        </div>
-                    </div>
+                    <!--                    <div id="uploadProgress" style="display: none">
+                                            Uploading in progress...
+                                            <div class="progress-bar">
+                                                <div class="progress"></div>
+                                            </div>
+                                        </div>-->
                 </form>
 
                 <%} else {%>
