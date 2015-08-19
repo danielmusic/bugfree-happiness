@@ -23,7 +23,7 @@
                     function startProgressbar(space) {
                         // display progress bar
                         var uploadprogress = 0;
-                        $('#modal-upload').modal('show');
+                        $("#modal-upload").addClass("md-show");
                         $('#uploadProgress').css('display', 'block');
                         $('.progress-bar').css('display', 'block');
                         // start timer
@@ -93,15 +93,6 @@
                     function back() {
                         window.location.href = "#!/artist/tracks";
                     }
-
-                    window.onbeforeunload = function () {
-                        $('.growing-bar').css('width', 100 + '%');
-                        clearInterval(progress);
-                        setTimeout(function () {
-                            $('.growing-bar').css('width', '100%');
-                            progress = null;
-                        }, 1000);
-                    };
                 </script>
 
                 <%@page import="EntityManager.Artist"%>
