@@ -219,7 +219,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 Admin admin = new Admin();
                 admin.setEmail(StringEscapeUtils.escapeHtml4(email));
                 admin.setPassword(passwordHash);
-                admin.setName(name);
+                admin.setName(StringEscapeUtils.escapeHtml4(name));
                 em.persist(admin);
                 Query q = em.createQuery("SELECT a FROM Admin a where a.email=:email");
                 q.setParameter("email", email);
@@ -235,9 +235,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                     return result;
                 }
                 Artist artist = new Artist();
-                artist.setEmail(email);
+                artist.setEmail(StringEscapeUtils.escapeHtml4(email));
                 artist.setPassword(passwordHash);
-                artist.setName(name);
+                artist.setName(StringEscapeUtils.escapeHtml4(name));
                 if (isArtist) {
                     artist.setIsBand(false);
                 } else if (isBand) {
@@ -253,9 +253,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 em.persist(cart);
             } else {
                 Member member = new Member();
-                member.setEmail(email);
+                member.setEmail(StringEscapeUtils.escapeHtml4(email));
                 member.setPassword(passwordHash);
-                member.setName(name);
+                member.setName(StringEscapeUtils.escapeHtml4(name));
                 em.persist(member);
                 Query q = em.createQuery("SELECT a FROM Member a where a.email=:email");
                 q.setParameter("email", email);
