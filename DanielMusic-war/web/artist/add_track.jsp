@@ -4,22 +4,29 @@
     <section class="content section">
         <div class="container">
             <article>
+                <link href="css/fileupload.css" rel="stylesheet" type="text/css">
                 <script>
                     var progress;
                     function upload(musicFileSize) {
+                        alert(musicFileSize);
+
                         var secs = musicFileSize / 500000;
+                        alert(secs);
                         var space = 100 / secs;
                         // avoid concurrent processing
-                        if (progress)
+                        if (progress) {
                             return;
-                        //uploadform.action = 'MusicManagementController?target=AddTrack&time=' + time;
+                        }
+
+                        //var uploadform = document.getElementById('uploadform');
+                        //uploadform.action = 'MusicManagementController?target=AddTrack';
                         //uploadform.target = 'target-frame';
-                        //uploadform.submit();
                         startProgressbar(space);
                     }
                     function startProgressbar(space) {
                         // display progress bar
                         var uploadprogress = 0;
+                        $('#uploadProgress').css('display', 'block');
                         $('.progress-bar').css('display', 'block');
                         // start timer
                         progress = setInterval(function () {
@@ -35,7 +42,7 @@
                                 setTimeout(function () {
                                     // hide progress bar
                                     $('.progress-bar').css('display', '');
-                                    $('.progress').css('width', '');
+                                    $('.progress').css('width', '100%');
                                     // clear timer variable
                                     progress = null;
                                 }, 1000);
@@ -59,24 +66,22 @@
 
                     $(function () {
                         $('#submit').click(function () {
-                            alert("hello");
                             if (window.File && window.FileReader && window.FileList && window.Blob) {
                                 var musicFile = $('#music');
                                 var musicFileSize = $('#music')[0].files[0].size;
-
                                 if (!isMusic(musicFile.val())) {
                                     document.getElementById("errMsg").style.display = "block";
                                     document.getElementById('errMsg').innerHTML = "Only wav format song is allowed";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
-
                                 if (musicFileSize > 100000000) {
                                     document.getElementById("errMsg").style.display = "block";
                                     document.getElementById('errMsg').innerHTML = "Music size must be below 100mb.";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
+                                $('#uploadform').submit();
 
                                 //successful
                                 upload(musicFileSize);
@@ -98,7 +103,7 @@
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
-                <form id="uploadform" method="POST" enctype="multipart/form-data" class="form">
+                <form id="uploadform" method="GET" action="MusicManagementController?target=AddTrack" enctype="multipart/form-data" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
 
@@ -162,12 +167,17 @@
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="button" name="submit" id="submit" class="small invert" style="margin-right: 10px;">Add Track</button>
-                    <!-- progress bar -->
-                    <div class="progress-bar">
-                        <div class="progress"></div>
-                    </div>
                     <div class="clear"></div>
+                    <!--<iframe id="target-frame" name="target-frame" class="frame"></iframe>-->
+                    <!-- progress bar -->
+                    <div id="uploadProgress" style="display: none">
+                        Uploading in progress...
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
                 </form>
+
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>

@@ -813,51 +813,8 @@ public class MusicManagementController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-//        // get upload time
-//        String time = req.getParameter("time");
-//        // get progress
-//        // null: already finished
-//        Object o = req.getSession().getAttribute(time);
-//        String progress = o == null ? "100.0" : o + "";
-//
-//        if (progress.startsWith("100")) { // just done
-//            req.getSession().removeAttribute(time);
-//        }
-//        // build response
-//        StringBuilder sb = new StringBuilder("");
-//        sb.append("{progress: {")
-//                .append(time).append(":").append(progress)
-//                .append("}}");
-//        System.out.println(sb.toString());
-//        PrintWriter out = resp.getWriter();
-//        // response data
-//        out.println(sb.toString());
-//        out.close();
     }
 
-    // create DiskFileItemFactory with fileCleaningTracker
-    private static DiskFileItemFactory newDiskFileItemFactory(ServletContext context,
-            File repository) {
-        FileCleaningTracker fileCleaningTracker
-                = FileCleanerCleanup.getFileCleaningTracker(context);
-        DiskFileItemFactory factory
-                = new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD,
-                        repository);
-        factory.setFileCleaningTracker(fileCleaningTracker);
-        return factory;
-    }
-    // progress listener
-    // put progress into session with the given id
-
-    private static ProgressListener getProgressListener(final String id, final HttpSession sess) {
-        ProgressListener progressListener = new ProgressListener() {
-            public void update(long pBytesRead, long pContentLength, int pItems) {
-                // put progress into session
-                sess.setAttribute(id, ((double) pBytesRead / (double) pContentLength) * 100);
-            }
-        };
-        return progressListener;
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

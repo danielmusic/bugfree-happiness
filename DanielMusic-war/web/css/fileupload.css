@@ -17,10 +17,10 @@ and open the template in the editor.
     height: 20px;
     width: 500px;
     display: block;
-    border: 2px solid red;
+    border: 2px solid black;
 }
 .progress {
     background-color: red;
     height: 100%;
-    width: 50px;
+    width: 0px;
 }
