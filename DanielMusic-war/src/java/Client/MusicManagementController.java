@@ -12,7 +12,6 @@ import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.ClientManagement.ClientManagementBeanLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import javax.ejb.EJB;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -28,10 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
-import org.apache.commons.io.FileCleaningTracker;
 import org.json.JSONObject;
 
 @MultipartConfig

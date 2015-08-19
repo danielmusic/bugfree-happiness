@@ -23,7 +23,7 @@
                     function startProgressbar(space) {
                         // display progress bar
                         var uploadprogress = 0;
-                        $('#modal-upload').modal('show');
+                        $("#modal-upload").addClass("md-show");
                         $('#uploadProgress').css('display', 'block');
                         $('.progress-bar').css('display', 'block');
                         // start timer
@@ -93,15 +93,6 @@
                     function back() {
                         window.location.href = "#!/artist/tracks";
                     }
-
-                    window.onbeforeunload = function () {
-                        $('.growing-bar').css('width', 100 + '%');
-                        clearInterval(progress);
-                        setTimeout(function () {
-                            $('.growing-bar').css('width', '100%');
-                            progress = null;
-                        }, 1000);
-                    };
                 </script>
 
                 <%@page import="EntityManager.Artist"%>
@@ -178,7 +169,7 @@
                             <div class="md-content">
                                 <h3>Uploading...</h3>
                                 <div>
-                                    <p>Please be patient while we receive your music and process it.</p>
+                                    <p>Please wait while we process your music...</p>
                                     <div class="chart">
                                         <div class="bar bar-0 white">
                                             <div class="face top">
