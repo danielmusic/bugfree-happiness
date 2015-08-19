@@ -35,7 +35,7 @@
                             uploadprogress += space;
                             // change progress width
                             if (uploadprogress < 100) {
-                                $('.progress').css('width', uploadprogress + 'px');
+                                $('.progress').css('width', uploadprogress + '%');
                             } else { // upload finished
                                 // stop timer
                                 clearInterval(progress);
