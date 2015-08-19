@@ -100,8 +100,8 @@
             <!-- ############ icon navigation ############ -->
             <nav id="icon-nav">
                 <ul>
-                    <li><a onclick="javascript:getShoppingCart();" id="nav-up"><span class="icon icon-cart"></span></a></li>
-                    <li><a onclick="javascript:;" id="nav-search" class="external"><span class="icon icon-search"></span></a></li>
+                    <li><a onclick="javascript:getShoppingCart();" id="nav-up"><span class="icon icon-cart" style="cursor: pointer"></span></a></li>
+                    <li><a onclick="javascript:;" id="nav-search" class="external"><span class="icon icon-search" style="cursor: pointer"></span></a></li>
                 </ul>
             </nav>
             <!-- /icon navigation -->
