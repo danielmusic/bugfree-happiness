@@ -2,6 +2,7 @@
 <section id="page" data-title="Albums">
     <section class="content section">
         <div class="container">
+            <link rel="stylesheet" type="text/css" href="css/progressbar.css">
             <article>
                 <div class="md-modal md-effect-1" id="modal-profilePic">
                     <div class="md-content">
@@ -18,7 +19,59 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="md-modal md-effect-1" id="modal-upload">
+                    <div class="md-content">
+                        <h3>Uploading...</h3>
+                        <div>
+                            <p>Please wait while we process your music...</p>
+                            <div id="progressBar" class="default">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <script>
+                    var progress;
+                    function upload(musicFileSize) {
+                        var secs = musicFileSize / 100000;
+                        var space = 100 / secs;
+                        if (progress) {
+                            return;
+                        }
+                        startProgressbar(space);
+                    }
+
+                    function startProgressbar(space) {
+                        // display progress bar
+                        var uploadprogress = 0;
+                        $("#modal-upload").addClass("md-show");
+                        //$('#uploadProgress').css('display', 'block');
+                        // start timer
+                        progress = setInterval(function () {
+                            // ask progress
+                            // get progress from response data
+                            uploadprogress += (Math.random() * 5) + space - 5;
+                            // change progress width
+                            if (uploadprogress < 100) {
+                                progressBar(Math.round(uploadprogress), $('#progressBar'));
+                            } else { // upload finished
+                                // stop timer
+                                clearInterval(progress);
+                                setTimeout(function () {
+                                    // hide progress bar
+                                    progressBar(100, $('#progressBar'));
+                                    progress = null;
+                                }, 1000);
+                            }
+                        }, 1000);
+                    }
+
+                    function progressBar(percent, $element) {
+                        var progressBarWidth = percent * $element.width() / 100;
+                        $element.find('div').animate({width: progressBarWidth}, 500).html(percent + "%&nbsp;");
+                    }
+
                     function getExtension(filename) {
                         var parts = filename.split('.');
                         return parts[parts.length - 1];
@@ -48,22 +101,23 @@
                     $(function () {
                         $('form').submit(function () {
                             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                                var file = $('#picture');
-                                var fileSize = $('#picture')[0].files[0].size;
+                                var musicFile = $('#music');
+                                var musicFileSize = $('#music')[0].files[0].size;
 
-                                if (fileSize > 5000000) {
+                                if (!isMusic(musicFile.val())) {
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Image size must be below 5mb.";
+                                    document.getElementById('errMsg').innerHTML = "Only wav format song is allowed";
+                                    window.scrollTo(0, 0);
+                                    return false;
+                                }
+                                if (musicFileSize > 100000000) {
+                                    document.getElementById("errMsg").style.display = "block";
+                                    document.getElementById('errMsg').innerHTML = "Music size must be below 100mb.";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
 
-                                if (!isImage(file.val())) {
-                                    document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Please select a valid image";
-                                    window.scrollTo(0, 0);
-                                    return false;
-                                }
+                                upload(musicFileSize);
 
                             } else {
                                 document.getElementById("errMsg").style.display = "block";
@@ -171,10 +225,7 @@
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
-                <div class="md-overlay"></div><!-- the overlay element -->
-                <script src="js/classie.js"></script>
-                <script src="js/modalEffects.js"></script>
-                <script src="js/cssParser.js"></script>
+                <div class="md-overlay"></div>
             </article>
         </div>
     </section>

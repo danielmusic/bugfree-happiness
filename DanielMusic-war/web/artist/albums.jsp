@@ -179,10 +179,7 @@
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
-
             </article>
-            <script src="js/classie.js"></script>
-            <script src="js/modalEffects.js"></script>
         </div>
     </section>
 </section>

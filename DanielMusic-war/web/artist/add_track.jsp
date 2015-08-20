@@ -4,17 +4,6 @@
         <div class="container">
             <article>
                 <link rel="stylesheet" type="text/css" href="css/progressbar.css">
-                <div class="md-modal md-effect-1" id="modal-upload">
-                    <div class="md-content">
-                        <h3>Uploading...</h3>
-                        <div>
-                            <p>Please wait while we process your music...</p>
-                            <div id="progressBar" class="default">
-                                <div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <script>
                     var progress;
                     function upload(musicFileSize) {
@@ -49,10 +38,6 @@
                                 }, 1000);
                             }
                         }, 1000);
-                    }
-
-                    function test() {
-                        progressBar(25, $('#progressBar'));
                     }
 
                     function progressBar(percent, $element) {
@@ -105,13 +90,23 @@
                         window.location.href = "#!/artist/tracks";
                     }
                 </script>
-
-
                 <%@page import="EntityManager.Artist"%>
                 <%
                     Artist artist = (Artist) (session.getAttribute("artist"));
                     if (artist != null) {
                 %>
+                <div class="md-modal md-effect-1" id="modal-upload">
+                    <div class="md-content">
+                        <h3>Uploading...</h3>
+                        <div>
+                            <p>Please wait while we process your music...</p>
+                            <div id="progressBar" class="default">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <form id="uploadform" method="POST" action="MusicManagementController?target=AddTrack" enctype="multipart/form-data" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
@@ -177,16 +172,11 @@
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="submit" name="submit" id="submit" class="small invert md-trigger" data-modal="modal-upload" style="margin-right: 10px;">Add Track</button>
                     <div class="clear"></div>
-
-                    <div id="progressBar" class="default">
-                        <div></div>
-                    </div>
-
                 </form>
-
                 <%} else {%>
                 <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
+                <div class="md-overlay"></div>
             </article>
         </div>
     </section>

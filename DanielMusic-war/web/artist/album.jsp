@@ -122,7 +122,6 @@
                 <div class="md-overlay"></div>
                 <script src="js/classie.js"></script>
                 <script src="js/modalEffects.js"></script>
-                <script src="js/cssParser.js"></script>
             </article>
         </div>
     </section>
