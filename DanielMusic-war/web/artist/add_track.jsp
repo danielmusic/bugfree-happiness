@@ -1,31 +1,36 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="Albums">
-
     <section class="content section">
         <div class="container">
             <article>
-                <link href="css/fileupload.css" rel="stylesheet" type="text/css">
+                <link rel="stylesheet" type="text/css" href="css/progressbar.css">
+                <div class="md-modal md-effect-1" id="modal-upload">
+                    <div class="md-content">
+                        <h3>Uploading...</h3>
+                        <div>
+                            <p>Please wait while we process your music...</p>
+                            <div id="progressBar" class="default">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <script>
                     var progress;
                     function upload(musicFileSize) {
                         var secs = musicFileSize / 100000;
                         var space = 100 / secs;
-                        // avoid concurrent processing
                         if (progress) {
                             return;
                         }
-
-                        //var uploadform = document.getElementById('uploadform');
-                        //uploadform.action = 'MusicManagementController?target=AddTrack';
-                        //uploadform.target = 'target-frame';
                         startProgressbar(space);
                     }
+
                     function startProgressbar(space) {
                         // display progress bar
                         var uploadprogress = 0;
                         $("#modal-upload").addClass("md-show");
-                        $('#uploadProgress').css('display', 'block');
-                        $('.progress-bar').css('display', 'block');
+                        //$('#uploadProgress').css('display', 'block');
                         // start timer
                         progress = setInterval(function () {
                             // ask progress
@@ -33,20 +38,26 @@
                             uploadprogress += (Math.random() * 5) + space - 5;
                             // change progress width
                             if (uploadprogress < 100) {
-//                                $('.progress').css('width', uploadprogress + '%');
-                                $('.growing-bar').css('width', uploadprogress + '%');
+                                progressBar(Math.round(uploadprogress), $('#progressBar'));
                             } else { // upload finished
                                 // stop timer
                                 clearInterval(progress);
                                 setTimeout(function () {
                                     // hide progress bar
-//                                    $('.progress-bar').css('display', '');
-                                    $('.growing-bar').css('width', '100%');
-                                    // clear timer variable
+                                    progressBar(100, $('#progressBar'));
                                     progress = null;
                                 }, 1000);
                             }
                         }, 1000);
+                    }
+
+                    function test() {
+                        progressBar(25, $('#progressBar'));
+                    }
+
+                    function progressBar(percent, $element) {
+                        var progressBarWidth = percent * $element.width() / 100;
+                        $element.find('div').animate({width: progressBarWidth}, 500).html(percent + "%&nbsp;");
                     }
 
                     function getExtension(filename) {
@@ -94,6 +105,7 @@
                         window.location.href = "#!/artist/tracks";
                     }
                 </script>
+
 
                 <%@page import="EntityManager.Artist"%>
                 <%
@@ -164,43 +176,12 @@
                     <input type="hidden" value="Artist" name="source">
                     <button type="button" class="small invert" onclick="javascript:back();" style="margin-right: 10px;">Back</button>
                     <button type="submit" name="submit" id="submit" class="small invert md-trigger" data-modal="modal-upload" style="margin-right: 10px;">Add Track</button>
-                    <article>
-                        <div class="md-modal md-effect-1" id="modal-upload">
-                            <div class="md-content">
-                                <h3>Uploading...</h3>
-                                <div>
-                                    <p>Please wait while we process your music...</p>
-                                    <div class="chart">
-                                        <div class="bar bar-0 white">
-                                            <div class="face top">
-                                                <div class="growing-bar"></div>
-                                            </div>
-                                            <div class="face side-0">
-                                                <div class="growing-bar"></div>
-                                            </div>
-                                            <div class="face floor">
-                                                <div class="growing-bar"></div>
-                                            </div>
-                                            <div class="face side-a"></div>
-                                            <div class="face side-b"></div>
-                                            <div class="face side-1">
-                                                <div class="growing-bar"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
                     <div class="clear"></div>
-                    <!--<iframe id="target-frame" name="target-frame" class="frame"></iframe>-->
-                    <!-- progress bar -->
-                    <!--                    <div id="uploadProgress" style="display: none">
-                                            Uploading in progress...
-                                            <div class="progress-bar">
-                                                <div class="progress"></div>
-                                            </div>
-                                        </div>-->
+
+                    <div id="progressBar" class="default">
+                        <div></div>
+                    </div>
+
                 </form>
 
                 <%} else {%>

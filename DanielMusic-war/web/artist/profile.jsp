@@ -181,7 +181,7 @@
 
                         <div class="row clearfix">
                             <div class="col-1-3">
-                                <label for="ppEmail"><strong>PayPay Email Address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
+                                <label for="ppEmail"><strong>PayPal Email Address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
                                 <input type="email" value="<%if (artist.getPaypalEmail() != null) {
                                         out.print(artist.getPaypalEmail());
                                     }%>" name="paypalEmail" id="ppEmail" required>
