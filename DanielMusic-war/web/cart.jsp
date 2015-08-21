@@ -30,13 +30,13 @@
             });
             var stringArr = "";
             for (var i = 0; i < arr.length; i++) {
+                alert(arr[i]);
                 if (i != (arr.length - 1)) {
-                    stringArr += arr[i] + ",";
+                    stringArr += arr[i] + " ";
                 } else {
                     stringArr += arr[i];
                 }
             }
-
             var numOfTicks = 0;
             for (var i = 0, n = checkboxes.length; i < n; i++) {
                 if (checkboxes[i].checked) {

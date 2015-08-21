@@ -434,6 +434,7 @@ public class MusicManagementController extends HttpServlet {
                     if (true) {
                         Account account = (Account) session.getAttribute("account");
                         String strTrackIDs = request.getParameter("deleteTrack");
+                        System.out.println("Track IDs " + strTrackIDs);
                         Scanner sc2 = new Scanner(strTrackIDs);
                         ArrayList<String> trackIDs = new ArrayList<>();
                         while (sc2.hasNext()) {
@@ -443,6 +444,7 @@ public class MusicManagementController extends HttpServlet {
                         int deleteCounter = 0;
                         if (account != null) {
                             for (String s : trackIDs) {
+                                System.out.println("string s " + s);
                                 returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), true);
                                 if (returnHelper.getResult()) {
                                     deleteCounter++;
@@ -452,6 +454,7 @@ public class MusicManagementController extends HttpServlet {
                         } else {
                             shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                             for (String s : trackIDs) {
+                                System.out.println("Removing track: " + s);
                                 Music track = new Music();
                                 track.setId(Long.parseLong(s));
                                 Boolean result = shoppingCart.getListOfMusics().remove(track);
@@ -809,7 +812,6 @@ public class MusicManagementController extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
 
     /**
      * Handles the HTTP <code>POST</code> method.
