@@ -94,6 +94,10 @@
                             }
                         });
                     });
+
+                    if ($('#ppEmail').val() == '') {
+                        $("html, body").animate({scrollTop: -100}, "slow");
+                    }
                 </script>
 
                 <%
