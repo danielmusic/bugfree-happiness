@@ -10,14 +10,14 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-<!--    <filter-mapping>
+    <filter-mapping>
         <filter-name>HttpsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <filter>
         <filter-name>HttpsFilter</filter-name>
         <filter-class>Client.HttpsFilter</filter-class>
-    </filter>-->
+    </filter>
     <servlet>
         <servlet-name>GenreManagementController</servlet-name>
         <servlet-class>Admin.GenreManagementController</servlet-class>
