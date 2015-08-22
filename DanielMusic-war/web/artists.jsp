@@ -22,10 +22,20 @@
             if (jumpToAlbumID != null && !jumpToAlbumID.isEmpty()) {
     %>
     <script>
-        window.onload = function () {
-            alert("TODO WHY NOT WORKING");
-            document.getElementById("album_<%=jumpToAlbumID%>").focus();
-        }
+        (function () {
+            alert("Jumping");
+            //$('#tabs a[href="#tab-releases"]').tab('show');
+            // $("#tab-releases").on("shown.bs.tab", function () {
+            //      document.getElementById("album_<%=jumpToAlbumID%>").focus();
+            //   });
+
+            //$("#tab-releases").focusin();
+            //$('#tabs a:last').tab('show')
+            //document.getElementById("album_<%=jumpToAlbumID%>").focus();
+
+            alert("Jumping");
+
+        })();
     </script>
     <%
             session.removeAttribute("jumpToAlbumID");
@@ -157,7 +167,7 @@
                     <p class="success" id="goodMsg"  style="display:none;"></p>
 
                     <!-- tabs -->
-                    <div class="tabs-wrap">
+                    <div id="tabs" class="tabs-wrap">
                         <!-- tabs navigation -->
                         <ul class="tabs">
                             <li><a href="#tab-bio" class="active-tab">Biography</a></li>

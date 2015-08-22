@@ -126,9 +126,8 @@
                                                 genre = artist.getGenre().getName();
                                             }
                                     %>
-                                    <div class="col-1-4 item" data-genres="">
-                                        <a style="cursor: pointer;" onclick="javascript:loadArtistFromSearch(<%=artist.getId()%>)" class="thumb-glitch artist" data-thumbicon="plus">
-                                            <span class="hoverlayer"></span>
+                                    <div class="col-1-4">
+                                        <a style="cursor: pointer;" onclick="javascript:loadArtistFromSearch(<%=artist.getId()%>)" class="thumb-glitch">
                                             <span class="img">
                                                 <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
                                                 <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
@@ -177,7 +176,7 @@
 
                                     <div class="col-1-4 item">
                                         <!-- Thumbnail -->
-                                        <a style="cursor: pointer;" onclick="javascript:loadAlbum(<%=album.getId()%>)" class="thumb-glitch release tip" data-thumbicon="plus">
+                                        <a style="cursor: pointer;" onclick="javascript:loadAlbum(<%=album.getId()%>)" class="thumb-glitch release">
                                             <span class="hoverlayer"></span>
                                             <span class="img">
                                                 <img src="<%=albumArt%>" alt="Album Cover Image" />

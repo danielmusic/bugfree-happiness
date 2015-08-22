@@ -30,7 +30,6 @@
             });
             var stringArr = "";
             for (var i = 0; i < arr.length; i++) {
-                alert(arr[i]);
                 if (i != (arr.length - 1)) {
                     stringArr += arr[i] + " ";
                 } else {
@@ -53,7 +52,7 @@
                     url: url,
                     data: {'deleteTrack': stringArr},
                     success: function () {
-                        window.location.href = "#!/redirect";
+                        window.location.href = "/#!/redirect";
                     },
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
@@ -302,7 +301,7 @@
                             %>
                         </tbody>
                     </table>
-                    <button class="medium invert" onclick="removeTrack()">Remove track(s)</button>
+                    <button type="button" class="medium invert" onclick="removeTrack()">Remove track(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
                     <%
                         }

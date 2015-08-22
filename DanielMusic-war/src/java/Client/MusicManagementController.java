@@ -464,6 +464,8 @@ public class MusicManagementController extends HttpServlet {
                             }
                         }
 
+                        session.setAttribute("redirectPage", "#!/cart");
+                        session.setAttribute("ShoppingCart", shoppingCart);
                         if (deleteCounter > 0) {
                             jsObj.put("result", true);
                             jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
@@ -473,9 +475,6 @@ public class MusicManagementController extends HttpServlet {
                             jsObj.put("errMsg", "No records were deleted.");
                             response.getWriter().write(jsObj.toString());
                         }
-
-                        session.setAttribute("redirectPage", "#!/cart");
-                        session.setAttribute("ShoppingCart", shoppingCart);
                     }
                     return;
 
