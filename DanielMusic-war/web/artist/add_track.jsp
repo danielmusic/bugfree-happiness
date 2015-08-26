@@ -9,6 +9,9 @@
                     function upload(musicFileSize) {
                         var secs = musicFileSize / 100000;
                         var space = 100 / secs;
+                        if (space > 100) {
+                            space = 100;
+                        }
                         if (progress) {
                             return;
                         }
@@ -24,7 +27,8 @@
                         progress = setInterval(function () {
                             // ask progress
                             // get progress from response data
-                            uploadprogress += (Math.random() * 5) + space - 5;
+                            
+                            uploadprogress += Math.abs((Math.random() * 5) + space - 5);
                             // change progress width
                             if (uploadprogress < 100) {
                                 progressBar(Math.round(uploadprogress), $('#progressBar'));
