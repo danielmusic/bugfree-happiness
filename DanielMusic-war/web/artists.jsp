@@ -23,6 +23,7 @@
     %>
     <script>
         (function () {
+
             alert("Jumping");
             //$('#tabs a[href="#tab-releases"]').tab('show');
             // $("#tab-releases").on("shown.bs.tab", function () {
@@ -33,9 +34,20 @@
             //$('#tabs a:last').tab('show')
             //document.getElementById("album_<%=jumpToAlbumID%>").focus();
 
+
+
+
+            var tabs = $('.tabs-wrap');
+            var current_id = '#tab-releases';
+            $('ul.tabs li a', tabs).removeClass('active-tab');
+            $('ul.tabs li a[href*="' + current_id + '"]').addClass('active-tab');
+            $('.tab-content:not(:eq(' + current_id + '))', tabs).css('display', 'none');
+            $(current_id, tabs).css('display', 'block');
+            document.getElementById("album_<%=jumpToAlbumID%>").focus();
             alert("Jumping");
 
         })();
+
     </script>
     <%
             session.removeAttribute("jumpToAlbumID");

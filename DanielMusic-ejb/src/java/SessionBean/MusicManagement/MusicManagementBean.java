@@ -638,16 +638,34 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                }
                 album.setName(name);
                 //Update album genre
+                //todo halppp
+                for (Genre albumGenre : album.getListOfGenres()) {
+                    List<Album> genreAlbums = albumGenre.getListOfAlbums();
+                    genreAlbums.remove(album);
+                    albumGenre.setListOfAlbums(genreAlbums);
+                    em.merge(albumGenre);
+                }
                 Genre genre = em.getReference(Genre.class, genreID);
                 List<Genre> genres = new ArrayList();
                 genres.add(genre);
                 album.setListOfGenres(genres);
                 album.setGenreName(genre.getName());
                 //Update the list of music genres
+                System.out.println("WUBWUBWUB");
                 for (Music music : album.getListOfMusics()) {
+                    System.out.println(music.getName());
+                    System.out.println(music.getListOfGenres().get(0).getName());
+                    for (Genre musicGenre : music.getListOfGenres()) {
+                        List<Music> genreMusics = musicGenre.getListOfMusics();
+                        genreMusics.remove(music);
+                        musicGenre.setListOfMusics(genreMusics);
+                        em.merge(musicGenre);
+                    }
                     music.setListOfGenres(genres);
                     em.merge(music);
+                    System.out.println(music.getListOfGenres().get(0).getName());
                 }
+                //todo halppp end
                 album.setDescription(StringEscapeUtils.escapeHtml4(description));
                 album.setYearReleased(yearReleased);
                 album.setCredits(StringEscapeUtils.escapeHtml4(credits));
