@@ -96,7 +96,7 @@
                     if (artist != null) {
                 %>
                 <div class="md-modal md-effect-1" id="modal-upload">
-                    <div class="md-content">
+                    <div class="md-content" style="background-color: #000000">
                         <h3>Uploading...</h3>
                         <div>
                             <p>Please wait while we process your music...</p>
