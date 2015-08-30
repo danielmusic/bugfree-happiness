@@ -1,84 +1,47 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="About Us 2">
-    <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Fan JSP</h1>
-        <h2 class="heading-m">A Few Words About <span class="color">NOISA</span></h2>
-        <!-- Overlay -->
-        <span class="overlay dots"></span>
+        <h1 class="heading-l">Fan</h1>
+        <h2 class="heading-m">Sign up as fan <span class="color">now!</span></h2>
     </section>
-    <!-- /intro -->
-
-    <!-- ############################# Content ############################# -->
     <section class="content section">
-        <!-- container -->
         <div class="container">
-
-            <!-- ############################# About US ############################# -->
-
-            <!-- Article -->
             <article>
-
-                <div class="col-1-2">
-                    <img src="placeholders/about-img01.jpg" alt="Noisa image" class="inline">
-                    <br>
-                    <!-- Buttons list -->
-                    <ul class="buttons-list">
-                        <li>
-                            <a class="btn small" href="javascript:;" ><i class="icon icon-download"></i> Download Recents Podcasts</a>
-                        </li>
-                        <li>
-                            <a class="btn small dark" href="javascript:;" ><i class="icon icon-download"></i> Download Our Bio</a>
-                        </li>
-
-                    </ul>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
+                <div class="col-1-1">
+                    <p style="text-align: justify;">
+                        For fans, having an account on sounds.sg will serve as a one-stop platform for easy browsing and discovering of music made by Singaporean artists, 
+                        as well as providing the easy purchase of tracks from any artist on sounds.sg. Besides uninhibited access to the music available on sounds.sg, 
+                        a fan account also allows the user to buy tracks and download them, with permanent access to the purchased tracks, as well as transaction information. 
+                        With the fan account, the user is also able to create a wishlist of tracks that they would like to purchase, and coupled with the 'Featured Songs' playlist, 
+                        this will facilitate the ease with which they can purchase the tracks. Buying will simply be a click away. Fans can show their support for the artists 
+                        by purchasing their music, and also keep track with the artists by following their profile, which contains information provided by the artist, such as upcoming gig 
+                        dates and venues. The fan account will also be notified whenever an artist they are following has uploaded new songs onto the site. Following the artist profile 
+                        also allows the fan to receive unique rewards from the artist upon purchase of their tracks, from something as simple as a message of gratitude, to other rewards, 
+                        depending on the artist. Signup for a fan account is free, anytime, anywhere.
+                    </p>
+                    <p style="text-align: justify;">
+                        The fan page will contain easy access to the artists they are following, automatically updated whenever the fan follows a new artist. 
+                        Customizable playlists will also be available besides the main playlist of featured tracks. The fan can listen to their purchased songs while they 
+                        explore sounds.sg in search of new incredible artists to follow and support.
                     </p>
                 </div>
-
-                <div class="col-1-2 last">
-                    <h2>Biography</h2>
-                    <p class="intro-text caps">Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
-
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus vitae lacus vestibulum sagittis. Nullam sed risus blandit, pretium magna id, varius lectus. Praesent a condimentum est. Pellentesque rutrum consectetur metus. Curabitur scelerisque, tortor quis ullamcorper semper, lacus metus placerat tellus, et aliquam libero tortor et lectus. Maecenas rhoncus, sem a pellentesque convallis, dolor nulla semper dolor, vestibulum luctus sapien lectus in quam. Nunc accumsan consequat est a porttitor. Proin vitae dolor mauris. Aliquam erat volutpat. Quisque quis tincidunt mi.
-                    </p>
-                    <p>Duis dolor tellus, faucibus non ligula ac, fringilla porttitor eros. Cras sagittis eleifend erat ac fringilla. Proin ac odio et neque vulputate tempus at vel justo. Maecenas semper imperdiet euismod. Donec tempor erat vel scelerisque tincidunt. Sed sagittis purus orci, eu auctor lectus placerat vel. Nunc imperdiet tincidunt volutpat. Duis ac semper purus. Nunc mauris magna, ornare at lorem et, sollicitudin dapibus tortor.</p>
-
-                    <blockquote>
-                        <p>
-                            Sed pellentesque dapibus tellus in semper. Aenean faucibus aliquet turpis, id fermentum sem consectetur id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus euismod nunc scelerisque tincidunt.
-                        </p>
-                    </blockquote>
-                    <br>
-                    <h3>Videos</h3>
-                    <iframe src="//player.vimeo.com/video/66171813?portrait=0&amp;color=ea4233" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-                </div>
-
-
             </article>
-            <!-- /article -->
-
         </div>
-        <!-- /container -->
     </section>
-    <!-- /Content -->
-
 </section>
 <!-- /page -->
 <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 </script>
