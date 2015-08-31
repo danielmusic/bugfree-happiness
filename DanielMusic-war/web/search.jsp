@@ -259,23 +259,6 @@
                                                     </a>
                                                 </span>
 
-                                                <span id='btnPause<%=music.getId()%>' style="display: none;">
-                                                    <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch(<%=music.getId()%>);" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                       data-artist_target="_blank"
-                                                       data-artist_url="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>);"
-                                                       data-shop_target="_blank"
-                                                       data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
-                                                       data-shop_target="_blank"
-                                                       >
-                                                        <i class="icon icon-pause">
-                                                            <span style="display: none;">
-                                                                <span  class="track-title"><%=music.getName()%></span>
-                                                                <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
-                                                            </span>
-                                                        </i>
-                                                    </a>
-                                                </span>
-
                                                 <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)">
                                                     <i class="icon icon-cart"></i>
                                                 </a>
