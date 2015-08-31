@@ -638,33 +638,73 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                }
                 album.setName(name);
                 //Update album genre
-                //todo halppp
-                for (Genre albumGenre : album.getListOfGenres()) {
-                    List<Album> genreAlbums = albumGenre.getListOfAlbums();
-                    genreAlbums.remove(album);
-                    albumGenre.setListOfAlbums(genreAlbums);
-                    em.merge(albumGenre);
+                Genre newGenre = em.getReference(Genre.class, genreID);
+                List<Genre> newGenreList = new ArrayList();
+                newGenreList.add(newGenre);
+                List<Genre> albumGenres = album.getListOfGenres();
+                for (Genre genre : albumGenres) {
+                    genre.getListOfAlbums().remove(album);
                 }
-                Genre genre = em.getReference(Genre.class, genreID);
-                List<Genre> genres = new ArrayList();
-                genres.add(genre);
-                album.setListOfGenres(genres);
-                album.setGenreName(genre.getName());
-                //Update the list of music genres
-                System.out.println("WUBWUBWUB");
-                for (Music music : album.getListOfMusics()) {
-                    System.out.println(music.getName());
-                    System.out.println(music.getListOfGenres().get(0).getName());
-                    for (Genre musicGenre : music.getListOfGenres()) {
-                        List<Music> genreMusics = musicGenre.getListOfMusics();
-                        genreMusics.remove(music);
-                        musicGenre.setListOfMusics(genreMusics);
-                        em.merge(musicGenre);
+                album.setListOfGenres(null);
+                album.setListOfGenres(newGenreList);
+                album.setGenreName(newGenreList.get(0).getName());
+                newGenre.getListOfAlbums().add(album);
+
+                List<Music> albumMusics = album.getListOfMusics();
+//                for (Music music : albumMusics) {
+//                    List<Genre> musicGenres = music.getListOfGenres();
+//                    for (Genre genre : musicGenres) {
+//                        genre.getListOfMusics().remove(music);
+//                        musicGenres.remove(genre);
+//                    }
+//                    music.setListOfGenres(newGenreList);
+//                }
+
+                //handle genre side removal and add of music
+                List<Genre> musicGenres = new ArrayList();
+                for (Music music : albumMusics) {
+                    musicGenres.add(music.getListOfGenres().get(0));
+                    for (int i = 0; i < music.getListOfGenres().size(); i++) {
+                        music.getListOfGenres().remove(i);
                     }
-                    music.setListOfGenres(genres);
-                    em.merge(music);
-                    System.out.println(music.getListOfGenres().get(0).getName());
+                    music.setListOfGenres(newGenreList);
                 }
+                for (Genre genre : musicGenres) {
+                    for (Music music : albumMusics) {
+                        genre.getListOfMusics().remove(music);
+                    }
+                }
+                for (Music music : albumMusics) {
+                    newGenre.getListOfMusics().add(music);
+                }
+
+                //todo halppp
+//                for (Genre albumGenre : album.getListOfGenres()) {
+//                    List<Album> genreAlbums = albumGenre.getListOfAlbums();
+//                    genreAlbums.remove(album);
+//                    albumGenre.setListOfAlbums(genreAlbums);
+//                    em.merge(albumGenre);
+//                }
+//                Genre genre = em.getReference(Genre.class, genreID);
+//                List<Genre> genres = new ArrayList();
+//                genres.add(genre);
+//                album.setListOfGenres(genres);
+//                album.setGenreName(genre.getName());
+//                //Update the list of music genres
+//                System.out.println("WUBWUBWUB");
+//                for (Music music : album.getListOfMusics()) {
+//                    System.out.println(music.getName());
+//                    System.out.println(music.getListOfGenres().get(0).getName());
+//                    for (Genre musicGenre : music.getListOfGenres()) {
+//                        List<Music> genreMusics = musicGenre.getListOfMusics();
+//                        genreMusics.remove(music);
+//                        musicGenre.setListOfMusics(genreMusics);
+//                        em.merge(musicGenre);
+//                    }
+//                    music.setListOfGenres(genres);
+//                    em.merge(music);
+//                    System.out.println(music.getListOfGenres().get(0).getName());
+//                }
                 //todo halppp end
                 album.setDescription(StringEscapeUtils.escapeHtml4(description));
                 album.setYearReleased(yearReleased);

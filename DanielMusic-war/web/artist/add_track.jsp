@@ -7,8 +7,11 @@
                 <script>
                     var progress;
                     function upload(musicFileSize) {
-                        var secs = musicFileSize / 100000;
+                        var secs = musicFileSize / 25000;
                         var space = 100 / secs;
+                        if (space > 100) {
+                            space = 100;
+                        }
                         if (progress) {
                             return;
                         }
@@ -24,7 +27,8 @@
                         progress = setInterval(function () {
                             // ask progress
                             // get progress from response data
-                            uploadprogress += (Math.random() * 5) + space - 5;
+                            
+                            uploadprogress += Math.abs((Math.random() * 5) + space - 5);
                             // change progress width
                             if (uploadprogress < 100) {
                                 progressBar(Math.round(uploadprogress), $('#progressBar'));
@@ -34,6 +38,9 @@
                                 setTimeout(function () {
                                     // hide progress bar
                                     progressBar(100, $('#progressBar'));
+                                    $('#upload-title').text("Still Processing...");
+                                    $('#upload-spinner').show();
+                                    $('#upload-desc').text("Sorry, our music conversion is taking longer than expected, this page will automatically refresh when the upload is completed.");
                                     progress = null;
                                 }, 1000);
                             }
@@ -96,10 +103,11 @@
                     if (artist != null) {
                 %>
                 <div class="md-modal md-effect-1" id="modal-upload">
-                    <div class="md-content">
-                        <h3>Uploading...</h3>
+                    <div class="md-content" style="background-color: #000000">
+                        <h3 id="upload-title">Uploading...</h3>
                         <div>
-                            <p>Please wait while we process your music...</p>
+                            <p id="upload-desc">Please wait while we upload your music...</p>
+                            <center><img id="upload-spinner" style="display: none;" src="../img/AjaxLoader.gif" alt=""/></center>
                             <div id="progressBar" class="default">
                                 <div></div>
                             </div>
