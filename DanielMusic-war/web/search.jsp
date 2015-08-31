@@ -219,9 +219,9 @@
                                                 <span>&nbsp;&nbsp;</span>
                                             </a>
 
-                                            <a class="track" onclick="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>)" style="cursor: pointer;">
-                                                <span class="track-title" style="margin-left: 40px;"><%=music.getName()%></span>
-                                                <span class="track-artists" style="margin-left: 40px;"><%=music.getArtistName()%></span>
+                                            <a class="track">
+                                                <span class="track-title" style="margin-left: 40px;cursor: pointer;" onclick="javascript:loadAlbum(<%=music.getAlbum().getId()%>)"><%=music.getName()%></span>
+                                                <span class="track-artists" style="margin-left: 40px;cursor: pointer;" onclick="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>)"><%=music.getArtistName()%></span>
                                             </a> 
 
 
