@@ -642,7 +642,20 @@ jQuery(document).ready(function ($) {
 
             });
         }
+        
+        /* Open to album
+         ---------------------------------------------------------------------- */
 
+        if ($('#jumpToAlbum').length > 0) {
+            var tabs = $('.tabs-wrap');
+            var current_id = '#tab-releases';
+            $('ul.tabs li a', tabs).removeClass('active-tab');
+            $('ul.tabs li a[href*="' + current_id + '"]').addClass('active-tab');
+            $('.tab-content:not(:eq(' + current_id + '))', tabs).css('display', 'none');
+            $(current_id, tabs).css('display', 'block');
+            var jumpToAlbumID = $('#jumpToAlbum').val();
+            $("#album_"+jumpToAlbumID)[0].scrollIntoView( true );
+        }
     }
 
     // Init scripts
