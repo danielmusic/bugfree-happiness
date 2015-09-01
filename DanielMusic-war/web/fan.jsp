@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="About Us 2">
+<section id="page" data-title="sounds.sg | Fan">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Fan</h1>
         <h2 class="heading-m">Sign up as fan <span class="color">now!</span></h2>

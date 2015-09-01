@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Sounds.sg">
+<section id="page" data-title="sounds.sg">
     <!-- ############################# Sections ############################# -->
 
     <!-- ############################# Intro ############################# -->
@@ -50,7 +50,7 @@
         <div class="container">
 
             <div class="col-1-2">
-                <h1 class="heading-xl">Sounds SG</h1>
+                <h1 class="heading-xl">sounds SG</h1>
                 <p class="intro-text caps">Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis.</p>
                 <p class="intro-text">Etiam non turpis ac mi ornare cursus nec eu risus. Suspendisse vulputate libero ac dolor varius, nec sagittis quam imperdiet. Sed risus ante, gravida ac accumsan in, tempus quis lacus. Nulla ac tempus sem, non scelerisque nunc.  </p>
                 <a class="stamp-button" href="javascript:;">Read more</a>

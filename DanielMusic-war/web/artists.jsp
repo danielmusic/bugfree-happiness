@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Sound.sg">
+<section id="page" data-title="sound.sg">
     <style>
         .track-details:before{
             top: 5px;
