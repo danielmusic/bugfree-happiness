@@ -94,7 +94,7 @@
         <!-- navigation container -->
         <div class="container">
             <a href="#!/home" id="logo">
-                <img src="placeholders/logo.png" alt="Sounds.sg" style="padding-top: 5px;">
+                <img src="placeholders/logo.png" alt="sounds.sg" style="padding-top: 5px;">
             </a>
 
             <!-- ############ icon navigation ############ -->
