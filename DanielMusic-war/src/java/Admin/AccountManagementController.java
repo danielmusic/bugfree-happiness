@@ -32,14 +32,11 @@ public class AccountManagementController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Welcome to AccountManagementController");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
         String id = request.getParameter("id");
         String email = request.getParameter("email");
         String password = request.getParameter("pwd");
-
-        System.out.println("target " + target);
 
         session = request.getSession();
         ReturnHelper returnHelper;
