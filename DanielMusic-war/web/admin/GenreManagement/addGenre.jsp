@@ -11,7 +11,7 @@
 <!doctype html>
 <html class="fixed">
     <head>
-        <jsp:include page="../head.html" />
+        <jsp:include page="../jspIncludePages/head.html" />
     </head>
     <body onload="alertFunc()">
         <script>
@@ -19,12 +19,12 @@
                 window.location.href = "../../GenreManagementController?target=ListAllGenre";
             }
         </script>
-        <jsp:include page="../displayNotification.jsp" />
+        <jsp:include page="../jspIncludePages/displayNotification.jsp" />
         <section class="body">
-            <jsp:include page="../header.jsp" />
+            <jsp:include page="../jspIncludePages/header.jsp" />
 
             <div class="inner-wrapper">
-                <jsp:include page="../sidebar.jsp" />
+                <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
                         <h2>Genre Management - Add Genre</h2>
@@ -77,7 +77,7 @@
             </div>
         </section>
 
-        <jsp:include page="../foot.html" />
+        <jsp:include page="../jspIncludePages/foot.html" />
     </body>
 </html>
 <%    }
