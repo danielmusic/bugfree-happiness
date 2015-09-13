@@ -16,9 +16,8 @@
         <!-- start: page -->
         <section class="body-sign">
             <div class="center-sign">
-                <a href="/" class="logo pull-left">
-                    Logo
-                </a>
+                <a href="/" class="logo pull-left"> <!-- login --></a>
+                                    
                 <div class="panel panel-sign">
                     <div class="panel-title-sign mt-xl text-right">
                         <h2 class="title text-uppercase text-bold m-none"><i class="fa fa-user mr-xs"></i> Sign In</h2>
