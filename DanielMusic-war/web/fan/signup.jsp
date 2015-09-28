@@ -98,7 +98,7 @@
                     <p class="error" id="errMsg" style="display:none;"></p>
                     <p class="success" id="goodMsg"  style="display:none;"></p>
 
-                    <h2>Sign up for an artist account</h2>
+                    <h2>Sign up for a fah account</h2>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
