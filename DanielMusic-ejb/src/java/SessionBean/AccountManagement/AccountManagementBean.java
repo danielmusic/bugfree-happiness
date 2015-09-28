@@ -203,8 +203,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
-            if (name==null || email==null || name.isEmpty() || email.isEmpty() || password==null || password.isEmpty()) {
-                result.setDescription("Name, email, password cannot be empty.");
+            if (email==null  || email.isEmpty() || password==null || password.isEmpty()) {
+                result.setDescription("Email, password cannot be empty.");
+                return result;
+            } else if ((isArtist || isBand) && (name==null || name.isEmpty())) {
+                result.setDescription("Name cannot be empty.");
                 return result;
             } else if (checkIfEmailExists(email)) {
                 result.setDescription("Unable to register, email already in use.");
