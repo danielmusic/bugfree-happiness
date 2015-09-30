@@ -62,15 +62,15 @@ public class ClientAccountManagementController extends HttpServlet {
                                 session.setAttribute("artist", (Artist) account);
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(account.getId(), true, true));
                                 session.setAttribute("listOfGenres", adminManagementBean.listAllGenres());
-                                nextPage = "#!/artist/profile";
+                                nextPage = "/#!/artist/profile";
                             } else if (account instanceof Member) {
                                 session.setAttribute("member", (Member) account);
-                                nextPage = "#!/fan/profile";
+                                nextPage = "/#!/fan/profile";
                             }
                             session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
-                            nextPage = "#!/login";
+                            nextPage = "/#!/login";
                         }
                     }
                     break;
