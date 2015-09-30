@@ -207,8 +207,10 @@
                             <p>Year Released: <%=album.getYearReleased()%></p>
                             <%if (album.getListOfMusics().size() > 1) {%>
                             <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Album to Cart</a>
-                            <%}%>
+                            <%} else {%>
+                            <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Single to Cart</a>
                             <%
+                            }
                                 List<Music> musics = album.getListOfMusics();
                                 if (musics == null) {
                                     musics = new ArrayList();
