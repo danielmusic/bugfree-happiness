@@ -678,6 +678,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 String buyerName = "unregistered user";
                 if (payment.getAccount() != null) {
                     buyerName = payment.getAccount().getName();
+                    if (buyerName==null || buyerName.isEmpty()){
+                        buyerName = "a fan";
+                    }
                 }
                 emailTemplate += "Hi there, " + buyerName + " from sounds.SG has just purchased your album/track(s) listed below:";
 
