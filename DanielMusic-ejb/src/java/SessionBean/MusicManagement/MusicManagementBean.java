@@ -10,6 +10,7 @@ import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
+import SessionBean.CommonInfrastructure.SendGridLocal;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.Mp3File;
@@ -40,11 +41,16 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
+    
+    private static final String approvalRequestEmailSubject = "sounds.SG - New Artist Approval Request";
+    private static final String approvalRequestEmailMsg = "Hi there!<br/><br/>There's a new artist pending your approval. Please login to <a href='http://sounds.sg/admin/login.jsp'>admin console</a> to view the full details. <br/><br/><b>Request Details</b><br/>";
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
     @EJB
     private AccountManagementBeanLocal ambl;
+    @EJB
+    private SendGridLocal sgl;
 
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
@@ -930,13 +936,17 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return helper;
             }
 
-            if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
-                album.getArtist().setIsApproved(-2);
-            }
             if (album.getListOfMusics() == null || album.getListOfMusics().isEmpty()) {
                 helper.setDescription("The album cannot be published, no tracks found.");
                 helper.setResult(false);
                 return helper;
+            }
+
+            //Reupdate the approval status to pending regardless if they were new or not approved previously
+            //Send the email also
+            if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
+                album.getArtist().setIsApproved(-2);
+                sgl.sendEmail("admin@sounds.sg", "no-reply@sounds.sg", approvalRequestEmailSubject, approvalRequestEmailMsg+"Name: "+album.getArtistName()+"<br/>Account Email: "+album.getArtist().getEmail()+"<br/>Contact Email: "+album.getArtist().getContactEmail()+"<br/>PayPal Email: "+album.getArtist().getPaypalEmail()+"<br/>Facebook: "+album.getArtist().getFacebookURL());
             }
             album.setIsPublished(true);
             helper.setDescription("Album has been published successfully.");

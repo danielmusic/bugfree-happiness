@@ -425,7 +425,7 @@ public class MusicManagementController extends HttpServlet {
                             jsObj.put("errMsg", "No records were deleted.");
                             response.getWriter().write(jsObj.toString());
                         }
-                        session.setAttribute("redirectPage", "/#!/cart");
+                        session.setAttribute("redirectPage", "#!/cart");
                         session.setAttribute("ShoppingCart", shoppingCart);
                     }
                     return;
@@ -464,7 +464,7 @@ public class MusicManagementController extends HttpServlet {
                             }
                         }
 
-                        session.setAttribute("redirectPage", "/#!/cart");
+                        session.setAttribute("redirectPage", "#!/cart");
                         session.setAttribute("ShoppingCart", shoppingCart);
                         if (deleteCounter > 0) {
                             jsObj.put("result", true);
@@ -696,7 +696,7 @@ public class MusicManagementController extends HttpServlet {
                             jsObj.put("result", false);
                             jsObj.put("errMsg", "Internal server error.");
                             response.getWriter().write(jsObj.toString());
-                            session.setAttribute("redirectPage", "/#!/cart");
+                            session.setAttribute("redirectPage", "#!/cart");
                             return;
                         }
                         session.setAttribute("checkoutHelper", checkoutHelper);
@@ -711,7 +711,7 @@ public class MusicManagementController extends HttpServlet {
                                 jsObj.put("errMsg", checkoutHelper.getMessage());
                             }
                             response.getWriter().write(jsObj.toString());
-                            session.setAttribute("redirectPage", "/#!/cart");
+                            session.setAttribute("redirectPage", "#!/cart");
                             return;
                         }
                         switch (checkoutHelper.getPayKey()) {
@@ -723,10 +723,10 @@ public class MusicManagementController extends HttpServlet {
                                 if (account != null) {
                                     account = accountManagementBean.getAccount(account.getId());
                                     session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
-                                    session.setAttribute("redirectPage", "/#!/fan/profile");
+                                    session.setAttribute("redirectPage", "#!/fan/profile");
                                     return;
                                 } else {
-                                    session.setAttribute("redirectPage", "/#!/download-links");
+                                    session.setAttribute("redirectPage", "#!/download-links");
                                     return;
                                 }
                             case "NO_PAYMENT_REQUIRED_FAILED":
@@ -734,13 +734,13 @@ public class MusicManagementController extends HttpServlet {
                                 jsObj.put("result", false);
                                 jsObj.put("errMsg", "There was an error completing the checkout request, please try again later.");
                                 response.getWriter().write(jsObj.toString());
-                                session.setAttribute("redirectPage", "/#!/cart");
+                                session.setAttribute("redirectPage", "#!/cart");
                                 return;
                         }
                         jsObj.put("result", true);
                         jsObj.put("goodMsg", "Please verify the following payment details.");
                         response.getWriter().write(jsObj.toString());
-                        session.setAttribute("redirectPage", "/#!/checkout");
+                        session.setAttribute("redirectPage", "#!/checkout");
                     }
                     return;
 
@@ -752,17 +752,17 @@ public class MusicManagementController extends HttpServlet {
                         ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
                         if (!result.getResult()) {//fail to complete payment
                             session.setAttribute("errMsg", result.getDescription());
-                            session.setAttribute("redirectPage", "/#!/checkout");
+                            session.setAttribute("redirectPage", "#!/checkout");
                             nextPage = "redirect2.jsp";
                         } else {
                             Payment payment = clientManagementBean.getPayment(result.getID());
                             if (payment.getAccount() != null) {
                                 //Logged in user will view list of purchaserd music
                                 session.setAttribute("ListOfPurchasedMusics", payment.getAccount().getListOfPurchasedMusics());
-                                session.setAttribute("redirectPage", "/#!/fan/profile");
+                                session.setAttribute("redirectPage", "#!/fan/profile");
                                 nextPage = "redirect2.jsp";
                             } else {
-                                session.setAttribute("redirectPage", "/#!/download-links");
+                                session.setAttribute("redirectPage", "#!/download-links");
                                 nextPage = "redirect2.jsp";
                             }
                             session.removeAttribute("ShoppingCart");

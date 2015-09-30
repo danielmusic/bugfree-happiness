@@ -92,7 +92,7 @@ public class MusicController extends HttpServlet {
                         String searchText = request.getParameter("text");
                         SearchHelper result = musicManagementBean.search(searchText);
                         session.setAttribute("searchResult", result);
-                        session.setAttribute("redirectPage", "/#!/search");
+                        session.setAttribute("redirectPage", "#!/search");
                         jsObj.put("result", true);
                         response.getWriter().write(jsObj.toString());
                         return;

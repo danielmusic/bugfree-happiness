@@ -20,9 +20,9 @@ import org.apache.commons.lang3.StringEscapeUtils;
 @Stateless
 public class AdminManagementBean implements AdminManagementBeanLocal {
 
-    private static final String artistBandAccountApprovedSubject = "Daniel Music: Artist/Band Account Approved";
+    private static final String artistBandAccountApprovedSubject = "sounds.SG - Artist/Band Account Approved";
     private static final String artistBandAccountApprovedMsg = "Your account has been approved. Your profile, albums and tracks will now be shown to the public.";
-    private static final String artistBandAccountRejectedSubject = "Daniel Music: Artist/Band Account Rejected";
+    private static final String artistBandAccountRejectedSubject = "sounds.SG - Artist/Band Account Rejected";
     private static final String artistBandAccountRejectedMsg = "Unfortuantely your account has been rejected by our administrators..";
 
     @EJB
