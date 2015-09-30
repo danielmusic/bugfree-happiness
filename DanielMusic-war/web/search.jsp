@@ -233,7 +233,7 @@
                                                    data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
                                                    data-shop_target="_blank"
                                                    >
-                                                    <i class="icon icon-play2">
+                                                    <i class="icon icon-plus">
                                                         <span style="display: none;">
                                                             <span  class="track-title"><%=music.getName()%></span>
                                                             <span class="track-artists"><%=music.getAlbum().getArtist().getName()%></span>
