@@ -72,6 +72,9 @@ public class AccountManagementController extends HttpServlet {
                             session.setAttribute("artists", artists);
                             nextPage = "/admin/AccountManagement/artistManagement.jsp";
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -84,6 +87,9 @@ public class AccountManagementController extends HttpServlet {
                             session.setAttribute("bands", bands);
                             nextPage = "/admin/AccountManagement/bandManagement.jsp";
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -96,6 +102,9 @@ public class AccountManagementController extends HttpServlet {
                             session.setAttribute("fans", fans);
                             nextPage = "/admin/AccountManagement/fanManagement.jsp";
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -105,16 +114,19 @@ public class AccountManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             if (source.equals("band")) {
                                 nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
-                            } else if (source.equals("artist")){
+                            } else if (source.equals("artist")) {
                                 nextPage = "/admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                             }
                         } else {
-                            if (source.equals("band")) { 
+                            if (source.equals("band")) {
                                 nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
-                            } else if (source.equals("artist")){
+                            } else if (source.equals("artist")) {
                                 nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                             }
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -134,6 +146,9 @@ public class AccountManagementController extends HttpServlet {
                                 nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                             }
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -144,6 +159,9 @@ public class AccountManagementController extends HttpServlet {
                             session.setAttribute("artist", artist);
                             nextPage = "/admin/AccountManagement/artist.jsp";
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -154,6 +172,9 @@ public class AccountManagementController extends HttpServlet {
                             session.setAttribute("band", band);
                             nextPage = "/admin/AccountManagement/band.jsp";
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -187,6 +208,9 @@ public class AccountManagementController extends HttpServlet {
                                 }
                             }
                         }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
 
@@ -195,12 +219,15 @@ public class AccountManagementController extends HttpServlet {
                         String url = musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false, 300L);
                         System.out.println(url);
                         nextPage = url;
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
                     }
                     break;
             }
 
             if (nextPage.equals("")) {
-                response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("/admin/workspace.jsp?errMsg=An error has occured");
                 return;
             } else {
                 response.sendRedirect(nextPage);
