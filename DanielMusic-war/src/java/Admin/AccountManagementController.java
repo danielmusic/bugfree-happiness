@@ -49,28 +49,28 @@ public class AccountManagementController extends HttpServlet {
                         Account account = accountManagementBean.getAccount(email);
                         if (account instanceof Admin) {
                             session.setAttribute("admin", (Admin) accountManagementBean.getAccount(email));
-                            nextPage = "admin/workspace.jsp";
+                            nextPage = "/admin/workspace.jsp";
                         } else {
-                            nextPage = "admin/login.jsp?errMsg=Access Denied";
+                            nextPage = "/admin/login.jsp?errMsg=Access Denied";
                         }
                     } else {
-                        nextPage = "admin/login.jsp?errMsg=" + returnHelper.getDescription();
+                        nextPage = "/admin/login.jsp?errMsg=" + returnHelper.getDescription();
                     }
                     break;
 
                 case "Logout":
                     session.invalidate();
-                    nextPage = "admin/login.jsp?goodMsg=Logout Successful";
+                    nextPage = "/admin/login.jsp?goodMsg=Logout Successful";
                     break;
 
                 case "ListAllArtist":
                     if (checkLogin(response)) {
                         List<Artist> artists = adminManagementBean.listAllArtists(true);
                         if (artists == null) {
-                            nextPage = "admin/error500.html";
+                            nextPage = "/admin/error500.html";
                         } else {
                             session.setAttribute("artists", artists);
-                            nextPage = "admin/AccountManagement/artistManagement.jsp";
+                            nextPage = "/admin/AccountManagement/artistManagement.jsp";
                         }
                     }
                     break;
@@ -79,10 +79,10 @@ public class AccountManagementController extends HttpServlet {
                     if (checkLogin(response)) {
                         List<Artist> bands = adminManagementBean.listAllBands(true);
                         if (bands == null) {
-                            nextPage = "admin/error500.html";
+                            nextPage = "/admin/error500.html";
                         } else {
                             session.setAttribute("bands", bands);
-                            nextPage = "admin/AccountManagement/bandManagement.jsp";
+                            nextPage = "/admin/AccountManagement/bandManagement.jsp";
                         }
                     }
                     break;
@@ -91,10 +91,10 @@ public class AccountManagementController extends HttpServlet {
                     if (checkLogin(response)) {
                         List<Member> fans = adminManagementBean.listAllMembers(true);
                         if (fans == null) {
-                            nextPage = "admin/error500.html";
+                            nextPage = "/admin/error500.html";
                         } else {
                             session.setAttribute("fans", fans);
-                            nextPage = "admin/AccountManagement/fanManagement.jsp";
+                            nextPage = "/admin/AccountManagement/fanManagement.jsp";
                         }
                     }
                     break;
@@ -104,15 +104,15 @@ public class AccountManagementController extends HttpServlet {
                         returnHelper = adminManagementBean.approveArtistOrBand(Long.parseLong(id));
                         if (returnHelper.getResult()) {
                             if (source.equals("band")) {
-                                nextPage = "admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
                             } else if (source.equals("artist")){
-                                nextPage = "admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                             }
                         } else {
                             if (source.equals("band")) { 
-                                nextPage = "admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
                             } else if (source.equals("artist")){
-                                nextPage = "admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                             }
                         }
                     }
@@ -123,15 +123,15 @@ public class AccountManagementController extends HttpServlet {
                         returnHelper = adminManagementBean.rejectArtistOrBand(Long.parseLong(id));
                         if (returnHelper.getResult()) {
                             if (source.equals("band")) {
-                                nextPage = "admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
                             } else {
-                                nextPage = "admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                             }
                         } else {
                             if (source.equals("band")) {
-                                nextPage = "admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
                             } else {
-                                nextPage = "admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                             }
                         }
                     }
@@ -142,7 +142,7 @@ public class AccountManagementController extends HttpServlet {
                         if (id != null) {
                             Artist artist = adminManagementBean.getArtist(Long.parseLong(id));
                             session.setAttribute("artist", artist);
-                            nextPage = "admin/AccountManagement/artist.jsp";
+                            nextPage = "/admin/AccountManagement/artist.jsp";
                         }
                     }
                     break;
@@ -152,7 +152,7 @@ public class AccountManagementController extends HttpServlet {
                         if (id != null) {
                             Artist band = adminManagementBean.getArtist(Long.parseLong(id));
                             session.setAttribute("band", band);
-                            nextPage = "admin/AccountManagement/band.jsp";
+                            nextPage = "/admin/AccountManagement/band.jsp";
                         }
                     }
                     break;
@@ -164,26 +164,26 @@ public class AccountManagementController extends HttpServlet {
                             if (source != null && source.equals("artistManagement")) {
                                 List<Artist> artists = adminManagementBean.listAllArtists(true);
                                 if (artists == null) {
-                                    nextPage = "admin/error500.html";
+                                    nextPage = "/admin/error500.html";
                                 } else {
                                     session.setAttribute("artists", artists);
-                                    nextPage = "admin/AccountManagement/artistManagement.jsp";
+                                    nextPage = "/admin/AccountManagement/artistManagement.jsp";
                                 }
                             } else if (source != null && source.equals("bandManagement")) {
                                 List<Artist> bands = adminManagementBean.listAllBands(true);
                                 if (bands == null) {
-                                    nextPage = "admin/error500.html";
+                                    nextPage = "/admin/error500.html";
                                 } else {
                                     session.setAttribute("bands", bands);
-                                    nextPage = "admin/AccountManagement/bandManagement.jsp";
+                                    nextPage = "/admin/AccountManagement/bandManagement.jsp";
                                 }
                             } else if (source != null && source.equals("fanManagement")) {
                                 List<Member> fans = adminManagementBean.listAllMembers(true);
                                 if (fans == null) {
-                                    nextPage = "admin/error500.html";
+                                    nextPage = "/admin/error500.html";
                                 } else {
                                     session.setAttribute("fans", fans);
-                                    nextPage = "admin/AccountManagement/fanManagement.jsp";
+                                    nextPage = "/admin/AccountManagement/fanManagement.jsp";
                                 }
                             }
                         }
@@ -200,7 +200,7 @@ public class AccountManagementController extends HttpServlet {
             }
 
             if (nextPage.equals("")) {
-                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
                 return;
             } else {
                 response.sendRedirect(nextPage);
@@ -208,7 +208,7 @@ public class AccountManagementController extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            response.sendRedirect("admin/error500.html");
+            response.sendRedirect("/admin/error500.html");
             ex.printStackTrace();
             return;
         }
@@ -218,7 +218,7 @@ public class AccountManagementController extends HttpServlet {
         try {
             Admin admin = (Admin) (session.getAttribute("admin"));
             if (admin == null) {
-                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
                 return false;
             } else {
                 return true;

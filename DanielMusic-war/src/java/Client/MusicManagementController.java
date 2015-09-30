@@ -68,11 +68,11 @@ public class MusicManagementController extends HttpServlet {
                     if (artist != null && id != null) {
                         session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                         if (source != null && source.equals("viewAlbum")) {
-                            nextPage = "#!/artist/album";
+                            nextPage = "/#!/artist/album";
                         } else if (source != null && source.equals("editAlbumPrice")) {
-                            nextPage = "#!/artist/edit_album_price";
+                            nextPage = "/#!/artist/edit_album_price";
                         } else {
-                            nextPage = "#!/artist/edit_album";
+                            nextPage = "/#!/artist/edit_album";
                         }
                     }
                     break;
@@ -82,12 +82,12 @@ public class MusicManagementController extends HttpServlet {
                         Album album = musicManagementBean.getAlbum(Long.parseLong(id));
                         session.setAttribute("album", album);
                         if (source != null && source.equals("editSinglePrice")) {
-                            nextPage = "#!/artist/edit_singles";
+                            nextPage = "/#!/artist/edit_singles";
                         } else {
                             session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "128", false, 300L));
                             session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "320", false, 300L));
                             session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(album.getListOfMusics().get(0).getId(), "wav", false, 300L));
-                            nextPage = "#!/artist/singles";
+                            nextPage = "/#!/artist/singles";
                         }
                     }
                     break;
@@ -115,7 +115,7 @@ public class MusicManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/artist/albums";
+                            nextPage = "/#!/artist/albums";
                         }
                     }
                     break;
@@ -152,7 +152,7 @@ public class MusicManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/artist/albums";
+                            nextPage = "/#!/artist/albums";
                         }
                     }
                     break;
@@ -186,7 +186,7 @@ public class MusicManagementController extends HttpServlet {
                                     session.setAttribute("errMsg", returnHelper.getDescription());
                                 }
                             }
-                            nextPage = "#!/artist/edit_album";
+                            nextPage = "/#!/artist/edit_album";
                         }
                     }
                     break;
@@ -210,7 +210,7 @@ public class MusicManagementController extends HttpServlet {
                                     session.setAttribute("errMsg", returnHelper.getDescription());
                                 }
                             }
-                            nextPage = "#!/artist/edit_singles";
+                            nextPage = "/#!/artist/edit_singles";
                         }
                     }
                     break;
@@ -228,7 +228,7 @@ public class MusicManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/artist/albums";
+                            nextPage = "/#!/artist/albums";
                         }
                     }
                     break;
@@ -245,7 +245,7 @@ public class MusicManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/artist/albums";
+                            nextPage = "/#!/artist/albums";
                         }
                     }
                     break;
@@ -259,7 +259,7 @@ public class MusicManagementController extends HttpServlet {
                         session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                         session.setAttribute("tracks", tracks);
                         if (artist != null) {
-                            nextPage = "#!/artist/tracks";
+                            nextPage = "/#!/artist/tracks";
                         }
                     }
 
@@ -271,12 +271,12 @@ public class MusicManagementController extends HttpServlet {
                         session.setAttribute("track", track);
 
                         if (source != null && source.equals("editMusicPrice")) {
-                            nextPage = "#!/artist/edit_track";
+                            nextPage = "/#!/artist/edit_track";
                         } else {
                             session.setAttribute("URL_128", musicManagementBean.generateDownloadLink(Long.parseLong(id), "128", false, 300L));
                             session.setAttribute("URL_320", musicManagementBean.generateDownloadLink(Long.parseLong(id), "320", false, 300L));
                             session.setAttribute("URL_Wav", musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false, 300L));
-                            nextPage = "#!/artist/track";
+                            nextPage = "/#!/artist/track";
                         }
                     }
                     break;
@@ -300,9 +300,9 @@ public class MusicManagementController extends HttpServlet {
                                 }
                             }
                             if (source != null && source.equals("editAlbumPrice")) {
-                                nextPage = "#!/artist/edit_album_price";
+                                nextPage = "/#!/artist/edit_album_price";
                             } else {
-                                nextPage = "#!/artist/edit_track";
+                                nextPage = "/#!/artist/edit_track";
                             }
                         }
                     }
@@ -345,7 +345,7 @@ public class MusicManagementController extends HttpServlet {
                                 } else {
                                     session.setAttribute("errMsg", returnHelper.getDescription());
                                 }
-                                nextPage = "#!/artist/tracks";
+                                nextPage = "/#!/artist/tracks";
                             }
                         }
                     }
@@ -366,7 +366,7 @@ public class MusicManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/artist/tracks";
+                            nextPage = "/#!/artist/tracks";
                         }
                     }
                     break;
@@ -425,7 +425,7 @@ public class MusicManagementController extends HttpServlet {
                             jsObj.put("errMsg", "No records were deleted.");
                             response.getWriter().write(jsObj.toString());
                         }
-                        session.setAttribute("redirectPage", "#!/cart");
+                        session.setAttribute("redirectPage", "/#!/cart");
                         session.setAttribute("ShoppingCart", shoppingCart);
                     }
                     return;
@@ -464,7 +464,7 @@ public class MusicManagementController extends HttpServlet {
                             }
                         }
 
-                        session.setAttribute("redirectPage", "#!/cart");
+                        session.setAttribute("redirectPage", "/#!/cart");
                         session.setAttribute("ShoppingCart", shoppingCart);
                         if (deleteCounter > 0) {
                             jsObj.put("result", true);
@@ -594,7 +594,7 @@ public class MusicManagementController extends HttpServlet {
                         session.setAttribute("artistDetails", artist);
                         List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(Long.parseLong(id), false, false);
                         session.setAttribute("artistAlbumDetails", albums);
-                        nextPage = "#!/artists";
+                        nextPage = "/#!/artists";
                     }
                     break;
 
@@ -603,7 +603,7 @@ public class MusicManagementController extends HttpServlet {
                         //Check login
                         if (artist == null) {
                             session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
-                            response.sendRedirect("#!/login");
+                            response.sendRedirect("/#!/login");
                             return;
                         }
                         String trackID = request.getParameter("trackID");
@@ -624,10 +624,10 @@ public class MusicManagementController extends HttpServlet {
                                 session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                                 tracks = musicManagementBean.listAllTracksByAlbumID(Long.parseLong(id));
                                 session.setAttribute("tracks", tracks);
-                                nextPage = "#!/artist/tracks";
+                                nextPage = "/#!/artist/tracks";
                             } else {
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
-                                nextPage = "#!/artist/albums";
+                                nextPage = "/#!/artist/albums";
                             }
                         } else {
                             response.sendRedirect("error500.html");
@@ -641,7 +641,7 @@ public class MusicManagementController extends HttpServlet {
                         //Check login
                         if (artist == null) {
                             session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
-                            response.sendRedirect("#!/login");
+                            response.sendRedirect("/#!/login");
                             return;
                         }
                         String trackID = request.getParameter("trackID");
@@ -662,10 +662,10 @@ public class MusicManagementController extends HttpServlet {
                                 session.setAttribute("album", musicManagementBean.getAlbum(Long.parseLong(id)));
                                 tracks = musicManagementBean.listAllTracksByAlbumID(Long.parseLong(id));
                                 session.setAttribute("tracks", tracks);
-                                nextPage = "#!/artist/tracks";
+                                nextPage = "/#!/artist/tracks";
                             } else {
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(artist.getId(), true, true));
-                                nextPage = "#!/artist/albums";
+                                nextPage = "/#!/artist/albums";
                             }
                         } else {
                             response.sendRedirect("error500.html");
@@ -696,7 +696,7 @@ public class MusicManagementController extends HttpServlet {
                             jsObj.put("result", false);
                             jsObj.put("errMsg", "Internal server error.");
                             response.getWriter().write(jsObj.toString());
-                            session.setAttribute("redirectPage", "#!/cart");
+                            session.setAttribute("redirectPage", "/#!/cart");
                             return;
                         }
                         session.setAttribute("checkoutHelper", checkoutHelper);
@@ -711,7 +711,7 @@ public class MusicManagementController extends HttpServlet {
                                 jsObj.put("errMsg", checkoutHelper.getMessage());
                             }
                             response.getWriter().write(jsObj.toString());
-                            session.setAttribute("redirectPage", "#!/cart");
+                            session.setAttribute("redirectPage", "/#!/cart");
                             return;
                         }
                         switch (checkoutHelper.getPayKey()) {
@@ -723,10 +723,10 @@ public class MusicManagementController extends HttpServlet {
                                 if (account != null) {
                                     account = accountManagementBean.getAccount(account.getId());
                                     session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
-                                    session.setAttribute("redirectPage", "#!/fan/profile");
+                                    session.setAttribute("redirectPage", "/#!/fan/profile");
                                     return;
                                 } else {
-                                    session.setAttribute("redirectPage", "#!/download-links");
+                                    session.setAttribute("redirectPage", "/#!/download-links");
                                     return;
                                 }
                             case "NO_PAYMENT_REQUIRED_FAILED":
@@ -734,13 +734,13 @@ public class MusicManagementController extends HttpServlet {
                                 jsObj.put("result", false);
                                 jsObj.put("errMsg", "There was an error completing the checkout request, please try again later.");
                                 response.getWriter().write(jsObj.toString());
-                                session.setAttribute("redirectPage", "#!/cart");
+                                session.setAttribute("redirectPage", "/#!/cart");
                                 return;
                         }
                         jsObj.put("result", true);
                         jsObj.put("goodMsg", "Please verify the following payment details.");
                         response.getWriter().write(jsObj.toString());
-                        session.setAttribute("redirectPage", "#!/checkout");
+                        session.setAttribute("redirectPage", "/#!/checkout");
                     }
                     return;
 
@@ -752,21 +752,17 @@ public class MusicManagementController extends HttpServlet {
                         ReturnHelper result = clientManagementBean.completePayment(paymentIDlong, UUID);
                         if (!result.getResult()) {//fail to complete payment
                             session.setAttribute("errMsg", result.getDescription());
-                            session.setAttribute("redirectPage", "#!/checkout");
+                            session.setAttribute("redirectPage", "/#!/checkout");
                             nextPage = "redirect2.jsp";
                         } else {
                             Payment payment = clientManagementBean.getPayment(result.getID());
                             if (payment.getAccount() != null) {
                                 //Logged in user will view list of purchaserd music
                                 session.setAttribute("ListOfPurchasedMusics", payment.getAccount().getListOfPurchasedMusics());
-                                session.setAttribute("redirectPage", "#!/fan/profile");
+                                session.setAttribute("redirectPage", "/#!/fan/profile");
                                 nextPage = "redirect2.jsp";
                             } else {
-                                //Payment not tied to account will access download page directly
-//                            DownloadHelper downloadHelper = clientManagementBean.getPurchaseDownloadLinks(payment.getId());
-//                            session.setAttribute("downloadLinks", downloadHelper);
-
-                                session.setAttribute("redirectPage", "#!/download-links");
+                                session.setAttribute("redirectPage", "/#!/download-links");
                                 nextPage = "redirect2.jsp";
                             }
                             session.removeAttribute("ShoppingCart");
@@ -779,19 +775,13 @@ public class MusicManagementController extends HttpServlet {
                     String bitrateType = request.getParameter("bitrateType");
                     String musicID = request.getParameter("musicID");
                     String downloadLink = musicManagementBean.generateDownloadLink(Long.parseLong(musicID), bitrateType, true, 300L);
-//                    session.setAttribute("DownloadTrack", downloadLink);
-//                    //session.setAttribute("redirectPage", "#!/fan/profile");
-//                    //jsObj.put("result", true);
-//                    jsObj.put("result", true);
-//                    jsObj.put("downloadLink", downloadLink);
-//                    response.getWriter().write(jsObj.toString());
                     response.sendRedirect(downloadLink);
                     return;
             }
 
             if (nextPage.equals("")) {
                 session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
-                response.sendRedirect("#!/login");
+                response.sendRedirect("/#!/login");
                 return;
             } else {
                 response.sendRedirect(nextPage);

@@ -28,7 +28,6 @@ public class MusicController extends HttpServlet {
     HttpSession session;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Welcome to MusicController");
         String target = request.getParameter("target");
         String id = request.getParameter("id");
 
@@ -93,7 +92,7 @@ public class MusicController extends HttpServlet {
                         String searchText = request.getParameter("text");
                         SearchHelper result = musicManagementBean.search(searchText);
                         session.setAttribute("searchResult", result);
-                        session.setAttribute("redirectPage", "#!/search");
+                        session.setAttribute("redirectPage", "/#!/search");
                         jsObj.put("result", true);
                         response.getWriter().write(jsObj.toString());
                         return;
@@ -104,7 +103,7 @@ public class MusicController extends HttpServlet {
                         Long musicID = Long.parseLong(request.getParameter("id"));
                         Music music = musicManagementBean.getMusic(musicID);
                         session.setAttribute("musicLyrics", music);
-                        response.sendRedirect("#!/lyrics");
+                        response.sendRedirect("/#!/lyrics");
                         return;
                     }
 
@@ -117,9 +116,9 @@ public class MusicController extends HttpServlet {
                             session.setAttribute("artistDetails", artist);
                             List<Album> albums = musicManagementBean.listAllAlbumByArtistOrBandID(artistID, false, false);
                             session.setAttribute("artistAlbumDetails", albums);
-                            response.sendRedirect("#!/artists");
+                            response.sendRedirect("/#!/artists");
                         } else {
-                            response.sendRedirect("#!/index");
+                            response.sendRedirect("/#!/index");
                         }
                     }
                     return;

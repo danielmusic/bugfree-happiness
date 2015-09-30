@@ -35,7 +35,6 @@ public class ClientAccountManagementController extends HttpServlet {
     String nextPage = "", goodMsg = "", errMsg = "";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Welcome to client account managment controller");
         String target = request.getParameter("target");
         String source = request.getParameter("source");
 
@@ -62,15 +61,15 @@ public class ClientAccountManagementController extends HttpServlet {
                                 session.setAttribute("artist", (Artist) account);
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(account.getId(), true, true));
                                 session.setAttribute("listOfGenres", adminManagementBean.listAllGenres());
-                                nextPage = "#!/artist/profile";
+                                nextPage = "/#!/artist/profile";
                             } else if (account instanceof Member) {
                                 session.setAttribute("member", (Member) account);
-                                nextPage = "#!/fan/profile";
+                                nextPage = "/#!/fan/profile";
                             }
                             session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
-                            nextPage = "#!/login";
+                            nextPage = "/#!/login";
                         }
                     }
                     break;
@@ -147,7 +146,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                         }
                                     } else {
                                         session.setAttribute("errMsg", "Ops an error has occured");
-                                        nextPage = "#!/artist/profile";
+                                        nextPage = "/#!/artist/profile";
                                         break;
                                     }
                                 }
@@ -163,7 +162,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                     session.setAttribute("account", account);
                                 } else {
                                     session.setAttribute("errMsg", returnHelper.getDescription());
-                                    nextPage = "#!/artist/profile";
+                                    nextPage = "/#!/artist/profile";
                                     break;
                                 }
                             }
@@ -206,7 +205,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                     session.setAttribute("errMsg", returnHelper.getDescription());
                                 }
                             }
-                            nextPage = "#!/artist/profile";
+                            nextPage = "/#!/artist/profile";
                         }
                     }
                     break;
@@ -218,11 +217,11 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             session.setAttribute("goodMsg", returnHelper.getDescription());
                             session.setAttribute("resetPasswordEmail", email);
-                            nextPage = "#!/reset-password2";
+                            nextPage = "/#!/reset-password2";
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
                             session.setAttribute("resetPasswordEmail", "");
-                            nextPage = "#!/reset-password";
+                            nextPage = "/#!/reset-password";
                         }
                     }
                     break;
@@ -238,14 +237,14 @@ public class ClientAccountManagementController extends HttpServlet {
                             returnHelper = accountManagementBean.updateAccountPassword(accountID, password);
                             if (returnHelper.getResult()) {
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
-                                nextPage = "#!/login";
+                                nextPage = "/#!/login";
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
-                                nextPage = "#!/reset-password2";
+                                nextPage = "/#!/reset-password2";
                             }
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
-                            nextPage = "#!/reset-password2";
+                            nextPage = "/#!/reset-password2";
                         }
                     }
                     break;
@@ -260,7 +259,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/verify-email";
+                            nextPage = "/#!/verify-email";
                         }
                     }
                     break;
@@ -275,7 +274,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
                             }
-                            nextPage = "#!/change-email";
+                            nextPage = "/#!/change-email";
                         }
                     }
                     break;
@@ -292,10 +291,10 @@ public class ClientAccountManagementController extends HttpServlet {
                                 //Refresh account
                                 account = accountManagementBean.getAccount(account.getId());
                                 session.setAttribute("account", account);
-                                nextPage = "#!/verify-email";
+                                nextPage = "/#!/verify-email";
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
-                                nextPage = "#!/verify-email";
+                                nextPage = "/#!/verify-email";
                             }
                         }
                     }
@@ -310,10 +309,10 @@ public class ClientAccountManagementController extends HttpServlet {
                                 session.setAttribute("goodMsg", returnHelper.getDescription());
                                 account = accountManagementBean.getAccount(account.getId());
                                 session.setAttribute("account", account);
-                                nextPage = "#!/change-email";
+                                nextPage = "/#!/change-email";
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
-                                nextPage = "#!/change-email";
+                                nextPage = "/#!/change-email";
                             }
                         }
                         break;
@@ -331,10 +330,10 @@ public class ClientAccountManagementController extends HttpServlet {
                                 //Refresh account
                                 account = accountManagementBean.getAccount(account.getId());
                                 session.setAttribute("account", account);
-                                nextPage = "#!/change-email";
+                                nextPage = "/#!/change-email";
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
-                                nextPage = "#!/change-email";
+                                nextPage = "/#!/change-email";
                             }
                         }
                     }
@@ -351,10 +350,10 @@ public class ClientAccountManagementController extends HttpServlet {
                                 //Refresh account
                                 account = accountManagementBean.getAccount(account.getId());
                                 session.setAttribute("account", account);
-                                nextPage = "#!/change-name";
+                                nextPage = "/#!/change-name";
                             } else {
                                 session.setAttribute("errMsg", returnHelper.getDescription());
-                                nextPage = "#!/change-name";
+                                nextPage = "/#!/change-name";
                             }
                         }
                     }
@@ -364,17 +363,17 @@ public class ClientAccountManagementController extends HttpServlet {
                     request.getSession(false).invalidate();
                     session = request.getSession();
                     session.setAttribute("goodMsg", "Logout Successful");
-                    nextPage = "#!/login";
+                    nextPage = "/#!/login";
                     break;
 
                 case "PageRedirect":
                     if (source != null) {
                         if (source.equals("albums")) {
-                            nextPage = "#!/artist/albums";
+                            nextPage = "/#!/artist/albums";
                         } else if (source.equals("profile")) {
-                            nextPage = "#!/artist/profile";
+                            nextPage = "/#!/artist/profile";
                         } else if (source.equals("transactionHistory")) {
-                            nextPage = "#!/fan/profile";
+                            nextPage = "/#!/fan/profile";
                         }
                     }
                     break;
@@ -396,14 +395,14 @@ public class ClientAccountManagementController extends HttpServlet {
 
             if (nextPage.equals("")) {
                 session.setAttribute("errMsg", "Ops. Session expired. Please try again.");
-                response.sendRedirect("#!/login");
+                response.sendRedirect("/#!/login");
                 return;
             } else {
                 response.sendRedirect(nextPage);
                 return;
             }
         } catch (Exception ex) {
-            response.sendRedirect("error500.html");
+            response.sendRedirect("/error500.html");
             ex.printStackTrace();
             return;
         }

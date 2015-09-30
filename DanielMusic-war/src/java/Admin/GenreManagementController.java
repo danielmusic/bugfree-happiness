@@ -38,10 +38,10 @@ public class GenreManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             genres = adminManagementBean.listAllGenres();
                             if (genres == null) {
-                                nextPage = "admin/error500.html";
+                                nextPage = "/admin/error500.html";
                             } else {
                                 session.setAttribute("genres", genres);
-                                nextPage = "admin/GenreManagement/GenreManagement.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/GenreManagement/GenreManagement.jsp?goodMsg=" + returnHelper.getDescription();
                             }
                         }
                         break;
@@ -49,10 +49,10 @@ public class GenreManagementController extends HttpServlet {
                     case "ListAllGenre":
                         genres = adminManagementBean.listAllGenres();
                         if (genres == null) {
-                            nextPage = "admin/error500.html";
+                            nextPage = "/admin/error500.html";
                         } else {
                             session.setAttribute("genres", genres);
-                            nextPage = "admin/GenreManagement/GenreManagement.jsp";
+                            nextPage = "/admin/GenreManagement/GenreManagement.jsp";
                         }
                         break;
 
@@ -61,10 +61,10 @@ public class GenreManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             genres = adminManagementBean.listAllGenres();
                             if (genres == null) {
-                                nextPage = "admin/error500.html";
+                                nextPage = "/admin/error500.html";
                             } else {
                                 session.setAttribute("genres", genres);
-                                nextPage = "admin/GenreManagement/GenreManagement.jsp?goodMsg=" + returnHelper.getDescription();
+                                nextPage = "/admin/GenreManagement/GenreManagement.jsp?goodMsg=" + returnHelper.getDescription();
                             }
                         }
                         break;
@@ -72,7 +72,7 @@ public class GenreManagementController extends HttpServlet {
             }
 
             if (nextPage.equals("")) {
-                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
                 return;
             } else {
                 response.sendRedirect(nextPage);
@@ -80,7 +80,7 @@ public class GenreManagementController extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            response.sendRedirect("admin/error500.html");
+            response.sendRedirect("/admin/error500.html");
             ex.printStackTrace();
             return;
         }
@@ -90,7 +90,7 @@ public class GenreManagementController extends HttpServlet {
         try {
             Admin admin = (Admin) (session.getAttribute("admin"));
             if (admin == null) {
-                response.sendRedirect("admin/login.jsp?errMsg=Session Expired.");
+                response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
                 return false;
             } else {
                 return true;
