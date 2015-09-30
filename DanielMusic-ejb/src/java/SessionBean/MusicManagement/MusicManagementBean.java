@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.ejb.EJB;
@@ -41,7 +42,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
-    
+
     private static final String approvalRequestEmailSubject = "sounds.SG - New Artist Approval Request";
     private static final String approvalRequestEmailMsg = "Hi there!<br/><br/>There's a new artist pending your approval. Please login to <a href='http://sounds.sg/admin/login.jsp'>admin console</a> to view the full details. <br/><br/><b>Request Details</b><br/>";
 
@@ -946,7 +947,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //Send the email also
             if (album.getArtist().getIsApproved() == 0 || album.getArtist().getIsApproved() == -1) {
                 album.getArtist().setIsApproved(-2);
-                sgl.sendEmail("admin@sounds.sg", "no-reply@sounds.sg", approvalRequestEmailSubject, approvalRequestEmailMsg+"Name: "+album.getArtistName()+"<br/>Account Email: "+album.getArtist().getEmail()+"<br/>Contact Email: "+album.getArtist().getContactEmail()+"<br/>PayPal Email: "+album.getArtist().getPaypalEmail()+"<br/>Facebook: "+album.getArtist().getFacebookURL());
+                sgl.sendEmail("admin@sounds.sg", "no-reply@sounds.sg", approvalRequestEmailSubject, approvalRequestEmailMsg + "Name: " + album.getArtistName() + "<br/>Account Email: " + album.getArtist().getEmail() + "<br/>Contact Email: " + album.getArtist().getContactEmail() + "<br/>PayPal Email: " + album.getArtist().getPaypalEmail() + "<br/>Facebook: " + album.getArtist().getFacebookURL());
             }
             album.setIsPublished(true);
             helper.setDescription("Album has been published successfully.");
@@ -1033,7 +1034,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("MusicManagement: listAllArtistBandInGenre() called");
         try {
             Query q;
-            q = em.createQuery("select a from Artist a where a.isApproved=true and a.genre.id=:genreID");
+            q = em.createQuery("select a from Artist a where a.isApproved=true and a.isDisabled=false and a.genre.id=:genreID");
             q.setParameter("genreID", genreID);
             List<Artist> artists = q.getResultList();
             return artists;
@@ -1049,7 +1050,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         System.out.println("MusicManagement: listAllGenreArtist() called");
         try {
             Query q;
-            q = em.createQuery("select a from Genre a  ORDER BY a.name ASC");
+            q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
             List<Genre> genres = q.getResultList();
             List<ExploreHelper> exploreHelpers = new ArrayList();
             for (Genre genre : genres) {

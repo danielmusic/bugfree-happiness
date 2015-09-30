@@ -309,7 +309,6 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "AddTrack":
-                    System.out.println("wubwubwubw");
                     if (true) {
                         String price = request.getParameter("price");
                         String yearReleased = request.getParameter("yearReleased");

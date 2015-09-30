@@ -106,7 +106,6 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            System.out.println("Open link: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);
             //System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
             //open link in browser
             //Accounts (all password is 12345678): 
@@ -211,9 +210,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             if (account!=null) {
                 List<Music> purchasedMusic = account.getListOfPurchasedMusics();
                 for (Music music : listOfMusicsInCart) {
-                    System.out.println("music"+music.getName());
                     if (purchasedMusic.contains(music)) {
-                        System.out.println("asdasd");
                         checkoutHelper.setMessage("Unable to checkout as you have already purchased the music \""+music.getName()+"\" by the artist \""+music.getArtistName()+"\" before.");
                         return checkoutHelper;
                     }
@@ -290,7 +287,6 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
 
-            System.out.println("-----------");
             System.out.println(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
             System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);

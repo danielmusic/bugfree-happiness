@@ -2,6 +2,7 @@ package EntityManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Music implements Serializable {
+public class Music implements Serializable,Comparable<Music> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -209,4 +210,8 @@ public class Music implements Serializable {
         return "EntityManager.Music[ id=" + id + " ]";
     }
 
+    @Override
+    public int compareTo(Music music) {
+        return trackNumber.compareTo(music.getTrackNumber());
+    }
 }

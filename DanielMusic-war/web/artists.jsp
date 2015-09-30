@@ -210,7 +210,7 @@
                             <%} else {%>
                             <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Single to Cart</a>
                             <%
-                            }
+                                }
                                 List<Music> musics = album.getListOfMusics();
                                 if (musics == null) {
                                     musics = new ArrayList();
@@ -274,21 +274,24 @@
                                                 <i style="cursor: pointer;" class="icon icon-menu2 toggle-title">
                                                     <span style='display: none;'></span>
                                                 </i>
-
+                                                <%if (album.getListOfMusics().size() > 1) {%>
                                                 <a style="cursor: pointer;" onclick="addTrackToCart(<%=music.getId()%>)">
-                                                    <i class="icon icon-cart"></i>
-                                                </a>
+                                                    <%} else {%>
+                                                    <a style="cursor: pointer;" onclick="addAlbumToCart(<%=album.getId()%>)">
+                                                        <%}%>
+                                                        <i class="icon icon-cart"></i>
+                                                    </a>
 
-                                                <span style="margin-left: 6px;">
-                                                    <%
-                                                        if (music.getPrice() == 0.0) {
-                                                            out.print("Free");
-                                                        } else {
-                                                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                                                            out.print(formatter.format(music.getPrice()));
-                                                        }
-                                                    %>
-                                                </span>
+                                                    <span style="margin-left: 6px;">
+                                                        <%
+                                                            if (music.getPrice() == 0.0) {
+                                                                out.print("Free");
+                                                            } else {
+                                                                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                                                out.print(formatter.format(music.getPrice()));
+                                                            }
+                                                        %>
+                                                    </span>
                                             </div>
                                         </div>
 
