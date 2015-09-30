@@ -1,4 +1,4 @@
-<section id="page" data-title="sounds.sg | Login">
+<section id="page" data-title="sounds.sg | login">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Account Login</h1>
     </section>

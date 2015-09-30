@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="sounds.sg | Fan">
+<section id="page" data-title="sounds.sg | fan">
     <style>
         p{
             margin-bottom: 5px;

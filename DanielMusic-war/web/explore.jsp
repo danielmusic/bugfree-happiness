@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="sounds.sg | Explore">
+<section id="page" data-title="sounds.sg | explore">
     <style>
         .track-details:before{
             display: none;

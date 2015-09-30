@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="sounds.sg | Lyrics">
+<section id="page" data-title="sounds.sg | lyrics">
     <%@page import="java.util.List"%>
     <%@page import="EntityManager.Album"%>
     <%@page import="EntityManager.Music"%>
