@@ -695,7 +695,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                         emailTemplate += "<li>" + a.getName() + "</li>";
                     }
                 }
-                if (first = false) {
+                if (first == false) {
                     emailTemplate += "</ol>";
                 }
                 first = true;
@@ -709,7 +709,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
                     }
                 }
-                if (first = false) {
+                if (first == false) {
                     emailTemplate += "</ol>";
                 }
 
