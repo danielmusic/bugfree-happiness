@@ -23,6 +23,12 @@
             function viewBand(id) {
                 window.location.href = "../../AccountManagementController?target=ListBandbyID&id=" + id;
             }
+            function enableAccount(id) {
+                bandManagement.id.value = id;
+                bandManagement.target.value = "EnableAccount";
+                document.bandManagement.action = "../../AccountManagementController";
+                document.bandManagement.submit();
+            }
             function disableAccount(id) {
                 bandManagement.id.value = id;
                 bandManagement.target.value = "DisableAccount";
@@ -110,7 +116,7 @@
                                             <td>
                                                 <%
                                                     if (!bands.get(i).getIsDisabled()) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Enabled</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
@@ -118,8 +124,10 @@
                                             </td>
                                             <td>
                                                 <% if (!bands.get(i).getIsDisabled()) {%>
-                                                <button type="button" class="btn btn-default" onclick="viewBand(<%=bands.get(i).getId()%>)">View</button>
-                                                <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove">Disable</button>
+                                                <div class='btn-group'>
+                                                    <button type="button" class="btn btn-default" onclick="viewBand(<%=bands.get(i).getId()%>)">View</button>
+                                                    <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove">Disable</button>
+                                                </div>
                                                 <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
@@ -144,6 +152,11 @@
                                                             </div>
                                                         </footer>
                                                     </section>
+                                                </div>
+                                                <%} else {%>
+                                                <div class='btn-group'>
+                                                    <button type="button" class="btn btn-default" onclick="viewArtist(<%=bands.get(i).getId()%>)">View</button>
+                                                    <button type="button" class="btn btn-default" onclick="enableAccount(<%=bands.get(i).getId()%>)">Enable</button>   
                                                 </div>
                                                 <%}%>
                                             </td>

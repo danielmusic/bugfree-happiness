@@ -21,6 +21,12 @@
             function refresh() {
                 window.location.href = "../../AccountManagementController?target=ListAllFan";
             }
+            function enableAccount(id) {
+                fanManagement.id.value = id;
+                fanManagement.target.value = "EnableAccount";
+                document.fanManagement.action = "../../AccountManagementController";
+                document.fanManagement.submit();
+            }
             function disableAccount(id) {
                 fanManagement.id.value = id;
                 fanManagement.target.value = "DisableAccount";
@@ -83,7 +89,7 @@
                                             <td>
                                                 <%
                                                     if (!fans.get(i).getIsDisabled()) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Enabled</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
@@ -123,6 +129,8 @@
                                                         </footer>
                                                     </section>
                                                 </div>
+                                                <%} else {%>
+                                                <button type="button" class="btn btn-default btn-block" onclick="enableAccount(<%=fans.get(i).getId()%>)">Enable</button>   
                                                 <%}%>
                                             </td>
                                         </tr>

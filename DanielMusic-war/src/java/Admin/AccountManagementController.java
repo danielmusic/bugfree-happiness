@@ -152,6 +152,43 @@ public class AccountManagementController extends HttpServlet {
                     }
                     break;
 
+                case "EnableAccount":
+                    if (checkLogin(response)) {
+                        System.out.println("innnnn");
+                        returnHelper = accountManagementBean.enableAccount(Long.parseLong(id));
+                        if (returnHelper.getResult()) {
+                            if (source != null && source.equals("artistManagement")) {
+                                List<Artist> artists = adminManagementBean.listAllArtists(true);
+                                if (artists == null) {
+                                    nextPage = "/admin/error500.html";
+                                } else {
+                                    session.setAttribute("artists", artists);
+                                    nextPage = "/admin/AccountManagement/artistManagement.jsp";
+                                }
+                            } else if (source != null && source.equals("bandManagement")) {
+                                List<Artist> bands = adminManagementBean.listAllBands(true);
+                                if (bands == null) {
+                                    nextPage = "/admin/error500.html";
+                                } else {
+                                    session.setAttribute("bands", bands);
+                                    nextPage = "/admin/AccountManagement/bandManagement.jsp";
+                                }
+                            } else if (source != null && source.equals("fanManagement")) {
+                                List<Member> fans = adminManagementBean.listAllMembers(true);
+                                if (fans == null) {
+                                    nextPage = "/admin/error500.html";
+                                } else {
+                                    session.setAttribute("fans", fans);
+                                    nextPage = "/admin/AccountManagement/fanManagement.jsp";
+                                }
+                            }
+                        }
+                    } else {
+                        response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
+                        return;
+                    }
+                    break;
+
                 case "ListArtistbyID":
                     if (checkLogin(response)) {
                         if (id != null) {

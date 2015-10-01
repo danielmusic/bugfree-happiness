@@ -23,6 +23,12 @@
             function viewArtist(id) {
                 window.location.href = "../../AccountManagementController?target=ListArtistbyID&id=" + id;
             }
+            function enableAccount(id) {
+                artistManagement.id.value = id;
+                artistManagement.target.value = "EnableAccount";
+                document.artistManagement.action = "../../AccountManagementController";
+                document.artistManagement.submit();
+            }
             function disableAccount(id) {
                 artistManagement.id.value = id;
                 artistManagement.target.value = "DisableAccount";
@@ -69,9 +75,9 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th style="width: 100px;">Account Status</th>
+                                            <th style="width: 100px;">Email Status</th>
                                             <th style="width: 100px;">Status</th>
-                                            <th style="width: 100px;">Email</th>
-                                            <th style="width: 100px;">Disabled?</th>
                                             <th style="width: 200px; text-align: center;">Action</th>
                                         </tr>
                                     </thead>
@@ -109,7 +115,7 @@
                                             <td>
                                                 <%
                                                     if (!artists.get(i).getIsDisabled()) {
-                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Active</span>");
+                                                        out.print("<span class='label label-success' style='font-size: 100%;'>Enabled</span>");
                                                     } else {
                                                         out.print("<span class='label label-danger' style='font-size: 100%;'>Disabled</span>");
                                                     }
@@ -145,6 +151,11 @@
                                                             </div>
                                                         </footer>
                                                     </section>
+                                                </div>
+                                                <%} else {%>
+                                                <div class='btn-group'>
+                                                    <button type="button" class="btn btn-default" onclick="viewArtist(<%=artists.get(i).getId()%>)">View</button>
+                                                    <button type="button" class="btn btn-default" onclick="enableAccount(<%=artists.get(i).getId()%>)">Enable</button>   
                                                 </div>
                                                 <%}%>
                                             </td>
