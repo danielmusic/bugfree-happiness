@@ -69,9 +69,11 @@
                     <div class="dropdown-menu">
                         <ul class="list-unstyled">
                             <li class="divider"></li>
-                            <li>
-                                <a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="fa fa-user"></i> My Profile</a>
-                            </li>
+                            <!--
+                          <li>
+                              <a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="fa fa-user"></i> My Profile</a>
+                          </li>
+                            -->
                             <li>
                                 <a role="menuitem" tabindex="-1" href="../AccountManagementController?target=Logout"><i class="fa fa-power-off"></i> Logout</a>
                             </li>
@@ -147,6 +149,8 @@
 
                 <!-- start: page -->
                 <h1>Welcome back!</h1>
+
+                <p>Select the relevant function to manage from the sidebar</p>
                 <!-- end: page -->
             </section>
         </div>
