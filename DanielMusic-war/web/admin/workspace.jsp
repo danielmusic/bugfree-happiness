@@ -146,7 +146,7 @@
                 </header>
 
                 <!-- start: page -->
-
+                <h1>Welcome back!</h1>
                 <!-- end: page -->
             </section>
         </div>
