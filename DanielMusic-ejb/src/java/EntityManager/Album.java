@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Album implements Serializable {
@@ -33,7 +33,7 @@ public class Album implements Serializable {
     private String artistName;
     private Boolean isSingle;
     @OneToMany(mappedBy = "album", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
-    @OrderColumn(name="trackNumber")
+    @OrderBy("trackNumber ASC")
     private List<Music> listOfMusics;
     private Long numPurchase;
     @ManyToMany(mappedBy = "listOfAlbums", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
