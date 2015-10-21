@@ -848,7 +848,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return result;
             } else {
                 //Check if artist has any other featured music
-                Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true");
+                Query q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true and e.album.artist.id=:artistID");
+                q.setParameter("artistID", music.getAlbum().getArtist().getId());
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
                 List<Music> musics = q.getResultList();
                 if (musics.size() > 0) {
