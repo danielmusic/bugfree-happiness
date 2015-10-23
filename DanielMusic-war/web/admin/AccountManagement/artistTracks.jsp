@@ -46,7 +46,7 @@
                 <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2>Artist Tracks - <%=artist.getName()%></h2>
+                        <h2><%=tracks.get(0).getAlbum().getName()%> : Tracks</h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li><a href="admin/workspace.jsp"><i class="fa fa-home"></i></a></li>
@@ -61,7 +61,7 @@
                     <!-- start: page -->
                     <section class="panel">
                         <header class="panel-heading">
-                            <h2 class="panel-title">Tracks - <%=artist.getName()%></h2>
+                            <h2 class="panel-title"><%=tracks.get(0).getAlbum().getName()%></h2>
                         </header>
                         <div class="panel-body">
                             <div class="row">
@@ -91,9 +91,16 @@
                                         <tr>        
                                             <td><%=tracks.get(i).getName()%></td>
                                             <td><%=tracks.get(i).getYearReleased()%></td>
-                                            <td><%=tracks.get(i).getTrackNumber()%></td>
+                                            <td>
+                                                <%
+                                                    if (tracks.get(i).getTrackNumber() != null) {
+                                                        out.print(tracks.get(i).getTrackNumber());
+                                                    } else {
+                                                        out.print("-");
+                                                    }
+                                                %>
+                                            </td>
                                             <td><%=tracks.get(i).getPrice()%></td>
-
                                             <td>
                                                 <%if (tracks.get(i).getLyrics() != null && !tracks.get(i).getLyrics().isEmpty()) {%>
                                                 <a class="modal-with-move-anim btn btn-default btn-block" href="#modalLyrics">View</a>

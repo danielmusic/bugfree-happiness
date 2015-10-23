@@ -36,7 +36,7 @@
                 <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2>Artist Albums  - <%=artist.getName()%></h2>
+                        <h2>Albums - <%=artist.getName()%></h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li><a href="admin/workspace.jsp"><i class="fa fa-home"></i></a></li>
@@ -86,8 +86,8 @@
 
                                             <td>
                                                 <%if (albums.get(i).getImageLocation() != null && !albums.get(i).getImageLocation().isEmpty()) {%>
-                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalAlbumArt">View</a>
-                                                <div id="modalAlbumArt" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalAlbumArt<%=albums.get(i).getId()%>">View</a>
+                                                <div id="modalAlbumArt<%=albums.get(i).getId()%>" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
                                                             <h2 class="panel-title">Album Artwork</h2>
@@ -116,9 +116,9 @@
                                             </td>
 
                                             <td>
-                                                <%if (albums.get(i).getCredits() != null && !albums.get(i).getCredits().isEmpty()) {%>
-                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalDescription">View</a>
-                                                <div id="modalDescription" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                                                <%if (albums.get(i).getDescription()!= null && !albums.get(i).getDescription().isEmpty()) {%>
+                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalDescription<%=albums.get(i).getId()%>">View</a>
+                                                <div id="modalDescription<%=albums.get(i).getId()%>" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
                                                             <h2 class="panel-title">Description</h2>
@@ -148,8 +148,8 @@
 
                                             <td>
                                                 <%if (albums.get(i).getCredits() != null && !albums.get(i).getCredits().isEmpty()) {%>
-                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalCredits">View</a>
-                                                <div id="modalCredits" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                                                <a class="modal-with-move-anim btn btn-default btn-block" href="#modalCredits<%=albums.get(i).getId()%>">View</a>
+                                                <div id="modalCredits<%=albums.get(i).getId()%>" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
                                                             <h2 class="panel-title">Credits</h2>
