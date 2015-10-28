@@ -19,7 +19,7 @@
         <div class="container">
             <article>
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
-                    <img src='img/Fans1.png' width="80px">
+                    <img src='img/Fans1.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
                         Easily listen to all the sounds you've purchased
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
-                    <img src='img/Fans2.png' width="80px">
+                    <img src='img/Fans2.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
                         Enjoy your purchases in high-fidelity
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
-                    <img src='img/Fans3.png' width="80px">
+                    <img src='img/Fans3.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
                         Manage your transactions
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
-                    <img src='img/Fans4.png' width="80px">
+                    <img src='img/Fans4.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
                         Show some love to your favourite artists
