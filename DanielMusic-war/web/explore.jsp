@@ -21,7 +21,7 @@
     </style>
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/blog-bg.jpg)">
-        <h1 class="heading-l">Explore</h1>
+        <h1 class="heading-l">explore</h1>
         <h2 class="heading-m">discover <span class="color">new sounds</span></h2>
     </section>
     <!-- /intro -->

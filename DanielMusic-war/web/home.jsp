@@ -29,19 +29,22 @@
     <!-- /intro -->
 
     <!-- ############################# Countdown ############################# -->
+
+    <!--
     <section class="countdown section">
         <div class="container">
             <h5 class="countdown-title">Singapore</h5>
-            <!-- countdown -->
+
             <div class="countdown-wrap" data-event-date="2015/10/18 20:20:00">
                 <div class="days" data-label="Days">000</div>
                 <div class="hours" data-label="Hours">00</div>
                 <div class="minutes" data-label="Minutes">00</div>
                 <div class="seconds" data-label="Seconds">00</div>
             </div>
-            <!-- /countdown -->
         </div>
     </section>
+    -->
+
     <!-- /countdown -->
 
     <!-- ############################# Homepage about ############################# -->
@@ -51,10 +54,9 @@
 
             <div class="col-1-2">
                 <h1 class="heading-xl">sounds SG</h1>
-                <p class="intro-text caps">Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis.</p>
-                <p class="intro-text">Etiam non turpis ac mi ornare cursus nec eu risus. Suspendisse vulputate libero ac dolor varius, nec sagittis quam imperdiet. Sed risus ante, gravida ac accumsan in, tempus quis lacus. Nulla ac tempus sem, non scelerisque nunc.  </p>
-                <a class="stamp-button" href="javascript:;">Read more</a>
-
+                <!-- <p class="intro-text caps">Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis.</p>-->
+                <p class="intro-text">New website coming soon...</p>
+                <!--    <a class="stamp-button" href="javascript:;">Read more</a>-->
             </div>
 
         </div>
@@ -66,15 +68,18 @@
 <!-- /page -->
 <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 
 </script>
