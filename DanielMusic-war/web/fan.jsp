@@ -6,7 +6,7 @@
         }
 
         .heading-l{
-            font-size: 58px;
+            font-size: 80px;
             margin-bottom: 0px;
         }
 
