@@ -5,15 +5,33 @@
             margin-bottom: 5px;
         }
 
+        .heading-l{
+            font-size: 58px;
+            margin-bottom: 0px;
+        }
+
+        .heading-m{
+            font-size: 32px;
+        }
+
         h6{
             font-size: 17px;
             margin-bottom: 10px;
+        }
+
+        /*orange header color*/
+        .header-color{
+            color: #ea4233;
+        }
+
+        .color{
+            font-size: 15px;
         }
     </style>
 
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">fan</h1>
-        <h2 class="heading-m">support <span class="color">local sounds</span></h2>
+        <h2 class="heading-m">support <span class="header-color">local sounds</span></h2>
     </section>
     <section class="content section">
         <div class="container">

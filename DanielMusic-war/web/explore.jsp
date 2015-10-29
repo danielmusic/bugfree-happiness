@@ -9,11 +9,20 @@
             border-left: none;
             margin-left: 0;
         }
+
+        .heading-l{
+            font-size: 58px;
+            margin-bottom: 0px;
+        }
+
+        .heading-m{
+            font-size: 32px;
+        }
     </style>
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/blog-bg.jpg)">
         <h1 class="heading-l">Explore</h1>
-        <h2 class="heading-m">explore  and <span class="color">Discover</span></h2>
+        <h2 class="heading-m">discover <span class="color">new sounds</span></h2>
     </section>
     <!-- /intro -->
     <section class="content section">

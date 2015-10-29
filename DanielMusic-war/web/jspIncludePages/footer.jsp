@@ -26,7 +26,7 @@
 
         <!-- Footer copyrights -->
         <div class="footer-copyrights col-1-2 last">
-            Copyright &copy; 2006-2014 - Noisa. All rights reserved
+            Copyright &copy; 2015 - sounds SG. All rights reserved
         </div>
         <!-- /footer copyrights -->
     </div>

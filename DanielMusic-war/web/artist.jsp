@@ -5,15 +5,33 @@
             margin-bottom: 5px;
         }
 
+        .heading-l{
+            font-size: 58px;
+            margin-bottom: 0px;
+        }
+
+        .heading-m{
+            font-size: 32px;
+        }
+
         h6{
             font-size: 17px;
             margin-bottom: 10px;
+        }
+
+        /*orange header color*/
+        .header-color{
+            color: #ea4233;
+        }
+
+        .color{
+            font-size: 15px;
         }
     </style>
 
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">artist</h1>
-        <h2 class="heading-m">support <span class="color">local sounds</span></h2>
+        <h2 class="heading-m">share <span class="header-color">your sounds</span></h2>
     </section>
     <section class="content section">
         <div class="container">
@@ -22,12 +40,12 @@
                     <img src='img/Artists1.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
-                        Easily listen to all the sounds you've purchased
+                        Be part of Singapore's largest repository of local music
                     </h6>
                     <p>
                         <span class="color">
-                            Download links to sounds will always be available<br>
-                            Listen to your downloaded sounds in WAV anywhere, anytime
+                            Sounds.sg will always be purely local<br>
+                            Stream and sell your music directly from our database
                         </span>
                     </p>
                 </div>
@@ -36,11 +54,12 @@
                     <img src='img/Artists2.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
-                        Enjoy your purchases in high-fidelity
+                        Own your profile
                     </h6>
                     <p>
                         <span class="color">
-                            Where visitors only get 128kbps MP3 streams, you get 320
+                            Manage your biography and track-listing<br>
+                            Upload lyrics together with your songs
                         </span>
                     </p>
                 </div>
@@ -49,12 +68,13 @@
                     <img src='img/Artists3.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
-                        Manage your transactions
+                        Get discovered
                     </h6>
                     <p>
                         <span class="color">
-                            Attach your PayPal account for seamless transactions<br>
-                            View your transaction history
+                            Publishing your profile automatically puts you on the explore page<br>
+                            Feature a song that best represents your sound<br>
+                            Allow users to hear you before they even know you
                         </span>
                     </p>
                 </div>
@@ -63,12 +83,13 @@
                     <img src='img/Artists4.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
                     <h6>
-                        Show some love to your favourite artists
+                        Get paid
                     </h6>
                     <p>
                         <span class="color">
-                            Artists get notified when you purchase their sounds<br>
-                            Sustain the local music scene
+                            We believe music should be properly valued<br>
+                            Dictate your own prices<br>
+                            Receive payment through PayPal; securely and reliably
                         </span>
                     </p>
                 </div>
