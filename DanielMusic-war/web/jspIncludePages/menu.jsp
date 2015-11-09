@@ -109,9 +109,6 @@
             <!-- ############ navigation ############ -->
             <nav id="nav">
                 <ul>
-                    <li>
-                        <a style="cursor: pointer;" onclick="javascript:retrieveGenre();">explore</a>
-                    </li>
                     <%
                         Account account = (Account) (session.getAttribute("artist"));
                         Artist artist = (Artist) (session.getAttribute("artist"));
@@ -119,6 +116,9 @@
 
                         if (artist != null) {
                     %>
+                    <li>
+                        <a style="cursor: pointer;" onclick="javascript:retrieveGenre();">explore</a>
+                    </li>
                     <li class="submenu">
                         <a href="ClientAccountManagementController?target=PageRedirect&source=profile">manage</a>
                         <ul>
@@ -141,12 +141,27 @@
                     </li>
                     <%} else if (fan != null) {%>
                     <li>
+                        <a>
+                            <%
+                                if (fan.getName() != null) {
+                                    out.print(fan.getName());
+                                }
+                            %>
+                        </a>
+                    </li>
+                    <li>
+                        <a style="cursor: pointer;" onclick="javascript:retrieveGenre();">explore</a>
+                    </li>
+                    <li>
                         <a href="ClientAccountManagementController?target=PageRedirect&source=transactionHistory">transaction history</a>
                     </li> 
                     <li>
                         <a href="ClientAccountManagementController?target=AccountLogout">logout</a>
                     </li>
                     <%} else {%>
+                    <li>
+                        <a style="cursor: pointer;" onclick="javascript:retrieveGenre();">explore</a>
+                    </li>
                     <li>
                         <a href="#!/artist">artist</a>
                     </li>
