@@ -101,11 +101,16 @@
                     <h2>Sign up for a fan account</h2>
 
                     <div class="row clearfix">
-                        <div class="col-1-1">
+                        <div class="col-1-2">
+                            <label for="name"><strong>Name</strong> *</label>
+                            <input type="text" name="name" id="name" required>
+                        </div>
+                        <div class="col-1-2 last">
                             <label for="email"><strong>Email</strong> *</label>
                             <input type="email" name="email" id="email" required>
                         </div>
                     </div>
+
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="password"><strong>Password</strong> *</label>

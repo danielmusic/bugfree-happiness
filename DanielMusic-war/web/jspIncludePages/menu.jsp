@@ -157,10 +157,10 @@
                         <a>sign up</a>
                         <ul>
                             <li>
-                                <a href='#!/artist/signup'>Artist signup</a>
+                                <a href='#!/artist/signup'>artist signup</a>
                             </li>
                             <li>
-                                <a href='#!/fan/signup'>Fan signup</a>
+                                <a href='#!/fan/signup'>fan signup</a>
                             </li>
                         </ul>
                     </li>
