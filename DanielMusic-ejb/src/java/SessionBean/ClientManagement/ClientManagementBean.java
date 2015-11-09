@@ -711,9 +711,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
                 emailTemplate += "P/S: The payment has been credited into your PayPal account. <br/><br/>"
                         + "Have a great day!<br/>"
-                        + "<a href=\"http://www.sounds.sg\">Sounds.sg</a>";
+                        + "<a href=\"http://www.sounds.sg\">sounds.sg</a>";
                 //Send using sendgrid
-                if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "sounds.SG - Fan Purchase", emailTemplate)) {
+                if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "sounds.sg - Fan Purchase", emailTemplate)) {
                     result.setDescription("Artist notification sent.");
                     result.setResult(true);
                 } else {
@@ -755,7 +755,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             //Create the email template
             //album first then music
-            String emailTemplate = "Thank you for purchasing from sounds.SG. To start your download, please click on the following link(s) below:";
+            String emailTemplate = "Thank you for purchasing from sounds.sg. To start your download, please click on the following link(s) below:";
             if (listOfAlbums != null && listOfAlbums.size() > 0) {
                 emailTemplate += ""
                         + "<h2>Albums</h2>"
@@ -828,9 +828,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             emailTemplate += "Enjoy your downloads!<br/><br/>"
                     + "P/S: The download links in this email are only valid for 12hours. If you did not purchased this music, someone else must have entered your email address on our site. You can just ignore this message. <br/><br/>"
                     + "Have a nice day!<br/>"
-                    + "<a href=\"http://www.sounds.sg\">sounds.SG</a>";
+                    + "<a href=\"http://www.sounds.sg\">sounds.sg</a>";
             //Send using sendgrid
-            if (sgl.sendEmail(buyerEmail, "no-reply@sounds.sg", "Your sounds.SG Purchase", emailTemplate)) {
+            if (sgl.sendEmail(buyerEmail, "no-reply@sounds.sg", "Your sounds.sg Purchase", emailTemplate)) {
                 result.setDescription("Download links sent.");
                 result.setResult(true);
             } else {

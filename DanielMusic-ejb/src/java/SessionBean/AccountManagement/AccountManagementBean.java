@@ -425,13 +425,13 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                         + "Visit this link to key in the code: <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a> <br/><br/>"
                         // need to login first before they can key
                         + "If this email change was not initated by you, please ignore this email.";
-                emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "Sounds.SG Account Verification", verificationInstructions);
+                emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "sounds.sg Account Verification", verificationInstructions);
             } else {
-                verificationInstructions = "Thank you for registering at Sounds.SG <br/><br/>"
+                verificationInstructions = "Thank you for registering at sounds.sg <br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
                         + "Visit this link to key in the code: <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a> <br/><br/>"
-                        + "If you did not sign up for an account at Sounds.SG, please ignore this email.";
-                emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Sounds.SG Account Verification", verificationInstructions);
+                        + "If you did not sign up for an account at sounds.sg, please ignore this email.";
+                emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "sounds.sg Account Verification", verificationInstructions);
             }
             if (emailSent) {
                 result.setResult(true);
@@ -552,7 +552,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                     + "Your password reset code is: <b>" + resetCode + "</b><br/>"
                     + "Visit this link to key in the code: <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
                     + "If this password reset was not initated by you, please ignore this email.";
-            Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Sounds.SG Password Reset", resetInstructions);
+            Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "sounds.sg Password Reset", resetInstructions);
             if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Password reset code sent, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");

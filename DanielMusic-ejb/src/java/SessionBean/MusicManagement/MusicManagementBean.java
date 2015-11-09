@@ -43,7 +43,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
 
-    private static final String approvalRequestEmailSubject = "sounds.SG - New Artist Approval Request";
+    private static final String approvalRequestEmailSubject = "sounds.sg - New Artist Approval Request";
     private static final String approvalRequestEmailMsg = "Hi there!<br/><br/>There's a new artist pending your approval. Please login to <a href='http://sounds.sg/admin/login.jsp'>admin console</a> to view the full details. <br/><br/><b>Request Details</b><br/>";
 
     @EJB
