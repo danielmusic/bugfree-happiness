@@ -203,6 +203,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
+            //Format name
+            if (name!=null)
+                name = name.trim();
             if (email==null  || email.isEmpty() || password==null || password.isEmpty()) {
                 result.setDescription("Email, password cannot be empty.");
                 return result;
