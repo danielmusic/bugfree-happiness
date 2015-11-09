@@ -2,7 +2,7 @@
 <section id="page" data-title="Artist Signup">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <div class="container">
-            <h1 class="heading-l">Artist Signup</h1>
+            <h1 class="heading-l">artist signup</h1>
             <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
         </div>
     </section>

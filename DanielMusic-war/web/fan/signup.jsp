@@ -2,7 +2,7 @@
 <section id="page" data-title="Fan Signup">
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Fan Signup</h1>
+        <h1 class="heading-l">fan signup</h1>
         <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
         <!-- Overlay -->
         <span class="overlay dots"></span>
@@ -98,7 +98,7 @@
                     <p class="error" id="errMsg" style="display:none;"></p>
                     <p class="success" id="goodMsg"  style="display:none;"></p>
 
-                    <h2>Sign up for a fah account</h2>
+                    <h2>Sign up for a fan account</h2>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
