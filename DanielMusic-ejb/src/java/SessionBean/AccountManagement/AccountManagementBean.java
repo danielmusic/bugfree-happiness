@@ -204,12 +204,13 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         result.setResult(false);
         try {
             //Format name
-            if (name!=null)
+            if (name != null) {
                 name = name.trim();
-            if (email==null  || email.isEmpty() || password==null || password.isEmpty()) {
+            }
+            if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
                 result.setDescription("Email, password cannot be empty.");
                 return result;
-            } else if (!isAdmin && (name==null || name.isEmpty())) {
+            } else if (!isAdmin && (name == null || name.isEmpty())) {
                 result.setDescription("Name cannot be empty.");
                 return result;
             } else if (checkIfEmailExists(email)) {
@@ -421,16 +422,19 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             em.merge(account);
             //Send the verification code
             String verificationInstructions = "";
+            if (account.getName() != null && !account.getName().isEmpty()) {
+                verificationInstructions = "Dear " + account.getName() + ",<br/><br/>";
+            }
             Boolean emailSent = false;
             if (changingEmail) {
-                verificationInstructions = "You have request for a change of account email.<br/><br/>"
+                verificationInstructions += "You have requested for a change of account email.<br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
                         + "Visit this link to key in the code: <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a> <br/><br/>"
                         // need to login first before they can key
                         + "If this email change was not initated by you, please ignore this email.";
                 emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "sounds.sg Account Verification", verificationInstructions);
             } else {
-                verificationInstructions = "Thank you for registering at sounds.sg <br/><br/>"
+                verificationInstructions += "Thank you for registering at sounds.sg <br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
                         + "Visit this link to key in the code: <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a> <br/><br/>"
                         + "If you did not sign up for an account at sounds.sg, please ignore this email.";
@@ -550,8 +554,12 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             account.setPasswordResetCode(resetCode);
             account.setForgetPassword(true);
             em.merge(account);
+            String resetInstructions = "";
             //Send the verification code
-            String resetInstructions = "You have request for a password reset.<br/><br/>"
+            if (account.getName() != null && !account.getName().isEmpty()) {
+                resetInstructions = "Dear " + account.getName() + ",<br/><br/>";
+            }
+            resetInstructions += "You have request for a password reset.<br/><br/>"
                     + "Your password reset code is: <b>" + resetCode + "</b><br/>"
                     + "Visit this link to key in the code: <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
                     + "If this password reset was not initated by you, please ignore this email.";
@@ -874,7 +882,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 //Check image
                 ReturnHelper checkImageResult = cibl.checkIfImageFitsRequirement(tempFileLocation);
                 if (!checkImageResult.getResult()) {
-                    result.setDescription("Profile picture does not meet image requirements. "+checkImageResult.getDescription());
+                    result.setDescription("Profile picture does not meet image requirements. " + checkImageResult.getDescription());
                     return result;
                 }
                 //Upload to GCS

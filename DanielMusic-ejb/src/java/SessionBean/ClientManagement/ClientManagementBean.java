@@ -670,7 +670,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 setOfArtists.add(m.getAlbum().getArtist());
             }
             for (Artist artist : setOfArtists) {
-                String emailTemplate = "";
+                String emailTemplate = "Dear "+artist.getName()+",<br/><br/>";
                 String buyerName = "unregistered user";
                 if (payment.getAccount() != null) {
                     buyerName = payment.getAccount().getName();
