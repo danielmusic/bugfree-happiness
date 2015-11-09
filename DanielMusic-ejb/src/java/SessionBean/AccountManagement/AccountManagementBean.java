@@ -206,7 +206,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (email==null  || email.isEmpty() || password==null || password.isEmpty()) {
                 result.setDescription("Email, password cannot be empty.");
                 return result;
-            } else if ((isArtist || isBand) && (name==null || name.isEmpty())) {
+            } else if (!isAdmin && (name==null || name.isEmpty())) {
                 result.setDescription("Name cannot be empty.");
                 return result;
             } else if (checkIfEmailExists(email)) {
