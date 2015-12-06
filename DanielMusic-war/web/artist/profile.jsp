@@ -130,7 +130,18 @@
                                 </span>
                             </a>
                             <%}%>
+
+
+                            <div class="details-meta">
+                                <ul class="details-list">
+                                    <li>
+                                        <span class="label">URL</span>
+                                        <input type="text" value="http://sounds.sg/music/<%=artist.getName()%>" disabled style="width:100%;"/>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
+
                     </div>
 
                     <div id="main" class="release main-left main-medium">
@@ -151,33 +162,42 @@
                         </div>
 
                         <div class="row clearfix">
-                            <div class="col-1-3">
+                            <div class="col-1-3" style="margin: 0 20px 24px 0;">
                                 <label for="ppEmail"><strong>PayPal Email Address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
                                 <input type="email" value="<%if (artist.getPaypalEmail() != null) {
                                         out.print(artist.getPaypalEmail());
                                     }%>" name="paypalEmail" id="ppEmail" required>
                             </div>
-                        </div>
 
-                        <hr class="divider">
-
-                        <div class="row clearfix">
-                            <div class="col-1-3" style="margin: 0 20px 24px 0;">
-                                <label for="oldpassword"><strong>Old Password</strong> *</label>
-                                <input id="oldpassword" type="password" name="oldpassword" placeholder="Leave blank unless setting a new password">
-                            </div>
                             <div class="col-1-3" style="margin: 0 0 0 0;">
-                                <label for="password"><strong>New Password</strong> *</label>
-                                <input id="password" type="password" name="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers" onchange="form.repassword.pattern = this.value;">
+                                <label>&nbsp;</label>
+                                <button type="button" class="invert" style="width: 100%;" onclick="javascript:window.location.href = '#!/change-password'" >Change Password</button>
                             </div>
+
+                            <div class="col-1-3 last"></div>
                         </div>
 
-                        <div class="row clearfix">
-                            <div class="col-1-3 last">
-                                <label for="repassword"><strong>Re-enter Password</strong> *</label>
-                                <input id="repassword" type="password" name="repassword">
-                            </div>
+                        <!--
+                    <hr class="divider">
+
+                    <div class="row clearfix">
+                        <div class="col-1-3" style="margin: 0 20px 24px 0;">
+                            <label for="oldpassword"><strong>Old Password</strong> *</label>
+                            <input id="oldpassword" type="password" name="oldpassword" placeholder="Leave blank unless setting a new password">
                         </div>
+                        <div class="col-1-3" style="margin: 0 0 0 0;">
+                            <label for="password"><strong>New Password</strong> *</label>
+                            <input id="password" type="password" name="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers" onchange="form.repassword.pattern = this.value;">
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-1-3 last">
+                            <label for="repassword"><strong>Re-enter Password</strong> *</label>
+                            <input id="repassword" type="password" name="repassword">
+                        </div>
+                    </div> -->
+
                     </div>
 
                     <hr class="divider">
@@ -255,10 +275,40 @@
                     <div class="row clearfix">
                         <div class="col-1-2" style="margin-bottom: 24px;">
                             <label for="bio"><strong>Biography</strong> </label>
+                            <script type="text/javascript">
+                                counter = function () {
+                                    var wordLimit = 200;
+                                    var value = $('#bio').val();
+
+                                    if (value.length == 0) {
+                                        $('#wordCount').html(wordLimit);
+                                        return;
+                                    }
+
+                                    var regex = /\s+/gi;
+                                    var wordCount = wordLimit - (value.trim().replace(regex, ' ').split(' ').length);
+
+                                    $('#wordCount').html(wordCount);
+                                };
+
+                                $(document).ready(function () {
+                                    counter();
+                                    $('#bio').change(counter);
+                                    $('#bio').keydown(counter);
+                                    $('#bio').keypress(counter);
+                                    $('#bio').keyup(counter);
+                                    $('#bio').blur(counter);
+                                    $('#bio').focus(counter);
+                                });
+                            </script>
                             <textarea name="bio" id="bio" style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getBiography());
                                 } %></textarea>
-                            <label>200 words max</label>
+                            <label>  
+                                <div id="result">
+                                    <span id="wordCount">200</span> words left<br/>
+                                </div>
+                            </label>
                         </div>
 
                         <div class="col-1-2 last">

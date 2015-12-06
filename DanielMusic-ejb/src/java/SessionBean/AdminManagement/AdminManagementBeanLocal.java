@@ -64,5 +64,7 @@ public interface AdminManagementBeanLocal {
     public Artist getArtist(Long artistID);
     
     public Member getMember(Long memberID);
+    
+    public ReturnHelper exportVerifiedFanAccountEmails();
 
 }

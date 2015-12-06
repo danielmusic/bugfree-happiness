@@ -292,4 +292,28 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
         }
     }
 
+    public ReturnHelper exportVerifiedFanAccountEmails() {
+        ReturnHelper returnHelper = new ReturnHelper();
+        returnHelper.setResult(false);
+        try {
+            Query q = em.createQuery("SELECT s FROM Account s where s.emailIsVerified=true");
+            List<Account> accounts = q.getResultList();
+            String accountList = "";
+            for (Account account : accounts) {
+                if (account instanceof Member) {
+                    accountList += account.getEmail() + ",";
+                }
+            }
+            if (sgl.sendEmail("admin@sounds.sg", "no-reply@sounds.sg", "sounds.sg | verified accounts email list", accountList)) {
+                returnHelper.setResult(true);
+                returnHelper.setDescription("List of emails sent");
+            } else {
+                returnHelper.setDescription("Unable to send the email, try again later");
+            }
+        } catch (Exception e) {
+            returnHelper.setDescription("Error retriving account records");
+        }
+        return returnHelper;
+    }
+
 }

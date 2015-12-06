@@ -125,6 +125,10 @@
                                         out.print(artist.getGenre().getName());
                                     }%></div>
                             </li>
+                            <li>
+                                <span class="label">URL</span>
+                                <input type="text" value="http://sounds.sg/music/<%=artist.getName()%>" disabled style="width:100%;"/>
+                            </li>
                         </ul>
                     </div>
                     <!-- Details Share -->

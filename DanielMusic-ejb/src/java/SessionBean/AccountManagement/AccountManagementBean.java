@@ -213,6 +213,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             } else if (!isAdmin && (name == null || name.isEmpty())) {
                 result.setDescription("Name cannot be empty.");
                 return result;
+            } else if (password.length() < 6) {
+                result.setDescription("Password must be longer than 6 characters.");
+                return result;
             } else if (checkIfEmailExists(email)) {
                 result.setDescription("Unable to register, email already in use.");
                 return result;
@@ -1007,6 +1010,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Account account = (Account) q.getSingleResult();
             if (!validatePassword(oldPassword, account.getPassword())) {
                 result.setDescription("Old password provided is invalid, password not updated.");
+            } else if (newPassword.length() < 6) {
+                result.setDescription("New password must be longer than 6 characters.");
+                return result;
             } else {
                 account.setForgetPassword(false);
                 account.setPassword(generatePasswordHash(generatePasswordSalt(), newPassword));

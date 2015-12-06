@@ -57,16 +57,29 @@ public class ClientAccountManagementController extends HttpServlet {
                         if (returnHelper.getResult()) {
                             account = accountManagementBean.getAccount(email);
                             session.setAttribute("account", account);
+                            String accountType = "Unknown";
                             if (account instanceof Artist) {
                                 session.setAttribute("artist", (Artist) account);
                                 session.setAttribute("albums", musicManagementBean.listAllAlbumByArtistOrBandID(account.getId(), true, true));
                                 session.setAttribute("listOfGenres", adminManagementBean.listAllGenres());
+                                if (((Artist) account).getIsBand()) {
+                                    accountType = "band";
+                                } else {
+                                    accountType = "artist";
+                                }
                                 nextPage = "/#!/artist/profile";
                             } else if (account instanceof Member) {
                                 session.setAttribute("member", (Member) account);
+                                accountType = "fan";
                                 nextPage = "/#!/fan/profile";
                             }
                             session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
+                            if (account.getName() != null && !account.getName().isEmpty()) {
+                                session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as " + accountType + ".");
+                            } else {
+                                session.setAttribute("goodMsg", "Welcome back! You are logged in as " + accountType + ".");
+                            }
+
                         } else {
                             session.setAttribute("errMsg", returnHelper.getDescription());
                             nextPage = "/#!/login";
@@ -130,27 +143,27 @@ public class ClientAccountManagementController extends HttpServlet {
                     if (true) {
                         Account account = (Account) session.getAttribute("account");
                         if (account != null) {
-                            String repassword = request.getParameter("repassword");
-                            String oldpassword = request.getParameter("oldpassword");
-                            String password = request.getParameter("password");
-                            //check need to update password
-                            if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty() && repassword != null && !repassword.isEmpty()) {
-                                if (!password.equals(repassword)) {
-                                    session.setAttribute("errMsg", "New Password and Re-enter Password does not match. Please try again.");
-                                } else {
-                                    Artist artist = (Artist) (session.getAttribute("artist"));
-                                    if (artist != null) {
-                                        returnHelper = accountManagementBean.updateAccountPassword(artist.getId(), oldpassword, password);
-                                        if (returnHelper.getResult()) {
-                                            session.setAttribute("goodMsg", returnHelper.getDescription());
-                                        }
-                                    } else {
-                                        session.setAttribute("errMsg", "Ops an error has occured");
-                                        nextPage = "/#!/artist/profile";
-                                        break;
-                                    }
-                                }
-                            }
+//                            String repassword = request.getParameter("repassword");
+//                            String oldpassword = request.getParameter("oldpassword");
+//                            String password = request.getParameter("password");
+//                            //check need to update password
+//                            if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty() && repassword != null && !repassword.isEmpty()) {
+//                                if (!password.equals(repassword)) {
+//                                    session.setAttribute("errMsg", "New Password and Re-enter Password does not match. Please try again.");
+//                                } else {
+//                                    Artist artist = (Artist) (session.getAttribute("artist"));
+//                                    if (artist != null) {
+//                                        returnHelper = accountManagementBean.updateAccountPassword(artist.getId(), oldpassword, password);
+//                                        if (returnHelper.getResult()) {
+//                                            session.setAttribute("goodMsg", returnHelper.getDescription());
+//                                        }
+//                                    } else {
+//                                        session.setAttribute("errMsg", "Ops an error has occured");
+//                                        nextPage = "/#!/artist/profile";
+//                                        break;
+//                                    }
+//                                }
+//                            }
 
                             String email = request.getParameter("email");
                             //Updates email only if the user enters a different mail
@@ -389,6 +402,32 @@ public class ClientAccountManagementController extends HttpServlet {
                         System.out.println("Controller: GetPastPurchases");
                         account = accountManagementBean.getAccount(account.getId());
                         session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
+                    }
+                    break;
+
+                case "ChangePassword":
+                    if (true) {
+                        Account account = (Account) session.getAttribute("account");
+                        if (account != null) {
+                            String repassword = request.getParameter("repassword");
+                            String oldpassword = request.getParameter("oldpassword");
+                            String password = request.getParameter("password");
+                            //check need to update password
+                            if (oldpassword != null && !oldpassword.isEmpty() && password != null && !password.isEmpty() && repassword != null && !repassword.isEmpty()) {
+                                if (!password.equals(repassword)) {
+                                    session.setAttribute("errMsg", "New Password and Re-enter Password does not match. Please try again.");
+                                } else {
+                                    returnHelper = accountManagementBean.updateAccountPassword(account.getId(), oldpassword, password);
+                                    if (returnHelper.getResult()) {
+                                        session.setAttribute("goodMsg", returnHelper.getDescription());
+                                    } else {
+                                        session.setAttribute("errMsg", returnHelper.getDescription());
+                                    }
+                                    nextPage = "/#!/change-password";
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break;
             }

@@ -141,15 +141,6 @@
                     </li>
                     <%} else if (fan != null) {%>
                     <li>
-                        <a>
-                            <%
-                                if (fan.getName() != null) {
-                                    out.print(fan.getName());
-                                }
-                            %>
-                        </a>
-                    </li>
-                    <li>
                         <a style="cursor: pointer;" onclick="javascript:retrieveGenre();">explore</a>
                     </li>
                     <li>

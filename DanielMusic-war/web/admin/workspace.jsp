@@ -38,6 +38,11 @@
         <!-- Head Libs -->
         <script src="assets/vendor/modernizr/modernizr.js"></script>
     </head>
+    <script>
+        function generateEmail() {
+            window.location.href = "../AccountManagementController?target=GenerateEmail";
+        }
+    </script>
     <body onload="alertFunc()">
         <jsp:include page="jspIncludePages/displayNotification.jsp" />
         <header class="header">
@@ -151,6 +156,8 @@
                 <h1>Welcome back!</h1>
 
                 <p>Select the relevant function to manage from the sidebar</p>
+
+                <button type="button" class="btn btn-default" onclick="generateEmail()">Generate Verified Account Email</button>
                 <!-- end: page -->
             </section>
         </div>

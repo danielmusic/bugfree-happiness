@@ -81,11 +81,11 @@
                                 document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
                                 return false;
                             } else if (password === repassword) {
-                                if (password.length < 8) {
+                                if (password.length < 6) {
                                     document.getElementById("chkAgree").checked = false;
                                     document.getElementById("grecaptcha").reset();
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Passwords too short. At least 8 characters. Please key again.";
+                                    document.getElementById('errMsg').innerHTML = "Password must be longer than 6 characters.";
                                     return false;
                                 }
                             }

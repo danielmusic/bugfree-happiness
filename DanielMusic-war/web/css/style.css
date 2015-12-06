@@ -152,7 +152,8 @@ select, option {
 .form .row { margin-bottom: 0px }
 .form input { padding-top: 12px; padding-bottom: 12px; }
 
-.form textarea { min-height: 200px; }
+.form textarea { min-height: 200px;  font-size:  inherit; font-family: inherit;}
+
 
 .form input[type="submit"] {
     margin: 0;
