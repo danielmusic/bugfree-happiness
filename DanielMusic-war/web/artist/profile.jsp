@@ -201,14 +201,14 @@
                             </div>
                             <div class="col-1-3" style="margin: 0 0 0 0;">
                                 <label for="password"><strong>New Password</strong> *</label>
-                                <input id="password" type="password" name="password" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.repassword.pattern = this.value;">
+                                <input id="password" type="password" name="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers" onchange="form.repassword.pattern = this.value;">
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-1-3 last">
                                 <label for="repassword"><strong>Re-enter Password</strong> *</label>
-                                <input id="repassword" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="repassword">
+                                <input id="repassword" type="password" name="repassword">
                             </div>
                         </div>
                     </div>
