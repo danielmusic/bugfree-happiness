@@ -130,39 +130,6 @@
                                 </span>
                             </a>
                             <%}%>
-
-                            <div class="details-meta">
-                                <ul class="details-list">
-                                    <li>
-                                        <span class="label">Name</span>
-                                        <div class="data"><b><%=artist.getName()%></b></div>
-                                    </li>
-                                    <li>
-                                        <span class="label">Genres</span>
-                                        <div class="data"><%if (artist.getGenre() != null) {
-                                                out.print(artist.getGenre().getName());
-                                            }%></div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="details-social-box">
-                                <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
-                                <a href="<%=artist.getFacebookURL()%>"><i class="icon icon-facebook"></i></a>
-                                    <%}%>
-
-                                <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
-                                <a href="<%=artist.getTwitterURL()%>"><i class="icon icon-twitter"></i></a>
-                                    <%}%>
-
-                                <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
-                                <a href="<%=artist.getInstagramURL()%>"><i class="fa fa-instagram "></i></a>
-                                    <%}%>
-
-                                <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
-                                <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
-                                    <%}%>
-                            </div>
                         </div>
                     </div>
 
@@ -251,14 +218,30 @@
                     <div class="row clearfix">
                         <div class="col-1-2">
                             <label for="dateFormed"><strong>Date Formed</strong> </label>
-                            <%
-                                String date = "";
-                                if (artist.getBandDateFormed() != null) {
-                                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-                                    date = DATE_FORMAT.format(artist.getBandDateFormed());
+
+                            <select name="dateFormed" id="dateFormed" style="width: 100%; height:42px;"></select>
+                            <script>
+                                var start = 1900;
+                                var end = new Date().getFullYear();
+                                var options = "";
+                                var previouslySelectedDate = <%
+                                    String date = "";
+                                    if (artist.getBandDateFormed() != null) {
+                                        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy");
+                                        date = DATE_FORMAT.format(artist.getBandDateFormed());
+                                        out.print(date);
+                                    }
+                                %>;
+                                for (var year = end; year >= start; year--) {
+                                    if (year === previouslySelectedDate) {
+                                        options += "<option selected value='" + year + "-01-01'>" + year + "</option>";
+                                    } else {
+                                        options += "<option value='" + year + "-01-01'>" + year + "</option>";
+                                    }
                                 }
-                            %>
-                            <input type="date" id="dateFormed" name="dateFormed" value="<%=date%>">
+                                document.getElementById("dateFormed").innerHTML = options;
+                            </script>
+
                         </div>
                         <div class="col-1-2 last">
                             <label for="bandMembers"><strong>Members</strong> </label>
