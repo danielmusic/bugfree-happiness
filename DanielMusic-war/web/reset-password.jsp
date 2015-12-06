@@ -1,4 +1,4 @@
-<section id="page" data-title="Password Reset">
+<section id="page" data-title="sounds.sg | password reset">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Password Reset</h1>
         <span class="overlay dots"></span>

@@ -18,6 +18,7 @@
         <from>^/artist/(.+)$</from>
         <to type="redirect">%{context-path}/Controller?name=$1</to>
     </rule>-->
+    <!-- Rewrites /music/artistName -->
     <rule match-type="regex">
         <!--<from>^(?!(\/(.+(\.js|\.css|\.jsp|\.html|\.htm|\.jpg|\.png|\.jpeg|\.gif|\.urlrewrite)))|\/#!\/).*</from>-->
         <!--<from>^/([\w]*)$</from>-->

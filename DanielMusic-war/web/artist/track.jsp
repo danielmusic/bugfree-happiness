@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Track">
+<section id="page" data-title="sounds.sg | track">
     <%@page import="java.text.NumberFormat"%>
     <%@page import="EntityManager.Album"%>
     <%@page import="EntityManager.Music"%>

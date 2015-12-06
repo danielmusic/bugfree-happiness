@@ -1,4 +1,4 @@
-<section id="page" data-title="Account Email Verification">
+<section id="page" data-title="sounds.sg | email verification">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">Account Email Verification</h1>
         <span class="overlay dots"></span>

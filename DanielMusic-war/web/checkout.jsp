@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Shopping Cart">
+<section id="page" data-title="sounds.sg | shopping cart">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/events-bg.jpg)">
         <h1 class="heading-l">Cart <span class="color">Checkout</span></h1>
     </section>

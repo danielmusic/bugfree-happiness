@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Albums">
+<section id="page" data-title="sounds.sg | albums">
     <section class="content section">
         <div class="container">
             <article>
@@ -27,7 +27,7 @@
                         progress = setInterval(function () {
                             // ask progress
                             // get progress from response data
-                            
+
                             uploadprogress += Math.abs((Math.random() * 5) + space - 5);
                             // change progress width
                             if (uploadprogress < 100) {
@@ -137,7 +137,17 @@
 
                         <div class="col-1-2 last">
                             <label for="yearReleased"><strong>Year Released</strong> *</label>
-                            <input type="number" id="yearReleased" name="yearReleased" min="1900" max="2050" required>
+
+                            <select name="yearReleased" id="yearReleased" style="width: 100%; height:42px;"></select>
+                            <script>
+                                var start = 1900;
+                                var end = new Date().getFullYear();
+                                var options = "";
+                                for (var year = end; year >= start; year--) {
+                                    options += "<option value='" + year + "'>" + year + "</option>";
+                                }
+                                document.getElementById("yearReleased").innerHTML = options;
+                            </script>
                         </div>
                     </div>
 

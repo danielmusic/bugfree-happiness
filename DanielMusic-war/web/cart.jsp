@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Shopping Cart">
+<section id="page" data-title="sounds.sg | shopping cart">
     <%@page import="EntityManager.ShoppingCart"%>
     <%@page import="EntityManager.Account"%>
     <%@page import="java.util.ArrayList"%>

@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Tracks">
+<section id="page" data-title="sounds.sg | tracks">
     <section class="content section">
         <div class="container">
             <article>

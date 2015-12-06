@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Profile Page">
+<section id="page" data-title="sounds.sg | profile">
     <%@page import="EntityManager.Genre"%>
     <%@page import="java.util.List"%>
     <%@page import="EntityManager.Artist"%>

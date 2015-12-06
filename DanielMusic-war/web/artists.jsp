@@ -1,20 +1,22 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="sound.sg">
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="EntityManager.Album"%>
+<%@page import="EntityManager.Music"%>
+<%@page import="EntityManager.Artist"%>
+<%@page import="EntityManager.Account"%>
+<%@page import="java.text.NumberFormat"%>
+<%
+    Artist artist = (Artist) session.getAttribute("artistDetails");
+    List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
+%>
+<section id="page" data-title="sounds.sg | <%=artist.getName()%>">
     <style>
         .track-details:before{
             top: 5px;
         }
     </style>
-    <%@page import="java.util.List"%>
-    <%@page import="java.util.ArrayList"%>
-    <%@page import="EntityManager.Album"%>
-    <%@page import="EntityManager.Music"%>
-    <%@page import="EntityManager.Artist"%>
-    <%@page import="EntityManager.Account"%>
-    <%@page import="java.text.NumberFormat"%>
     <%
-        Artist artist = (Artist) session.getAttribute("artistDetails");
-        List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
         if (artist == null || albums == null) {
             out.print("<p class='warning'>Ops. No results found.</p>");
         } else {
@@ -27,7 +29,7 @@
         }
     %>
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/artist-single-bg.jpg)">
-        <h2 class="heading-l">Artist <span class="color"><%=artist.getName()%></span></h2>
+        <h2 class="heading-l"><span class="color"><%=artist.getName()%></span></h2>
         <br>
         <span class="overlay grids"></span>
     </section>

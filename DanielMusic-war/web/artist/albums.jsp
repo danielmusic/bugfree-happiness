@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Albums">
+<section id="page" data-title="sounds.sg | albums">
     <%@page import="EntityManager.Account"%>
     <%@page import="EntityManager.Artist"%>
     <%@page import="EntityManager.Album"%>

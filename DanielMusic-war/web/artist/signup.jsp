@@ -1,5 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="Artist Signup">
+<section id="page" data-title="sounds.sg | artist signup">
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <div class="container">
             <h1 class="heading-l">artist signup</h1>
