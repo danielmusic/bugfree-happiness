@@ -208,7 +208,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="music"><strong>Music * (WAV format, 44.1 kHz, 16bit)</strong></label>
+                            <label for="music"><strong>Music * (WAV format, 44.1 kHz min, 24bit max)</strong></label>
                             <input type="file" id="music" name="music" required>
                         </div>
                     </div>
