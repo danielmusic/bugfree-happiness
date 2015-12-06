@@ -2,6 +2,7 @@ package SessionBean.CommonInfrastructure;
 
 import EntityManager.ReturnHelper;
 import javax.ejb.Local;
+import javax.servlet.http.Part;
 
 @Local
 public interface CommonInfrastructureBeanLocal {
@@ -11,4 +12,5 @@ public interface CommonInfrastructureBeanLocal {
     public String generateUUID();
     
     public ReturnHelper checkIfImageFitsRequirement(String filename);
+    public String getSubmittedFileName(Part part);
 }

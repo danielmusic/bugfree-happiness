@@ -32,12 +32,13 @@ import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.Part;
 import net.sf.jmimemagic.Magic;
 import org.apache.commons.codec.binary.Base64;
 
 @Stateless
 public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -107,7 +108,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             return result;
         }
     }
-    
+
     @Override
     public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds) {
         System.out.println("CommonInfrastructureBean: getMusicFileURLFromGoogleCloudStorage() called");
@@ -123,7 +124,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             return null;
         }
     }
-    
+
     @Override
     public String generateUUID() {
         UUID id = UUID.randomUUID();
@@ -141,9 +142,9 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 .setServiceAccountUser(null)
                 .build();
         return credential;
-        
+
     }
-    
+
     private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
         String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expirationInSeconds) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
@@ -152,14 +153,14 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 + "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
         return signed_url;
     }
-    
+
     private static PrivateKey loadKeyFromPkcs12(String filename, char[] password) throws Exception {
         FileInputStream fis = new FileInputStream(filename);
         KeyStore ks = KeyStore.getInstance("PKCS12");
         ks.load(fis, password);
         return (PrivateKey) ks.getKey("privatekey", password);
     }
-    
+
     private String signString(String stringToSign, PrivateKey privateKey) throws Exception {
         if (privateKey == null) {
             throw new Exception("Private Key not initalized");
@@ -170,7 +171,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         byte[] rawSignature = signer.sign();
         return new String(Base64.encodeBase64(rawSignature, false), "UTF-8");
     }
-    
+
     @Override
     public ReturnHelper deleteFileFromGoogleCloudStorage(String remoteDestinationFile) {
         System.out.println("CommonInfrastructureBean: deleteFileFromGoogleCloudStorage() called");
@@ -201,7 +202,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             return result;
         }
     }
-    
+
     @Override
     public ReturnHelper checkIfImageFitsRequirement(String filename) {
         System.out.println("checkIfImageFitsRequirement() called");
@@ -229,5 +230,15 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             result.setDescription("Unable to check image requirements due to internal server error.");
         }
         return result;
+    }
+
+    public String getSubmittedFileName(Part part) {
+        for (String cd : part.getHeader("content-disposition").split(";")) {
+            if (cd.trim().startsWith("filename")) {
+                String fileName = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+                return fileName.substring(fileName.lastIndexOf('/') + 1).substring(fileName.lastIndexOf('\\') + 1); // MSIE fix.
+            }
+        }
+        return null;
     }
 }

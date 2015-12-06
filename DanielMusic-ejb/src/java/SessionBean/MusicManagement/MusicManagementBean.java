@@ -219,7 +219,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return helper;
             }
 
-            String fileName = musicPart.getSubmittedFileName();
+            String fileName = cibl.getSubmittedFileName(musicPart);
             //Don't take file extension for the filename
             fileName = removeExtension(fileName);
             String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_" + fileName + ".wav";
@@ -504,7 +504,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     helper.setResult(false);
                     return helper;
                 }
-                String fileName = imagePart.getSubmittedFileName();
+                String fileName = cibl.getSubmittedFileName(imagePart);
                 tempImageURL = "temp/albumart_" + cibl.generateUUID() + "_" + fileName;
                 InputStream fileInputStream = imagePart.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
@@ -721,7 +721,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 if (imagePart != null) {
                     String imageLocation = null;
                     String tempImageURL = null;
-                    String fileName = imagePart.getSubmittedFileName();
+                    String fileName = cibl.getSubmittedFileName(imagePart);
                     tempImageURL = "temp/" + cibl.generateUUID() + "_" + fileName;
                     InputStream fileInputStream = imagePart.getInputStream();
                     OutputStream fileOutputStream = new FileOutputStream(tempImageURL);
