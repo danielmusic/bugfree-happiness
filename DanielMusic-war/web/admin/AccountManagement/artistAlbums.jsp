@@ -93,10 +93,8 @@
                                                             <h2 class="panel-title">Album Artwork</h2>
                                                         </header>
                                                         <div class="panel-body">
-                                                            <div class="modal-wrapper">
-                                                                <div class="modal-text">
-                                                                    <img src="http://sounds.sg.storage.googleapis.com/<%=albums.get(i).getImageLocation()%>">
-                                                                </div>
+                                                            <div class="modal-wrapper">                       
+                                                                <img class="img-responsive" src="http://sounds.sg.storage.googleapis.com/<%=albums.get(i).getImageLocation()%>">
                                                             </div>
                                                         </div>
                                                         <footer class="panel-footer">
@@ -116,7 +114,7 @@
                                             </td>
 
                                             <td>
-                                                <%if (albums.get(i).getDescription()!= null && !albums.get(i).getDescription().isEmpty()) {%>
+                                                <%if (albums.get(i).getDescription() != null && !albums.get(i).getDescription().isEmpty()) {%>
                                                 <a class="modal-with-move-anim btn btn-default btn-block" href="#modalDescription<%=albums.get(i).getId()%>">View</a>
                                                 <div id="modalDescription<%=albums.get(i).getId()%>" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">

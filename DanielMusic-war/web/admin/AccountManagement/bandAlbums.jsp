@@ -95,7 +95,7 @@
                                                         <div class="panel-body">
                                                             <div class="modal-wrapper">
                                                                 <div class="modal-text">
-                                                                    <img src="http://sounds.sg.storage.googleapis.com/<%=albums.get(i).getImageLocation()%>">
+                                                                    <img class="img-responsive" src="http://sounds.sg.storage.googleapis.com/<%=albums.get(i).getImageLocation()%>">
                                                                 </div>
                                                             </div>
                                                         </div>
