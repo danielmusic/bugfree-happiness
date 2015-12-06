@@ -7,6 +7,7 @@ import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
+import EntityManager.StartupBean;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import SessionBean.CommonInfrastructure.SendGridLocal;
 import java.io.File;
@@ -20,6 +21,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
@@ -35,6 +37,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class AccountManagementBean implements AccountManagementBeanLocal {
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
@@ -53,7 +56,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper loginAccount(String email, String password) {
-        System.out.println("AccountManagementBean: loginAccount() called");
+        log.info("AccountManagementBean: loginAccount() called");
         ReturnHelper result = new ReturnHelper();
         try {
             Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
@@ -66,26 +69,26 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                     result.setDescription("Unable to login, account is disabled.");
                     return result;
                 }
-                System.out.println("loginAccount(): Account with email:" + email + " logged in successfully.");
+                log.info("loginAccount(): Account with email:" + email + " logged in successfully.");
                 em.detach(account);
                 account.setPassword(null);
                 result.setResult(true);
                 result.setDescription("Login successful.");
                 return result;
             } else {
-                System.out.println("loginAccount(): Login credentials provided were incorrect, password wrong.");
+                log.info("loginAccount(): Login credentials provided were incorrect, password wrong.");
                 result.setResult(false);
                 result.setDescription("Login credentials provided incorrect.");
                 return result;
             }
         } catch (NoResultException ex) {//cannot find account with that email
-            System.out.println("loginAccount(): Login credentials provided were incorrect, no such email found.");
+            log.info("loginAccount(): Login credentials provided were incorrect, no such email found.");
             result.setResult(false);
             result.setDescription("Login credentials provided incorrect.");
             return result;
         } catch (Exception ex) {
-            System.out.println("loginAccount(): Internal error");
-            ex.printStackTrace();
+            log.info("loginAccount(): Internal error");
+            log.info(ex.getMessage());
             result.setResult(false);
             result.setDescription("Unable to login, internal server error.");
             return result;
@@ -119,7 +122,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public Account getAccount(String email) {
-        System.out.println("AccountManagementBean: getAccount() called");
+        log.info("AccountManagementBean: getAccount() called");
         try {
             Query q = em.createQuery("SELECT a FROM Account a where a.email=:email");
             q.setParameter("email", email);
@@ -143,18 +146,18 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Member member = new Member();
             return member;
         } catch (NoResultException ex) {
-            System.out.println("getAccount(): Could not find account with that email");
+            log.info("getAccount(): Could not find account with that email");
             return null;
         } catch (Exception ex) {
-            System.out.println("getAccount(): Internal error");
-            ex.printStackTrace();
+            log.info("getAccount(): Internal error");
+            log.info(ex.getMessage());
             return null;
         }
     }
 
     @Override
     public Account getAccount(Long id) {
-        System.out.println("AccountManagementBean: getAccount() called");
+        log.info("AccountManagementBean: getAccount() called");
         try {
             Query q = em.createQuery("SELECT a FROM Account a where a.id=:id");
             q.setParameter("id", id);
@@ -178,11 +181,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             Member member = new Member();
             return member;
         } catch (NoResultException ex) {
-            System.out.println("getAccount(): Could not find account with that id");
+            log.info("getAccount(): Could not find account with that id");
             return null;
         } catch (Exception ex) {
-            System.out.println("getAccount(): Internal error");
-            ex.printStackTrace();
+            log.info("getAccount(): Internal error");
+            log.info(ex.getMessage());
             return null;
         }
     }
@@ -199,7 +202,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper registerAccount(String name, String email, String password, boolean isAdmin, boolean isArtist, boolean isBand) {
-        System.out.println("AccountManagementBean: registerAccount() called");
+        log.info("AccountManagementBean: registerAccount() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -280,8 +283,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             result.setDescription("Account registered successfully. You may now login");
             return result;
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: registerAccount() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: registerAccount() failed");
+            log.info(ex.getMessage());
             result.setResult(false);
             result.setDescription("Failed to register account due to internal server error.");
             return result;
@@ -290,7 +293,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper enableAccount(Long accountID) {
-        System.out.println("AccountManagementBean: enableAccount() called");
+        log.info("AccountManagementBean: enableAccount() called");
         ReturnHelper result = new ReturnHelper();
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
         q.setParameter("id", accountID);
@@ -306,17 +309,17 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Account enabled successfully.");
             }
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: enableAccount() failed");
+            log.info("AccountManagementBean: enableAccount() failed");
             result.setResult(false);
             result.setDescription("Failed to enable account. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper disableAccount(Long accountID) {
-        System.out.println("AccountManagementBean: disableAccount() called");
+        log.info("AccountManagementBean: disableAccount() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
@@ -332,16 +335,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Account disabled successfully.");
             }
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: enableAccount() failed");
+            log.info("AccountManagementBean: enableAccount() failed");
             result.setDescription("Failed to disable account. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public boolean checkIfEmailExists(String email) {
-        System.out.println("AccountManagementBean: checkIfEmailExists() called");
+        log.info("AccountManagementBean: checkIfEmailExists() called");
         Query q = em.createQuery("SELECT a FROM Account a WHERE a.email=:email");
         q.setParameter("email", email);
         try {
@@ -350,15 +353,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             return false;
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: checkIfEmailExists() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: checkIfEmailExists() failed");
+            log.info(ex.getMessage());
             return false;
         }
     }
 
     @Override
     public boolean checkIfNewEmailExists(String newEmail) {
-        System.out.println("AccountManagementBean: checkIfNewEmailExists() called");
+        log.info("AccountManagementBean: checkIfNewEmailExists() called");
         Query q = em.createQuery("SELECT a FROM Account a WHERE a.newEmail=:newEmail");
         q.setParameter("newEmail", newEmail);
         try {
@@ -367,15 +370,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             return false;
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: checkIfNewEmailExists() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: checkIfNewEmailExists() failed");
+            log.info(ex.getMessage());
             return false;
         }
     }
 
     @Override
     public boolean checkIfArtistNameExists(String name) {
-        System.out.println("AccountManagementBean: checkIfAritstNameExists() called");
+        log.info("AccountManagementBean: checkIfAritstNameExists() called");
         Query q = em.createQuery("SELECT a FROM Artist a WHERE a.name=:name");
         q.setParameter("name", name);
         try {
@@ -384,15 +387,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             return false;
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: checkIfAritstNameExists() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: checkIfAritstNameExists() failed");
+            log.info(ex.getMessage());
             return false;
         }
     }
 
     @Override
     public ReturnHelper generateAndSendVerificationEmail(Long accountID, String email, Boolean changingEmail) {
-        System.out.println("AccountManagementBean: generateAndSendVerificationEmail() called");
+        log.info("AccountManagementBean: generateAndSendVerificationEmail() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -450,8 +453,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Unable to send verificaiton email due to issues with our email servers. Please try again later.");
             }
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: generateAndSendVerificationEmail() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: generateAndSendVerificationEmail() failed");
+            log.info(ex.getMessage());
             result.setDescription("Unable to send verification email because of an internal server error, please try again later.");
         }
         return result;
@@ -459,7 +462,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper enterEmailVerificationCode(String email, String verificationCode) {
-        System.out.println("AccountManagementBean: enterEmailVerificationCode() called");
+        log.info("AccountManagementBean: enterEmailVerificationCode() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -491,8 +494,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: enterEmailVerificationCode() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: enterEmailVerificationCode() failed");
+            log.info(ex.getMessage());
             result.setDescription("Unable to verify code because of an internal server error, please try again later.");
         }
         return result;
@@ -500,7 +503,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper enterNewEmailVerificationCode(String newEmailAddress, String verificationCode) {
-        System.out.println("AccountManagementBean: enterNewEmailVerificationCode() called");
+        log.info("AccountManagementBean: enterNewEmailVerificationCode() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -529,8 +532,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: enterEmailVerificationCode() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: enterEmailVerificationCode() failed");
+            log.info(ex.getMessage());
             result.setDescription("Unable to verify code because of an internal server error, please try again later.");
         }
         return result;
@@ -538,7 +541,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper generateAndSendForgetPasswordEmail(String email) {
-        System.out.println("AccountManagementBean: generateAndSendForgetPasswordEmail() called");
+        log.info("AccountManagementBean: generateAndSendForgetPasswordEmail() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -574,8 +577,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Unable to send password reset code due issues with our email servers. Please try again later.");
             }
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: generateAndSendForgetPasswordEmail() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: generateAndSendForgetPasswordEmail() failed");
+            log.info(ex.getMessage());
             result.setDescription("Unable to passowrd reset coode because of an internal server error, please try again later.");
         }
         return result;
@@ -583,7 +586,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper enterForgetPasswordCode(String email, String passwordResetCode) {
-        System.out.println("AccountManagementBean: enterForgetPasswordCode() called");
+        log.info("AccountManagementBean: enterForgetPasswordCode() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -614,8 +617,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription(UNAUTHORIZED_EMAIL_VERIFICATION_ATTEMPT);
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: enterForgetPasswordCode() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: enterForgetPasswordCode() failed");
+            log.info(ex.getMessage());
             result.setDescription("Unable to verify code because of an internal server error, please try again later.");
         }
         return result;
@@ -653,8 +656,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             byte[] hash = skf.generateSecret(spec).getEncoded();
             return iterations + ":" + toHex(saltInBytes) + ":" + toHex(hash);
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: generatePasswordHash() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: generatePasswordHash() failed");
+            log.info(ex.getMessage());
         }
         return passwordHash;
     }
@@ -666,8 +669,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
             sr.nextBytes(salt);
         } catch (NoSuchAlgorithmException ex) {
-            System.out.println("AccountManagementBean: generatePasswordSalt() failed");
-            ex.printStackTrace();
+            log.info("AccountManagementBean: generatePasswordSalt() failed");
+            log.info(ex.getMessage());
         }
         //return Arrays.toString(salt);
         return salt.toString();
@@ -686,7 +689,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
 
     @Override
     public ReturnHelper updateMemberProfile(Long accountID, String newName, Part profilePicture) {
-        System.out.println("AccountManagementBean: updateAccountProfile() called");
+        log.info("AccountManagementBean: updateAccountProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
@@ -710,16 +713,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Account no longer exists.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateMemberProfile() failed");
+            log.info("AccountManagementBean: updateMemberProfile() failed");
             result.setDescription("Update profile failed, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateMemberProfilePicture(Long accountID, Part profilePicture) {
-        System.out.println("AccountManagementBean: updateMemberProfilePicture() called");
+        log.info("AccountManagementBean: updateMemberProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -764,20 +767,20 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 }
             }
         } catch (NoResultException ex) {
-            System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");
+            log.info("AccountManagementBean: updateMemberProfilePicture() failed");
             result.setDescription("Account not found.");
             return result;
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateMemberProfilePicture() failed");
+            log.info("AccountManagementBean: updateMemberProfilePicture() failed");
             result.setDescription("Update profille failed, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateArtistProfile(Long artistID, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL, Part profilePicture) {
-        System.out.println("AccountManagementBean: updateArtistProfile() called");
+        log.info("AccountManagementBean: updateArtistProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -822,16 +825,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to update profile. Genre selected may have been deleted. Please try again.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateArtistProfile() failed");
+            log.info("AccountManagementBean: updateArtistProfile() failed");
             result.setDescription("Update profile failed, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateArtistName(Long artistID, String newName) {
-        System.out.println("AccountManagementBean: updateArtistName() called");
+        log.info("AccountManagementBean: updateArtistName() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -846,16 +849,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Artist no longer exists.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateArtistName() failed");
+            log.info("AccountManagementBean: updateArtistName() failed");
             result.setDescription("Name change failed, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateArtistProfilePicture(Long artistID, Part profilePicture) {
-        System.out.println("AccountManagementBean: updateArtistProfilePicture() called");
+        log.info("AccountManagementBean: updateArtistProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -906,20 +909,20 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 }
             }
         } catch (NoResultException ex) {
-            System.out.println("AccountManagementBean: updateArtistProfilePicture() failed");
+            log.info("AccountManagementBean: updateArtistProfilePicture() failed");
             result.setDescription("Account not found.");
             return result;
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateArtistProfilePicture() failed");
+            log.info("AccountManagementBean: updateArtistProfilePicture() failed");
             result.setDescription("Update profille failed, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateBandProfile(Long bandID, String members, Date dateFormed, Long genreID, String biography, String influences, String contactEamil, String paypalEmail, String facebookURL, String instagramURL, String twitterURL, String websiteURL, Part profilePicture) {
-        System.out.println("AccountManagementBean: updateBandProfile() called");
+        log.info("AccountManagementBean: updateBandProfile() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -966,16 +969,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to update profile. Genre selected may have been deleted. Please try again.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateBandProfile() failed");
+            log.info("AccountManagementBean: updateBandProfile() failed");
             result.setDescription("Update profile failed, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper deleteAccountProfilePicture(Long accountID) {
-        System.out.println("AccountManagementBean: deleteAccountProfilePicture() called");
+        log.info("AccountManagementBean: deleteAccountProfilePicture() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
@@ -992,16 +995,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to find account with the provided ID.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: deleteAccountProfilePicture() failed");
+            log.info("AccountManagementBean: deleteAccountProfilePicture() failed");
             result.setDescription("Unable to remove profile picture, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateAccountPassword(Long accountID, String oldPassword, String newPassword) {
-        System.out.println("AccountManagementBean: updateAccountPassword() called");
+        log.info("AccountManagementBean: updateAccountPassword() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT a FROM Account a WHERE a.id=:id");
@@ -1023,16 +1026,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to find account with the provided ID.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateAccountPassword() failed");
+            log.info("AccountManagementBean: updateAccountPassword() failed");
             result.setDescription("Unable to update account's password due to internal server error. Please try again later.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateAccountPassword(Long accountID, String newPassword) {
-        System.out.println("AccountManagementBean: updateAccountPassword() called");
+        log.info("AccountManagementBean: updateAccountPassword() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT a FROM Account a WHERE a.id=:id");
@@ -1046,16 +1049,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to find account with the provided ID.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateAccountPassword() failed");
+            log.info("AccountManagementBean: updateAccountPassword() failed");
             result.setDescription("Unable to update account's password due to internal server error. Please try again later.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateAccountEmail(Long accountID, String newEmail) {
-        System.out.println("AccountManagementBean: updateAccountEmail() called");
+        log.info("AccountManagementBean: updateAccountEmail() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
@@ -1083,16 +1086,16 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to find account with the provided ID.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: updateAccountEmail() failed");
+            log.info("AccountManagementBean: updateAccountEmail() failed");
             result.setDescription("Unable to update account's email, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper cancelUpdateAccountEmail(Long accountID) {
-        System.out.println("AccountManagementBean: cancelUpdateAccountEmail() called");
+        log.info("AccountManagementBean: cancelUpdateAccountEmail() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         Query q = em.createQuery("SELECT s FROM Account s WHERE s.id=:id");
@@ -1109,9 +1112,9 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         } catch (NoResultException ex) {
             result.setDescription("Unable to find account with the provided ID.");
         } catch (Exception ex) {
-            System.out.println("AccountManagementBean: cancelUpdateAccountEmail() failed");
+            log.info("AccountManagementBean: cancelUpdateAccountEmail() failed");
             result.setDescription("Unable to cancel update account's email, internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }

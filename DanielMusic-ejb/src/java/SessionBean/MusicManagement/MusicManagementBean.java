@@ -8,6 +8,7 @@ import EntityManager.Genre;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
 import EntityManager.SearchHelper;
+import EntityManager.StartupBean;
 import SessionBean.AccountManagement.AccountManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import SessionBean.CommonInfrastructure.SendGridLocal;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
@@ -42,6 +44,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
 
     private static final String approvalRequestEmailSubject = "sounds.sg - New Artist Approval Request";
     private static final String approvalRequestEmailMsg = "Hi there!<br/><br/>There's a new artist pending your approval. Please login to <a href='http://sounds.sg/admin/login.jsp'>admin console</a> to view the full details. <br/><br/><b>Request Details</b><br/>";
@@ -75,19 +78,19 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             result.setDescription("mp3 file encoded successfully.");
             return result;
         } catch (EncoderException ex) {
-            System.out.println("encodeWavToMP3(): Error, " + ex.getMessage());
+            log.info("encodeWavToMP3(): Error, " + ex.getMessage());
             result.setDescription("Error in converting the provided wav file to mp3. Please try again.");
         } catch (Exception ex) {
-            System.out.println("encodeWavToMP3(): Unknown error.");
+            log.info("encodeWavToMP3(): Unknown error.");
             result.setDescription("Error in converting the provided wav file to mp3. Please try again.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public String generateDownloadLink(Long musicID, String type, Boolean isIncreaseDownloadCount, Long expiryInSeconds) {
-        System.out.println("generateDownloadLink() called");
+        log.info("generateDownloadLink() called");
         try {
             Query q = em.createQuery("select a from Music a where a.id=:id");
             q.setParameter("id", musicID);
@@ -113,32 +116,32 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return downloadLink;
             }
         } catch (Exception e) {
-            System.out.println("Error. Failed to generateDownloadLink()");
-            e.printStackTrace();
+            log.info("Error. Failed to generateDownloadLink()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<Music> searchMusicByGenre(Long genreID) {
-        System.out.println("searchMusicByGenre() called with genreID: " + genreID);
+        log.info("searchMusicByGenre() called with genreID: " + genreID);
         try {
             Query q = em.createQuery("SELECT m FROM Music m, Album a WHERE a.listOfMusics.id=m.id and m.listOfGenres.id=:genreID AND m.isDeleted=false AND a.isDeleted=FALSE AND a.isPublished=true ORDER BY a.publishedDate DESC ");
             q.setParameter("genreID", genreID);
             List<Music> listOfMusics = q.getResultList();
-            System.out.println("searchMusicByGenre() successful");
+            log.info("searchMusicByGenre() successful");
 
             return listOfMusics;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error while calling searchMusicByGenre()");
+            log.info(e.getMessage());
+            log.info("Error while calling searchMusicByGenre()");
             return null;
         }
     }
 
     @Override
     public SearchHelper search(String searchString) {
-        System.out.println("search() called with searchString: " + searchString);
+        log.info("search() called with searchString: " + searchString);
         try {
             Query q;
             SearchHelper helper = new SearchHelper();
@@ -159,15 +162,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setListOfArtists(listOfArtists);
             helper.setListOfMusics(listOfMusics);
 
-            System.out.println("search() successful");
-            System.out.println(helper.getListOfArtists().size());
-            System.out.println(helper.getListOfAlbums().size());
-            System.out.println(helper.getListOfMusics().size());
-
             return helper;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error while calling search()");
+            log.info(e.getMessage());
+            log.info("Error while calling search()");
             return null;
         }
     }
@@ -243,9 +241,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             //Check if the file meets bitrate requirements
             Encoder encoder = new Encoder();
             MultimediaInfo multimediaInfo = encoder.getInfo(file);
-            System.out.println("BR:" + multimediaInfo.getAudio().getBitRate());
-            System.out.println("SR:" + multimediaInfo.getAudio().getSamplingRate());
-            System.out.println("F:" + multimediaInfo.getFormat());
+            log.info("BR:" + multimediaInfo.getAudio().getBitRate());
+            log.info("SR:" + multimediaInfo.getAudio().getSamplingRate());
+            log.info("F:" + multimediaInfo.getFormat());
             if (!multimediaInfo.getFormat().equals("wav")) {
                 helper.setDescription("File uploaded does not appear to be a proper wav format.");
                 file.delete();
@@ -368,7 +366,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
             helper.setDescription("Error occurred while creating track, please try again.");
             helper.setResult(false);
             return helper;
@@ -377,28 +375,28 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public Music getMusic(Long musicID) {
-        System.out.println("MusicManagementBean: getMusic() called");
+        log.info("MusicManagementBean: getMusic() called");
         Music music;
         try {
             music = em.getReference(Music.class, musicID);
             Boolean isDeleted = music.getIsDeleted();
             if (isDeleted) {
-                System.out.println("MusicManagementBean: Failed to getMusic(), music has been deleted");
+                log.info("MusicManagementBean: Failed to getMusic(), music has been deleted");
                 return null;
             } else {
-                System.out.println("MusicManagementBean: Successfully called getMusic(), music retrieved");
+                log.info("MusicManagementBean: Successfully called getMusic(), music retrieved");
                 return music;
             }
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: Error occurred while trying to call getMusic()");
-            e.printStackTrace();
+            log.info("MusicManagementBean: Error occurred while trying to call getMusic()");
+            log.info(e.getMessage());
             return null;
         }
     }
 
     @Override
     public ReturnHelper deleteMusic(Long musicID) {
-        System.out.println("MusicManagementBean: deleteMusic() called");
+        log.info("MusicManagementBean: deleteMusic() called");
         ReturnHelper helper = new ReturnHelper();
         Music music;
         try {
@@ -419,13 +417,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
             em.remove(music);
-            System.out.println("MusicManagementBean: deleteMusic() successfully");
+            log.info("MusicManagementBean: deleteMusic() successfully");
             helper.setDescription("The track has been deleted successfully.");
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("MusicManagementBean: Error occurred while calling deleteMusic()");
+            log.info(e.getMessage());
+            log.info("MusicManagementBean: Error occurred while calling deleteMusic()");
             helper.setDescription("Error occurred while trying to delete the track, please try again.");
             helper.setResult(false);
             return helper;
@@ -438,22 +436,22 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //    }
     @Override
     public List<Music> listAllTracksByAlbumID(Long albumID) {
-        System.out.println("MusicManagementBean: ListAllTracksByAlbumID() called");
+        log.info("MusicManagementBean: ListAllTracksByAlbumID() called");
         try {
             Query q = em.createQuery("select a from Music a where a.isDeleted=false AND a.album.id=:albumID");
             q.setParameter("albumID", albumID);
             List<Music> albums = q.getResultList();
             return albums;
         } catch (Exception ex) {
-            System.out.println("ListAllTracksByAlbumID() failed");
-            ex.printStackTrace();
+            log.info("ListAllTracksByAlbumID() failed");
+            log.info(ex.getMessage());
             return null;
         }
     }
 
     @Override
     public ReturnHelper createAlbum(Boolean isSingle, Part imagePart, String name, Long genreID, String description, Long artistOrBandID, Integer yearReleased, String credits, Double price) {
-        System.out.println("createAlbum() called");
+        log.info("createAlbum() called");
         ReturnHelper helper = new ReturnHelper();
         try {
             ReturnHelper result = new ReturnHelper();
@@ -492,9 +490,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             genresAlbums.add(album);
             em.merge(genre);
             em.flush();
-            System.out.println("MusicManagementBean: em.flush(). Album has been persisted.");
+            log.info("MusicManagementBean: em.flush(). Album has been persisted.");
             em.refresh(album);
-            System.out.println("MusicManagementBean: em.refresh(). Album ID: " + album.getId());
+            log.info("MusicManagementBean: em.refresh(). Album ID: " + album.getId());
 
             //check whether user uploads an image
             if (imagePart != null) {
@@ -528,7 +526,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
                 if ((result != null)) {
                     if (result.getResult()) {
-                        System.out.println("Image location set... " + imageLocation);
+                        log.info("Image location set... " + imageLocation);
                         album.setImageLocation(imageLocation);
                         em.merge(album);
                     } else {
@@ -540,15 +538,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
             }
 
-            System.out.println("Album created successfully.");
+            log.info("Album created successfully.");
             helper.setID(album.getId());
             helper.setDescription("Album has been created successfully.");
             helper.setResult(true);
             return helper;
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("MusicManagementBean: Error occurred while calling createAlbum()");
+            log.info(e.getMessage());
+            log.info("MusicManagementBean: Error occurred while calling createAlbum()");
             helper.setDescription("Error occurred while trying to create album, please try again.");
             helper.setResult(false);
             return helper;
@@ -557,24 +555,24 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public Album getAlbum(Long albumID) {
-        System.out.println("getAlbum() called.");
+        log.info("getAlbum() called.");
         try {
             Query q = em.createQuery("SELECT E FROM Album E WHERE E.id=:albumID");
             q.setParameter("albumID", albumID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             Album album = (Album) q.getSingleResult();
-            System.out.println("getAlbum() called successfully");
+            log.info("getAlbum() called successfully");
             return album;
         } catch (Exception e) {
-            System.out.println("Error while calling getAlbum()");
-            e.printStackTrace();
+            log.info("Error while calling getAlbum()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<Album> listAllAlbumByArtistOrBandID(Long artistOrBandAccountID, Boolean showUnpublished, Boolean showUnapproved) {
-        System.out.println("ListAllAlbumByArtistOrBandID() called");
+        log.info("ListAllAlbumByArtistOrBandID() called");
         try {
             Query q = null;
             Account account = ambl.getAccount(artistOrBandAccountID);
@@ -597,15 +595,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             List<Album> albums = q.getResultList();
             return albums;
         } catch (Exception ex) {
-            System.out.println("ListAllAlbumByArtistOrBandID() failed");
-            ex.printStackTrace();
+            log.info("ListAllAlbumByArtistOrBandID() failed");
+            log.info(ex.getMessage());
             return null;
         }
     }
 
     @Override
     public ReturnHelper editAlbum(Long albumID, Part imagePart, String name, Long genreID, String description, Integer yearReleased, String credits, Double price) {
-        System.out.println("editAlbum() called.");
+        log.info("editAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         helper.setResult(false);
         try {
@@ -626,7 +624,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
 
             if (album.getIsPublished()) {
-                System.out.println("Album is already published, cannot be edited.");
+                log.info("Album is already published, cannot be edited.");
                 helper.setDescription("Album has been published and cannot be edited.");
                 helper.setResult(false);
                 return helper;
@@ -698,10 +696,10 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                album.setListOfGenres(genres);
 //                album.setGenreName(genre.getName());
 //                //Update the list of music genres
-//                System.out.println("WUBWUBWUB");
+//                log.info("WUBWUBWUB");
 //                for (Music music : album.getListOfMusics()) {
-//                    System.out.println(music.getName());
-//                    System.out.println(music.getListOfGenres().get(0).getName());
+//                    log.info(music.getName());
+//                    log.info(music.getListOfGenres().get(0).getName());
 //                    for (Genre musicGenre : music.getListOfGenres()) {
 //                        List<Music> genreMusics = musicGenre.getListOfMusics();
 //                        genreMusics.remove(music);
@@ -710,7 +708,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 //                    }
 //                    music.setListOfGenres(genres);
 //                    em.merge(music);
-//                    System.out.println(music.getListOfGenres().get(0).getName());
+//                    log.info(music.getListOfGenres().get(0).getName());
 //                }
                 //todo halppp end
                 album.setDescription(StringEscapeUtils.escapeHtml4(description));
@@ -761,8 +759,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return helper;
             }
         } catch (Exception e) {
-            System.out.println("Error while calling editAlbum()");
-            e.printStackTrace();
+            log.info("Error while calling editAlbum()");
+            log.info(e.getMessage());
             helper.setDescription("Error while editing album, please try again.");
             helper.setResult(false);
             return helper;
@@ -771,7 +769,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper editMusicPrice(Long musicID, Double newPrice) {
-        System.out.println("MusicManagementBean: editMusicPrice() called");
+        log.info("MusicManagementBean: editMusicPrice() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -793,8 +791,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 result.setResult(true);
             }
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: Error occurred while trying to editMusicPrice()");
-            e.printStackTrace();
+            log.info("MusicManagementBean: Error occurred while trying to editMusicPrice()");
+            log.info(e.getMessage());
             result.setDescription("Internal server error");
         }
         return result;
@@ -802,7 +800,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper editAlbumPrice(Long albumID, Double newPrice) {
-        System.out.println("MusicManagementBean: editAlbumPrice() called");
+        log.info("MusicManagementBean: editAlbumPrice() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -828,8 +826,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 result.setResult(true);
             }
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: Error occurred while trying to editAlbumPrice()");
-            e.printStackTrace();
+            log.info("MusicManagementBean: Error occurred while trying to editAlbumPrice()");
+            log.info(e.getMessage());
             result.setDescription("Internal server error");
         }
         return result;
@@ -837,7 +835,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper featureMusic(Long musicID) {
-        System.out.println("MusicManagementBean: featureMusic() called");
+        log.info("MusicManagementBean: featureMusic() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -865,8 +863,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 result.setResult(true);
             }
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: Error occurred while trying to featureMusic()");
-            e.printStackTrace();
+            log.info("MusicManagementBean: Error occurred while trying to featureMusic()");
+            log.info(e.getMessage());
             result.setDescription("Internal server error");
         }
         return result;
@@ -874,7 +872,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper unfeatureMusic(Long musicID) {
-        System.out.println("MusicManagementBean: unfeatureMusic() called");
+        log.info("MusicManagementBean: unfeatureMusic() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -889,8 +887,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 result.setResult(true);
             }
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: Error occurred while trying to unfeatureMusic()");
-            e.printStackTrace();
+            log.info("MusicManagementBean: Error occurred while trying to unfeatureMusic()");
+            log.info(e.getMessage());
             result.setDescription("Internal server error");
         }
         return result;
@@ -898,7 +896,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public Music getFeaturedMusic(Long artistID) {
-        System.out.println("MusicManagementBean: getFeaturedMusic() called");
+        log.info("MusicManagementBean: getFeaturedMusic() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -912,8 +910,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 return null;
             }
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: Error occurred while trying to getFeaturedMusic()");
-            e.printStackTrace();
+            log.info("MusicManagementBean: Error occurred while trying to getFeaturedMusic()");
+            log.info(e.getMessage());
             result.setDescription("Internal server error");
             return null;
         }
@@ -921,7 +919,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper publishAlbum(Long albumID) {
-        System.out.println("publishAlbum() called.");
+        log.info("publishAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
             Query q = em.createQuery("SELECT E FROM Album E where E.id=:id");
@@ -956,7 +954,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             return helper;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
             helper.setDescription("Error occurred while trying to publish album, please try again later.");
             helper.setResult(false);
             return helper;
@@ -965,7 +963,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public ReturnHelper deleteAlbum(Long albumID) {
-        System.out.println("MusicManagementBean: deleteAlbum() called.");
+        log.info("MusicManagementBean: deleteAlbum() called.");
         ReturnHelper helper = new ReturnHelper();
         try {
             Album album = em.getReference(Album.class, albumID);
@@ -1022,8 +1020,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
-            System.out.println("MusicManagementBean: deleteAlbum() failed.");
-            e.printStackTrace();
+            log.info("MusicManagementBean: deleteAlbum() failed.");
+            log.info(e.getMessage());
             helper.setDescription("Error occurred while trying to delete album, please try again.");
             helper.setResult(false);
             return helper;
@@ -1032,7 +1030,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public List<Artist> listAllArtistBandInGenre(Long genreID) {
-        System.out.println("MusicManagement: listAllArtistBandInGenre() called");
+        log.info("MusicManagement: listAllArtistBandInGenre() called");
         try {
             Query q;
             q = em.createQuery("select a from Artist a where a.isApproved=true and a.isDisabled=false and a.genre.id=:genreID");
@@ -1040,15 +1038,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             List<Artist> artists = q.getResultList();
             return artists;
         } catch (Exception e) {
-            System.out.println("MusicManagement: Error while calling listAllArtistBandInGenre()");
-            e.printStackTrace();
+            log.info("MusicManagement: Error while calling listAllArtistBandInGenre()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<ExploreHelper> listAllGenreArtist() {
-        System.out.println("MusicManagement: listAllGenreArtist() called");
+        log.info("MusicManagement: listAllGenreArtist() called");
         try {
             Query q;
             q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
@@ -1069,8 +1067,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             }
             return exploreHelpers;
         } catch (Exception e) {
-            System.out.println("MusicManagement: Error while calling listAllGenreArtist()");
-            e.printStackTrace();
+            log.info("MusicManagement: Error while calling listAllGenreArtist()");
+            log.info(e.getMessage());
         }
 
         return null;
@@ -1078,7 +1076,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
 
     @Override
     public Long getArtistID(String artistName) {
-        System.out.println("getArtist() called.");
+        log.info("getArtist() called.");
         try {
             Query q = em.createQuery("SELECT E FROM Artist E WHERE E.name=:artistName");
             q.setParameter("artistName", artistName);
@@ -1088,14 +1086,14 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
             return null;
         }
     }
 
     @Override
     public Boolean checkIfMusicBelongsToArtist(Long artistID, Long musicID) {
-        System.out.println("checkIfMusicBelongsToArtist() called");
+        log.info("checkIfMusicBelongsToArtist() called");
         try {
             Query q = em.createQuery("SELECT e FROM Music e WHERE e.id=:musicID and e.album.artist.id=:artistID");
             q.setParameter("artistID", artistID);
@@ -1105,15 +1103,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         } catch (NoResultException ex) {
             return false;
         } catch (Exception ex) {
-            System.out.println("checkIfMusicBelongsToArtist() failed");
-            ex.printStackTrace();
+            log.info("checkIfMusicBelongsToArtist() failed");
+            log.info(ex.getMessage());
         }
         return false;
     }
 
     @Override
     public Boolean checkIfAlbumBelongsToArtist(Long artistID, Long albumID) {
-        System.out.println("checkIfAlbumBelongsToArtist() called");
+        log.info("checkIfAlbumBelongsToArtist() called");
         try {
             Query q = em.createQuery("SELECT e FROM Album e WHERE e.id=:albumID AND e.artist.id=:artistID");
             q.setParameter("artistID", artistID);
@@ -1123,15 +1121,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         } catch (NoResultException ex) {
             return false;
         } catch (Exception ex) {
-            System.out.println("checkIfAlbumBelongsToArtist() failed");
-            ex.printStackTrace();
+            log.info("checkIfAlbumBelongsToArtist() failed");
+            log.info(ex.getMessage());
         }
         return false;
     }
 
     @Override
     public Music getNextMusicByArtist(Long artistID) {
-        System.out.println("getNextMusicByArtist() called");
+        log.info("getNextMusicByArtist() called");
         try {
             Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.artist.id=:artistID and e.album.isPublished=true and e.isDeleted=false");
             q.setParameter("artistID", artistID);
@@ -1141,15 +1139,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             int musicNum = random.nextInt(musics.size());
             return musics.get(musicNum);
         } catch (Exception ex) {
-            System.out.println("getNextMusicByArtist() failed");
-            ex.printStackTrace();
+            log.info("getNextMusicByArtist() failed");
+            log.info(ex.getMessage());
             return null;
         }
     }
 
     @Override
     public Music getNextMusicByGenre(Long genreID) {
-        System.out.println("getNextMusicByGenre() called");
+        log.info("getNextMusicByGenre() called");
         try {
             Query q = em.createQuery("SELECT e FROM Music e WHERE e.album.artist.genre.id=:genreID and e.album.isPublished=true and e.isDeleted=false");
             q.setParameter("genreID", genreID);
@@ -1159,15 +1157,15 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             int musicNum = random.nextInt(musics.size());
             return musics.get(musicNum);
         } catch (Exception ex) {
-            System.out.println("getNextMusicByGenre() failed");
-            ex.printStackTrace();
+            log.info("getNextMusicByGenre() failed");
+            log.info(ex.getMessage());
             return null;
         }
     }
 
     @Override
     public Music getNextMusic(String musicURL, String currentPage) {
-        System.out.println("getNextMusic() called");
+        log.info("getNextMusic() called");
         try {
             Query q = em.createQuery("SELECT e FROM Music e WHERE e.fileLocation128=:musicURL and e.isDeleted=false");
             musicURL = musicURL.substring(40);
@@ -1181,8 +1179,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return getNextMusicByArtist(music.getAlbum().getArtist().getId());
             }
         } catch (Exception ex) {
-            System.out.println("getNextMusic() failed");
-            ex.printStackTrace();
+            log.info("getNextMusic() failed");
+            log.info(ex.getMessage());
             return null;
         }
     }

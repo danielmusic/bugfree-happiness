@@ -5,6 +5,8 @@ import SessionBean.AdminManagement.AdminManagementBeanLocal;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -18,15 +20,17 @@ import javax.persistence.Query;
 
 public class StartupBean {
 
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName());
+
     @PersistenceContext(unitName = "DanielMusic-ejbPU")
     private EntityManager em;
 
     @EJB
     private AccountManagementBeanLocal accountManagementBeanLocal;
-    
+
     @EJB
     private CommonInfrastructureBeanLocal commonInfrastructureBeanLocal;
-    
+
     @EJB
     private AdminManagementBeanLocal adminManagementBeanLocal;
 
@@ -37,25 +41,20 @@ public class StartupBean {
             File theDir = new File("temp");
             // if the directory does not exist, create it
             if (!theDir.exists()) {
-                System.out.print("Initiating directories...");
+                log.info("Initiating directories...");
                 boolean result = false;
                 try {
                     theDir.mkdir();
                     result = true;
                 } catch (SecurityException se) {
-                    System.out.println("failed");
-                    System.out.println("!!!!!!!!!!!!!!!!!!");
-                    System.out.println("!!!!!!!!!!!!!!!!!!");        
-                    System.out.println("WARNING: FAILED TO INIT DIRECTORIES. File upload functions will not work correctly.");
-                    System.out.println("!!!!!!!!!!!!!!!!!!");
-                    System.out.println("!!!!!!!!!!!!!!!!!!");
-                    se.printStackTrace();
+                    log.log(Level.SEVERE, "WARNING: FAILED TO INIT DIRECTORIES. File upload functions will not work correctly.");
+                    log.log(Level.SEVERE, se.getMessage());
                 }
                 if (result) {
-                    System.out.println("done");
+                    log.info("done");
                 }
             } else {
-                System.out.println("Skipping init of directories, already initated.");
+                log.info("Skipping init of directories, already initated.");
             }
             //init GCS authorization
             System.out.print("Initiating Google Cloud Storage authorization...");
@@ -68,9 +67,9 @@ public class StartupBean {
             List<Account> accounts = q.getResultList();
             // Don't insert anything if database appears to be initiated.
             if (accounts != null && accounts.size() > 0) {
-                System.out.println("Skipping init of database, already initated.");
+                log.info("Skipping init of database, already initated.");
             } else {
-                System.out.println("Initiating sample database records...");
+                log.info("Initiating sample database records...");
                 ReturnHelper result;
                 result = accountManagementBeanLocal.registerAccount("Admin", "admin@sounds.sg", "admin", true, false, false);
                 Account account = accountManagementBeanLocal.getAccount("admin@sounds.sg");
@@ -114,8 +113,8 @@ public class StartupBean {
                 adminManagementBeanLocal.createGenre("Jazz");
             }
         } catch (Exception ex) {
-            System.out.println("Error initating database");
-            ex.printStackTrace();
+            log.log(Level.SEVERE, "Error initating database");
+            log.log(Level.SEVERE, ex.getMessage());
         }
     }
 }

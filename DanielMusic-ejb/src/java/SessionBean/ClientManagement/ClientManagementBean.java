@@ -10,6 +10,7 @@ import EntityManager.Payment;
 import EntityManager.PaymentHelper;
 import EntityManager.ReturnHelper;
 import EntityManager.ShoppingCart;
+import EntityManager.StartupBean;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import SessionBean.CommonInfrastructure.SendGridLocal;
 import SessionBean.MusicManagement.MusicManagementBeanLocal;
@@ -27,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
@@ -37,6 +40,7 @@ import javax.persistence.Query;
 
 @Stateless
 public class ClientManagementBean implements ClientManagementBeanLocal {
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
 
     private static final Double ARTISTBAND_CUT_PERCENTAGE = 0.7; //70%
     private static final String MAIN_PAYPAL_RECIVING_ACCOUNT = "admin@sounds.sg"; // For reciving the 100% of the amount first before passing it to the artists
@@ -103,10 +107,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
 
-            System.out.println("-----------");
-            System.out.println(payResponse.getPaymentExecStatus());
+            log.info(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            //System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
+            //log.info("Open this link in browser: https://www.sandbox.paypal.com/webscr?cmd=_ap-payment&paykey=" + payKey);
             //open link in browser
             //Accounts (all password is 12345678): 
             //daniel-buyer@hotmail.com, daniel-artist@hotmail.com, danielmusic@hotmail.com
@@ -118,7 +121,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.info(ex.getMessage());
             return false;
         }
     }
@@ -126,7 +129,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
     @Override
     public CheckoutHelper getPayKey(Long accountID, String nonMemberEmail, Set<Music> tracksInCart, Set<Album> albumInCart) {
         CheckoutHelper checkoutHelper = new CheckoutHelper();
-        System.out.println("getPayKey() called");
+        log.info("getPayKey() called");
         try {
             //If accountID is not null, is a registered account purchase. Get it's shopping cart content
             //If null, the other 3 arguments should be filled in
@@ -287,9 +290,9 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
 
-            System.out.println(payResponse.getPaymentExecStatus());
+            log.info(payResponse.getPaymentExecStatus());
             String payKey = payResponse.getPayKey();
-            System.out.println("Open this link in browser: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);
+            log.info("Open this link in browser: https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay?paykey=" + payKey);
             checkoutHelper.setPayKey(payKey);
             return checkoutHelper;
 
@@ -298,15 +301,15 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             //daniel-buyer@hotmail.com, daniel-artist@hotmail.com, danielmusic@hotmail.com
             //Login at https://www.sandbox.paypal.com
         } catch (Exception ex) {
-            System.out.println("getPayKey() failed");
-            ex.printStackTrace();
+            log.log(Level.SEVERE, "getPayKey() failed");
+            log.log(Level.SEVERE, ex.getMessage());
             return null;
         }
     }
 
     @Override
     public Payment getPayment(Long paymentID) {
-        System.out.println("getPayment() called");
+        log.info("getPayment() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -318,14 +321,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
         } catch (NoResultException ex) {
             return null;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.info(ex.getMessage());
             return null;
         }
     }
 
 //    @Override
 //    public DownloadHelper getPurchaseDownloadLinks(Long paymentID) {
-//        System.out.println("getPurchaseDownloadLinks() called");
+//        log.info("getPurchaseDownloadLinks() called");
 //        List<DownloadHelper> purchaseDownloads = new ArrayList();
 //        try {
 //            Payment payment = getPayment(paymentID);
@@ -362,13 +365,13 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 //        } catch (NoResultException ex) {
 //            return null;
 //        } catch (Exception ex) {
-//            ex.printStackTrace();
+//            log.info(ex.getMessage());
 //            return null;
 //        }
 //    }
     @Override
     public ReturnHelper completePayment(Long paymentID, String UUID) {
-        System.out.println("completePayment() called");
+        log.info("completePayment() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -377,11 +380,11 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             Payment payment = (Payment) q.getSingleResult();
             if (!payment.getUUID().equals(UUID)) {
-                System.out.println("completePayment(): UUID does not match");
+                log.log(Level.SEVERE, "completePayment(): UUID does not match");
                 result.setDescription("Payment could not be completed due to invalid UUID. If you have completed your PayPal payment and see this error message, please contact us.");
                 return result;
             } else if (payment.getPaymentCompleted()) {
-                System.out.println("completePayment(): Payment already completed");
+                log.info("completePayment(): Payment already completed");
                 result.setDescription("Payment completed successfully. Thank you for your purchase!");
                 result.setResult(true);
                 return result;
@@ -441,14 +444,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             result.setDescription("Unable to find a matching payment record in our system. If you have completed your PayPal payment and see this error message, please contact us.");
         } catch (Exception ex) {
             result.setDescription("Internal server error.");
-            ex.printStackTrace();
+            log.log(Level.SEVERE, ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ShoppingCart getShoppingCart(Long accountID) {
-        System.out.println("ClientManagementBean: getShoppingCart() called");
+        log.info("ClientManagementBean: getShoppingCart() called");
         ShoppingCart cart;
         Account account;
         try {
@@ -459,18 +462,18 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             // account = em.getReference(Account.class, accountID);
 
             cart = account.getShoppingCart();
-            System.out.println("ClientManagementBean: getShoppingCart() successfully");
+            log.info("ClientManagementBean: getShoppingCart() successfully");
             return cart;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ClientManagementBean: getShoppingCart() failed to execute");
+            log.info(e.getMessage());
+            log.info("ClientManagementBean: getShoppingCart() failed to execute");
             return null;
         }
     }
 
     @Override
     public ReturnHelper removeItemFromShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
-        System.out.println("ClientManagementBean: removeItemFromShoppingCart() called");
+        log.info("ClientManagementBean: removeItemFromShoppingCart() called");
         ReturnHelper helper = new ReturnHelper();
         Account account;
         ShoppingCart cart;
@@ -483,7 +486,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             cart = account.getShoppingCart();
             em.merge(cart);
             if (isTrack) {
-                System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Removing track from cart...");
+                log.info("ClientManagementBean: removeItemFromShoppingCart(): Removing track from cart...");
                 q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
@@ -492,16 +495,16 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 em.flush();
 
                 if (result) {
-                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Track has been removed from cart");
+                    log.info("ClientManagementBean: removeItemFromShoppingCart(): Track has been removed from cart");
                     helper.setDescription("Track has been removed from cart successfully.");
                     helper.setResult(true);
                 } else {
-                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Failed to remove track from cart");
+                    log.info("ClientManagementBean: removeItemFromShoppingCart(): Failed to remove track from cart");
                     helper.setDescription("Error while removing track from cart, please try again.");
                     helper.setResult(false);
                 }
             } else {
-                System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Removing album from cart...");
+                log.info("ClientManagementBean: removeItemFromShoppingCart(): Removing album from cart...");
                 q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
@@ -510,18 +513,18 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 em.flush();
 
                 if (result) {
-                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Album has been removed from cart");
+                    log.info("ClientManagementBean: removeItemFromShoppingCart(): Album has been removed from cart");
                     helper.setDescription("A;bum has been removed from cart successfully.");
                     helper.setResult(true);
                 } else {
-                    System.out.println("ClientManagementBean: removeItemFromShoppingCart(): Failed to remove album from cart");
+                    log.info("ClientManagementBean: removeItemFromShoppingCart(): Failed to remove album from cart");
                     helper.setDescription("Error while removing album from cart, please try again.");
                     helper.setResult(false);
                 }
             }
             return helper;
         } catch (Exception e) {
-            System.out.println("ClientManagementBean: removeItemFromShoppingCart() exception occurred");
+            log.info("ClientManagementBean: removeItemFromShoppingCart() exception occurred");
             helper.setDescription("An error occurred while removing item from shopping cart, please try again.");
             helper.setResult(false);
             return helper;
@@ -530,7 +533,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper addItemToShoppingCart(Long accountID, Long trackOrAlbumID, Boolean isTrack) {
-        System.out.println("ClientManagementBean: addItemToShoppingCart() called");
+        log.info("ClientManagementBean: addItemToShoppingCart() called");
         ShoppingCart cart;
         Music music;
         Album album;
@@ -552,7 +555,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             Boolean result;
             if (isTrack) {
-                System.out.println("addItemToShoppingCart: inside isTrack");
+                log.info("addItemToShoppingCart: inside isTrack");
                 q = em.createQuery("Select m from Music m where m.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
                 q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
@@ -562,7 +565,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 cart.setListOfMusics(musicSet);
                 em.merge(cart);
             } else {
-                System.out.println("addItemToShoppingCart: inside isAlbum");
+                log.info("addItemToShoppingCart: inside isAlbum");
 
                 q = em.createQuery("Select a from Album a where a.id=:trackOrAlbumID");
                 q.setParameter("trackOrAlbumID", trackOrAlbumID);
@@ -578,14 +581,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 helper.setResult(false);
                 return helper;
             }
-            System.out.println("ClientManagementBean: addItemToShoppingCart() successfully");
+            log.info("ClientManagementBean: addItemToShoppingCart() successfully");
 
             helper.setDescription("Item has been added to cart successfully.");
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ClientManagementBean: addItemToShoppingCart() failed");
+            log.info(e.getMessage());
+            log.info("ClientManagementBean: addItemToShoppingCart() failed");
             helper.setDescription("Error occurred while adding item to cart.");
             helper.setResult(false);
             return helper;
@@ -594,7 +597,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public ReturnHelper clearShoppingCart(Long accountID) {
-        System.out.println("ClientManagementBean: clearShoppingCart() called");
+        log.info("ClientManagementBean: clearShoppingCart() called");
         ShoppingCart cart;
         ReturnHelper helper = new ReturnHelper();
         try {
@@ -605,14 +608,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             cart.getListOfAlbums().removeAll(cart.getListOfAlbums());
             cart.getListOfMusics().removeAll(cart.getListOfMusics());
-            System.out.println("ClientManagementBean: clearShoppingCart() successfully");
+            log.info("ClientManagementBean: clearShoppingCart() successfully");
 
             helper.setDescription("Shopping cart has been cleared successfully.");
             helper.setResult(true);
             return helper;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ClientManagementBean: clearShoppingCart() failed");
+            log.info(e.getMessage());
+            log.info("ClientManagementBean: clearShoppingCart() failed");
             helper.setDescription("Failed to clear shopping cart please try again.");
             helper.setResult(false);
             return helper;
@@ -621,7 +624,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
     @Override
     public Boolean checkArtistPayPalEmailExists(Long trackOrAlbumID, Boolean isTrack) {
-        System.out.println("ClientManagementBean: checkArtistPayPalEmailExists() called");
+        log.info("ClientManagementBean: checkArtistPayPalEmailExists() called");
         try {
             Query q;
             if (isTrack) {
@@ -642,15 +645,15 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ClientManagementBean: checkArtistPayPalEmailExists() failed");
+            log.info(e.getMessage());
+            log.info("ClientManagementBean: checkArtistPayPalEmailExists() failed");
         }
         return false;
     }
 
     @Override
     public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID) {
-        System.out.println("notifyArtistsOfCustomerPurchase() called");
+        log.info("notifyArtistsOfCustomerPurchase() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -725,14 +728,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             result.setDescription("Artist notified of the purchase");
         } catch (Exception ex) {
             result.setDescription("Internal server error");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper sendDownloadLinkToBuyer(Long paymentID) {
-        System.out.println("sendDownloadLinkToBuyer() called");
+        log.info("sendDownloadLinkToBuyer() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -840,7 +843,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             result.setDescription("Unable to retrieve payment record.");
         } catch (Exception ex) {
             result.setDescription("Internal server error");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }

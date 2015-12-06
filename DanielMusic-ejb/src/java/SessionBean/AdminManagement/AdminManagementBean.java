@@ -6,9 +6,11 @@ import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.Music;
 import EntityManager.ReturnHelper;
+import EntityManager.StartupBean;
 import SessionBean.CommonInfrastructure.CommonInfrastructureBeanLocal;
 import SessionBean.CommonInfrastructure.SendGridLocal;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
@@ -19,6 +21,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class AdminManagementBean implements AdminManagementBeanLocal {
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
 
     private static final String artistBandAccountApprovedSubject = "sounds.SG - Artist/Band Account Approved";
     private static final String artistBandAccountApprovedMsg = "Your account has been approved. Your profile, albums and tracks will now be shown to the public.";
@@ -35,7 +38,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
 
     @Override
     public ReturnHelper approveArtistOrBand(Long artistOrBandID) {
-        System.out.println("AdminManagementBean: approveArtistOrBand() called");
+        log.info("AdminManagementBean: approveArtistOrBand() called");
         ReturnHelper result = new ReturnHelper();
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
         q.setParameter("id", artistOrBandID);
@@ -61,17 +64,17 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 }
             }
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: approveArtistOrBand() failed");
+            log.info("AdminManagementBean: approveArtistOrBand() failed");
             result.setResult(false);
             result.setDescription("Failed to approve artist. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper rejectArtistOrBand(Long artistOrBandID) {
-        System.out.println("AdminManagementBean: rejectArtistOrBand() called");
+        log.info("AdminManagementBean: rejectArtistOrBand() called");
         ReturnHelper result = new ReturnHelper();
         Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
         q.setParameter("id", artistOrBandID);
@@ -96,17 +99,17 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 }
             }
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: rejectArtistOrBand() failed");
+            log.info("AdminManagementBean: rejectArtistOrBand() failed");
             result.setResult(false);
             result.setDescription("Failed to approve artist. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public List<Artist> listAllArtists(Boolean isAdmin) {
-        System.out.println("AdminManagementBean: listAllArtists() called");
+        log.info("AdminManagementBean: listAllArtists() called");
         try {
             Query q;
             if (isAdmin) {
@@ -115,18 +118,18 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 q = em.createQuery("select a from Artist a where a.isBand=true AND a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
             }
             List<Artist> listOfArtists = q.getResultList();
-            System.out.println("AdminManagementBean: listAllArtists() called successfully");
+            log.info("AdminManagementBean: listAllArtists() called successfully");
             return listOfArtists;
         } catch (Exception e) {
-            System.out.println("AdminManagementBean: Error while calling listAllArtists()");
-            e.printStackTrace();
+            log.info("AdminManagementBean: Error while calling listAllArtists()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<Artist> listAllBands(Boolean isAdmin) {
-        System.out.println("AdminManagementBean: listAllBands() called");
+        log.info("AdminManagementBean: listAllBands() called");
         try {
             Query q;
             if (isAdmin) {
@@ -135,18 +138,18 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 q = em.createQuery("select b from Artist b where b.isBand=true AND b.isDisabled=false and b.emailIsVerified=true and b.isApproved=true");
             }
             List<Artist> listOfBands = q.getResultList();
-            System.out.println("AdminManagementBean: listAllBands() called successfully");
+            log.info("AdminManagementBean: listAllBands() called successfully");
             return listOfBands;
         } catch (Exception e) {
-            System.out.println("AdminManagementBean: Error while calling listAllBands()");
-            e.printStackTrace();
+            log.info("AdminManagementBean: Error while calling listAllBands()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<Member> listAllMembers(Boolean isAdmin) {
-        System.out.println("AdminManagementBean: listAllMembers() called");
+        log.info("AdminManagementBean: listAllMembers() called");
         try {
             Query q;
             if (isAdmin) {
@@ -155,34 +158,34 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 q = em.createQuery("select m from Member m where m.isDisabled=false and m.emailIsVerified=true");
             }
             List<Member> listOfMembers = q.getResultList();
-            System.out.println("AdminManagementBean: listAllMembers() called successfully");
+            log.info("AdminManagementBean: listAllMembers() called successfully");
             return listOfMembers;
         } catch (Exception e) {
-            System.out.println("AdminManagementBean: Error while calling listAllMembers()");
-            e.printStackTrace();
+            log.info("AdminManagementBean: Error while calling listAllMembers()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<Genre> listAllGenres() {
-        System.out.println("AdminManagementBean: listAllGenres() called");
+        log.info("AdminManagementBean: listAllGenres() called");
         try {
             Query q;
             q = em.createQuery("SELECT g FROM Genre g");
             List<Genre> listOfGenres = q.getResultList();
-            System.out.println("AdminManagementBean: listAllGenres() called successfully");
+            log.info("AdminManagementBean: listAllGenres() called successfully");
             return listOfGenres;
         } catch (Exception e) {
-            System.out.println("AdminManagementBean: Error while calling listAllGenres()");
-            e.printStackTrace();
+            log.info("AdminManagementBean: Error while calling listAllGenres()");
+            log.info(e.getMessage());
         }
         return null;
     }
 
     @Override
     public ReturnHelper createGenre(String name) {
-        System.out.println("AdminManagementBean: createGenre() called");
+        log.info("AdminManagementBean: createGenre() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -194,17 +197,17 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             result.setDescription("Genre created.");
             return result;
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: createGenre() failed");
+            log.info("AdminManagementBean: createGenre() failed");
             result.setResult(false);
             result.setDescription("Failed to create genre. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper updateGenre(Long genreID, String newName) {
-        System.out.println("AdminManagementBean: updateGenre() called");
+        log.info("AdminManagementBean: updateGenre() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -218,17 +221,17 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             result.setDescription("Genre updated.");
             return result;
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: updateGenre() failed");
+            log.info("AdminManagementBean: updateGenre() failed");
             result.setResult(false);
             result.setDescription("Failed to update genre. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public ReturnHelper deleteGenre(Long genreID) {
-        System.out.println("AdminManagementBean: deleteGenre() called");
+        log.info("AdminManagementBean: deleteGenre() called");
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         try {
@@ -248,46 +251,46 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             result.setDescription("Genre deleted.");
             return result;
         } catch (Exception ex) {
-            System.out.println("AdminManagementBean: deleteGenre() failed");
+            log.info("AdminManagementBean: deleteGenre() failed");
             result.setResult(false);
             result.setDescription("Failed to delete genre. Internal server error.");
-            ex.printStackTrace();
+            log.info(ex.getMessage());
         }
         return result;
     }
 
     @Override
     public Artist getArtist(Long artistID) {
-        System.out.println("AdminManagementBean: getArtist() called");
+        log.info("AdminManagementBean: getArtist() called");
         Artist artist;
         try {
             Query q = em.createQuery("Select a from Artist a where a.id=:artistID");
             q.setParameter("artistID", artistID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             artist = (Artist) q.getSingleResult();
-            System.out.println("AdminManagementBean: getArtist() successfully retrieved");
+            log.info("AdminManagementBean: getArtist() successfully retrieved");
             return artist;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("AdminManagementBean: getArtist() got exception");
+            log.info(e.getMessage());
+            log.info("AdminManagementBean: getArtist() got exception");
             return null;
         }
     }
 
     @Override
     public Member getMember(Long memberID) {
-        System.out.println("AdminManagementBean: getMember() called");
+        log.info("AdminManagementBean: getMember() called");
         Member member;
         try {
             Query q = em.createQuery("Select m from Member m where m.id=:memberID");
             q.setParameter("memberID", memberID);
             q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
             member = (Member) q.getSingleResult();
-            System.out.println("AdminManagementBean: getMember() successfully retrieved");
+            log.info("AdminManagementBean: getMember() successfully retrieved");
             return member;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("AdminManagementBean: getMember() got exception");
+            log.info(e.getMessage());
+            log.info("AdminManagementBean: getMember() got exception");
             return null;
         }
     }
