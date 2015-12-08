@@ -10,7 +10,7 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-<!--    <filter-mapping>
+    <!--    <filter-mapping>
         <filter-name>HttpsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
@@ -58,6 +58,17 @@
         <servlet-name>MusicController</servlet-name>
         <url-pattern>/MusicController</url-pattern>
     </servlet-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error500.jsp</location>
+    </error-page>
+    <error-page>
+        <location>/error.jsp</location>
+    </error-page>
     <session-config>
         <session-timeout>
             30
