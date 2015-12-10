@@ -150,6 +150,11 @@
                             <%}%>
                     </div>
                 </div>
+
+                <p>
+                    <a class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
+                    <a class="btn invert sp-add-list" data-id="release-list">Add All Tracks to Playlist</a>
+                </p>
             </div>
 
             <div id="main" class="release main-left main-medium">
@@ -178,6 +183,48 @@
                             </p>
                         </div>
                         <!-- /tab content -->
+                        <!-- play all tracks content/add all tracks to playlist button-->
+                        <ul id="release-list" class="tracklist" style="display:none;">
+                            <%
+                                for (int i = 0; i < albums.size(); i++) {
+                                    Album album = albums.get(i);
+                                    String albumArt = album.getImageLocation();
+                                    if (albumArt == null || albumArt.isEmpty()) {
+                                        albumArt = "img/cover.png";
+                                    } else {
+                                        albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
+                                    }
+                                    List<Music> musics = album.getListOfMusics();
+                                    if (musics != null && !musics.isEmpty()) {
+                                        for (int j = 0; j < musics.size(); j++) {
+                                            Music music = musics.get(j);
+                            %>
+                            <li>
+                                <div class="track-details">
+                                    <div class="track-buttons">
+                                        <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                           data-artist="<%=music.getArtistName()%>"
+                                           data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                           data-artist_target="_blank"
+                                           data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
+                                           data-shop_target="_blank"
+                                           >
+                                            <i class="icon icon-plus">
+                                                <span style="display: none;">
+                                                    <span  class="track-title"><%=music.getName()%></span>
+                                                    <span class="track-artists"><%=artist.getName()%></span>
+                                                </span>
+                                            </i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <%
+                                        }
+                                    }
+                                }
+                            %>
+                        </ul>
                         <!-- tab content -->
                         <div id="tab-releases" class="tab-content">
                             <%
@@ -211,7 +258,7 @@
                                 %>
                             </p>
                             <p>Year Released: <%=album.getYearReleased()%></p>
-                            <%if (album.getListOfMusics().size() > 1) {%>
+                            <%if (!album.getIsSingle()) {%>
                             <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Album to Cart</a>
                             <%} else {%>
                             <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Single to Cart</a>
@@ -249,8 +296,7 @@
                                                    data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                                    data-artist_target="_blank"
                                                    data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
-                                                   data-shop_target="_blank"
-                                                   >
+                                                   data-shop_target="_blank">
                                                     <i class="icon icon-plus">
                                                         <span style="display: none;">
                                                             <span  class="track-title"><%=music.getName()%></span>
@@ -316,10 +362,6 @@
                                 <%}%>                                    
                             </ul>
                             <%}%>
-                            <p>
-                                <a class="btn invert sp-play-list" data-id="release-list" style="margin-right: 10px;">Play All Tracks</a>
-                                <a class="btn sp-add-list" data-id="release-list">Add All Tracks to Playlist</a>
-                            </p>
                         </div>
                     </div>
                 </article>
