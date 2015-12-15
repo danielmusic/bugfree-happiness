@@ -8,6 +8,166 @@
     <section class="content section">
         <div class="container">
             <article>
+                <script type="text/javascript">
+                    var fd = new FormData();
+                    var canvas, dataURL;
+                    var image = document.getElementById('image');
+                    var cropper = new Cropper(image, {
+                        aspectRatio: 1 / 1,
+                        zoomable: false,
+                        minContainerWidth: 300,
+                        minContainerHeight: 300,
+                        minCanvasWidth: 300,
+                        minCanvasHeight: 300,
+                        minCropBoxWidth: 300,
+                        minCropBoxHeight: 300,
+                    });
+
+                    function submitForm() {
+                        var email = $('#email').val();
+                        var contactEmail = $('#contactEmail').val();
+                        var paypalEmail = $('#paypalEmail').val();
+                        var genreID = $('#genre').val();
+                        var bio = $('#bio').val();
+                        var influences = $('#influences').val();
+                        var facebookURL = $('#facebookURL').val();
+                        var instagramURL = $('#instagramURL').val();
+                        var twitterURL = $('#twitterURL').val();
+                        var websiteURL = $('#websiteURL').val();
+                        var target = $('#target').val();
+                        if (dataURL != null) {
+                            fd.append('picture', dataURL);
+                        }
+                        fd.append('email', email);
+                        fd.append('contactEmail', contactEmail);
+                        fd.append('paypalEmail', paypalEmail);
+                        fd.append('genreID', genreID);
+                        fd.append('bio', bio);
+                        fd.append('influences', influences);
+                        fd.append('facebookURL', facebookURL);
+                        fd.append('instagramURL', instagramURL);
+                        fd.append('twitterURL', twitterURL);
+                        fd.append('websiteURL', websiteURL);
+                        fd.append('target', target);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", 'ClientAccountManagementController?target=ArtistProfileUpdate');
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState == 4) {
+                                window.location.href = "/redirect.jsp";
+                            }
+                        };
+                        xhr.send(fd);
+                    }
+
+                    function cancel() {
+                        window.cancel = function (e) {
+                            e.wrap('<form>').closest('form').get(0).reset();
+                            e.unwrap();
+                        }
+                        document.getElementById("cropper-area").innerHTML = "<img id='image' src=''>";
+                        document.getElementById("change-picture").disabled = true;
+                    }
+
+                    function confirm() {
+                        canvas = cropper.getCroppedCanvas();
+                        dataURL = canvas.toDataURL();
+                    }
+
+
+                    (function ($) {
+                        var inputImage = document.getElementById('inputImage');
+                        var URL = window.URL || window.webkitURL;
+                        var blobURL;
+
+                        if (URL) {
+                            inputImage.onchange = function () {
+                                var files = this.files;
+                                var file, img;
+
+                                if (cropper && files && files.length) {
+                                    file = files[0];
+                                    img = new Image();
+                                    img.src = URL.createObjectURL(file);
+                                    img.onload = function () {
+                                        if (this.width >= 300 && this.height >= 300) {
+                                            if (/^image\/\w+/.test(file.type)) {
+                                                blobURL = URL.createObjectURL(file);
+                                                cropper.reset().replace(blobURL);
+                                                inputImage.value = null;
+                                            } else {
+                                                window.alert('Please choose an image file.');
+                                            }
+                                        } else {
+                                            window.alert("Image needs to be at least 300px in width and height.");
+                                        }
+                                    };
+                                }
+                            };
+                        } else {
+                            inputImage.disabled = true;
+                            inputImage.parentNode.className += ' disabled';
+                        }
+
+
+
+
+                        /**
+                         * jQuery.textareaCounter
+                         * Version 1.0
+                         * Copyright (c) 2011 c.bavota - http://bavotasan.com
+                         * Dual licensed under MIT and GPL.
+                         * Date: 10/20/2011
+                         **/
+                        $.fn.textareaCounter = function (options) {
+                            // setting the defaults
+                            // $("textarea").textareaCounter({ limit: 100 });
+                            var defaults = {
+                                limit: 100
+                            };
+                            var options = $.extend(defaults, options);
+
+                            // and the plugin begins
+                            return this.each(function () {
+                                var obj, text, wordcount, limited;
+
+                                obj = $(this);
+                                obj.after('<span style="font-size: 11px; clear: both; margin-top: 3px; display: block;" id="counter-text"></span>');
+
+                                obj.keyup(function () {
+                                    text = obj.val();
+                                    if (text === "") {
+                                        wordcount = 0;
+                                    } else {
+                                        wordcount = $.trim(text).split(" ").length;
+                                    }
+                                    if (wordcount > options.limit) {
+                                        $("#counter-text").html('<span style="color: #DD0000;">0 words left</span>');
+                                        limited = $.trim(text).split(" ", options.limit);
+                                        limited = limited.join(" ");
+                                        $(this).val(limited);
+                                    } else {
+                                        $("#counter-text").html((options.limit - wordcount) + ' words left');
+                                    }
+                                });
+                            });
+                        };
+                    })(jQuery);
+                </script>
+                <div class="md-modal md-effect-1" id="modal-change-profilepic">
+                    <div class="md-content">
+                        <h3>Change Profile Picture</h3>
+                        <div style="text-align:center;">
+                            <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*"/>&nbsp;&nbsp;
+                            <button class="md-close" onclick="confirm()" type="button">Confirm and Close</button>&nbsp;&nbsp;
+                            <!--button onclick="cancel($('#inputImage'))" type="button">Cancel</button-->
+                        </div>
+                        <div id="cropper-area" style="max-width:550px;min-height:600px;">
+                            <img id="image" src="">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="md-modal md-effect-1" id="modal-profilePic">
                     <div class="md-content">
                         <h3>Standard Requirement</h3>
@@ -73,17 +233,17 @@
 
                 <script>
                     $(document).ready(function () {
-                        $("#fb").change(function () {
+                        $("#facebookURL").change(function () {
                             if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
                                 this.value = "http://" + this.value;
                             }
                         });
-                        $("#twitter").change(function () {
+                        $("#twitterURL").change(function () {
                             if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
                                 this.value = "http://" + this.value;
                             }
                         });
-                        $("#ig").change(function () {
+                        $("#instagramURL").change(function () {
                             if (!/^(?:ht)tps?\:\/\//.test(this.value)) {
                                 this.value = "http://" + this.value;
                             }
@@ -95,7 +255,7 @@
                         });
                     });
 
-                    if ($('#ppEmail').val() == '') {
+                    if ($('#paypalEmail').val() == '') {
                         $("html, body").animate({scrollTop: -100}, "slow");
                     }
                 </script>
@@ -110,7 +270,7 @@
                         }
                 %>
 
-                <form action="ClientAccountManagementController" class="form" method="POST" enctype="multipart/form-data">
+                <form name="profileForm" class="form" method="POST" enctype="multipart/form-data" action="javascript:submitForm();" accept-charset="utf-8" >
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
 
                     <h2>Account Details</h2>
@@ -163,10 +323,10 @@
 
                         <div class="row clearfix">
                             <div class="col-1-3" style="margin: 0 20px 24px 0;">
-                                <label for="ppEmail"><strong>PayPal Email Address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
+                                <label for="paypalEmail"><strong>PayPal Email Address:</strong> * <a class="md-trigger" data-modal="modal-paypal">(?)</a></label>
                                 <input type="email" value="<%if (artist.getPaypalEmail() != null) {
                                         out.print(artist.getPaypalEmail());
-                                    }%>" name="paypalEmail" id="ppEmail" required>
+                                    }%>" name="paypalEmail" id="paypalEmail" required>
                             </div>
 
                             <div class="col-1-3" style="margin: 0 0 0 0;">
@@ -230,7 +390,7 @@
 
                         <div class="col-1-3 last">  
                             <label><strong>Change Profile Picture</strong> <a class="md-trigger" data-modal="modal-profilePic">(?)</a></label>
-                            <input type="file" id="pic" name="picture" style="height: 40px;padding-top: 8px;padding-bottom: 8px;">
+                            <button type="button" class="md-trigger medium invert" data-modal="modal-change-profilepic" id="change-picture">Change Profile Picture</button>&nbsp;
                         </div>
                     </div>
 
@@ -275,40 +435,12 @@
                     <div class="row clearfix">
                         <div class="col-1-2" style="margin-bottom: 24px;">
                             <label for="bio"><strong>Biography</strong> </label>
-                            <script type="text/javascript">
-                                counter = function () {
-                                    var wordLimit = 200;
-                                    var value = $('#bio').val();
-
-                                    if (value.length == 0) {
-                                        $('#wordCount').html(wordLimit);
-                                        return;
-                                    }
-
-                                    var regex = /\s+/gi;
-                                    var wordCount = wordLimit - (value.trim().replace(regex, ' ').split(' ').length);
-
-                                    $('#wordCount').html(wordCount);
-                                };
-
-                                $(document).ready(function () {
-                                    counter();
-                                    $('#bio').change(counter);
-                                    $('#bio').keydown(counter);
-                                    $('#bio').keypress(counter);
-                                    $('#bio').keyup(counter);
-                                    $('#bio').blur(counter);
-                                    $('#bio').focus(counter);
-                                });
-                            </script>
                             <textarea name="bio" id="bio" style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getBiography());
                                 } %></textarea>
-                            <label>  
-                                <div id="result">
-                                    <span id="wordCount">200</span> words left<br/>
-                                </div>
-                            </label>
+                            <script type="text/javascript">
+                                $("#bio").textareaCounter({limit: 200});
+                            </script>
                         </div>
 
                         <div class="col-1-2 last">
@@ -321,15 +453,15 @@
 
                     <div class="row clearfix">
                         <div class="col-1-2">
-                            <label for="fb"><strong>Facebook URL</strong></label>
-                            <input type="url" id="fb" name="facebookURL" placeholder="http://" value="<%if (artist.getFacebookURL() != null) {
+                            <label for="facebookURL"><strong>Facebook URL</strong></label>
+                            <input type="url" id="facebookURL" name="facebookURL" placeholder="http://" value="<%if (artist.getFacebookURL() != null) {
                                     out.print(artist.getFacebookURL());
                                 }%>">
                         </div>
 
                         <div class="col-1-2 last">
-                            <label for="twitter"><strong>Twitter URL</strong></label>
-                            <input type="url" id="twitter" name="twitterURL" placeholder="http://" value="<%if (artist.getTwitterURL() != null) {
+                            <label for="twitterURL"><strong>Twitter URL</strong></label>
+                            <input type="url" id="twitterURL" name="twitterURL" placeholder="http://" value="<%if (artist.getTwitterURL() != null) {
                                     out.print(artist.getTwitterURL());
                                 }%>">
                         </div>
@@ -337,8 +469,8 @@
 
                     <div class="row clearfix">
                         <div class="col-1-2">
-                            <label for="ig"><strong>Instagram URL</strong></label>  
-                            <input type="url" id="ig" name="instagramURL" placeholder="http://" value="<%if (artist.getInstagramURL() != null) {
+                            <label for="instagramURL"><strong>Instagram URL</strong></label>  
+                            <input type="url" id="instagramURL" name="instagramURL" placeholder="http://" value="<%if (artist.getInstagramURL() != null) {
                                     out.print(artist.getInstagramURL());
                                 }%>">
                         </div>
@@ -351,8 +483,8 @@
                         </div>
                     </div>
 
-                    <input type="submit" value="Save" class="small invert">
-                    <input type="hidden" value="ArtistProfileUpdate" name="target">
+                    <button type="submit" class="small invert" id="submitBtn">Submit</button>
+                    <input type="hidden" value="ArtistProfileUpdate" name="target" id="target">
                     <div class="clear"></div>
                 </form>
 

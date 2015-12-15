@@ -231,6 +231,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             }
         } catch (Exception ex) {
             result.setDescription("Unable to check image requirements due to internal server error.");
+            ex.printStackTrace();
         }
         return result;
     }

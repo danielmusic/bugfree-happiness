@@ -33,7 +33,6 @@ public class AccountManagementController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String target = request.getParameter("target");
-        System.out.println("target " + target);
         String source = request.getParameter("source");
         String id = request.getParameter("id");
         String email = request.getParameter("email");
@@ -155,7 +154,6 @@ public class AccountManagementController extends HttpServlet {
 
                 case "EnableAccount":
                     if (checkLogin(response)) {
-                        System.out.println("innnnn");
                         returnHelper = accountManagementBean.enableAccount(Long.parseLong(id));
                         if (returnHelper.getResult()) {
                             if (source != null && source.equals("artistManagement")) {
@@ -255,7 +253,6 @@ public class AccountManagementController extends HttpServlet {
                 case "GetDownloadLink":
                     if (checkLogin(response)) {
                         String url = musicManagementBean.generateDownloadLink(Long.parseLong(id), "wav", false, 300L);
-                        System.out.println(url);
                         nextPage = url;
                     } else {
                         response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
@@ -264,7 +261,6 @@ public class AccountManagementController extends HttpServlet {
                     break;
 
                 case "GenerateEmail":
-                    System.out.println("wub");
                     if (checkLogin(response)) {
                         returnHelper = adminManagementBean.exportVerifiedFanAccountEmails();
                         if (returnHelper.getResult()) {

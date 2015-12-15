@@ -433,7 +433,6 @@ public class MusicManagementController extends HttpServlet {
                     if (true) {
                         Account account = (Account) session.getAttribute("account");
                         String strTrackIDs = request.getParameter("deleteTrack");
-                        System.out.println("Track IDs " + strTrackIDs);
                         Scanner sc2 = new Scanner(strTrackIDs);
                         ArrayList<String> trackIDs = new ArrayList<>();
                         while (sc2.hasNext()) {
@@ -443,7 +442,6 @@ public class MusicManagementController extends HttpServlet {
                         int deleteCounter = 0;
                         if (account != null) {
                             for (String s : trackIDs) {
-                                System.out.println("string s " + s);
                                 returnHelper = clientManagementBean.removeItemFromShoppingCart(account.getId(), Long.parseLong(s), true);
                                 if (returnHelper.getResult()) {
                                     deleteCounter++;
@@ -453,7 +451,6 @@ public class MusicManagementController extends HttpServlet {
                         } else {
                             shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                             for (String s : trackIDs) {
-                                System.out.println("Removing track: " + s);
                                 Music track = new Music();
                                 track.setId(Long.parseLong(s));
                                 Boolean result = shoppingCart.getListOfMusics().remove(track);
@@ -700,7 +697,6 @@ public class MusicManagementController extends HttpServlet {
                         }
                         session.setAttribute("checkoutHelper", checkoutHelper);
                         if (checkoutHelper.getPayKey() == null) {
-                            System.out.println("subsubs");
                             jsObj.put("result", false);
                             if (checkoutHelper.getMessage().isEmpty()) {
                                 session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
@@ -770,7 +766,6 @@ public class MusicManagementController extends HttpServlet {
                     break;
 
                 case "GenerateDownloadLink":
-                    System.out.println("im innnnnnnnnnnnnnn");
                     String bitrateType = request.getParameter("bitrateType");
                     String musicID = request.getParameter("musicID");
                     String downloadLink = musicManagementBean.generateDownloadLink(Long.parseLong(musicID), bitrateType, true, 300L);

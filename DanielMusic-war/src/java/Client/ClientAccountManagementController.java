@@ -182,19 +182,16 @@ public class ClientAccountManagementController extends HttpServlet {
 
                             Artist artist = (Artist) (session.getAttribute("artist"));
                             Part picture = request.getPart("picture");
-                            if (picture.getSize() == 0) {
-                                picture = null;
-                            }
                             String contactEmail = request.getParameter("contactEmail");
                             String paypalEmail = request.getParameter("paypalEmail");
-                            String genreID = request.getParameter("genre");
+                            String genreID = request.getParameter("genreID");
                             String bio = request.getParameter("bio");
                             String influences = request.getParameter("influences");
                             String facebookURL = request.getParameter("facebookURL");
                             String instagramURL = request.getParameter("instagramURL");
                             String twitterURL = request.getParameter("twitterURL");
                             String websiteURL = request.getParameter("websiteURL");
-
+                            
                             if (artist != null) {
                                 if (!artist.getIsBand()) {
                                     returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);
@@ -218,11 +215,10 @@ public class ClientAccountManagementController extends HttpServlet {
                                     session.setAttribute("errMsg", returnHelper.getDescription());
                                 }
                             }
-                            nextPage = "/#!/artist/profile";
+                            session.setAttribute("redirectPage", "#!/artist/profile");
                         }
                     }
-                    break;
-
+                    return;
                 case "SendResetPasswordEmail":
                     if (true) {
                         String email = request.getParameter("email");
@@ -391,15 +387,9 @@ public class ClientAccountManagementController extends HttpServlet {
                     }
                     break;
 
-                case "SaveCartAndLogin":
-                    System.out.println("Controller: SaveCartAndLogin");
-                    //TODO future
-                    return;
-
                 case "GetPastPurchases":
                     if (true) {
                         Account account = (Account) session.getAttribute("account");
-                        System.out.println("Controller: GetPastPurchases");
                         account = accountManagementBean.getAccount(account.getId());
                         session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                     }

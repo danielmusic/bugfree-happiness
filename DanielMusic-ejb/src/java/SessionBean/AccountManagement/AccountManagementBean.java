@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -33,11 +34,14 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.servlet.http.Part;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class AccountManagementBean implements AccountManagementBeanLocal {
-    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
+
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName());
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
@@ -879,6 +883,17 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 //Save file to local drive first
                 InputStream fileInputStream = profilePicture.getInputStream();
                 OutputStream fileOutputStream = new FileOutputStream(tempFileLocation);
+
+                StringWriter writer = new StringWriter();
+                IOUtils.copy(fileInputStream, writer, "UTF-8");
+                String imageString = writer.toString();
+                imageString = imageString.substring("data:image/png;base64,"
+                        .length());
+                byte[] contentData = imageString.getBytes();
+                byte[] decodedData = Base64.decodeBase64(contentData);
+                fileOutputStream = new FileOutputStream(tempFileLocation);
+                fileOutputStream.write(decodedData);
+
                 int nextByte;
                 while ((nextByte = fileInputStream.read()) != -1) {
                     fileOutputStream.write(nextByte);
@@ -886,13 +901,14 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 //Check image
+                System.out.println(tempFileLocation);//TODO
                 ReturnHelper checkImageResult = cibl.checkIfImageFitsRequirement(tempFileLocation);
                 if (!checkImageResult.getResult()) {
                     result.setDescription("Profile picture does not meet image requirements. " + checkImageResult.getDescription());
                     return result;
                 }
                 //Upload to GCS
-                String imageLocation = "images/artist/profile/profilepictures_" + account.getId();
+                String imageLocation = "images/artist/profile/profilepicture_" + account.getId() + "_"+new Date();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);
