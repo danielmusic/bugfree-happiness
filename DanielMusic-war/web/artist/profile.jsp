@@ -30,6 +30,8 @@
                         var genreID = $('#genre').val();
                         var bio = $('#bio').val();
                         var influences = $('#influences').val();
+                        var dateFormed = $('#dateFormed').val();
+                        var bandMembers = $('#bandMembers').val();
                         var facebookURL = $('#facebookURL').val();
                         var instagramURL = $('#instagramURL').val();
                         var twitterURL = $('#twitterURL').val();
@@ -44,6 +46,8 @@
                         fd.append('genreID', genreID);
                         fd.append('bio', bio);
                         fd.append('influences', influences);
+                        fd.append('dateFormed', dateFormed);
+                        fd.append('bandMembers', bandMembers);
                         fd.append('facebookURL', facebookURL);
                         fd.append('instagramURL', instagramURL);
                         fd.append('twitterURL', twitterURL);
@@ -410,10 +414,13 @@
                                         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy");
                                         date = DATE_FORMAT.format(artist.getBandDateFormed());
                                         out.print(date);
-                                    }
+                                    } else
+                                        out.print("\"\"");
                                 %>;
+                                    alert(previouslySelectedDate);
                                 for (var year = end; year >= start; year--) {
                                     if (year === previouslySelectedDate) {
+                                        alert("HUATTTT");
                                         options += "<option selected value='" + year + "-01-01'>" + year + "</option>";
                                     } else {
                                         options += "<option value='" + year + "-01-01'>" + year + "</option>";

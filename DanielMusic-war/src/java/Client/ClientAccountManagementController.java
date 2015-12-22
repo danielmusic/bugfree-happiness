@@ -198,7 +198,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                 } else {
                                     String bandMembers = request.getParameter("bandMembers");
                                     String dateFormed = request.getParameter("dateFormed");
-
+                                    System.out.println(dateFormed);
                                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                     Date date = null;
 

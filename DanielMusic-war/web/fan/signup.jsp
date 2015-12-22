@@ -57,7 +57,7 @@
                                     document.getElementById("errMsg").style.display = "block";
                                     document.getElementById('errMsg').innerHTML = "Sorry, Password can not be empty.";
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "You can't leave Captcha Code empty!";
+                                    document.getElementById('errMsg').innerHTML = "Plase tick the reCAPTCHA box to verify that you are a human!";
                                 }
                             }
                         }
