@@ -29,7 +29,7 @@
         }
     </style>
 
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
+    <section class="intro-title section border-bottom" style="background-image: url(placeholders/SoundsHeaders_Artist.jpg)">
         <h1 class="heading-l">artist</h1>
         <h2 class="heading-m">share <span class="header-color">your sounds</span></h2>
     </section>
