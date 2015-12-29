@@ -397,9 +397,9 @@ img.border { border: 6px solid #ddd; }
  ---------------------------------------------------------------------- */
 
 /* Menu height */
-#main-nav-wrapper, #main-nav { height: 80px; }
-#nav a { line-height: 80px; }
-#search-wrap { top:80px; }
+#main-nav-wrapper, #main-nav { height: 64px; }
+#nav a { line-height: 64px; }
+#search-wrap { top: 64px; }
 
 /* Navigation wrapper */
 #main-nav-wrapper {
@@ -533,7 +533,7 @@ img.border { border: 6px solid #ddd; }
     height: 16px;
     border-left: 1px dotted #666;
     padding-left: 10px;
-    margin-top: 32px;
+    margin-top: 25px;
 }
 
 #icon-nav li {
@@ -563,7 +563,7 @@ img.border { border: 6px solid #ddd; }
 #logo { 
     position: absolute;
     left: 0;
-    top: 25px;
+    top: 22px;
 }
 #logo img { margin: 0; }
 
