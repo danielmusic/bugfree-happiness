@@ -1,9 +1,34 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | fan signup">
+    <style>
+        .heading-l{
+            font-size: 80px;
+            margin-bottom: 0px;
+        }
+
+        @media only screen and (min-width: 768px) and (max-width: 980px) {
+            .container{
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 767px) {
+            .container{
+                width: 100%;
+            }
+        }
+
+        @media only screen and (min-width: 480px) and (max-width: 767px) {
+            .container{
+                width: 100%;
+            }
+        }
+    </style>
+
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">fan signup</h1>
-        <h2 class="heading-m">It's now or <span class="color">Never</span></h2>
+
         <!-- Overlay -->
         <span class="overlay dots"></span>
     </section>
@@ -98,42 +123,61 @@
                     <p class="error" id="errMsg" style="display:none;"></p>
                     <p class="success" id="goodMsg"  style="display:none;"></p>
 
-                    <h2>Sign up for a fan account</h2>
+                    <div class="container" style="width: 50%;">
 
-                    <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="name"><strong>Name</strong> *</label>
-                            <input type="text" name="name" id="name" required>
+                        <div class="row clearfix">
+                            <div class="col-1-1" style="text-align: center;">
+                                <label for="name"><strong>Sign up for a fan account</strong></label>
+                            </div>
                         </div>
-                        <div class="col-1-2 last">
-                            <label for="email"><strong>Email</strong> *</label>
-                            <input type="email" name="email" id="email" required>
+
+                        <div class="row clearfix">
+                            <div class="col-1-1">
+                                <label for="name"><strong>Name</strong> *</label>
+                                <input type="text" name="name" id="name" required>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-1-1">
+                                <label for="email"><strong>Email</strong> *</label>
+                                <input type="email" name="email" id="email" required>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-1-1">
+                                <label for="password"><strong>Password</strong> *</label>
+                                <input id="password" type="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers" name="password" id="password" required onchange="form.repassword.pattern = this.value;">
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-1-1">
+                                <label for="repassword"><strong>Re-enter Password</strong> *</label>
+                                <input id="repassword" type="password" name="repassword" required>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row clearfix">
-                        <div class="col-1-2">
-                            <label for="password"><strong>Password</strong> *</label>
-                            <input id="password" type="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers" name="password" id="password" required onchange="form.repassword.pattern = this.value;">
-                        </div>
-                        <div class="col-1-2 last">
-                            <label for="repassword"><strong>Re-enter Password</strong> *</label>
-                            <input id="repassword" type="password" name="repassword" required>
-                        </div>
-                    </div>
-
-                    <div class="row clearfix">
-                        <div class="col-1-1">
+                        <div class="col-1-1" style="text-align: center;">
                             <label><input type="checkbox" id="chkAgree" name="option" required> I have read and agree to the Terms of Use.</label>
                         </div>
                     </div>
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <div id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
+                            <div align="center" id="grecaptcha" name="grecaptcha" class="g-recaptcha" data-sitekey="6LfmfQoTAAAAAMud4GA01cFMlPc4HPG3NFKvc8XA"></div>
                         </div>
                     </div>
-                    <button type="button" class="large invert" onclick="loadAjaxSignupFan()">Sign up now!</button>
+
+                    <div class="row clearfix">
+                        <div class="col-1-1" style="text-align: center;">
+                            <button type="button" class="large invert" onclick="loadAjaxSignupFan()">create account</button>
+                        </div>
+                    </div>
+
                     <div class="clear"></div>
                 </form>
             </article>

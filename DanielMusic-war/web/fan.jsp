@@ -29,7 +29,7 @@
         }
     </style>
 
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
+    <section class="intro-title section border-bottom" style="background-image: url(placeholders/SoundsHeaders_Fan.jpg)">
         <h1 class="heading-l">fan</h1>
         <h2 class="heading-m">support <span class="header-color">local sounds</span></h2>
     </section>
