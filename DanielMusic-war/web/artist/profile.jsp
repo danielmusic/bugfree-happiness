@@ -375,7 +375,7 @@
                                 <option value="">Select</option>
                                 <%
                                     for (int i = 0; i < genres.size(); i++) {
-                                        if (artist.getGenre() != null && artist.getGenre().getId() == genres.get(i).getId()) {
+                                        if (artist.getGenre() != null && artist.getGenre().getId().equals(genres.get(i).getId())) {
                                             out.write("<option selected value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
                                         } else {
                                             out.write("<option value='" + genres.get(i).getId() + "'>" + genres.get(i).getName() + "</option>");
