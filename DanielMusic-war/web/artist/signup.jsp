@@ -132,6 +132,7 @@
                         <div class="row clearfix">
                             <div class="col-1-1" style="text-align: center;">
                                 <label for="name"><strong>I am signing up as a </strong></label>
+                                
                                 <div id="options">
                                     <label style="display: inline; margin-right: 22px;"><input type="radio" id="r1" value="ArtistSignup" name="option" style="margin-right: 5px;" required> Solo Artist</label>
                                     <label style="display: inline;"><input type="radio" id="r2" value="BandSignup" name="option" style="margin-right: 5px;" required> Band</label>
