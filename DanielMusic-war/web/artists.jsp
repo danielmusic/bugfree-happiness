@@ -12,8 +12,13 @@
 %>
 <section id="page" data-title="sounds.sg | <%=artist.getName()%>">
     <style>
-        .track-details:before{
-            top: 5px;
+        .heading-l{
+            font-size: 80px;
+            margin-bottom: 0px;
+        }
+
+        .heading-m{
+            font-size: 32px;
         }
     </style>
     <%
@@ -120,14 +125,14 @@
                                 <div class="data"><b><%=artist.getName()%></b></div>
                             </li>
                             <li>
-                                <span class="label">Genres</span>
+                                <span class="label">Genre</span>
                                 <div class="data"><%if (artist.getGenre() != null) {
                                         out.print(artist.getGenre().getName());
                                     }%></div>
                             </li>
                             <li>
-                                <span class="label">URL</span>
-                                <input type="text" value="http://sounds.sg/music/<%=artist.getName()%>" disabled style="width:100%;"/>
+                                <span class="label" style="margin-bottom: 5px;">URL</span>
+                                <input type="text" value="http://sounds.sg/music/<%=artist.getName()%>" style="width:100%; height: 25px; font-size: 14px;" disabled/>
                             </li>
                         </ul>
                     </div>
@@ -152,8 +157,8 @@
                 </div>
 
                 <p>
-                    <a class="btn invert sp-play-list" data-id="release-list">Play All Tracks</a>
-                    <a class="btn invert sp-add-list" data-id="release-list">Add All Tracks to Playlist</a>
+                    <a class="btn invert sp-play-list" data-id="release-list" style="width: 100%;">Play All Tracks</a>
+                    <a class="btn invert sp-add-list" data-id="release-list" style="width: 100%;">Add All Tracks to Playlist</a>
                 </p>
             </div>
 
@@ -161,6 +166,8 @@
                 <article>
                     <p class="error" id="errMsg" style="display:none;"></p>
                     <p class="success" id="goodMsg"  style="display:none;"></p>
+
+                    <h1><%=artist.getName()%></h1>
 
                     <!-- tabs -->
                     <div id="tabs" class="tabs-wrap">
@@ -359,8 +366,11 @@
                                     </li>
                                 </div>
 
-                                <%}%>                                    
+                                <%}%>            
                             </ul>
+
+                             <!-- end of looping-->
+                            <br><br>
                             <%}%>
                         </div>
                     </div>
