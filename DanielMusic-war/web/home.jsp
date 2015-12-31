@@ -1,73 +1,69 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg">
-    <!-- ############################# Sections ############################# -->
+    <style>
+        a, a > * {
+            color: white;
+        }
+    </style>
 
-    <!-- ############################# Intro ############################# -->
+    <!-- ############################# Sections ############################# -->
     <section class="revoslider section border-bottom">
-        <div class="fullwidth-video fullwidthbanner">
+        <div class="fullwidthbanner-container fullwidthbanner">
             <ul>
                 <li data-transition="fade" data-slotamount="7" data-masterspeed="100">
                     <img src="placeholders/revoslider/video-cover.jpg" alt="" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat" />
-                    <div class="tp-caption lfb very-large-text customin ltl tp-resizeme" 
-                         data-x="390" 
-                         data-y="260" 
-                         data-customin="x:0;y:0;z:0;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0%;"
-                         data-speed="1500"
-                         data-start="100"
-                         data-easing="Power4.easeInOut"
-                         data-splitin="none"
-                         data-splitout="none"
-                         data-elementdelay="0.01"
-                         data-endelementdelay="0.1"
-                         data-endspeed="1000"
-                         data-endeasing="Power4.easeIn">sounds<span class="color">sg</span></div>
-                    <div class="tp-caption lfb medium-text caps" data-x="460" data-y="350" data-speed="800" data-start="1500" data-easing="easeOutExpo">Your local Music Hub</div>
+                    <div class="tp-static-layers">
+                        <div class="tp-caption lfb customin ltl tp-resizeme" 
+                             data-x="100" 
+                             data-y="360" 
+                             data-customin="x:0;y:0;z:0;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0%;"
+                             data-speed="1500"
+                             data-start="100"
+                             data-easing="Power4.easeInOut"
+                             data-splitin="none"
+                             data-splitout="none"
+                             data-elementdelay="0.01"
+                             data-endelementdelay="0.1"
+                             data-endspeed="1000"
+                             data-endeasing="Power4.easeIn">
+                            <table border="1">
+                                <tr>
+                                    <td style="background-color: red; text-align: center;">
+                                        <a class="sp-play-track" href="placeholders/mp3/1-01 Hands Up.mp3" style=""><i class="fa fa-play "></i></a>
+                                    </td>
+                                    <td style="background-color: grey;">
+                                        <p style="margin: 5px 5px 5px 5px;">
+                                            Hubababubbas
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="background-color: #00232c;">
+                                        <p style="margin: 5px 5px 5px 5px;">
+                                            sasassasas  asdasd asda sdasdas dasd
+                                        </p>
+                                        <p style="margin: 5px 5px 5px 5px;">
+                                            asdsadasdas  asdasd asda sdasdas dasd asdasd
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </li>
+
+                <!-- 
+                <li data-transition="fade" data-slotamount="7" data-masterspeed="100">
+                    <img src="placeholders/revoslider/slide01-bg.jpg" alt="" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat" />
+                </li>
+                -->
+
             </ul>
         </div>
     </section>
-    <!-- /intro -->
-
-    <!-- ############################# Countdown ############################# -->
-
-    <!--
-    <section class="countdown section">
-        <div class="container">
-            <h5 class="countdown-title">Singapore</h5>
-
-            <div class="countdown-wrap" data-event-date="2015/10/18 20:20:00">
-                <div class="days" data-label="Days">000</div>
-                <div class="hours" data-label="Hours">00</div>
-                <div class="minutes" data-label="Minutes">00</div>
-                <div class="seconds" data-label="Seconds">00</div>
-            </div>
-        </div>
-    </section>
-    -->
-
-    <!-- /countdown -->
-
-    <!-- ############################# Homepage about ############################# -->
-    <section class="homepage-about section border-top" style="background-image: url(placeholders/homepage-footer-bg.jpg)">
-        <!-- container -->
-        <div class="container">
-
-            <div class="col-1-2">
-                <h1 class="heading-xl">sounds SG</h1>
-                <!-- <p class="intro-text caps">Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis.</p>-->
-                <p class="intro-text">New website coming soon...</p>
-                <!--    <a class="stamp-button" href="javascript:;">Read more</a>-->
-            </div>
-
-        </div>
-        <!-- /container -->
-    </section>
-    <!-- /section -->
-
 </section>
-<!-- /page -->
-<script type="text/javascript">
 
+<script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-66150326-1']);
     var d = document.location.pathname + document.location.search + document.location.hash;
@@ -81,5 +77,5 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     })();
-
 </script>
+
