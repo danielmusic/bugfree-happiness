@@ -441,8 +441,8 @@ Scamp Player Stylesheet
 }
 .sp-queue .sp-icon:before {
     font-family: 'Scamp-Player';
-    font-size: 42px;
-    line-height: normal;
+    font-size: 34px;
+    //line-height: normal;
     font-weight: normal;
 }
 .sp-track.playing .sp-icon:before, .sp-track.paused .sp-icon:before, .sp-track.loading .sp-icon:before {  }
@@ -515,6 +515,7 @@ Scamp Player Stylesheet
 .sp-title a.sp-title-button {
     font-weight: 500;
     font-size: 14px;
+    margin-top: 4px;
 }
 .sp-title a.sp-artist-button { }
 
@@ -653,7 +654,7 @@ Scamp Player Stylesheet
     .sp-marquee-container { display: block; }
     .sp-progress-mobile { display: block; }
     .sp-queue .sp-small-screen { display: none; }
-    .sp-title a.sp-title-button { font-size: 12px; }
+    .sp-title a.sp-title-button { font-size: 12px; margin-top: 6px;}
 }
 
 
