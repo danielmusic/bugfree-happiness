@@ -59,7 +59,7 @@
                         if (!account.getEmailIsVerified()) {
                             out.print("<p class='warning'>You will not be able to publish your music until you verify your email. Click here to <a href='#!/verify-email'>enter or resend your verification code</a>.</p>");
                         } else if (artist.getIsApproved() == 0) { //new
-                            out.print("<p class='warning'>Your account will be subjected to an approval process when you publish your first album/single. Your profile, albums and tracks will not be searchable on the website until your account is approved.</p>");
+                            out.print("<p class='warning'>Your account will be subject to approval when you publish your first album/single. Your profile will only be searchable when your account is approved.</p>");
                         } else if (artist.getIsApproved() == -1) { //rejected
                             out.print("<p class='warning'>Your account's published album(s) has been rejected, review your profile, albums and tracks and republish a new album for us to review your account again.</p>");
                         } else if (artist.getIsApproved() == -2) { //pending
