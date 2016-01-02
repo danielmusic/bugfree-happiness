@@ -104,9 +104,9 @@
                 %>
                 <div class="md-modal md-effect-1" id="modal-upload">
                     <div class="md-content" style="background-color: #000000">
-                        <h3 id="upload-title">Uploading...</h3>
+                        <h3 id="upload-title">Uploading</h3>
                         <div>
-                            <p id="upload-desc">Please wait while we upload your music...</p>
+                            <p id="upload-desc" style="text-align: center;">Please wait while we upload your music...</p>
                             <center><img id="upload-spinner" style="display: none;" src="../img/AjaxLoader.gif" alt=""/></center>
                             <div id="progressBar" class="default">
                                 <div></div>
