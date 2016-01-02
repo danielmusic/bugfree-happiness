@@ -284,7 +284,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             generateAndSendVerificationEmail(result.getID(), email, false);
             result.setResult(true);
-            result.setDescription("Account registered successfully. You may now login");
+            result.setDescription("Account successfully registered.");
             return result;
         } catch (Exception ex) {
             log.info("AccountManagementBean: registerAccount() failed");
@@ -849,7 +849,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             artist.setName(StringEscapeUtils.escapeHtml4(newName));
             em.merge(artist);
             result.setResult(true);
-            result.setDescription("Name updated and is now pending approval.");
+            result.setDescription("Your name has been updated. We'll get back to you real soon!");
         } catch (NoResultException ex) {
             result.setDescription("Artist no longer exists.");
         } catch (Exception ex) {
