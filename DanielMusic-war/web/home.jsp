@@ -28,17 +28,17 @@
                              data-endeasing="Power4.easeIn">
                             <table border="1">
                                 <tr>
-                                    <td style="background-color: red; text-align: center;">
+                                    <td style="background-color: #ea4233; text-align: center;">
                                         <a class="sp-play-track" href="placeholders/mp3/1-01 Hands Up.mp3" style=""><i class="fa fa-play "></i></a>
                                     </td>
-                                    <td style="background-color: grey;">
-                                        <p style="margin: 5px 5px 5px 5px;">
+                                    <td style="background-color: #D7D7D7;">
+                                        <p style="margin: 5px 5px 5px 5px; color: #1E1E1E;">
                                             Hubababubbas
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" style="background-color: #00232c;">
+                                    <td colspan="2" style="background-color: #1E1E1E;">
                                         <p style="margin: 5px 5px 5px 5px;">
                                             sasassasas  asdasd asda sdasdas dasd
                                         </p>

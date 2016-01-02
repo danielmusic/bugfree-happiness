@@ -49,7 +49,7 @@
                 <%} else if (artist != null && track == null) {%>
                 <p class="warning" id="errMsg">Ops. An error has occurred. <a href="#!/artist/tracks">Click here to try again.</a></p>
                 <%} else {%>
-                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+                <p class="warning" id="errMsg">Your Session has timed out. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
             </article>
         </div>

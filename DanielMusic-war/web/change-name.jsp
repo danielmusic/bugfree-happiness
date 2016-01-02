@@ -32,7 +32,7 @@
                 </form>
             </article>
             <%} else {%>
-            <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+            <p class="warning" id="errMsg">Your Session has timed out. <a href="#!/login">Click here to login again.</a></p>
             <%}%>
         </div>
     </section>
