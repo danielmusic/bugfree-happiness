@@ -9,7 +9,7 @@
         <h1 class="heading-l">account login</h1>
     </section>
     <section class="content section">
-        <div class="container" style="width: 480px;">
+        <div class="container" style="width: 440px;">
             <article>
                 <form class="form" name="loginForm" action="ClientAccountManagementController">
                     <p class="error" id="errMsg" style="display:none;"></p>
@@ -32,7 +32,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1" style="text-align: center;">
-                            <button type="submit" class="medium invert" style="width: 200px;">Login</button>
+                            <button type="submit" class="medium invert">Login</button>
                         </div>
                     </div>
 
