@@ -42,10 +42,10 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>    
-                                <th style="width: 30%">Track Name</th>
-                                <th style="width: 30%">Album Name</th>
-                                <th style="width: 30%">Artist Name</th>
-                                <th style="width: 10%">Price</th>
+                                <th style="width: 30%">Track</th>
+                                <th style="width: 30%">Album</th>
+                                <th style="width: 30%">Artist</th>
+                                <th style="width: 10%">SGD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,9 +83,9 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>  
-                                <th style="width: 30%">Album Name</th>
-                                <th style="width: 30%">Artist Name</th>
-                                <th style="width: 40%">Price</th>
+                                <th style="width: 30%">Album</th>
+                                <th style="width: 30%">Artist</th>
+                                <th style="width: 40%">SGD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -104,20 +104,15 @@
                                     <% out.print(formatter.format(albumPrices.get(i)));%>
                                 </td>
                             </tr>
-                            <%
-                                }
-                            %>
+                            <%}%>
                         </tbody>
                     </table>
                     <hr class="divider2" style="margin-right: 0px;">
-                    <%
-                        }
-                    %>
+                    <%}%>
                 </form>
                 <p style="float: right;">
                     <strong>Subtotal: <%=formatter.format(payment.getTotalPaymentAmount())%></strong> 
                     <br/><br/>
-
                 </p>
                 <form action="https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay" target="PPDGFrame" class="standard">
                     <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif">
@@ -136,16 +131,17 @@
     </section>
 </section>
 <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-66150326-1']);
+    var d = document.location.pathname + document.location.search + document.location.hash;
+    _gaq.push(['_trackPageview', d]);
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-66150326-1']);
-  var d = document.location.pathname + document.location.search + document.location.hash;
-  _gaq.push(['_trackPageview', d]);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
 </script>
