@@ -181,7 +181,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1" style="text-align: center;">
-                            <label><input type="checkbox" id="chkAgree" name="option" required> I have read and agree to the Terms of Use.</label>
+                            <label><input type="checkbox" id="chkAgree" name="option" required> I have read and agree to the <a href="#!/terms-of-use">Terms of Use.</a></label>
                         </div>
                     </div>
 
