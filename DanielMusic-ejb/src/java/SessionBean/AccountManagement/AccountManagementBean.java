@@ -284,7 +284,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             generateAndSendVerificationEmail(result.getID(), email, false);
             result.setResult(true);
-            result.setDescription("Account registered successfully. You may now login");
+            result.setDescription("Your account has been successfully registered! Please log in below.");
             return result;
         } catch (Exception ex) {
             log.info("AccountManagementBean: registerAccount() failed");
