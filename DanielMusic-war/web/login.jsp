@@ -1,9 +1,15 @@
 <section id="page" data-title="sounds.sg | login">
+    <style>
+        .heading-l{
+            font-size: 80px;
+            margin-bottom: 0px;
+        }
+    </style>
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">Account Login</h1>
+        <h1 class="heading-l">account login</h1>
     </section>
     <section class="content section">
-        <div class="container">
+        <div class="container" style="width: 440px;">
             <article>
                 <form class="form" name="loginForm" action="ClientAccountManagementController">
                     <p class="error" id="errMsg" style="display:none;"></p>
@@ -23,8 +29,15 @@
                             <a href="#!/reset-password">Forget password?</a>
                         </div>
                     </div>
+
+                    <div class="row clearfix">
+                        <div class="col-1-1" style="text-align: center;">
+                            <button type="submit" class="medium invert">Login</button>
+                        </div>
+                    </div>
+
                     <input type="hidden" value="AccountLogin" name="target">
-                    <button type="submit" class="medium invert">Login</button>
+
                     <div class="clear"></div>
                 </form>
             </article>

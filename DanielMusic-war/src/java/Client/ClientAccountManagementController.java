@@ -75,7 +75,11 @@ public class ClientAccountManagementController extends HttpServlet {
                             }
                             session.setAttribute("ListOfPurchasedMusics", account.getListOfPurchasedMusics());
                             if (account.getName() != null && !account.getName().isEmpty()) {
-                                session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as " + accountType + ".");
+                                if (accountType.equals("artist")) {
+                                    session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as an " + accountType + ".");
+                                } else {
+                                    session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as a" + accountType + ".");
+                                }
                             } else {
                                 session.setAttribute("goodMsg", "Welcome back! You are logged in as " + accountType + ".");
                             }
@@ -191,7 +195,7 @@ public class ClientAccountManagementController extends HttpServlet {
                             String instagramURL = request.getParameter("instagramURL");
                             String twitterURL = request.getParameter("twitterURL");
                             String websiteURL = request.getParameter("websiteURL");
-                            
+
                             if (artist != null) {
                                 if (!artist.getIsBand()) {
                                     returnHelper = accountManagementBean.updateArtistProfile(artist.getId(), Long.parseLong(genreID), bio, influences, contactEmail, paypalEmail, facebookURL, instagramURL, twitterURL, websiteURL, picture);

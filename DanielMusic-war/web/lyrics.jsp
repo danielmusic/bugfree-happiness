@@ -32,19 +32,21 @@
         %>
 
         <article>
-            <h2 class="heading-l"><%=music.getName()%>'s</h2>
+            <div class="container">
+                <h2 class="heading-l"><%=music.getName()%>'s</h2>
 
-            <%=music.getAlbum().getArtist().getName()%>
+                <%=music.getAlbum().getArtist().getName()%>
 
-            <%
-                if (music.getLyrics() != null) {
-                    String lyrics = music.getLyrics().replaceAll("\\r", "<br>");
-                    out.print(lyrics);
-                }
-            %>
+                <%
+                    if (music.getLyrics() != null) {
+                        String lyrics = music.getLyrics().replaceAll("\\r", "<br>");
+                        out.print(lyrics);
+                    }
+                %>
+            </div>
             <br/><br/><br/>
         </article>
-            
+
         <%} else {%>
         <p class='warning'>No music was specified or the lyrics for the specified music is no longer available.</p>
         <%}%>

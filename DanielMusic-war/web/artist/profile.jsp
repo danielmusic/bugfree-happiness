@@ -188,34 +188,18 @@
                     </div>
                 </div>
 
-                <div class="md-modal md-effect-1" id="modal-name">
-                    <div class="md-content">
-                        <h3>Modal Dialog</h3>
-                        <div>
-                            <p>This is a modal window. You can do the following things with it:</p>
-                            <ul>
-                                <li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
-                                <li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
-                                <li><strong>Close:</strong> click on the button below to close the modal.</li>
-                            </ul>
-                            <div style="text-align:center;">
-                                <button class="md-close" type="button">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="md-modal md-effect-1" id="modal-change-email">
                     <div class="md-content">
-                        <h3>Account Email</h3>
+                        <h3><strong>Email</strong></h3>
                         <div>
-                            <p>This is the email address that you will use to:</p>
+                            <p>This email address will be used for:</p>
                             <ul>
-                                <li><strong>Login:</strong> into Sounds.SG</li>
-                                <li><strong>Reset:</strong> your password if the need arises</li>
-                                <li><strong>Receive:</strong> invoices about your purchases on Sounds.SG</li>
+                                <li>Logging in to sounds.sg</li>
+                                <li>Resetting your password</li>
+                                <li>Receiving transaction information</li>
                             </ul>
-                            <p>Update this field only if you are changing your email. A verification code will be sent to the new email.</p>
+                            <p>Your email will not be displayed on your biography. Update this field only if you are changing your email. A verification code will be sent to the new email.</p>
+                            <br>
                             <div style="text-align:center;">
                                 <button class="md-close" type="button">Close</button>
                             </div>
@@ -225,9 +209,10 @@
 
                 <div class="md-modal md-effect-1" id="modal-paypal">
                     <div class="md-content">
-                        <h3>Payment Details</h3>
+                        <h3><strong>PayPal Email</strong></h3>
                         <div>
-                            <p>When a fan buys your music, the money will go directly to the above address. Please also be sure to follow the instructions on the Sell Your Music on ?? page!:</p>
+                            <p>Please ensure that the email supplied is linked to your PayPal account. This will be the only means of monetary transaction on sounds.sg.</p>
+                            <br>
                             <div style="text-align:center;">
                                 <button class="md-close" type="button">Close</button>
                             </div>
@@ -311,13 +296,13 @@
                     <div id="main" class="release main-left main-medium">
                         <div class="row clearfix">
                             <div class="col-1-3" style="margin: 0 20px 24px 0;">
-                                <label for="name"><strong>Name</strong> <a class="md-trigger" data-modal="modal-name">(?)</a></label>
+                                <label for="name"><strong>Name</strong></label>
                                 <input type="text" id="name" name="name" value="<%=account.getName()%>" disabled>
-                                <a href="#!/change-name">Change Name</a>
+                                <a href="#!/change-name">Change Artist/Band Name</a>
                             </div>
 
                             <div class="col-1-3" style="margin: 0 0 0 0;">
-                                <label for="email"><strong>Current Email</strong> <a class="md-trigger" data-modal="modal-change-email">(?)</a></label>
+                                <label for="email"><strong>Email</strong> <a class="md-trigger" data-modal="modal-change-email">(?)</a></label>
                                 <input type="email" id="email" name="email" value="<%=account.getEmail()%>">
                                 <%if (account.getNewEmail() != null && account.getNewEmail().length() > 0) {%><a href="#!/change-email">Email change in progress...</a><%}%>
                             </div>
@@ -371,7 +356,7 @@
                     <div class="row clearfix">
                         <div class="col-1-3">
                             <label for="genre"><strong>Genre</strong> *</label>
-                            <select name="genre" id="genre" style="width: 100%; height:42px;" required>
+                            <select name="genre" id="genre" style="width: 100%; height:38px;" required>
                                 <option value="">Select</option>
                                 <%
                                     for (int i = 0; i < genres.size(); i++) {
@@ -414,8 +399,9 @@
                                         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy");
                                         date = DATE_FORMAT.format(artist.getBandDateFormed());
                                         out.print(date);
-                                    } else
+                                    } else {
                                         out.print("\"\"");
+                                    }
                                 %>;
                                 for (var year = end; year >= start; year--) {
                                     if (year === previouslySelectedDate) {
@@ -494,7 +480,7 @@
                 </form>
 
                 <%} else {%>
-                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+                <p class="warning" id="errMsg">Your Session has timed out. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
                 <div class="md-overlay"></div>
                 <script src="js/classie.js"></script>

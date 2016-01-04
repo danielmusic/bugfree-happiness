@@ -155,7 +155,7 @@
                     <div class="clear" style="margin-bottom: 20px;"></div>
                 </form>
                 <%} else {%>
-                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+                <p class="warning" id="errMsg">Your Session has timed out. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
                 <div class="md-overlay"></div><!-- the overlay element -->
                 <script src="js/classie.js"></script>

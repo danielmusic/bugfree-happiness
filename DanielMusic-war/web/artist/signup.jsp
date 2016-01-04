@@ -132,7 +132,7 @@
                         <div class="row clearfix">
                             <div class="col-1-1" style="text-align: center;">
                                 <label for="name"><strong>I am signing up as a </strong></label>
-                                
+
                                 <div id="options">
                                     <label style="display: inline; margin-right: 22px;"><input type="radio" id="r1" value="ArtistSignup" name="option" style="margin-right: 5px;" required> Solo Artist</label>
                                     <label style="display: inline;"><input type="radio" id="r2" value="BandSignup" name="option" style="margin-right: 5px;" required> Band</label>
@@ -157,7 +157,8 @@
                         <div class="row clearfix">
                             <div class="col-1-1">
                                 <label for="password"><strong>Password</strong> *</label>
-                                <input id="password" type="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers"  name="password" id="password" required onchange="form.repassword.pattern = this.value;">
+                                <input id="password" type="password" title="Password should contain at least 6 characters, including Upper/lowercase and numbers"  name="password" id="password" required onchange="form.repassword.pattern = this.value;">
+                                <div style="font-size: 12px; color: rgb(234, 66, 51);">Password should contain at least 6 characters, including Upper/lowercase and numbers</div>
                             </div>
                         </div>
 

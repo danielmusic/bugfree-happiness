@@ -22,9 +22,9 @@
 
                 <div class="md-modal md-effect-1" id="modal-upload">
                     <div class="md-content" style="background-color: #000000">
-                        <h3 id="upload-title">Uploading...</h3>
+                        <h3 id="upload-title">Uploading</h3>
                         <div>
-                            <p id="upload-desc">Please wait while we upload your music...</p>
+                            <p id="upload-desc" style="text-align: center;">Please wait while we upload your music...</p>
                             <center><img id="upload-spinner" style="display: none;" src="../img/AjaxLoader.gif" alt=""/></center>
                             <div id="progressBar" class="default">
                                 <div></div>
@@ -114,13 +114,13 @@
 
                                 if (!isMusic(musicFile.val())) {
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Only wav format song is allowed";
+                                    document.getElementById('errMsg').innerHTML = "Please upload 44.1kHz 16bit .wav files.";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
                                 if (musicFileSize > 100000000) {
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Music size must be below 100mb.";
+                                    document.getElementById('errMsg').innerHTML = "Please upload 44.1kHz 16bit .wav files.";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
@@ -240,7 +240,7 @@
                     <div class="clear"></div>
                 </form>
                 <%} else {%>
-                <p class="warning" id="errMsg">Ops. Session timeout. <a href="#!/login">Click here to login again.</a></p>
+                <p class="warning" id="errMsg">Your Session has timed out. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
                 <div class="md-overlay"></div>
             </article>

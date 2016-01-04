@@ -3,6 +3,12 @@
 <%@page import="EntityManager.Artist"%>
 <section id="main-nav-wrapper">
     <div id="main-nav">
+        <style>
+            .form input{
+                font-size: 10pt;
+                height: 38px;
+            }
+        </style>
         <script>
             function TriggeredKey(e) {
                 if (e.keyCode === 13) {
@@ -194,7 +200,7 @@
                                         </div>
                                         <div class="row clearfix">
                                             <div class="col-1-1" style="margin: 0 0 0 10px;">
-                                                <input type='submit' value="Login" class="medium invert">
+                                                <input type='submit' value="Login" style="width: 198px; height: 38px; line-height: 0px;" class="medium invert">
                                             </div>
                                         </div>
                                         <input type="hidden" value="AccountLogin" name="target">

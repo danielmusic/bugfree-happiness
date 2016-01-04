@@ -6,6 +6,8 @@
 <%@page import="EntityManager.Artist"%>
 <%@page import="EntityManager.Account"%>
 <%@page import="java.text.NumberFormat"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.text.DecimalFormatSymbols"%>
 <%
     Artist artist = (Artist) session.getAttribute("artistDetails");
     List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
@@ -260,6 +262,9 @@
                                         out.print("Free");
                                     } else {
                                         NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                        DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                                        decimalFormatSymbols.setCurrencySymbol("");
+                                        ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
                                         out.print(formatter.format(album.getPrice()));
                                     }
                                 %>
@@ -347,6 +352,9 @@
                                                                 out.print("Free");
                                                             } else {
                                                                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                                                DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                                                                decimalFormatSymbols.setCurrencySymbol("");
+                                                                ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
                                                                 out.print(formatter.format(music.getPrice()));
                                                             }
                                                         %>
@@ -369,7 +377,7 @@
                                 <%}%>            
                             </ul>
 
-                             <!-- end of looping-->
+                            <!-- end of looping-->
                             <br><br>
                             <%}%>
                         </div>

@@ -8,6 +8,13 @@
     <%@page import="EntityManager.Music"%>
     <%@page import="java.util.List"%>
     <%@page import="java.text.NumberFormat"%>
+    <%@page import="java.text.DecimalFormat"%>
+    <%@page import="java.text.DecimalFormatSymbols"%>
+    <style>
+        input, select {
+            width: 100%;
+        }
+    </style>
     <script>
         function checkAllTracks(source) {
             checkboxes = document.getElementsByName('deleteTrack');
@@ -15,6 +22,7 @@
                 checkboxes[i].checked = source.checked;
             }
         }
+
         function checkAllAlbums(source) {
             checkboxes = document.getElementsByName('deleteAlbum');
             for (var i = 0, n = checkboxes.length; i < n; i++) {
@@ -263,13 +271,13 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
-                                <th class="product-remove" style="width: 5%">
+                                <th>
                                     <input type="checkbox" onclick="checkAllTracks(this);" />
                                 </th>     
-                                <th style="width: 30%">Track Name</th>
-                                <th style="width: 30%">Album Name</th>
-                                <th style="width: 25%">Artist Name</th>
-                                <th style="width: 10%">Price</th>
+                                <th>Track</th>
+                                <th>Album</th>
+                                <th>Artist</th>
+                                <th>SGD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -301,7 +309,7 @@
                             %>
                         </tbody>
                     </table>
-                    <button type="button" class="medium invert" onclick="removeTrack()">Remove track(s)</button>
+                    <button type="button" class="medium invert" onclick="removeTrack()">Remove selected track(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
                     <%
                         }
@@ -317,9 +325,9 @@
                                 <th class="product-remove" style="width: 5%">
                                     <input type="checkbox" onclick="checkAllAlbums(this)" />
                                 </th>     
-                                <th style="width: 30%">Album Name</th>
-                                <th style="width: 30%">Artist Name</th>
-                                <th style="width: 35%">Price</th>
+                                <th style="width: 30%">Album</th>
+                                <th style="width: 30%">Artist</th>
+                                <th style="width: 35%">SGD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -342,21 +350,21 @@
                                         out.print(formatter.format(a.getPrice()));%>
                                 </td>
                             </tr>
-                            <%
-                                }
-                            %>
+                            <%}%>
                         </tbody>
                     </table>
-                    <button class="medium invert" onclick="removeAlbum()">Remove album(s)</button>
+                    <button class="medium invert" onclick="removeAlbum()">Remove selected album(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
-                    <%                                }
-                    %>
+                    <%}%>
                 </form>
                 <p style="float: right;">
                     <strong>
-                        Subtotal:                                   
+                        Total:                                    
                         <%
                             NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                            DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                            decimalFormatSymbols.setCurrencySymbol("");
+                            ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
                             out.print(formatter.format(totalPrice));
                         %>
                     </strong>
@@ -375,7 +383,6 @@
     </section>
 </section>
 <script type="text/javascript">
-
                         var _gaq = _gaq || [];
                         _gaq.push(['_setAccount', 'UA-66150326-1']);
                         var d = document.location.pathname + document.location.search + document.location.hash;
@@ -389,5 +396,4 @@
                             var s = document.getElementsByTagName('script')[0];
                             s.parentNode.insertBefore(ga, s);
                         })();
-
 </script>

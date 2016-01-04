@@ -32,6 +32,6 @@
         <jsp:include page="jspIncludePages/footer.jsp" />
 
         <jsp:include page="jspIncludePages/foot.html" />
-        <script src="js/lightbox2-master/js/lightbox-plus-jquery.min.js"></script>
+    
     </body>
 </html>
