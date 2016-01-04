@@ -215,12 +215,12 @@ Scamp Player Stylesheet
     margin-top: 5px;
 }
 .sp-buttons-container a.sp-queue-button:before {
-    content: "\f0ca";
+    content: "\f0cb";
     font-family: FontAwesome;
     font-size: 28px;
 }
 #scamp_player.sp-show-list .sp-buttons-container a.sp-queue-button:before {
-    content: "\f1b0";
+    content: "\f05c";
     font-family: FontAwesome;
     font-size: 28px;
 }
