@@ -221,7 +221,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Name cannot be empty.");
                 return result;
             } else if (password.length() < 6) {
-                result.setDescription("Password must be longer than 6 characters.");
+                result.setDescription("Password must contain at least 6 characters.");
                 return result;
             } else if (checkIfEmailExists(email)) {
                 result.setDescription("Unable to register, email already in use.");

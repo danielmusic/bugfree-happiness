@@ -98,6 +98,25 @@
                             document.getElementById("grecaptcha").reset();
                             return false;
                         }
+
+                        var name = document.getElementById("name").value;
+                        if (name == null || name == "") {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = "Sorry, Name can not be empty.";
+                            document.getElementById("chkAgree").checked = false;
+                            document.getElementById("grecaptcha").reset();
+                            return false;
+                        }
+
+                        var email = document.getElementById("email").value;
+                        if (email == null || email == "") {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = "Sorry, Email can not be empty.";
+                            document.getElementById("chkAgree").checked = false;
+                            document.getElementById("grecaptcha").reset();
+                            return false;
+                        }
+
                         if ((password !== null && repassword !== null) && (password !== "" && repassword !== "")) {
                             if (password !== repassword) {
                                 document.getElementById("chkAgree").checked = false;
@@ -120,10 +139,9 @@
                 </script>
 
                 <form name="AccountSignupForm" class="form">
-                    <p class="error" id="errMsg" style="display:none;"></p>
-                    <p class="success" id="goodMsg"  style="display:none;"></p>
-
                     <div class="container" style="width: 50%;">
+                        <p class="error" id="errMsg" style="display:none;"></p>
+                        <p class="success" id="goodMsg"  style="display:none;"></p>
 
                         <div class="row clearfix">
                             <div class="col-1-1" style="text-align: center;">
