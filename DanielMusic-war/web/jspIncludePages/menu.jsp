@@ -98,9 +98,10 @@
         </div>
         <!-- /search -->
         <!-- navigation container -->
+
         <div class="container">
             <a href="#!/home" id="logo">
-                <img src="placeholders/logo.png" alt="sounds.sg">
+                <img src="placeholders/logo.png" alt="sounds.sg" id="placeholderLogo" /> 
             </a>
 
             <!-- ############ icon navigation ############ -->
@@ -200,7 +201,7 @@
                                         </div>
                                         <div class="row clearfix">
                                             <div class="col-1-1" style="margin: 0 0 0 10px;">
-                                                <input type='submit' value="Login" style="width: 198px; height: 38px; line-height: 0px;" class="medium invert">
+                                                <input type='submit' value="Login" style="width: 90%; height: 38px; line-height: 0px;" class="medium invert">
                                             </div>
                                         </div>
                                         <input type="hidden" value="AccountLogin" name="target">
@@ -223,3 +224,10 @@
         </div>
     </div>
 </section>
+
+<script>
+    var is_touch_device = 'ontouchstart' in document.documentElement;
+    if (is_touch_device) {
+        document.getElementById("placeholderLogo").style.marginTop = "5px";
+    }
+</script>
