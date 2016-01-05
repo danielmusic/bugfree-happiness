@@ -434,7 +434,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             String verificationInstructions = "<body style=\"font-family: arial\">";
             if (account.getName() != null && !account.getName().isEmpty()) {
                 verificationInstructions += ""
-                        + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>"
+                        + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>"
                         + "<h2>Hey " + account.getName() + ",</h2>";
             } else {
                 verificationInstructions += "<h2>Hey there,</h2>";
@@ -581,7 +581,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             String resetInstructions = "<body style=\"font-family: arial\">";
             //Send the verification code
             if (account.getName() != null && !account.getName().isEmpty()) {
-                resetInstructions += "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>"
+                resetInstructions += "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>"
                         + " <h2>Hey " + account.getName() + ",</h2>";
             } else {
                 resetInstructions += "<h2>Hey there,</h2>";

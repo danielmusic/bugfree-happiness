@@ -77,7 +77,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     artist.setIsApproved(1);
                     em.merge(artist);
                     String emailMsg = "<body style=\"font-family: arial\">"
-                            + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>";
+                            + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>";
                     if (account.getName() != null && !account.getName().isEmpty()) {
                         emailMsg += "<h2>Hey " + account.getName() + ",</h2>";
                     } else {
@@ -119,7 +119,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     artist.setIsApproved(-1);
                     em.merge(artist);
                     String emailMsg = "<body style=\"font-family: arial\">"
-                            + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>";
+                            + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>";
                     if (account.getName() != null && !account.getName().isEmpty()) {
                         emailMsg += "<h2>Hey " + account.getName() + ",</h2>";
                     } else {

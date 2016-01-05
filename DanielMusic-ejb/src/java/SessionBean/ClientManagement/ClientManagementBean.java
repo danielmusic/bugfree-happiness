@@ -674,7 +674,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             }
             for (Artist artist : setOfArtists) {
                 String emailTemplate = "<body style=\"font-family: arial\">\n"
-                        + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>"
+                        + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>"
                         + "<h2>Hey " + artist.getName() + ",</h2>";
                 String buyerName = "unregistered user";
                 if (payment.getAccount() != null) {
@@ -764,7 +764,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             //Create the email template
             String emailTemplate = "<body style=\"font-family: arial\">\n"
-                    + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>";
+                    + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>";
             if (payment.getAccount() != null) {
                 if (payment.getAccount().getName() == null || payment.getAccount().getName().isEmpty()) {
                     emailTemplate += "<h2>Hey there,</h2>";
