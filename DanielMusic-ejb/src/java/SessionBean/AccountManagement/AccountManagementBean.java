@@ -431,24 +431,38 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             em.merge(account);
             //Send the verification code
-            String verificationInstructions = "";
+            String verificationInstructions = "<body style=\"font-family: arial\">";
             if (account.getName() != null && !account.getName().isEmpty()) {
-                verificationInstructions = "Dear " + account.getName() + ",<br/><br/>";
+                verificationInstructions += ""
+                        + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>"
+                        + "<h2>Hey " + account.getName() + ",</h2>";
+            } else {
+                verificationInstructions += "<h2>Hey there,</h2>";
             }
             Boolean emailSent = false;
             if (changingEmail) {
-                verificationInstructions += "You have requested for a change of account email.<br/><br/>"
+                verificationInstructions += "<h1 style=\"color:red\">We’ve received your request to change your email at sounds.sg.</h1>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
-                        + "Visit this link to key in the code: <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a> <br/><br/>"
+                        + "Please visit this link to key it in <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a><br/><br/>"
                         // need to login first before they can key
-                        + "If this email change was not initated by you, please ignore this email.";
-                emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "sounds.sg Account Verification", verificationInstructions);
+                        + "If you didn’t request for an email change, please ignore this email.<br/><br/>"
+                        + "Cheers,<br/>"
+                        + "The sounds.sg team<br/>"
+                        + "<br/>"
+                        + "_____________________<br/>"
+                        + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "Change of Email", verificationInstructions);
             } else {
-                verificationInstructions += "Thank you for registering at sounds.sg <br/><br/>"
+                verificationInstructions += "<h1 style=\"color:red\">Thanks for registering with us!</h1>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
-                        + "Visit this link to key in the code: <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a> <br/><br/>"
-                        + "If you did not sign up for an account at sounds.sg, please ignore this email.";
-                emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "sounds.sg Account Verification", verificationInstructions);
+                        + "Please visit this link to key it in <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a><br/><br/>"
+                        + "If you didn’t sign up for an account, please ignore this email.<br/><br/>"
+                        + "Cheers,<br/>"
+                        + "The sounds.sg team<br/>"
+                        + "<br/>"
+                        + "_____________________<br/>"
+                        + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Account Verification", verificationInstructions);
             }
             if (emailSent) {
                 result.setResult(true);
@@ -564,16 +578,24 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             account.setPasswordResetCode(resetCode);
             account.setForgetPassword(true);
             em.merge(account);
-            String resetInstructions = "";
+            String resetInstructions = "<body style=\"font-family: arial\">";
             //Send the verification code
             if (account.getName() != null && !account.getName().isEmpty()) {
-                resetInstructions = "Dear " + account.getName() + ",<br/><br/>";
+                resetInstructions += "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>"
+                        + " <h2>Hey " + account.getName() + ",</h2>";
+            } else {
+                resetInstructions += "<h2>Hey there,</h2>";
             }
-            resetInstructions += "You have request for a password reset.<br/><br/>"
-                    + "Your password reset code is: <b>" + resetCode + "</b><br/>"
-                    + "Visit this link to key in the code: <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
-                    + "If this password reset was not initated by you, please ignore this email.";
-            Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "sounds.sg Password Reset", resetInstructions);
+            resetInstructions += "<h1 style=\"color:red\">You've requested for a password reset.</h1>"
+                    + "Your password reset code is <b>" + resetCode + "</b><br/>"
+                    + "Please visit this link to key it in <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
+                    + "If this password reset wasn’t initiated by you, please ignore this email.<br/><br/>"
+                    + "Cheers,<br/>"
+                    + "The sounds.sg team<br/>"
+                    + "<br/>"
+                    + "_____________________<br/>"
+                    + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+            Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Password Reset Request", resetInstructions);
             if (emailSent) {
                 result.setResult(true);
                 result.setDescription("Password reset code sent, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
@@ -908,7 +930,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                     return result;
                 }
                 //Upload to GCS
-                String imageLocation = "images/artist/profile/profilepicture_" + account.getId() + "_"+new Date();
+                String imageLocation = "images/artist/profile/profilepicture_" + account.getId() + "_" + new Date();
                 result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);

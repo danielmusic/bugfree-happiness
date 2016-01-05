@@ -21,12 +21,30 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class AdminManagementBean implements AdminManagementBeanLocal {
-    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
 
-    private static final String artistBandAccountApprovedSubject = "sounds.SG - Artist/Band Account Approved";
-    private static final String artistBandAccountApprovedMsg = "Your account has been approved. Your profile, albums and tracks will now be shown to the public.";
-    private static final String artistBandAccountRejectedSubject = "sounds.SG - Artist/Band Account Rejected";
-    private static final String artistBandAccountRejectedMsg = "Unfortunately your account has been rejected by our administrators.";
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName());
+    private static final String footerCheers = "<br/><br/>"
+            + "Cheers,<br/>"
+            + "The sounds.sg team<br/>"
+            + "<br/>"
+            + "_____________________<br/>"
+            + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+    private static final String footerRegret = "<br/><br/>"
+            + "Regretfully,<br/>"
+            + "The sounds.sg team<br/>"
+            + "<br/>"
+            + "_____________________<br/>"
+            + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+
+    private static final String artistBandAccountApprovedSubject = "Your account has been approved";
+    private static final String artistBandAccountApprovedMsg = "<h1 style=\"color:red\">Congrats! Your account has been approved.</h1>"
+            + " Your profile, albums and tracks are now accessible by everyone."
+            + footerCheers;
+    private static final String artistBandAccountRejectedSubject = "Your account has been rejected";
+    private static final String artistBandAccountRejectedMsg = "<h1 style=\"color:red\">Unfortunately, your account has been rejected by our administrators.</h1>"
+            + "This is likely because your profile doesn't conform to our guidelines.<br/>"
+            + "Do contact us at <a href=\"mailto:admin@sounds.sg\">admin@sounds.sg</a> should you require further clarification."
+            + footerRegret;
 
     @EJB
     private CommonInfrastructureBeanLocal cibl;
@@ -58,9 +76,16 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     Artist artist = (Artist) q.getSingleResult();
                     artist.setIsApproved(1);
                     em.merge(artist);
+                    String emailMsg = "<body style=\"font-family: arial\">"
+                            + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>";
+                    if (account.getName() != null && !account.getName().isEmpty()) {
+                        emailMsg += "<h2>Hey " + account.getName() + ",</h2>";
+                    } else {
+                        emailMsg += "<h2>Hey there,</h2>";
+                    }
                     result.setResult(true);
                     result.setDescription("Artist/Band has been approved.");
-                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
+                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", emailMsg + artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
                 }
             }
         } catch (Exception ex) {
@@ -93,9 +118,16 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     Artist artist = (Artist) q.getSingleResult();
                     artist.setIsApproved(-1);
                     em.merge(artist);
+                    String emailMsg = "<body style=\"font-family: arial\">"
+                            + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>";
+                    if (account.getName() != null && !account.getName().isEmpty()) {
+                        emailMsg += "<h2>Hey " + account.getName() + ",</h2>";
+                    } else {
+                        emailMsg += "<h2>Hey there,</h2>";
+                    }
                     result.setResult(true);
                     result.setDescription("Artist has been rejected.");
-                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
+                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", emailMsg + artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
                 }
             }
         } catch (Exception ex) {

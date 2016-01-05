@@ -4,7 +4,6 @@ import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.CheckoutHelper;
-import EntityManager.DownloadHelper;
 import EntityManager.Music;
 import EntityManager.Payment;
 import EntityManager.PaymentHelper;
@@ -40,7 +39,8 @@ import javax.persistence.Query;
 
 @Stateless
 public class ClientManagementBean implements ClientManagementBeanLocal {
-    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
+
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName());
 
     private static final Double ARTISTBAND_CUT_PERCENTAGE = 0.7; //70%
     private static final String MAIN_PAYPAL_RECIVING_ACCOUNT = "admin@sounds.sg"; // For reciving the 100% of the amount first before passing it to the artists
@@ -210,16 +210,16 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             }
 
             //Check if items has been purchased before
-            if (account!=null) {
+            if (account != null) {
                 List<Music> purchasedMusic = account.getListOfPurchasedMusics();
                 for (Music music : listOfMusicsInCart) {
                     if (purchasedMusic.contains(music)) {
-                        checkoutHelper.setMessage("Unable to checkout as you have already purchased the music \""+music.getName()+"\" by the artist \""+music.getArtistName()+"\" before.");
+                        checkoutHelper.setMessage("Unable to checkout as you have already purchased the music \"" + music.getName() + "\" by the artist \"" + music.getArtistName() + "\" before.");
                         return checkoutHelper;
                     }
                 }
             }
-            
+
             //Create a payment record in database (without marking it as successful first)
             String UUID = cibl.generateUUID();
             Payment payment = new Payment(totalPaymentAmount, UUID);
@@ -673,21 +673,24 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 setOfArtists.add(m.getAlbum().getArtist());
             }
             for (Artist artist : setOfArtists) {
-                String emailTemplate = "Dear "+artist.getName()+",<br/><br/>";
+                String emailTemplate = "<body style=\"font-family: arial\">\n"
+                        + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>"
+                        + "<h2>Hey " + artist.getName() + ",</h2>";
                 String buyerName = "unregistered user";
                 if (payment.getAccount() != null) {
-                    buyerName = payment.getAccount().getName();
-                    if (buyerName==null || buyerName.isEmpty()){
+                    if (payment.getAccount().getName() == null || payment.getAccount().getName().isEmpty()) {
                         buyerName = "a fan";
+                    } else {
+                        buyerName = payment.getAccount().getName();
                     }
                 }
-                emailTemplate += "Hi there, " + buyerName + " from sounds.SG has just purchased your album/track(s) listed below:";
+                emailTemplate += "<h1 style=\"color:red\">" + buyerName + " purchased your album/track(s) listed below:</h1>";
 
                 //2 Create the list of albums/musics for each artist
                 Boolean first = true;
                 for (Album a : listOfAlbums) {
                     if (a.getArtist().getId().equals(artist.getId())) {
-                        if (first) { 
+                        if (first) {
                             first = false;
                             emailTemplate += "<h2>Albums</h2><ol>";
                         }
@@ -712,11 +715,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     emailTemplate += "</ol>";
                 }
 
-                emailTemplate += "P/S: The payment has been credited into your PayPal account. <br/><br/>"
+                emailTemplate += "The payment has been credited into your PayPal account.<br/><br/>"
                         + "Have a great day!<br/>"
-                        + "<a href=\"http://www.sounds.sg\">sounds.sg</a>";
+                        + "The sounds.sg team<br/>"
+                        + "<br/>"
+                        + "_____________________<br/>"
+                        + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
                 //Send using sendgrid
-                if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "sounds.sg - Fan Purchase", emailTemplate)) {
+                if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "Someone bought your sounds!", emailTemplate)) {
                     result.setDescription("Artist notification sent.");
                     result.setResult(true);
                 } else {
@@ -757,8 +763,19 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             List<Album> listOfAlbums = payment.getAlbumPurchased();
 
             //Create the email template
+            String emailTemplate = "<body style=\"font-family: arial\">\n"
+                    + "<p align=\"center\"><img src=\"http://sounds.sg/img/EmailGraphic.png\"/></p>";
+            if (payment.getAccount() != null) {
+                if (payment.getAccount().getName() == null || payment.getAccount().getName().isEmpty()) {
+                    emailTemplate += "<h2>Hey there,</h2>";
+                } else {
+                    emailTemplate += "<h2>Hey " + payment.getAccount().getName() + ",</h2>";
+                }
+            }
+            emailTemplate += "<h1 style=\"color:red\">Thank you for purchasing from sounds.sg</h1>"
+                    + "To start your download, please click on the following link(s) below:";
+
             //album first then music
-            String emailTemplate = "Thank you for purchasing from sounds.sg. To start your download, please click on the following link(s) below:";
             if (listOfAlbums != null && listOfAlbums.size() > 0) {
                 emailTemplate += ""
                         + "<h2>Albums</h2>"
@@ -828,10 +845,13 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                 emailTemplate += "    </tbody>"
                         + "</table>";
             }
-            emailTemplate += "Enjoy your downloads!<br/><br/>"
-                    + "P/S: The download links in this email are only valid for 12hours. If you did not purchased this music, someone else must have entered your email address on our site. You can just ignore this message. <br/><br/>"
-                    + "Have a nice day!<br/>"
-                    + "<a href=\"http://www.sounds.sg\">sounds.sg</a>";
+            emailTemplate += "The links in this email are only valid for the next 12 hours.<br/><br/>"
+                    + "(If you didn't make this purchase, enjoy some Singaporean sounds anyway — on us!)<br/><br/>"
+                    + "Enjoy!<br/>"
+                    + "The sounds.sg team<br/>"
+                    + "<br/>"
+                    + "_____________________<br/>"
+                    + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
             //Send using sendgrid
             if (sgl.sendEmail(buyerEmail, "no-reply@sounds.sg", "Your sounds.sg Purchase", emailTemplate)) {
                 result.setDescription("Download links sent.");
