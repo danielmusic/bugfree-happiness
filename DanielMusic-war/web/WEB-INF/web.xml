@@ -67,7 +67,7 @@
         <location>/error500.jsp</location>
     </error-page>
     <error-page>
-        <location>/error.jsp</location>
+        <location>/error500.jsp</location>
     </error-page>
     <session-config>
         <session-timeout>
