@@ -4,6 +4,8 @@
         a, a > * {
             color: white;
         }
+        #page {}
+        .index-page {min-height: 600px;}
     </style>
 
     <!-- ############################# Sections ############################# -->
