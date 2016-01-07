@@ -215,19 +215,19 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 name = name.trim();
             }
             if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-                result.setDescription("Email, password cannot be empty.");
+                result.setDescription("Please fill in your email and password.");
                 return result;
             } else if (!isAdmin && (name == null || name.isEmpty())) {
-                result.setDescription("Name cannot be empty.");
+                result.setDescription("Please fill in your name.");
                 return result;
             } else if (password.length() < 6) {
                 result.setDescription("Password must contain at least 6 characters.");
                 return result;
             } else if (checkIfEmailExists(email)) {
-                result.setDescription("Unable to register, email already in use.");
+                result.setDescription("This email has already been registered.");
                 return result;
             } else if (!verifyEmailFormat(email)) {
-                result.setDescription("Unable to register, email format appears to be invalid.");
+                result.setDescription("The email entered is in the wrong format.");
                 return result;
             }
             String passwordSalt = generatePasswordSalt();

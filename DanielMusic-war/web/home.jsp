@@ -4,11 +4,22 @@
         a, a > * {
             color: white;
         }
+
+        #page {}
+        .index-page {
+            min-height: 100px;
+        }
+
+        @media only screen and (min-width: 480px) and (max-width: 767px) {
+            #footer {
+                padding: 0px 0 20px 0;
+            }
+        }
     </style>
 
     <!-- ############################# Sections ############################# -->
     <section class="revoslider section border-bottom">
-        <div class="fullwidthbanner-container fullwidthbanner">
+        <div class="fullscreenbanner-container fullwidthbanner">
             <ul>
                 <li data-transition="fade" data-slotamount="7" data-masterspeed="100">
                     <img src="placeholders/revoslider/video-cover.jpg" alt="" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat" />

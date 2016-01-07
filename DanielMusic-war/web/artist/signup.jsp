@@ -98,7 +98,7 @@
                         var repassword = document.getElementById("repassword").value;
                         if (repassword == null || repassword == "", password == null || password == "") {
                             document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = "Sorry, Password can not be empty.";
+                            document.getElementById('errMsg').innerHTML = "Please fill in your password.";
                             document.getElementById("chkAgree").checked = false;
                             document.getElementById("grecaptcha").reset();
                             return false;
@@ -107,7 +107,7 @@
                         var name = document.getElementById("name").value;
                         if (name == null || name == "") {
                             document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = "Sorry, Name can not be empty.";
+                            document.getElementById('errMsg').innerHTML = "Please fill in your name.";
                             document.getElementById("chkAgree").checked = false;
                             document.getElementById("grecaptcha").reset();
                             return false;
@@ -116,7 +116,7 @@
                         var email = document.getElementById("email").value;
                         if (email == null || email == "") {
                             document.getElementById("errMsg").style.display = "block";
-                            document.getElementById('errMsg').innerHTML = "Sorry, Email can not be empty.";
+                            document.getElementById('errMsg').innerHTML = "Please fill in your email.";
                             document.getElementById("chkAgree").checked = false;
                             document.getElementById("grecaptcha").reset();
                             return false;
@@ -127,7 +127,7 @@
                                 document.getElementById("chkAgree").checked = false;
                                 document.getElementById("grecaptcha").reset();
                                 document.getElementById("errMsg").style.display = "block";
-                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please key again.";
+                                document.getElementById('errMsg').innerHTML = "Passwords do not match. Please try again.";
                                 return false;
                             } else if (password === repassword) {
                                 if (password.length < 6) {
