@@ -800,8 +800,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             log.info("AccountManagementBean: updateMemberProfilePicture() failed");
             result.setDescription("Update profille failed, internal server error.");
             log.info(ex.getMessage());
-            System.out.println("ERROR!");
-            System.out.println(ex.getMessage());
         }
         return result;
     }
@@ -924,7 +922,6 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 fileOutputStream.close();
                 fileInputStream.close();
                 //Check image
-                System.out.println(tempFileLocation);//TODO
                 ReturnHelper checkImageResult = cibl.checkIfImageFitsRequirement(tempFileLocation);
                 if (!checkImageResult.getResult()) {
                     result.setDescription("Profile picture does not meet image requirements. " + checkImageResult.getDescription());
