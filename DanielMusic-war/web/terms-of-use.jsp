@@ -1,7 +1,7 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | terms of use">
     <section class="content section">
-        <div class="container">
+        <div class="container" style="width: 80%;">
             <article>
                 <h1><span class="color">sounds.sg</span> Terms of Use</h1>
                 <p>Welcome to <span class="color">sounds.sg</span>, a service provided by sounds.sg &reg; (&ldquo;<span class="color">sounds.sg</span>&rdquo;, &ldquo;<strong>we</strong>&rdquo; &ldquo;<strong>our</strong>&rdquo;, or &ldquo;<strong>us</strong>&rdquo;).</p>
@@ -150,13 +150,6 @@
                 <p>These Terms of Use, together with the Community Guidelines, Privacy Policy and Cookies Policy, constitute the entire agreement between you and <span class="color">sounds.sg</span> with respect to your use of the Platform (other than any use of <span class="color">sounds.sg</span>&rsquo;s APIs which may also be subject to separate API Terms of Use), and supersede any prior agreement between you and <span class="color">sounds.sg</span>. Any modifications to this Agreement must be made in writing.</p>
                 <h2>Third Party Rights</h2>
                 <p>These Terms of Use are not intended to give rights to anyone except you and <span class="color">sounds.sg</span>. This does not affect our right to transfer our rights or obligations to a third party as described in the Assignment to Third Parties section.</p>
-                <h2><span class="color">*Applicable Law and Jurisdiction</span></h2>
-                <p>Except where otherwise required by the mandatory law of the United States or any member state of the European Union</p>
-                <p>(i) this Agreement is subject to the laws of the Federal Republic of Germany, excluding the UN Convention on Contracts for the International Sale of Goods (CISG) and excluding the principles of conflict of laws (international private law); and</p>
-                <p>(ii) you hereby agree, and <span class="color">sounds.sg</span> agrees, to submit to the exclusive jurisdiction of the courts in Berlin, Germany for resolution of any dispute, action or proceeding arising in connection with this Agreement.</p>
-                <p>The foregoing provisions of this Applicable Law and Jurisdiction section do not apply to any claim in which <span class="color">sounds.sg</span> seeks equitable relief of any kind. You acknowledge that, in the event of a breach of this Agreement by <span class="color">sounds.sg</span> or any third party, the damage or harm, if any, caused to you will not entitle you to seek injunctive or other equitable relief against <span class="color">sounds.sg</span>, including with respect to Your Content, and your only remedy shall be for monetary damages, subject to the limitations of liability set forth in these Terms of Use.</p>
-                <h2><span class="color">*Disclosures</span></h2>
-                <p>The services hereunder are offered by <span class="color">sounds.sg</span>, a company incorporated under the laws of Singapore and with its main place of business at 5 Rivervale Crescent #15-05. More information about <span class="color">sounds.sg</span> is available here. You may contact us by sending correspondence to the foregoing address or by emailing us at admin@<span class="color">sounds.sg</span>.</p>
                 <p>Last Amended: 17 December 2015</p>
             </article>
         </div>
