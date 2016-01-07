@@ -10,18 +10,9 @@
             <article>
                 <script type="text/javascript">
                     var fd = new FormData();
-                    var canvas, dataURL;
-                    var image = document.getElementById('image');
-                    var cropper = new Cropper(image, {
-                        aspectRatio: 1 / 1,
-                        zoomable: false,
-                        minContainerWidth: 300,
-                        minContainerHeight: 300,
-                        minCanvasWidth: 300,
-                        minCanvasHeight: 300,
-                        minCropBoxWidth: 300,
-                        minCropBoxHeight: 300,
-                    });
+                    var dataURL;
+                    var image = document.querySelector('.img-container > img');
+                    var cropper;
 
                     function submitForm() {
                         var email = $('#email').val();
@@ -77,7 +68,7 @@
                         canvas = cropper.getCroppedCanvas();
                         dataURL = canvas.toDataURL();
                     }
-
+                    
 
                     (function ($) {
                         var inputImage = document.getElementById('inputImage');
@@ -89,6 +80,18 @@
                                 var files = this.files;
                                 var file, img;
 
+                                if (!cropper) {
+                                    cropper = new Cropper(image, {
+                                        aspectRatio: 1 / 1,
+                                        zoomable: false,
+                                        minContainerWidth: 300,
+                                        minContainerHeight: 300,
+                                        minCanvasWidth: 300,
+                                        minCanvasHeight: 300,
+                                        minCropBoxWidth: 300,
+                                        minCropBoxHeight: 300,
+                                    });
+                                }
                                 if (cropper && files && files.length) {
                                     file = files[0];
                                     img = new Image();
@@ -166,8 +169,8 @@
                             <button class="md-close" onclick="confirm()" type="button">Confirm and Close</button>&nbsp;&nbsp;
                             <!--button onclick="cancel($('#inputImage'))" type="button">Cancel</button-->
                         </div>
-                        <div id="cropper-area" style="max-width:550px;min-height:600px;">
-                            <img id="image" src="">
+                        <div class="img-container" id="cropper-area" style="max-width:550px;min-height:600px;">
+                            <img id="image" src="../img/blank.png">
                         </div>
                     </div>
                 </div>

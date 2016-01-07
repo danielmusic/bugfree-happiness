@@ -800,6 +800,8 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             log.info("AccountManagementBean: updateMemberProfilePicture() failed");
             result.setDescription("Update profille failed, internal server error.");
             log.info(ex.getMessage());
+            System.out.println("ERROR!");
+            System.out.println(ex.getMessage());
         }
         return result;
     }
@@ -909,8 +911,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 StringWriter writer = new StringWriter();
                 IOUtils.copy(fileInputStream, writer, "UTF-8");
                 String imageString = writer.toString();
-                imageString = imageString.substring("data:image/png;base64,"
-                        .length());
+                imageString = imageString.substring("data:image/png;base64,".length());
                 byte[] contentData = imageString.getBytes();
                 byte[] decodedData = Base64.decodeBase64(contentData);
                 fileOutputStream = new FileOutputStream(tempFileLocation);
