@@ -8,6 +8,7 @@
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.text.DecimalFormatSymbols"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%
     Artist artist = (Artist) session.getAttribute("artistDetails");
     List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
@@ -132,6 +133,16 @@
                                         out.print(artist.getGenre().getName());
                                     }%></div>
                             </li>
+                            <% if (artist.getIsBand()) {%>
+                            <li>
+                                <span class="label">Date Formed</span>
+                                <div class="data"><%if (artist.getBandDateFormed() != null) {
+                                        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy");
+                                        String date = DATE_FORMAT.format(artist.getBandDateFormed());
+                                        out.print(date);
+                                    }%></div>
+                            </li>
+                            <%}%>
                             <li>
                                 <span class="label" style="margin-bottom: 5px;">URL</span>
                                 <input type="text" value="http://sounds.sg/music/<%=artist.getName()%>" style="width:100%; height: 25px; font-size: 14px;" disabled/>
@@ -181,15 +192,40 @@
                         <!-- /tabs navigation -->
                         <!-- tab content -->
                         <div id="tab-bio" class="tab-content">
+                            <%
+                                if (artist.getIsBand() && artist.getBandMembers() != null && !artist.getBandMembers().isEmpty()) {
+                                    String repl = artist.getBandMembers().replaceAll("\\r", "<br>");
+                            %>
+                            <h2>Members</h2>
+                            <p> <%out.print(repl);%></p>
+                            <%}%>
+
+
+                            <%
+                                if (artist.getBiography() != null && !artist.getBiography().isEmpty()) {
+                                    String repl = artist.getBiography().replaceAll("\\r", "<br>");
+                            %>
                             <h2>Biography</h2>
-                            <p>
-                                <%
-                                    if (artist.getBiography() != null && !artist.getBiography().isEmpty()) {
-                                        String repl = artist.getBiography().replaceAll("\\r", "<br>");
-                                        out.print(repl);
-                                    }
-                                %>
-                            </p>
+                            <p> <%out.print(repl);%></p>
+                            <%}%>
+
+                            <%
+                                if (artist.getInfluences() != null && !artist.getInfluences().isEmpty()) {
+                                    String repl = artist.getInfluences().replaceAll("\\r", "<br>");
+                            %>
+                            <h2>Influences</h2>
+                            <p> <%out.print(repl);%></p>
+                            <%}%>
+
+                            <%
+                                if (artist.getContactEmail() != null && !artist.getContactEmail().isEmpty()) {
+                                    String repl = artist.getContactEmail().replaceAll("\\r", "<br>");
+                            %>
+                            <h2>Contact Email</h2>
+                            <p> <%out.print(repl);%></p>
+                            <%}%>
+
+
                         </div>
                         <!-- /tab content -->
                         <!-- play all tracks content/add all tracks to playlist button-->
