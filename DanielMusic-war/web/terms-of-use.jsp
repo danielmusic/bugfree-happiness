@@ -1,7 +1,7 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | terms of use">
     <section class="content section">
-        <div class="container" style="width: 80%;">
+        <div class="container" style="width: 70%;">
             <article>
                 <h1><span class="color">sounds.sg</span> Terms of Use</h1>
                 <p>Welcome to <span class="color">sounds.sg</span>, a service provided by sounds.sg &reg; (&ldquo;<span class="color">sounds.sg</span>&rdquo;, &ldquo;<strong>we</strong>&rdquo; &ldquo;<strong>our</strong>&rdquo;, or &ldquo;<strong>us</strong>&rdquo;).</p>

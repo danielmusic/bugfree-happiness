@@ -78,7 +78,7 @@ public class ClientAccountManagementController extends HttpServlet {
                                 if (accountType.equals("artist")) {
                                     session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as an " + accountType + ".");
                                 } else {
-                                    session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as a" + accountType + ".");
+                                    session.setAttribute("goodMsg", "Welcome back " + account.getName() + "! You are logged in as a " + accountType + ".");
                                 }
                             } else {
                                 session.setAttribute("goodMsg", "Welcome back! You are logged in as " + accountType + ".");
