@@ -33,9 +33,7 @@
 
         <article>
             <div class="container">
-                <h2 class="heading-l"><%=music.getName()%>'s</h2>
-
-                <%=music.getAlbum().getArtist().getName()%>
+                <h2 class="heading-l"><%=music.getName()%></h2>
 
                 <%
                     if (music.getLyrics() != null) {
