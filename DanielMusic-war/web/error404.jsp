@@ -9,7 +9,7 @@
         <div class="container">
             <article>
                 <div style="text-align: center; margin-top: 50px;">
-                    <img src="img/EmailGraphic.png" width="150px;">
+                    <img src="http://sounds.sg/img/EmailGraphic.png" width="150px;">
 
                     <p style="font-size: 30px; margin-top: 10px; margin-bottom: 10px;">This page doesn't exist.</p>
 
