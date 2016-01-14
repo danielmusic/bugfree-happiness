@@ -428,7 +428,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-2" style="margin-bottom: 24px;">
-                            <label for="bio"><strong>Biography</strong> </label>
+                            <label for="bio"><strong>About</strong> </label>
                             <textarea name="bio" id="bio" style="min-height:120px;"><%if (artist.getBiography() != null) {
                                     out.print(artist.getBiography());
                                 } %></textarea>

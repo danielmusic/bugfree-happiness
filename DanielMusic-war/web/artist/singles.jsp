@@ -94,7 +94,7 @@
 
                 <div id="main" class="release main-left main-medium">
                     <article>
-                        <h2 id="album_<%=album.getId()%>">Single TItle: <%=album.getName()%></h2>
+                        <h2 id="album_<%=album.getId()%>"><%=album.getName()%></h2>
 
                         <p>
                             <strong>Description:</strong><br>

@@ -205,7 +205,7 @@
                                 if (artist.getBiography() != null && !artist.getBiography().isEmpty()) {
                                     String repl = artist.getBiography().replaceAll("\\r", "<br>");
                             %>
-                            <h2>Biography</h2>
+                            <h2>About</h2>
                             <p> <%out.print(repl);%></p>
                             <%}%>
 
