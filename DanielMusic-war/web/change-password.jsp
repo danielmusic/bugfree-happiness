@@ -29,7 +29,7 @@
                     <div class="row clearfix">
                         <div class="col-1-1">
                             <label for="password"><strong>New Password</strong> *</label>
-                            <input id="password" type="password" name="password" title="Password should contain at least 6 characters, including UPPER/lowercase and numbers" onchange="form.repassword.pattern = this.value;" required>
+                            <input id="password" type="password" name="password" title="Password should contain at least 6 characters" onchange="form.repassword.pattern = this.value;" required>
                         </div>
                     </div>
 

@@ -177,7 +177,7 @@
                             <div class="col-1-1">
                                 <label for="password"><strong>Password</strong> *</label>
                                 <input id="password" type="password" title="Password should contain at least 6 characters, including Upper/lowercase and numbers"  name="password" id="password" required onchange="form.repassword.pattern = this.value;">
-                                <div style="font-size: 12px; color: rgb(234, 66, 51);">Password should contain at least 6 characters, including Upper/lowercase and numbers</div>
+                                <div style="font-size: 12px; color: rgb(234, 66, 51);">Password should contain at least 6 characters</div>
                             </div>
                         </div>
 
