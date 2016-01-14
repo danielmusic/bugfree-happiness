@@ -31,7 +31,7 @@
                     </div>
                     <input type="hidden" value="ChangeName" name="target">
                     <button type="submit" class="medium invert">Change Name</button>
-                    <button type="button" class="medium invert" onclick="window.location.href = '#!/artist/profile'">Back to Home</button>
+                    <button type="button" class="medium invert" onclick="window.location.href = '#!/artist/profile'">Back</button>
                     <div class="clear"></div>
                 </form>
             </article>

@@ -114,7 +114,7 @@
                             <ul class="tabs">
                                 <li><a href="#tab-artist" class="active-tab">Artists & Bands</a></li>
                                 <li><a href="#tab-album">Albums</a></li>
-                                <li><a href="#tab-music">Musics</a></li>
+                                <li><a href="#tab-music">Tracks</a></li>
                             </ul>
                             <!-- /tabs navigation -->
                             <!-- tab content -->

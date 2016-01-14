@@ -38,8 +38,8 @@
                                 setTimeout(function () {
                                     // hide progress bar
                                     progressBar(100, $('#progressBar'));
-                                    $('#upload-title').text("Still Processing...");
-                                    $('#upload-spinner').show();
+                                    $('#upload-title').text("Still Processing");
+                                    //$('#upload-spinner').show();
                                     $('#upload-desc').text("Sorry, our music conversion is taking longer than expected, this page will automatically refresh when the upload is completed.");
                                     progress = null;
                                 }, 1000);
@@ -106,7 +106,7 @@
                     <div class="md-content" style="background-color: #000000">
                         <h3 id="upload-title">Uploading</h3>
                         <div>
-                            <p id="upload-desc" style="text-align: center;">Please wait while we upload your music...</p>
+                            <p id="upload-desc" style="text-align: center;">Please wait while we upload your music</p>
                             <center><img id="upload-spinner" style="display: none;" src="../img/AjaxLoader.gif" alt=""/></center>
                             <div id="progressBar" class="default">
                                 <div></div>
@@ -166,7 +166,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1">
-                            <label for="music"><strong>Music * (WAV format, 44.1 kHz min, 24bit max)</strong></label>
+                            <label for="music"><strong>Music * (WAV format, 44.1kHz, 16bit/24bit)</strong></label>
                             <input type="file" id="music" name="music" required>
                         </div>
                     </div>

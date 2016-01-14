@@ -175,14 +175,14 @@
                     </div>
                 </div>
 
-                <div class="md-modal md-effect-1" id="modal-profilePic">
+                <div class="md-modal md-effect-1" id="modal-profilePic"><label for="music"><strong>Music * (WAV format, 44.1kHz, 16bit/24bit)</strong></label>
                     <div class="md-content">
                         <h3>Standard Requirement</h3>
                         <div>
                             <p>Profile picture file requirement:</p>
                             <ul>
-                                <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
-                                <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
+                                <li><strong>Ratio:</strong> Image must be in a ratio of 1:1</li>
+                                <li><strong>Pixel:</strong> Image must be at least 500px x 500px</li>
                             </ul>
                             <div style="text-align:center;">
                                 <button class="md-close" type="button">Close</button>
@@ -418,7 +418,7 @@
 
                         </div>
                         <div class="col-1-2 last">
-                            <label for="bandMembers"><strong>Members</strong> </label>
+                            <label for="bandMembers"><strong>Members</strong> (separated with commas)</label>
                             <input type="text" placeholder="e.g. daniel, john" id="bandMembers" name="bandMembers" value="<%if (artist.getBandMembers() != null) {
                                     out.print(artist.getBandMembers());
                                 }%>">
