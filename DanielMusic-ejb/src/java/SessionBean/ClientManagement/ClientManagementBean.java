@@ -684,7 +684,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                         buyerName = payment.getAccount().getName();
                     }
                 }
-                emailTemplate += "<h1 style=\"color:red\">" + buyerName + " purchased your album/track(s) listed below:</h1>";
+                emailTemplate += "<h1 style=\"color:#E34529\">" + buyerName + " purchased your album/track(s) listed below:</h1>";
 
                 //2 Create the list of albums/musics for each artist
                 Boolean first = true;
@@ -717,10 +717,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
                 emailTemplate += "The payment has been credited into your PayPal account.<br/><br/>"
                         + "Have a great day!<br/>"
-                        + "The sounds.sg team<br/>"
+                        + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
                         + "<br/>"
-                        + "_____________________<br/>"
-                        + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                        + "<hr/>"
+                        + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
                 //Send using sendgrid
                 if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "Someone bought your sounds!", emailTemplate)) {
                     result.setDescription("Artist notification sent.");
@@ -767,12 +767,12 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>";
             if (payment.getAccount() != null) {
                 if (payment.getAccount().getName() == null || payment.getAccount().getName().isEmpty()) {
-                    emailTemplate += "<h2>Hey there,</h2>";
+                    emailTemplate += "<span style=\"font-size: 150%;\">Hey there,</span>";
                 } else {
                     emailTemplate += "<h2>Hey " + payment.getAccount().getName() + ",</h2>";
                 }
             }
-            emailTemplate += "<h1 style=\"color:red\">Thank you for purchasing from sounds.sg</h1>"
+            emailTemplate += "<h1 style=\"color:#E34529\">Thank you for purchasing from sounds.sg</h1>"
                     + "To start your download, please click on the following link(s) below:";
 
             //album first then music
@@ -848,10 +848,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             emailTemplate += "The links in this email are only valid for the next 12 hours.<br/><br/>"
                     + "(If you didn't make this purchase, enjoy some Singaporean sounds anyway — on us!)<br/><br/>"
                     + "Enjoy!<br/>"
-                    + "The sounds.sg team<br/>"
+                    + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
                     + "<br/>"
-                    + "_____________________<br/>"
-                    + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                    + "<hr/>"
+                    + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
             //Send using sendgrid
             if (sgl.sendEmail(buyerEmail, "no-reply@sounds.sg", "Your sounds.sg Purchase", emailTemplate)) {
                 result.setDescription("Download links sent.");

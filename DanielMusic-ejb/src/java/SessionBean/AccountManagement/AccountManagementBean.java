@@ -435,33 +435,33 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (account.getName() != null && !account.getName().isEmpty()) {
                 verificationInstructions += ""
                         + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>"
-                        + "<h2>Hey " + account.getName() + ",</h2>";
+                        + "<span style=\"font-size: 150%;\">Hey " + account.getName() + ",</span>";
             } else {
-                verificationInstructions += "<h2>Hey there,</h2>";
+                verificationInstructions += "<span style=\"font-size: 150%;\">Hey there,</span>";
             }
             Boolean emailSent = false;
             if (changingEmail) {
-                verificationInstructions += "<h1 style=\"color:red\">We’ve received your request to change your email at sounds.sg.</h1>"
+                verificationInstructions += "<h1 style=\"color:#E34529\">We’ve received your request to change your email at sounds.sg.</h1>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
                         + "Please visit this link to key it in <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a><br/><br/>"
                         // need to login first before they can key
                         + "If you didn’t request for an email change, please ignore this email.<br/><br/>"
                         + "Cheers,<br/>"
-                        + "The sounds.sg team<br/>"
+                        + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
                         + "<br/>"
-                        + "_____________________<br/>"
-                        + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                        + "<hr/>"
+                        + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
                 emailSent = sgl.sendEmail(account.getNewEmail(), "no-reply@sounds.sg", "Change of Email", verificationInstructions);
             } else {
-                verificationInstructions += "<h1 style=\"color:red\">Thanks for registering with us!</h1>"
+                verificationInstructions += "<h1 style=\"color:#E34529\">Thanks for registering with us!</h1>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
                         + "Please visit this link to key it in <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a><br/><br/>"
                         + "If you didn’t sign up for an account, please ignore this email.<br/><br/>"
                         + "Cheers,<br/>"
-                        + "The sounds.sg team<br/>"
+                        + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
                         + "<br/>"
-                        + "_____________________<br/>"
-                        + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                        + "<hr/>"
+                        + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
                 emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Account Verification", verificationInstructions);
             }
             if (emailSent) {
@@ -582,19 +582,19 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             //Send the verification code
             if (account.getName() != null && !account.getName().isEmpty()) {
                 resetInstructions += "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>"
-                        + " <h2>Hey " + account.getName() + ",</h2>";
+                        + " <span style=\"font-size: 150%;\">Hey " + account.getName() + ",</span>";
             } else {
-                resetInstructions += "<h2>Hey there,</h2>";
+                resetInstructions += "<span style=\"font-size: 150%;\">Hey there,</span>";
             }
-            resetInstructions += "<h1 style=\"color:red\">You've requested for a password reset.</h1>"
+            resetInstructions += "<h1 style=\"color:#E34529\">You've requested for a password reset.</h1>"
                     + "Your password reset code is <b>" + resetCode + "</b><br/>"
                     + "Please visit this link to key it in <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
                     + "If this password reset wasn’t initiated by you, please ignore this email.<br/><br/>"
                     + "Cheers,<br/>"
-                    + "The sounds.sg team<br/>"
+                    + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
                     + "<br/>"
-                    + "_____________________<br/>"
-                    + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+                    + "<hr/>"
+                    + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
             Boolean emailSent = sgl.sendEmail(account.getEmail(), "no-reply@sounds.sg", "Password Reset Request", resetInstructions);
             if (emailSent) {
                 result.setResult(true);

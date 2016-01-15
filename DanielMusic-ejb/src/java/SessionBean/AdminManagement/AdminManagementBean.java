@@ -25,23 +25,23 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     private static final Logger log = Logger.getLogger(StartupBean.class.getName());
     private static final String footerCheers = "<br/><br/>"
             + "Cheers,<br/>"
-            + "The sounds.sg team<br/>"
+            + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
             + "<br/>"
-            + "_____________________<br/>"
-            + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+            + "<hr/>"
+            + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
     private static final String footerRegret = "<br/><br/>"
             + "Regretfully,<br/>"
-            + "The sounds.sg team<br/>"
+            + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
             + "<br/>"
-            + "_____________________<br/>"
-            + "&copy; 2015 - SOUNDS.SG, ALL RIGHTS RESERVED</body>";
+            + "<hr/>"
+            + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
 
     private static final String artistBandAccountApprovedSubject = "Your account has been approved";
-    private static final String artistBandAccountApprovedMsg = "<h1 style=\"color:red\">Congrats! Your account has been approved.</h1>"
+    private static final String artistBandAccountApprovedMsg = "<h1 style=\"color:#E34529\">Congrats! Your account has been approved.</h1>"
             + " Your profile, albums and tracks are now accessible by everyone."
             + footerCheers;
     private static final String artistBandAccountRejectedSubject = "Your account has been rejected";
-    private static final String artistBandAccountRejectedMsg = "<h1 style=\"color:red\">Unfortunately, your account has been rejected by our administrators.</h1>"
+    private static final String artistBandAccountRejectedMsg = "<h1 style=\"color:#E34529\">Unfortunately, your account has been rejected by our administrators.</h1>"
             + "This is likely because your profile doesn't conform to our guidelines.<br/>"
             + "Do contact us at <a href=\"mailto:admin@sounds.sg\">admin@sounds.sg</a> should you require further clarification."
             + footerRegret;
@@ -79,9 +79,9 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     String emailMsg = "<body style=\"font-family: arial\">"
                             + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>";
                     if (account.getName() != null && !account.getName().isEmpty()) {
-                        emailMsg += "<h2>Hey " + account.getName() + ",</h2>";
+                        emailMsg += "<span style=\"font-size: 150%;\">Hey " + account.getName() + ",</span>";
                     } else {
-                        emailMsg += "<h2>Hey there,</h2>";
+                        emailMsg += "<span style=\"font-size: 150%;\">Hey there,</span>";
                     }
                     result.setResult(true);
                     result.setDescription("Artist/Band has been approved.");
@@ -121,9 +121,9 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     String emailMsg = "<body style=\"font-family: arial\">"
                             + "<p align=\"left\" style=\"margin-left:150px;\"><img src=\"http://sounds.sg/img/EmailGraphic.png\" width=\"100px\"/></p>";
                     if (account.getName() != null && !account.getName().isEmpty()) {
-                        emailMsg += "<h2>Hey " + account.getName() + ",</h2>";
+                        emailMsg += "<span style=\"font-size: 150%;\">Hey " + account.getName() + ",</span>";
                     } else {
-                        emailMsg += "<h2>Hey there,</h2>";
+                        emailMsg += "<span style=\"font-size: 150%;\">Hey there,</span>";
                     }
                     result.setResult(true);
                     result.setDescription("Artist has been rejected.");
