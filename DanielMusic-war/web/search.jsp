@@ -112,9 +112,9 @@
                         <div class="tabs-wrap">
                             <!-- tabs navigation -->
                             <ul class="tabs">
-                                <li><a href="#tab-artist" class="active-tab">Artists & Bands</a></li>
-                                <li><a href="#tab-album">Albums</a></li>
-                                <li><a href="#tab-music">Tracks</a></li>
+                                <li><a href="#tab-artist" class="active-tab">Artists & Bands (<%=result.getListOfArtists().size()%>)</a></li>
+                                <li><a href="#tab-album">Albums (<%=result.getListOfAlbums().size()%>)</a></li>
+                                <li><a href="#tab-music">Tracks (<%=result.getListOfMusics().size()%>)</a></li>
                             </ul>
                             <!-- /tabs navigation -->
                             <!-- tab content -->
