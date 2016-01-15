@@ -357,8 +357,10 @@
                     <hr class="divider2" style="margin-right: 0px;">
                     <%}%>
                 </form>
-                <p style="float: right;">
-                    <strong>
+                <p>
+                    <button type="button"  class="medium invert" onclick="javascript:window.history.back();">Back</button>
+                    <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
+                    <strong style="float: right;">
                         Total:                                    
                         <%
                             NumberFormat formatter = NumberFormat.getCurrencyInstance();
@@ -368,9 +370,7 @@
                             out.print(formatter.format(totalPrice));
                         %>
                     </strong>
-                </p>
-                <br><br>
-                <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
+                </p>                
                 <%} else {%>
                 <h2>The cart is empty.</h2>
                 <%}%>

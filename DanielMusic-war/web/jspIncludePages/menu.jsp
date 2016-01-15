@@ -75,7 +75,7 @@
                     data: {},
                     success: function () {
                         //urlrewrite push state before redirecting
-                        window.history.pushState("", "", "/#!/");
+                        //window.history.pushState("", "", "/#!/");
                         window.location.href = "#!/cart";
                     },
                     error: function (xhr, status, error) {
