@@ -172,7 +172,7 @@
                                     </a>
 
                                     <span id='btnPlay<%=artistFeaturedMusic.getId()%>'>
-                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                            data-artist="<%=artist.getName()%>"
                                            data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                            data-artist_target="_blank"
