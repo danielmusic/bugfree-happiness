@@ -6,6 +6,8 @@
     <%@page import="EntityManager.Account"%>
     <%@page import="java.text.SimpleDateFormat"%>
     <section class="content section">
+        <link rel="stylesheet" href="js/crop/crop.css" type="text/css" />
+        <script src="js/crop/crop.js" type="text/javascript"></script>
         <div class="container">
             <article>
                 <script type="text/javascript">
@@ -68,7 +70,7 @@
                         canvas = cropper.getCroppedCanvas();
                         dataURL = canvas.toDataURL();
                     }
-                    
+
 
                     (function ($) {
                         var inputImage = document.getElementById('inputImage');
