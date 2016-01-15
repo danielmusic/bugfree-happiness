@@ -9,6 +9,8 @@
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.text.DecimalFormatSymbols"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.net.URLEncoder"%>
+
 <%
     Artist artist = (Artist) session.getAttribute("artistDetails");
     List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
@@ -104,6 +106,12 @@
                         }
                     });
                 }
+
+                function copyArtistURL() {
+                    var copyTextarea = document.querySelector('.artistURL');
+                    copyTextarea.select();
+                    document.execCommand('copy');
+                }
             </script>
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
@@ -145,7 +153,12 @@
                             <%}%>
                             <li>
                                 <span class="label" style="margin-bottom: 5px;">URL</span>
-                                <input type="text" value="http://sounds.sg/music/<%=artist.getName()%>" style="width:100%; height: 25px; font-size: 14px;" disabled/>
+                                <%
+                                    String artistURL = "http://sounds.sg/music/" + URLEncoder.encode(artist.getName(), "UTF-8");
+                                %>
+                                <input type="text" class="artistURL" value="<%=artistURL%>" style="width:100%; height: 40px; font-size: 14px;">
+                                <button class="" type="button" style="float: right; z-index: 2;position: relative;margin-right: 6px;margin-top: -40px;" onclick="javascript:copyArtistURL();">Copy URL</button>
+                                </input>
                             </li>
                         </ul>
                     </div>
