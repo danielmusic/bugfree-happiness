@@ -147,8 +147,16 @@
                                 </a> 
 
                                 <div class="track-buttons">
-                                    <%if (artistFeaturedMusic != null) {%>
-                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getAlbum().getImageLocation()%>"
+                                    <%
+                                    if (artistFeaturedMusic != null) {
+                                                                        String albumArt = artistFeaturedMusic.getAlbum().getImageLocation();
+                                    if (albumArt == null || albumArt.isEmpty()) {
+                                        albumArt = "img/cover.png";
+                                    } else {
+                                        albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
+                                    }
+                                    %>
+                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                        data-artist="<%=artist.getName()%>"
                                        data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                        data-artist_target="_blank"
