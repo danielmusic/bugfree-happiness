@@ -25,23 +25,23 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
     private static final Logger log = Logger.getLogger(StartupBean.class.getName());
     private static final String footerCheers = "<br/><br/>"
             + "Cheers,<br/>"
-            + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
+            + "The <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">sounds.sg</a> team<br/>"
             + "<br/>"
             + "<hr/>"
-            + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
+            + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2016 - <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
     private static final String footerRegret = "<br/><br/>"
             + "Regretfully,<br/>"
-            + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
+            + "The <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">sounds.sg</a> team<br/>"
             + "<br/>"
             + "<hr/>"
-            + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
+            + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2016 - <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
 
     private static final String artistBandAccountApprovedSubject = "Your account has been approved";
-    private static final String artistBandAccountApprovedMsg = "<h1 style=\"color:#E34529\">Congrats! Your account has been approved.</h1>"
+    private static final String artistBandAccountApprovedMsg = "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">Congrats! Your account has been approved.</span><br/><br/>"
             + " Your profile, albums and tracks are now accessible by everyone."
             + footerCheers;
     private static final String artistBandAccountRejectedSubject = "Your account has been rejected";
-    private static final String artistBandAccountRejectedMsg = "<h1 style=\"color:#E34529\">Unfortunately, your account has been rejected by our administrators.</h1>"
+    private static final String artistBandAccountRejectedMsg = "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">Unfortunately, your account has been rejected by our administrators.</span><br/><br/>"
             + "This is likely because your profile doesn't conform to our guidelines.<br/>"
             + "Do contact us at <a href=\"mailto:admin@sounds.sg\">admin@sounds.sg</a> should you require further clarification."
             + footerRegret;

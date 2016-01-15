@@ -684,7 +684,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                         buyerName = payment.getAccount().getName();
                     }
                 }
-                emailTemplate += "<h1 style=\"color:#E34529\">" + buyerName + " purchased your album/track(s) listed below:</h1>";
+                emailTemplate += "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">" + buyerName + " purchased your album/track(s) listed below:</span><br/><br/>";
 
                 //2 Create the list of albums/musics for each artist
                 Boolean first = true;
@@ -717,10 +717,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
                 emailTemplate += "The payment has been credited into your PayPal account.<br/><br/>"
                         + "Have a great day!<br/>"
-                        + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
+                        + "The <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">sounds.sg</a> team<br/>"
                         + "<br/>"
                         + "<hr/>"
-                        + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
+                        + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2016 - <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
                 //Send using sendgrid
                 if (sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", "Someone bought your sounds!", emailTemplate)) {
                     result.setDescription("Artist notification sent.");
@@ -772,7 +772,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
                     emailTemplate += "<h2>Hey " + payment.getAccount().getName() + ",</h2>";
                 }
             }
-            emailTemplate += "<h1 style=\"color:#E34529\">Thank you for purchasing from sounds.sg</h1>"
+            emailTemplate += "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">Thank you for purchasing from sounds.sg</span><br/><br/>"
                     + "To start your download, please click on the following link(s) below:";
 
             //album first then music
@@ -848,10 +848,10 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             emailTemplate += "The links in this email are only valid for the next 12 hours.<br/><br/>"
                     + "(If you didn't make this purchase, enjoy some Singaporean sounds anyway — on us!)<br/><br/>"
                     + "Enjoy!<br/>"
-                    + "The <a href=\"http://sounds.sg\" style=\"color:inherit;\">sounds.sg</a> team<br/>"
+                    + "The <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">sounds.sg</a> team<br/>"
                     + "<br/>"
                     + "<hr/>"
-                    + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2015 - <a href=\"http://sounds.sg\" style=\"color:inherit;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
+                    + "<span style=\"font-size: 70%;color: #969696;\">&copy; 2016 - <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">SOUNDS.SG</a>, ALL RIGHTS RESERVED</span></body>";
             //Send using sendgrid
             if (sgl.sendEmail(buyerEmail, "no-reply@sounds.sg", "Your sounds.sg Purchase", emailTemplate)) {
                 result.setDescription("Download links sent.");
