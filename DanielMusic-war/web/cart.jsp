@@ -367,7 +367,7 @@
                     <%}%>
                 </form>
                 <p>
-                    <button type="button"  class="medium invert" onclick="javascript:window.history.back();">Back</button>
+                    <button type="button" class="medium invert" onclick="javascript:window.history.back();" style="margin-right: 10px;">Back</button>
                     <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
                     <strong style="float: right;">
                         Total:                                    
