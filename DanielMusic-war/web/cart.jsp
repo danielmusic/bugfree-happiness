@@ -299,10 +299,14 @@
                                     <%=m.getArtistName()%>
                                 </td>
                                 <td>
-                                    <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                                        out.print(formatter.format(m.getPrice()));%>
+                                    <%
+                                        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                        DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                                        decimalFormatSymbols.setCurrencySymbol("");
+                                        ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
+                                        out.print(formatter.format(m.getPrice()));
+                                    %>
                                 </td>
-
                             </tr>
                             <%
                                 }
@@ -346,8 +350,13 @@
                                     <%=a.getArtistName()%>
                                 </td>
                                 <td>
-                                    <%NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                                        out.print(formatter.format(a.getPrice()));%>
+                                    <%
+                                        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                        DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                                        decimalFormatSymbols.setCurrencySymbol("");
+                                        ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
+                                        out.print(formatter.format(a.getPrice()));
+                                    %>
                                 </td>
                             </tr>
                             <%}%>

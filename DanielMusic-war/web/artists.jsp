@@ -10,22 +10,11 @@
 <%@page import="java.text.DecimalFormatSymbols"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.net.URLEncoder"%>
-
 <%
     Artist artist = (Artist) session.getAttribute("artistDetails");
     List<Album> albums = (List<Album>) session.getAttribute("artistAlbumDetails");
 %>
 <section id="page" data-title="sounds.sg | <%=artist.getName()%>">
-    <style>
-        .heading-l{
-            font-size: 80px;
-            margin-bottom: 0px;
-        }
-
-        .heading-m{
-            font-size: 32px;
-        }
-    </style>
     <%
         if (artist == null || albums == null) {
             out.print("<p class='warning'>Ops. No results found.</p>");
@@ -38,11 +27,6 @@
             session.removeAttribute("jumpToAlbumID");
         }
     %>
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/artist-single-bg.jpg)">
-        <h2 class="heading-l"><span class="color"><%=artist.getName()%></span></h2>
-        <br>
-        <span class="overlay grids"></span>
-    </section>
     <section class="content section">
         <div class="container">
             <script>
@@ -131,10 +115,6 @@
 
                     <div class="details-meta">
                         <ul class="details-list">
-                            <li>
-                                <span class="label">Name</span>
-                                <div class="data"><b><%=artist.getName()%></b></div>
-                            </li>
                             <li>
                                 <span class="label">Genre</span>
                                 <div class="data"><%if (artist.getGenre() != null) {
@@ -296,7 +276,7 @@
                                         albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
                                     }
                             %>
-                            <h2 id="album_<%=album.getId()%>"><%=album.getName()%></h2>
+                            <h2 id="album_<%=album.getId()%>"><%=album.getName()%> <div style="font-weight: 100; display: inline;">(<%=album.getYearReleased()%>)</div></h2> 
                             <p>
                                 <%
                                     if (album.getDescription() != null && !album.getDescription().isEmpty()) {

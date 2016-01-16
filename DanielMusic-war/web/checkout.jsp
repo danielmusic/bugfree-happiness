@@ -27,10 +27,15 @@
                 <%@page import="EntityManager.Payment"%>
                 <%@page import="java.util.List"%>
                 <%@page import="java.text.NumberFormat"%>
+                <%@page import="java.text.DecimalFormat"%>
+                <%@page import="java.text.DecimalFormatSymbols"%>
                 <h1>Shopping Cart</h1>
                 <%
                     CheckoutHelper checkoutHelper = (CheckoutHelper) session.getAttribute("checkoutHelper");
                     NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                    DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                    decimalFormatSymbols.setCurrencySymbol("");
+                    ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
                     if (checkoutHelper != null) {
                         Payment payment = checkoutHelper.getPayment();
                         List<Music> listOfMusics = payment.getMusicPurchased();

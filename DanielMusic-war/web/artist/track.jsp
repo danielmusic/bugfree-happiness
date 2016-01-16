@@ -4,6 +4,8 @@
     <%@page import="EntityManager.Album"%>
     <%@page import="EntityManager.Music"%>
     <%@page import="EntityManager.Artist"%>
+    <%@page import="java.text.DecimalFormatSymbols"%>
+    <%@page import="java.text.DecimalFormat"%>
     <section class="content section">
         <div class="container">
             <article>
@@ -79,6 +81,9 @@
                                                 out.print("Free");
                                             } else {
                                                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                                DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                                                decimalFormatSymbols.setCurrencySymbol("");
+                                                ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
                                                 out.print(formatter.format(music.getPrice()));
                                             }
                                         %>

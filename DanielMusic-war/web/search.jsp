@@ -17,6 +17,8 @@
             <%@page import="EntityManager.Album"%>
             <%@page import="EntityManager.Artist"%>
             <%@page import="java.text.NumberFormat"%>
+            <%@page import="java.text.DecimalFormat"%>
+            <%@page import="java.text.DecimalFormatSymbols"%>
             <%
                 SearchHelper result = (SearchHelper) session.getAttribute("searchResult");
                 if (result != null) {
@@ -269,6 +271,9 @@
                                                             out.print("Free");
                                                         } else {
                                                             NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                                                            DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) formatter).getDecimalFormatSymbols();
+                                                            decimalFormatSymbols.setCurrencySymbol("");
+                                                            ((DecimalFormat) formatter).setDecimalFormatSymbols(decimalFormatSymbols);
                                                             out.print(formatter.format(music.getPrice()));
                                                         }
                                                     %>
@@ -284,8 +289,6 @@
                         <!-- /tabs -->
                     </div>
                 </div>
-
-
             </article>
             <%} else {%>
             <article>
@@ -302,7 +305,6 @@
 </section>
 <!-- /page -->
 <script type="text/javascript">
-
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-66150326-1']);
     var d = document.location.pathname + document.location.search + document.location.hash;
@@ -316,5 +318,4 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     })();
-
 </script>
