@@ -1,5 +1,8 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg">
+    <!-- REVOLUTION BANNER CSS SETTINGS -->
+    <link rel="stylesheet" type="text/css" href="js/rs-plugin/css/settings.css" media="screen" />
+
     <style>
         a, a > * {
             color: white;
@@ -37,28 +40,6 @@
                              data-endelementdelay="0.1"
                              data-endspeed="1000"
                              data-endeasing="Power4.easeIn">
-                            <table border="1">
-                                <tr>
-                                    <td style="background-color: #ea4233; text-align: center;">
-                                        <a class="sp-play-track" href="placeholders/mp3/1-01 Hands Up.mp3" style=""><i class="fa fa-play "></i></a>
-                                    </td>
-                                    <td style="background-color: #D7D7D7;">
-                                        <p style="margin: 5px 5px 5px 5px; color: #1E1E1E;">
-                                            Hubababubbas
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="background-color: #1E1E1E;">
-                                        <p style="margin: 5px 5px 5px 5px;">
-                                            sasassasas  asdasd asda sdasdas dasd
-                                        </p>
-                                        <p style="margin: 5px 5px 5px 5px;">
-                                            asdsadasdas  asdasd asda sdasdas dasd asdasd
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
                     </div>
                 </li>

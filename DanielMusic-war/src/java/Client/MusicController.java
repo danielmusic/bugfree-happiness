@@ -49,7 +49,12 @@ public class MusicController extends HttpServlet {
                         jsObj.put("artistID", music.getAlbum().getArtist().getId());
                         jsObj.put("musicID", music.getId());
                         jsObj.put("album", music.getAlbum().getName());
-                        jsObj.put("cover", music.getAlbum().getImageLocation());
+                        String imageLocation = music.getAlbum().getImageLocation();
+                        if (imageLocation != null && !imageLocation.isEmpty()) {
+                            jsObj.put("cover", music.getAlbum().getImageLocation());
+                        } else {
+                            jsObj.put("cover", "cover.png");
+                        }
                         response.getWriter().write(jsObj.toString());
                     }
                     return;
