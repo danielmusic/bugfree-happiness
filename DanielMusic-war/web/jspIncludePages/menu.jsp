@@ -92,7 +92,7 @@
         <!-- ############ search ############ -->
         <div id="search-wrap">
             <div class="container">
-                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="TriggeredKey(event);"/>
+                <input type="text" placeholder="Search and hit enter..." name="s" id="search" onkeydown="TriggeredKey(event);" style="padding-top: 12px; padding-bottom: 12px;"/>
                 <span id="close-search"><i class="icon icon-close"></i></span>
             </div>
         </div>
