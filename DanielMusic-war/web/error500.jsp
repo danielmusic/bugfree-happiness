@@ -23,7 +23,7 @@
 
                     <p style="font-size: 16px; margin-top: 0px; margin-bottom: 0px;">and let us know what hapened. Be sure to include the web browser and</p>
 
-                    <p style="font-size: 16px;">operating system you were using when this occurred.</p>
+                    <p style="font-size: 16px; margin-top: 0px; margin-bottom: 0px;">operating system you were using when this occurred.</p>
                 </div>
             </article>
         </div>
