@@ -133,7 +133,7 @@
                         %>
                         <!-- Release -->
 
-                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>">
+                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>" style="margin-bottom: 20px;">
                             <div class="track-details">
 
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox" >
