@@ -216,7 +216,7 @@
                                     <li>
                                         <div class="track-details">
 
-                                            <a class="track" href="<%=albumArt%>" title="<%=music.getName()%>" data-lightbox="lightbox" >
+                                            <a class="track" href="<%=albumArt%>" title="<%=music.getName()%>" data-lightbox="lightbox<%=music.getName()%>" >
                                                 <img class="track-cover" title="<%=music.getArtistName()%>" alt="Track Cover" src="<%=albumArt%>">
                                                 <span>&nbsp;&nbsp;</span>
                                             </a>

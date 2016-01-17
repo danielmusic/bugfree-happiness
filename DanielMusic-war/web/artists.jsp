@@ -325,7 +325,7 @@
                                 <div class="toggle">
                                     <li>
                                         <div class="track-details">
-                                            <a class="track" href="<%=albumArt%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
+                                            <a class="track" href="<%=albumArt%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=artist.getName()%>">
                                                 <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=albumArt%>">
                                                 <span>&nbsp;&nbsp;</span>
                                             </a>
