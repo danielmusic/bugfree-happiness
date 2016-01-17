@@ -97,6 +97,16 @@
                     document.execCommand('copy');
                 }
             </script>
+
+            <div id="main" class="release main-left main-medium" style="margin-bottom: 0px;">
+                <article style="margin-bottom: 0px;">
+                    <p class="error" id="errMsg" style="display:none;"></p>
+                    <p class="success" id="goodMsg"  style="display:none;"></p>
+
+                    <h1><%=artist.getName()%></h1>
+                </article>
+            </div>
+
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
@@ -171,11 +181,6 @@
 
             <div id="main" class="release main-left main-medium">
                 <article>
-                    <p class="error" id="errMsg" style="display:none;"></p>
-                    <p class="success" id="goodMsg"  style="display:none;"></p>
-
-                    <h1><%=artist.getName()%></h1>
-
                     <!-- tabs -->
                     <div id="tabs" class="tabs-wrap">
                         <!-- tabs navigation -->
