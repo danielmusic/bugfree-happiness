@@ -136,7 +136,7 @@
                         <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>" style="margin-bottom: 20px;">
                             <div class="track-details">
 
-                                <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox" >
+                                <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=profilePicURL%>" >
                                     <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
                                     <span>&nbsp;&nbsp;</span>
                                 </a>

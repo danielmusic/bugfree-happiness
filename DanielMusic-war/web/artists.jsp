@@ -110,7 +110,7 @@
             <div class="sidebar main-left main-medium">
                 <div class="widget details-widget">
                     <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
-                    <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox">
+                    <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=artist.getImageURL()%>">
                         <span class="img">
                             <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
                         </span>
