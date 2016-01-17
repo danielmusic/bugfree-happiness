@@ -179,11 +179,37 @@
             }
         }
 
+        function validateValidEmail(email) {
+            var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
 
         function validateEmail() {
             var email = document.getElementById("email").value;
             var reemail = document.getElementById("reemail").value;
             var ok = true;
+
+            if (email == null || reemail == null) {
+                document.getElementById("email").style.borderColor = "#E34234";
+                document.getElementById("reemail").style.borderColor = "#E34234";
+                alert("Please fill in your email.");
+                return false;
+            }
+
+            if (email == "" || reemail == "") {
+                document.getElementById("email").style.borderColor = "#E34234";
+                document.getElementById("reemail").style.borderColor = "#E34234";
+                alert("Please fill in your email.");
+                return false;
+            }
+
+            if (!validateValidEmail(email) || !validateValidEmail(reemail)) {
+                document.getElementById("email").style.borderColor = "#E34234";
+                document.getElementById("reemail").style.borderColor = "#E34234";
+                alert("Please enter a valid email.");
+                return false;
+            }
+
             if ((email != null && reemail != null) || (email != "" && reemail != "")) {
                 if (email != reemail) {
                     document.getElementById("email").style.borderColor = "#E34234";
@@ -191,8 +217,6 @@
                     alert("Email do not match. Please key again.");
                     ok = false;
                 }
-            } else {
-                return ok;
             }
             return ok;
         }
