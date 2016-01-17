@@ -224,10 +224,8 @@
         </div>
     </div>
 </section>
-
 <script>
-    var is_touch_device = 'ontouchstart' in document.documentElement;
-    if (is_touch_device) {
+    if ('ontouchstart' in window) {
         document.getElementById("placeholderLogo").style.marginTop = "5px";
     }
 </script>
