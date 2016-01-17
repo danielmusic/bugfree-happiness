@@ -295,13 +295,13 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
-                                <th>
+                                <th style="width: 50px;">
                                     <input type="checkbox" onclick="checkAllTracks(this);" />
                                 </th>     
                                 <th>Track</th>
                                 <th>Album</th>
                                 <th>Artist</th>
-                                <th>SGD</th>
+                                <th style="width: 30px;">SGD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -350,12 +350,12 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
-                                <th class="product-remove" style="width: 5%">
+                                <th style="width: 50px;">
                                     <input type="checkbox" onclick="checkAllAlbums(this)" />
                                 </th>     
-                                <th style="width: 30%">Album</th>
-                                <th style="width: 30%">Artist</th>
-                                <th style="width: 35%">SGD</th>
+                                <th>Album</th>
+                                <th>Artist</th>
+                                <th style="width: 30px;">SGD</th>
                             </tr>
                         </thead>
                         <tbody>

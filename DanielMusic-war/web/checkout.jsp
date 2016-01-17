@@ -1,8 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="sounds.sg | shopping cart">
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/events-bg.jpg)">
-        <h1 class="heading-l">Cart <span class="color">Checkout</span></h1>
-    </section>
+<section id="page" data-title="sounds.sg | checkout">
     <script>
         //JS to skip this page when no payment is required
         //or redirect back to cart if checkoutHelper.getPayKey() is null
@@ -47,10 +44,10 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>    
-                                <th style="width: 30%">Track</th>
-                                <th style="width: 30%">Album</th>
-                                <th style="width: 30%">Artist</th>
-                                <th style="width: 10%">SGD</th>
+                                <th>Track</th>
+                                <th>Album</th>
+                                <th>Artist</th>
+                                <th style="width: 30px;">SGD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,9 +85,9 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>  
-                                <th style="width: 30%">Album</th>
-                                <th style="width: 30%">Artist</th>
-                                <th style="width: 40%">SGD</th>
+                                <th>Album</th>
+                                <th>Artist</th>
+                                <th style="width: 30px;">SGD</th>
                             </tr>
                         </thead>
                         <tbody>
