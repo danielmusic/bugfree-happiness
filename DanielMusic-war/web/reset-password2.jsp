@@ -4,12 +4,10 @@
         <span class="overlay dots"></span>
     </section>
     <section class="content section">
-        <div class="container">
+        <div class="container" style="width: 50%;">
             <%
                 String email = (String) session.getAttribute("resetPasswordEmail");
             %>
-
-
             <article>
                 <form class="form" name="resetPasswordForm" action="ClientAccountManagementController">
                     <jsp:include page="jspIncludePages/displayMessage.jsp" />
