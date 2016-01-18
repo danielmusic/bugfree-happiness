@@ -115,7 +115,7 @@
                             <!-- tabs navigation -->
                             <ul class="tabs">
                                 <li><a href="#tab-artist" class="active-tab">Artists & Bands (<%=result.getListOfArtists().size()%>)</a></li>
-                                <li><a href="#tab-album">Albums (<%=result.getListOfAlbums().size()%>)</a></li>
+                                <li><a href="#tab-album" onclick="javascript:runIsotope();">Albums (<%=result.getListOfAlbums().size()%>)</a></li>
                                 <li><a href="#tab-music">Tracks (<%=result.getListOfMusics().size()%>)</a></li>
                             </ul>
                             <!-- /tabs navigation -->
@@ -309,7 +309,6 @@
     _gaq.push(['_setAccount', 'UA-66150326-1']);
     var d = document.location.pathname + document.location.search + document.location.hash;
     _gaq.push(['_trackPageview', d]);
-
     (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';
@@ -317,5 +316,13 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
-    })();
+    })();</script>
+<script type="text/javascript" src="js/jquery.isotope.min.js"></script>
+<script type="text/javascript">
+    function runIsotope() {
+         $('.masonry').isotope();
+        setTimeout(function () {
+            $('.masonry').isotope('layout')
+        }, 500);
+    }
 </script>
