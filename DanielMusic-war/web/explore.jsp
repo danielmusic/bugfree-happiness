@@ -148,13 +148,13 @@
 
                                 <div class="track-buttons">
                                     <%
-                                    if (artistFeaturedMusic != null) {
-                                                                        String albumArt = artistFeaturedMusic.getAlbum().getImageLocation();
-                                    if (albumArt == null || albumArt.isEmpty()) {
-                                        albumArt = "img/cover.png";
-                                    } else {
-                                        albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
-                                    }
+                                        if (artistFeaturedMusic != null) {
+                                            String albumArt = artistFeaturedMusic.getAlbum().getImageLocation();
+                                            if (albumArt == null || albumArt.isEmpty()) {
+                                                albumArt = "img/cover.png";
+                                            } else {
+                                                albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
+                                            }
                                     %>
                                     <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                        data-artist="<%=artist.getName()%>"
@@ -228,4 +228,9 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     })();
+
+    //Disable right click save as on play icon
+    $('.track.sp-play-track').bind('contextmenu', function (e) {
+        return false;
+    });
 </script>

@@ -445,4 +445,8 @@
         s.parentNode.insertBefore(ga, s);
     })();
 
+    //Disable right click save as on play icon
+    $('.track.sp-play-track').bind('contextmenu', function (e) {
+        return false;
+    });
 </script>
