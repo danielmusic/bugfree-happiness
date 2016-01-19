@@ -312,7 +312,7 @@ img.border { border: 6px solid #ddd; }
     transition: top .8s ease, opacity .6s ease-in-out;
 }
 #page {}
-.index-page { min-height: 450px; }
+.index-page { min-height: 100px; }
 
 /* Container */
 .container {
