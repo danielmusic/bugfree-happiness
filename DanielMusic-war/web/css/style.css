@@ -312,7 +312,7 @@ img.border { border: 6px solid #ddd; }
     transition: top .8s ease, opacity .6s ease-in-out;
 }
 #page {}
-.index-page { min-height: 800px; }
+.index-page { min-height: 450px; }
 
 /* Container */
 .container {
@@ -1921,7 +1921,8 @@ ul.details-list .data {
  ---------------------------------------------------------------------- */
 #footer {
     background: #262626;
-    padding: 0px 0 70px 0;
+    padding: 0 0 20px 0;
+    margin-bottom: 50px;
     border-top:1px solid #333;
 }
 
