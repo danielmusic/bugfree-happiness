@@ -257,7 +257,7 @@
      ---------------------------------------------------------------------- */
 
     /* Container */
-    .container { width: 300px; }
+    .container { width: 300px; min-width: 80%; }
     .container img { 
         max-width: 100%;
         max-height:100%;
