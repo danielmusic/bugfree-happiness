@@ -1,27 +1,37 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg">
-    <!-- REVOLUTION BANNER CSS SETTINGS -->
-    <link rel="stylesheet" type="text/css" href="js/rs-plugin/css/settings.css" media="screen" />
-
-    <style>
-        a, a > * {
-            color: white;
-        }
-
-        #page {}
-        .index-page {
-            min-height: 100px;
-        }
-
-        @media only screen and (min-width: 480px) and (max-width: 767px) {
-            #footer {
-                padding: 0px 0 20px 0;
-            }
-        }
-    </style>
-
     <!-- ############################# Sections ############################# -->
-    
+    <ul class="anim-slider">
+
+		<!-- Slide No1 -->
+		<li class="anim-slide">
+			<h1 id="slide1">Slide 1</h1>
+		</li>
+
+		
+		<!-- Slide No2 -->
+		<li class="anim-slide">
+			<h1 id="slide1">Slide 2</h1>
+		</li>
+
+		<!-- Slide No3 -->
+		<li class="anim-slide">
+			<h1 id="slide1">Slide 3</h1>
+		</li>
+
+		<!-- Arrows -->
+		<nav class="anim-arrows">
+			<span class="anim-arrows-prev">
+				<i class="fa fa-angle-left fa-3x"></i>
+			</span>
+			<span class="anim-arrows-next">
+				<i class="fa fa-angle-right fa-3x"></i>
+			</span>
+		</nav>
+		<!-- Dynamically created dots -->
+		
+	</ul>
+
 </section>
 
 <script type="text/javascript">
@@ -40,3 +50,43 @@
     })();
 </script>
 
+<link rel="stylesheet" href="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.css"/>
+<script src="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.min.js" type="text/javascript"></script>
+<script>
+    //Slider
+    $(".anim-slider").animateSlider(
+		 	{
+		 		autoplay	:true,
+		 		interval	:5500,
+		 		animations 	: 
+				{
+					0	: 	//Slide No1
+					{
+						li	: 
+						{
+							show   	  : "fadeIn",
+							hide 	  : "fadeOutLeftBig",
+							delayShow : "delay0.5s"
+	 					}
+					},
+					1	: //Slide No2
+					{	
+						li			:
+						{
+							show 		: "fadeInLeft",
+							hide 		: "fadeOutLeftBig",
+							delayShow   : "delay0-5s"
+						}
+					},
+					2:
+					{
+						li			:
+						{
+							show 		: "fadeInUp",
+							hide 		: "fadeOutDownBig",
+							delayShow   : "delay0-5s"
+						}
+					}
+				}
+		 	});
+</script>
