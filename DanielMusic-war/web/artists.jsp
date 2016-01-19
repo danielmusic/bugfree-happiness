@@ -147,7 +147,7 @@
                                     String artistURL = "http://sounds.sg/music/" + URLEncoder.encode(artist.getName(), "UTF-8");
                                 %>
                                 <input type="text" class="artistURL" value="<%=artistURL%>" style="width: 100%; height: 30px; font-size: 12px; padding-top: 5px; padding-bottom: 5px;">
-                                <span class="fa fa-clipboard fa-1x" style="float: right; z-index: 2;position: relative;margin-right: 6px;margin-top: -23px;" onclick="javascript:copyArtistURL();"></span>
+                                <span title="click here to copy" class="fa fa-clipboard fa-1x" style="cursor: pointer; float: right; z-index: 2;position: relative;margin-right: 6px;margin-top: -23px;" onclick="javascript:copyArtistURL();"></span>
                                 <!--<button class="" type="button" style="float: right; z-index: 2;position: relative;margin-right: 6px;margin-top: -40px;" onclick="javascript:copyArtistURL();">Copy URL</button>-->
                                 </input>
                             </li>
