@@ -1,10 +1,4 @@
 <section id="page" data-title="sounds.sg | change password">
-    <style>
-        .heading-l{
-            font-size: 80px;
-            margin-bottom: 0px;
-        }
-    </style>
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <h1 class="heading-l">change account password</h1>
         <span class="overlay dots"></span>

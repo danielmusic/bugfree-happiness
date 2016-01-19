@@ -1,24 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | explore">
-    <style>
-        .track-details:before{
-            display: none;
-        }
-
-        .track-details{
-            border-left: none;
-            margin-left: 0;
-        }
-
-        .heading-l{
-            font-size: 80px;
-            margin-bottom: 0px;
-        }
-
-        .heading-m{
-            font-size: 32px;
-        }
-    </style>
     <!-- ############################# Intro ############################# -->
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/SoundsHeaders_Explore.jpg)">
         <h1 class="heading-l">explore</h1>
@@ -134,8 +115,7 @@
                         <!-- Release -->
 
                         <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>" style="margin-bottom: 20px;">
-                            <div class="track-details">
-
+                            <div class="track-details" style="border-left: none; margin-left: 0;">
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=profilePicURL%>" >
                                     <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
                                     <span>&nbsp;&nbsp;</span>

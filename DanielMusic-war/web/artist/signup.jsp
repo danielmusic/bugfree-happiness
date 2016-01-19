@@ -1,34 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | artist signup">
-    <style>
-        .heading-l{
-            font-size: 80px;
-            margin-bottom: 0px;
-        }
-
-        .form input[type="radio"]{
-            width: 0.7em;            
-        }
-
-        @media only screen and (min-width: 768px) and (max-width: 980px) {
-            .container{
-                width: 100%;
-            }
-        }
-
-        @media only screen and (max-width: 767px) {
-            .container{
-                width: 100%;
-            }
-        }
-
-        @media only screen and (min-width: 480px) and (max-width: 767px) {
-            .container{
-                width: 100%;
-            }
-        }
-    </style>
-
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
         <div class="container">
             <h1 class="heading-l">artist signup</h1>

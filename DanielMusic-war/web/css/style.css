@@ -179,6 +179,7 @@ select, option {
     display: inline-block;
     cursor:pointer;
     background-color: transparent;
+    width: 0.7em;   
 }
 /* Helper Classes
  ---------------------------------------------------------------------- */
@@ -240,14 +241,15 @@ img.border { border: 6px solid #ddd; }
 
 /* Large heading */
 .heading-l { 
-    font-size: 48px; 
+    font-size: 80px; 
     line-height: 1.4em;
     letter-spacing: -0.03em;
+    margin-bottom: 0px;
 }
 
 /* Medium heading */
 .heading-m { 
-    font-size: 32px; 
+    font-size: 32px;
     line-height: 1.4em;
 }
 
@@ -3116,12 +3118,12 @@ h4.active-toggle:before {
     float: none;
     text-align: left;
 }
-.select_style:after {
+.niceselect p:after {
     font-family: 'icomoon';
     content: "\e630";
     position: absolute;
     right: 15px;
-    top: 10px;
+    top: 7px;
     color: #999;
     font-weight: normal;
     font-size: 16px;

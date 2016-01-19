@@ -3,35 +3,33 @@
     <!-- ############################# Sections ############################# -->
     <ul class="anim-slider">
 
-		<!-- Slide No1 -->
-		<li class="anim-slide">
-			<h1 id="slide1">Slide 1</h1>
-		</li>
+        <!-- Slide No1 -->
+        <li class="anim-slide">
+            <h1 id="slide1">Slide 1</h1>
+        </li>
 
-		
-		<!-- Slide No2 -->
-		<li class="anim-slide">
-			<h1 id="slide1">Slide 2</h1>
-		</li>
+        <!-- Slide No2 -->
+        <li class="anim-slide">
+            <h1 id="slide1">Slide 2</h1>
+        </li>
 
-		<!-- Slide No3 -->
-		<li class="anim-slide">
-			<h1 id="slide1">Slide 3</h1>
-		</li>
+        <!-- Slide No3 -->
+        <li class="anim-slide">
+            <h1 id="slide1">Slide 3</h1>
+        </li>
 
-		<!-- Arrows -->
-		<nav class="anim-arrows">
-			<span class="anim-arrows-prev">
-				<i class="fa fa-angle-left fa-3x"></i>
-			</span>
-			<span class="anim-arrows-next">
-				<i class="fa fa-angle-right fa-3x"></i>
-			</span>
-		</nav>
-		<!-- Dynamically created dots -->
-		
-	</ul>
+        <!-- Arrows -->
+        <nav class="anim-arrows">
+            <span class="anim-arrows-prev">
+                <i class="fa fa-angle-left fa-3x"></i>
+            </span>
+            <span class="anim-arrows-next">
+                <i class="fa fa-angle-right fa-3x"></i>
+            </span>
+        </nav>
+        <!-- Dynamically created dots -->
 
+    </ul>
 </section>
 
 <script type="text/javascript">
@@ -55,38 +53,38 @@
 <script>
     //Slider
     $(".anim-slider").animateSlider(
-		 	{
-		 		autoplay	:true,
-		 		interval	:5500,
-		 		animations 	: 
-				{
-					0	: 	//Slide No1
-					{
-						li	: 
-						{
-							show   	  : "fadeIn",
-							hide 	  : "fadeOutLeftBig",
-							delayShow : "delay0.5s"
-	 					}
-					},
-					1	: //Slide No2
-					{	
-						li			:
-						{
-							show 		: "fadeInLeft",
-							hide 		: "fadeOutLeftBig",
-							delayShow   : "delay0-5s"
-						}
-					},
-					2:
-					{
-						li			:
-						{
-							show 		: "fadeInUp",
-							hide 		: "fadeOutDownBig",
-							delayShow   : "delay0-5s"
-						}
-					}
-				}
-		 	});
+            {
+                autoplay: true,
+                interval: 5500,
+                animations:
+                        {
+                            0: //Slide No1
+                                    {
+                                        li:
+                                                {
+                                                    show: "fadeIn",
+                                                    hide: "fadeOutLeftBig",
+                                                    delayShow: "delay0.5s"
+                                                }
+                                    },
+                            1: //Slide No2
+                                    {
+                                        li:
+                                                {
+                                                    show: "fadeInLeft",
+                                                    hide: "fadeOutLeftBig",
+                                                    delayShow: "delay0-5s"
+                                                }
+                                    },
+                            2:
+                                    {
+                                        li:
+                                                {
+                                                    show: "fadeInUp",
+                                                    hide: "fadeOutDownBig",
+                                                    delayShow: "delay0-5s"
+                                                }
+                                    }
+                        }
+            });
 </script>

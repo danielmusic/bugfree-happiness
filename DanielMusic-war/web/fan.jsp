@@ -1,37 +1,8 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | fan">
-    <style>
-        p{
-            margin-bottom: 5px;
-        }
-
-        .heading-l{
-            font-size: 80px;
-            margin-bottom: 0px;
-        }
-
-        .heading-m{
-            font-size: 32px;
-        }
-
-        h6{
-            font-size: 17px;
-            margin-bottom: 10px;
-        }
-
-        /*orange header color*/
-        .header-color{
-            color: #ea4233;
-        }
-
-        .color{
-            font-size: 15px;
-        }
-    </style>
-
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/SoundsHeaders_Fan.jpg)">
         <h1 class="heading-l">fan</h1>
-        <h2 class="heading-m">support <span class="header-color">local sounds</span></h2>
+        <h2 class="heading-m">support <span class="header-color" style="color: #ea4233;">local sounds</span></h2>
     </section>
     <section class="content section">
         <div class="container">
@@ -39,55 +10,48 @@
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Fans1.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Easily listen to all the sounds you've purchased
                     </h6>
-                    <p>
-                        <span class="color">
-                            Download links to sounds will always be available<br>
-                            Listen to your downloaded sounds in WAV anywhere, anytime
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Download links to sounds will always be available<br>
+                        Listen to your downloaded sounds in WAV anywhere, anytime
                     </p>
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Fans2.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Enjoy your purchases in high-fidelity
                     </h6>
-                    <p>
-                        <span class="color">
-                            Where visitors only get 128kbps MP3 streams, you get 320
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Where visitors only get 128kbps MP3 streams, you get 320
                     </p>
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Fans3.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Manage your transactions
                     </h6>
-                    <p>
-                        <span class="color">
-                            Attach your PayPal account for seamless transactions<br>
-                            View your transaction history
-                        </span>
+                    <p style="margin-bottom: 5px;">
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Attach your PayPal account for seamless transactions<br>
+                        View your transaction history
                     </p>
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Fans4.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Show some love to your favourite artists
                     </h6>
-                    <p>
-                        <span class="color">
-                            Artists get notified when you purchase their sounds<br>
-                            Sustain the local music scene
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Artists get notified when you purchase their sounds<br>
+                        Sustain the local music scene
                     </p>
                 </div>
             </article>

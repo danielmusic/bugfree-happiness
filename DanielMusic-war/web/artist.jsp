@@ -5,15 +5,6 @@
             margin-bottom: 5px;
         }
 
-        .heading-l{
-            font-size: 80px;
-            margin-bottom: 0px;
-        }
-
-        .heading-m{
-            font-size: 32px;
-        }
-
         h6{
             font-size: 17px;
             margin-bottom: 10px;
