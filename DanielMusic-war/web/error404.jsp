@@ -7,7 +7,43 @@
 <!--[if gt IE 8]><!--> 
 <html class="no-js" lang="en-US"><!--<![endif]-->
     <head>
-        <jsp:include page="jspIncludePages/head.html" />
+        <title>sounds.sg</title>
+        <meta charset="utf-8">
+        <!--[if IE]>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+        <![endif]-->
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="description" content="Singapore music hub">
+        <meta name="keywords" content="music"/>
+        <meta name="author" content="Sounds Singapore">
+        <!-- Fav icon -->
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+        <!-- <meta name="robots" content="index,follow"> -->
+
+        <!-- ############################# Stylesheets ############################# -->
+        <link rel="stylesheet" href="http://sounds.sg/css/style.css" media="screen" />
+        <!-- Add HTML5 support for older IE browsers -->
+        <!--[if lt IE 9]> 
+                <script src="js/html5.min.js"></script>
+                <script src="js/selectivizr-and-extra-selectors.min.js"></script>
+        <![endif]-->
+        <!-- ############################# Javascripts ############################# -->
+        <!-- jQuery -->
+        <script src="js/jquery.min.js" type="text/javascript"></script>
+        <!-- Add HTML5 support for older IE browsers -->
+        <!--[if lt IE 9]> 
+                <script src="js/html5.min.js"></script>
+                <script src="js/selectivizr-and-extra-selectors.min.js"></script>
+        <![endif]-->
+        <!-- Modernizr -->
+        <script src="js/modernizr.custom.js"></script>
+        <!-- PayPal -->
+        <script src="https://www.paypalobjects.com/js/external/dg.js" type="text/javascript"></script>
+
+        <!--Slider-->
+
+
     </head>
     <body>
 
@@ -15,8 +51,6 @@
         <!--[if lte IE 7]>
            <div id="ie-message"><p>You are using Internet Explorer 7.0 or older to view this site. Your browser is an eight year old browser which does not display modern web sites properly. Please upgrade to a newer browser to fully enjoy the web. <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Upgrade your browser</a></p></div>
         <![endif]-->
-
-        <!-- ############################# navigation section ############################# -->
 
         <section>
             <section id="page" data-title="sounds.sg | error">
@@ -43,9 +77,5 @@
                 </section>
             </section>
         </section>
-        <!-- /ajax container -->
-
-        <jsp:include page="jspIncludePages/foot.html" />
-
     </body>
 </html>
