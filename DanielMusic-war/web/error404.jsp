@@ -18,32 +18,9 @@
         <meta name="keywords" content="music"/>
         <meta name="author" content="Sounds Singapore">
         <!-- Fav icon -->
-        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-        <!-- <meta name="robots" content="index,follow"> -->
-
+        <link rel="shortcut icon" href="http://sounds.sg/img/favicon.ico" type="image/x-icon" />
         <!-- ############################# Stylesheets ############################# -->
         <link rel="stylesheet" href="http://sounds.sg/css/style.css" media="screen" />
-        <!-- Add HTML5 support for older IE browsers -->
-        <!--[if lt IE 9]> 
-                <script src="js/html5.min.js"></script>
-                <script src="js/selectivizr-and-extra-selectors.min.js"></script>
-        <![endif]-->
-        <!-- ############################# Javascripts ############################# -->
-        <!-- jQuery -->
-        <script src="js/jquery.min.js" type="text/javascript"></script>
-        <!-- Add HTML5 support for older IE browsers -->
-        <!--[if lt IE 9]> 
-                <script src="js/html5.min.js"></script>
-                <script src="js/selectivizr-and-extra-selectors.min.js"></script>
-        <![endif]-->
-        <!-- Modernizr -->
-        <script src="js/modernizr.custom.js"></script>
-        <!-- PayPal -->
-        <script src="https://www.paypalobjects.com/js/external/dg.js" type="text/javascript"></script>
-
-        <!--Slider-->
-
-
     </head>
     <body>
 
