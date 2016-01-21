@@ -249,7 +249,7 @@
                                         <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                            data-artist="<%=music.getArtistName()%>"
                                            data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
-                                           data-artist_target="_blank"
+                                           data-artist_target="_self"
                                            data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                            data-shop_target="_blank"
                                            >
@@ -341,7 +341,7 @@
                                                 <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                    data-artist="<%=music.getArtistName()%>"
                                                    data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
-                                                   data-artist_target="_blank"
+                                                   data-artist_target="_self"
                                                    data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                                    data-shop_target="_blank">
                                                     <i class="icon icon-plus">
@@ -356,7 +356,7 @@
                                                     <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                                        data-artist="<%=music.getArtistName()%>"
                                                        data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
-                                                       data-artist_target="_blank"
+                                                       data-artist_target="_self"
                                                        data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
                                                        data-shop_target="_blank"
                                                        style="margin-left: 6px;margin-right: 6px;"
