@@ -139,9 +139,9 @@
                                     <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                        data-artist="<%=artist.getName()%>"
                                        data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
-                                       data-artist_target="_blank"
+                                       data-artist_target="_self"
                                        data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
-                                       data-shop_target="_blank"
+                                       data-shop_target="_self"
                                        >
                                         <i class="icon icon-plus">
                                             <span style="display: none;">
@@ -155,9 +155,9 @@
                                         <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                            data-artist="<%=artist.getName()%>"
                                            data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
-                                           data-artist_target="_blank"
+                                           data-artist_target="_self"
                                            data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
-                                           data-shop_target="_blank"
+                                           data-shop_target="_self"
                                            style="margin-left: 0px;"
                                            >
                                             <i class="icon icon-play2">

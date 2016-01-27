@@ -251,7 +251,7 @@
                                            data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                            data-artist_target="_self"
                                            data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
-                                           data-shop_target="_blank"
+                                           data-shop_target="_self"
                                            >
                                             <i class="icon icon-plus">
                                                 <span style="display: none;">
@@ -343,7 +343,7 @@
                                                    data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                                    data-artist_target="_self"
                                                    data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
-                                                   data-shop_target="_blank">
+                                                   data-shop_target="_self">
                                                     <i class="icon icon-plus">
                                                         <span style="display: none;">
                                                             <span  class="track-title"><%=music.getName()%></span>
@@ -358,7 +358,7 @@
                                                        data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
                                                        data-artist_target="_self"
                                                        data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
-                                                       data-shop_target="_blank"
+                                                       data-shop_target="__self"
                                                        style="margin-left: 6px;margin-right: 6px;"
                                                        >
                                                         <i class="icon icon-play2">

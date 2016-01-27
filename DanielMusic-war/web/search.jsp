@@ -229,11 +229,10 @@
 
                                             <div class="track-buttons">
                                                 <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                   data-artist_target="_blank"
                                                    data-artist_url="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>);"
-                                                   data-shop_target="_blank"
+                                                   data-artist_target="_self"
                                                    data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
-                                                   data-shop_target="_blank"
+                                                   data-shop_target="_self"
                                                    >
                                                     <i class="icon icon-plus">
                                                         <span style="display: none;">
@@ -245,9 +244,8 @@
 
                                                 <span id='btnPlay<%=music.getId()%>'>
                                                     <a class="track sp-play-track" onclick="javascript:switchToPauseButtonFromSearch(<%=music.getId()%>);" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                       data-artist_target="_blank"
                                                        data-artist_url="javascript:loadArtistFromSearch(<%=music.getAlbum().getArtist().getId()%>);"
-                                                       data-shop_target="_blank"
+                                                       data-artist_target="_blank"
                                                        data-shop_url="javascript:addTrackToCartFromSearch(<%=music.getId()%>);"
                                                        data-shop_target="_blank"
                                                        style="margin-left: 0px;"
