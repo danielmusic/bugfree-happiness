@@ -85,7 +85,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     }
                     result.setResult(true);
                     result.setDescription("Artist/Band has been approved.");
-                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", emailMsg + artistBandAccountApprovedSubject, artistBandAccountApprovedMsg);
+                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, emailMsg + artistBandAccountApprovedMsg);
                 }
             }
         } catch (Exception ex) {
@@ -127,7 +127,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     }
                     result.setResult(true);
                     result.setDescription("Artist has been rejected.");
-                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", emailMsg + artistBandAccountRejectedSubject, artistBandAccountRejectedMsg);
+                    sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountRejectedSubject, emailMsg + artistBandAccountRejectedMsg);
                 }
             }
         } catch (Exception ex) {
