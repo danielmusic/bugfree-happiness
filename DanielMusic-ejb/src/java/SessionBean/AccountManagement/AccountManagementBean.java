@@ -443,7 +443,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             if (changingEmail) {
                 verificationInstructions += "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">We’ve received your request to change your email at sounds.sg.</span><br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
-                        + "Please visit this link to key it in <a href='http://sounds.sg/#!/change-email'>http://sounds.sg/#!/change-email</a><br/><br/>"
+                        + "Please visit this link to key it in <a href=\"http://sounds.sg/change-email\">http://sounds.sg/change-email</a><br/><br/>"
                         // need to login first before they can key
                         + "If you didn’t request for an email change, please ignore this email.<br/><br/>"
                         + "Cheers,<br/>"
@@ -455,7 +455,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             } else {
                 verificationInstructions += "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">Thanks for registering with us!</span><br/><br/>"
                         + "Your verification code is: <b>" + verificationCode + "</b><br/>"
-                        + "Please visit this link to key it in <a href='http://sounds.sg/#!/verify-email'>http://sounds.sg/#!/verify-email</a><br/><br/>"
+                        + "Please visit this link to key it in <a href=\"http://sounds.sg/verify-email\">http://sounds.sg/verify-email</a><br/><br/>"
                         + "If you didn’t sign up for an account, please ignore this email.<br/><br/>"
                         + "Cheers,<br/>"
                         + "The <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">sounds.sg</a> team<br/>"
@@ -588,7 +588,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             }
             resetInstructions += "<br/><span style=\"color:#E34529;font-size:200%;font-weight:bold;\">You've requested for a password reset.</span><br/><br/>"
                     + "Your password reset code is <b>" + resetCode + "</b><br/>"
-                    + "Please visit this link to key it in <a href='http://sounds.sg/#!/reset-password2'>http://sounds.sg/#!/reset-password2</a> <br/><br/>"
+                    + "Please visit this link to key it in <a href=\"http://sounds.sg/reset-password2\">http://sounds.sg/reset-password2</a> <br/><br/>"
                     + "If this password reset wasn’t initiated by you, please ignore this email.<br/><br/>"
                     + "Cheers,<br/>"
                     + "The <a href=\"http://sounds.sg\" style=\"color:inherit;text-decoration:none;\">sounds.sg</a> team<br/>"

@@ -13,6 +13,27 @@
         <from>^/login$</from>
         <to type="redirect">%{context-path}/#!/login</to>
     </rule>
+        <rule>
+        <from>^/verify-email$</from>
+        <to type="redirect">%{context-path}/#!/verify-email</to>
+    </rule>
+        <rule>
+        <from>^/change-email$</from>
+        <to type="redirect">%{context-path}/#!/change-email</to>
+    </rule>    
+    <rule>
+        <from>^/reset-password2$</from>
+        <to type="redirect">%{context-path}/#!/reset-password2</to>
+    </rule>
+        <rule>
+        <from>^/login$</from>
+        <to type="redirect">%{context-path}/#!/login</to>
+    </rule>
+        <rule>
+        <from>^/login$</from>
+        <to type="redirect">%{context-path}/#!/login</to>
+    </rule>
+
 <!--    <rule match-type="regex">
         <note>Example of redirecting /artist/test1 to /Controller?name=test1</note>
         <from>^/artist/(.+)$</from>
