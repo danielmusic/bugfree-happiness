@@ -11,10 +11,10 @@
             }
         }
     </style>
-    <section class="content section">
+    <section class="content section"  style="margin-right: auto; margin-left: auto; margin-top: 5%;">
         <div class="container">
             <article>
-                <div style="text-align: center; margin-top: 20px;">
+                <div style="text-align: center;">
                     <img src="http://sounds.sg/img/EmailGraphic.png" width="150px;">
 
                     <p style="font-size: 30px; margin-top: 10px; margin-bottom: 10px;">We're sorry, something went wrong.</p>
