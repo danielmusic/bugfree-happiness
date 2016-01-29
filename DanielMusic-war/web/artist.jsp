@@ -1,25 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | artist">
-    <style>
-        p{
-            margin-bottom: 5px;
-        }
-
-        h6{
-            font-size: 17px;
-            margin-bottom: 10px;
-        }
-
-        /*orange header color*/
-        .header-color{
-            color: #ea4233;
-        }
-
-        .color{
-            font-size: 15px;
-        }
-    </style>
-
     <section class="intro-title section border-bottom" style="background-image: url(placeholders/SoundsHeaders_Artist.jpg)">
         <h1 class="heading-l">artist</h1>
         <h2 class="heading-m">share <span class="header-color">your sounds</span></h2>
@@ -30,58 +10,50 @@
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Artists1.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Be part of Singapore's largest repository of local music
                     </h6>
-                    <p>
-                        <span class="color">
-                            Sounds.sg will always be purely local<br>
-                            Stream and sell your music directly from our database
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Sounds.sg will always be purely local<br>
+                        Stream and sell your music directly from our database
                     </p>
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Artists2.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Own your profile
                     </h6>
-                    <p>
-                        <span class="color">
-                            Manage your biography and track-listing<br>
-                            Upload lyrics together with your songs
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Manage your biography and track-listing<br>
+                        Upload lyrics together with your songs
                     </p>
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Artists3.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Get discovered
                     </h6>
-                    <p>
-                        <span class="color">
-                            Publishing your profile automatically puts you on the explore page<br>
-                            Feature a song that best represents your sound<br>
-                            Allow users to hear you before they even know you
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        Publishing your profile automatically puts you on the explore page<br>
+                        Feature a song that best represents your sound<br>
+                        Allow users to hear you before they even know you
                     </p>
                 </div>
 
                 <div class="col-1-1" style="text-align: center; margin-bottom: 80px;">
                     <img src='img/Artists4.png'>
                     <div class="row clearfix" style="margin-bottom: 30px;"></div>
-                    <h6>
+                    <h6 style="font-size: 17px; margin-bottom: 10px;">
                         Get paid
                     </h6>
-                    <p>
-                        <span class="color">
-                            We believe music should be properly valued<br>
-                            Dictate your own prices<br>
-                            Receive payment through PayPal; securely and reliably
-                        </span>
+                    <p style="margin-bottom: 5px; font-size: 15px;">
+                        We believe music should be properly valued<br>
+                        Dictate your own prices<br>
+                        Receive payment through PayPal; securely and reliably
                     </p>
                 </div>
             </article>
