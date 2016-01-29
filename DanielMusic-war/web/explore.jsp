@@ -97,7 +97,7 @@
                     </div>
 
                     <!-- Releases -->
-                    <div id="musicListing" class="masonry clearfix">
+                    <div id="musicListing" class="masonry clearfix" style="margin-right: 0px;">
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
                                 ExploreHelper artists = exploreHelpers.get(i);
