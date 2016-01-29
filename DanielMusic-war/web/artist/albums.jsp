@@ -74,10 +74,10 @@
                     <table class="layout display responsive-table">
                         <thead>
                             <tr>
-                                <th>no</th>
+                                <th>#</th>
                                 <th>Album Title</th>
                                 <th>Status</th>
-                                <th colspan="2"></th>
+                                <th colspan="2">Options</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -125,10 +125,10 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>no</th>
+                                <th>#</th>
                                 <th>Single Title</th>
                                 <th>Status</th>
-                                <th colspan="2"></th>
+                                <th colspan="2">Options</th>
                             </tr>
                         </thead>
                         <tbody>
