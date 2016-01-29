@@ -167,7 +167,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1" style="text-align: center;">
-                            <button type="button" class="large invert" onclick="loadAjaxSignupFan()">create account</button>
+                            <button type="button" class="large invert" onclick="loadAjaxSignupFan()" style="width: 304px; margin-right: 0px;">create account</button>
                         </div>
                     </div>
 
