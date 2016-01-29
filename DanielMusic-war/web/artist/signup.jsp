@@ -1,11 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | artist signup">
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <div class="container">
-            <h1 class="heading-l">artist signup</h1>
-        </div>
-    </section>
-
     <section class="content section">
         <div class="container">
             <article>
@@ -113,9 +107,10 @@
                         return true;
                     }
                 </script>
-
                 <form name="AccountSignupForm" class="form">
                     <div class="container" style="width: 50%;">
+                        <h1 style="font-size: 56px; text-align: center; margin-bottom: 60px;">artist signup</h1>
+
                         <p class="error" id="errMsg" style="display:none;"></p>
                         <p class="success" id="goodMsg"  style="display:none;"></p>
 
