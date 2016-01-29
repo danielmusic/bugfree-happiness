@@ -134,7 +134,7 @@
                                                 <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
                                                 <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
                                                 <%} else {%>
-                                                <img src="placeholders/artist01.jpg" />
+                                                <img src="placeholders/SilhouetteProfilePicture-01.jpg" />
                                                 <%}%>
                                             </span>
                                         </a>

@@ -109,7 +109,7 @@
                                     if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {
                                         profilePicURL = "http://sounds.sg.storage.googleapis.com/" + artist.getImageURL();
                                     } else {
-                                        profilePicURL = "placeholders/artist01.jpg";
+                                        profilePicURL = "placeholders/SilhouetteProfilePicture-01.jpg";
                                     }
                         %>
                         <!-- Release -->

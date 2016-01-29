@@ -116,9 +116,9 @@
                         </span>
                     </a>
                     <%} else {%>
-                    <a href="placeholders/artist01.jpg" title="<%=artist.getName()%>" class="thumb-glitch" data-lightbox="lightbox">
+                    <a href="placeholders/SilhouetteProfilePicture-01.jpg" title="<%=artist.getName()%>" class="thumb-glitch" data-lightbox="lightbox1">
                         <span class="img">
-                            <img src="placeholders/artist01.jpg" />
+                            <img src="placeholders/SilhouetteProfilePicture-01.jpg" />
                         </span>
                     </a>
                     <%}%>
