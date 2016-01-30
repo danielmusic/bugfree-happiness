@@ -114,7 +114,7 @@
                         <div class="tabs-wrap">
                             <!-- tabs navigation -->
                             <ul class="tabs">
-                                <li><a href="#tab-artist" class="active-tab">Artists & Bands (<%=result.getListOfArtists().size()%>)</a></li>
+                                <li><a href="#tab-artist" onclick="javascript:runIsotope();" class="active-tab">Artists & Bands (<%=result.getListOfArtists().size()%>)</a></li>
                                 <li><a href="#tab-album" onclick="javascript:runIsotope();">Albums (<%=result.getListOfAlbums().size()%>)</a></li>
                                 <li><a href="#tab-music">Tracks (<%=result.getListOfMusics().size()%>)</a></li>
                             </ul>
