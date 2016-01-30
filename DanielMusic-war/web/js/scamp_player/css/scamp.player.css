@@ -212,17 +212,14 @@ Scamp Player Stylesheet
 .sp-buttons-container .sp-queue-button-container {
     float: right;
     position: relative;
-    margin-top: 5px;
 }
 .sp-buttons-container a.sp-queue-button:before {
-    content: "\f0cb";
-    font-family: FontAwesome;
-    font-size: 28px;
+    content: "\e614";
+    font-size: 42px;
 }
 #scamp_player.sp-show-list .sp-buttons-container a.sp-queue-button:before {
-    content: "\f05c";
-    font-family: FontAwesome;
-    font-size: 28px;
+    content: "\e60b";
+    font-size: 42px;
 }
 #scamp_player.sp-queue-loading .sp-buttons-container a.sp-queue-button:before {
     content: "\e620";

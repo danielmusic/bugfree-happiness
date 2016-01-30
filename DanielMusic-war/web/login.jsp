@@ -1,11 +1,9 @@
 <section id="page" data-title="sounds.sg | login">
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">account login</h1>
-    </section>
     <section class="content section">
         <div class="container" style="width: 440px;">
             <article>
                 <form class="form" name="loginForm" action="ClientAccountManagementController">
+                    <h1 style="font-size: 56px; text-align: center; margin-bottom: 60px;">account login</h1>
                     <p class="error" id="errMsg" style="display:none;"></p>
                     <p class="success" id="goodMsg"  style="display:none;"></p>
 

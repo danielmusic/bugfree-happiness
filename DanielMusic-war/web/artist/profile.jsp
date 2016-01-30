@@ -479,7 +479,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="small invert" id="submitBtn">Submit</button>
+                    <button type="submit" class="medium invert" id="submitBtn">Submit</button>
                     <input type="hidden" value="ArtistProfileUpdate" name="target" id="target">
                     <div class="clear"></div>
                 </form>

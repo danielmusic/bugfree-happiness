@@ -37,10 +37,10 @@
                     }
                 </style>
 
-                <section class="content section">
+                <section class="content section"  style="margin-right: auto; margin-left: auto; margin-top: 9%;">
                     <div class="container">
                         <article>
-                            <div style="text-align: center; margin-top: 100px;">
+                            <div style="text-align: center; width: 50%; margin: 0 auto;">
                                 <img src="http://sounds.sg/img/EmailGraphic.png" width="150px;">
 
                                 <p style="font-size: 30px; margin-top: 10px; margin-bottom: 10px;">This page doesn't exist.</p>

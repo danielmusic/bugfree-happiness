@@ -1,13 +1,5 @@
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | fan signup">
-    <!-- ############################# Intro ############################# -->
-    <section class="intro-title section border-bottom" style="background-image: url(placeholders/about-bg.jpg)">
-        <h1 class="heading-l">fan signup</h1>
-        <!-- Overlay -->
-        <span class="overlay dots"></span>
-    </section>
-    <!-- /intro -->
-
     <!-- ############################# Content ############################# -->
     <section class="content section">
         <!-- container -->
@@ -114,6 +106,7 @@
 
                 <form name="AccountSignupForm" class="form">
                     <div class="container" style="width: 50%;">
+                        <h1 style="font-size: 56px; text-align: center; margin-bottom: 60px;">artist signup</h1>
                         <p class="error" id="errMsg" style="display:none;"></p>
                         <p class="success" id="goodMsg"  style="display:none;"></p>
 
@@ -167,7 +160,7 @@
 
                     <div class="row clearfix">
                         <div class="col-1-1" style="text-align: center;">
-                            <button type="button" class="large invert" onclick="loadAjaxSignupFan()">create account</button>
+                            <button type="button" class="large invert" onclick="loadAjaxSignupFan()" style="width: 304px; margin-right: 0px;">create account</button>
                         </div>
                     </div>
 

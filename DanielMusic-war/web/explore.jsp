@@ -97,7 +97,7 @@
                     </div>
 
                     <!-- Releases -->
-                    <div id="musicListing" class="masonry clearfix">
+                    <div id="musicListing" class="masonry clearfix" style="margin-right: 0px;">
                         <%
                             for (int i = 0; i < exploreHelpers.size(); i++) {
                                 ExploreHelper artists = exploreHelpers.get(i);
@@ -109,7 +109,7 @@
                                     if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {
                                         profilePicURL = "http://sounds.sg.storage.googleapis.com/" + artist.getImageURL();
                                     } else {
-                                        profilePicURL = "placeholders/artist01.jpg";
+                                        profilePicURL = "placeholders/SilhouetteProfilePicture-01.jpg";
                                     }
                         %>
                         <!-- Release -->
