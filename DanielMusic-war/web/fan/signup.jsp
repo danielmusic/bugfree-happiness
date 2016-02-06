@@ -106,7 +106,7 @@
 
                 <form name="AccountSignupForm" class="form">
                     <div class="container" style="width: 50%;">
-                        <h1 style="font-size: 56px; text-align: center; margin-bottom: 60px;">artist signup</h1>
+                        <h1 style="font-size: 56px; text-align: center; margin-bottom: 60px;">fan signup</h1>
                         <p class="error" id="errMsg" style="display:none;"></p>
                         <p class="success" id="goodMsg"  style="display:none;"></p>
 
