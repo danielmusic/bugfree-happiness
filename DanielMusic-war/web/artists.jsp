@@ -304,7 +304,6 @@
                                     }
                                 %>
                             </p>
-                            <p>Year Released: <%=album.getYearReleased()%></p>
                             <%if (!album.getIsSingle()) {%>
                             <a class="btn sp-add-list invert" onclick="addAlbumToCart(<%=album.getId()%>)">Add Album to Cart</a>
                             <%} else {%>
