@@ -48,6 +48,17 @@
         <%} else {%>
         <p class='warning'>No music was specified or the lyrics for the specified music is no longer available.</p>
         <%}%>
-        <jsp:include page="jspIncludePages/footer.jsp" />
+        
+        <!-- ############################# Footer ############################# -->
+        <footer id="footer" style="margin-bottom: 0px;">
+            <!-- Footer Bottom -->
+            <div id="footer-bottom" class="container">
+                <div class="footer-copyrights" style="text-align: center; margin-bottom: 5px;">
+                    © 2015 - SOUNDS.SG, ALL RIGHTS RESERVED
+                </div>
+            </div>
+            <!-- /footer bottom -->
+        </footer>
+        <!-- /footer -->
     </body>
 </html>
