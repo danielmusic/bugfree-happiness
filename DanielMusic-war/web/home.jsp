@@ -5,7 +5,7 @@
 
         <!-- Slide No1 -->
         <li class="anim-slide">
-            <h1 id="slide1">Slide 1</h1>
+            <img src="placeholders/Terrestrea1.jpg">
         </li>
 
         <!-- Slide No2 -->

@@ -108,7 +108,7 @@ public class MusicController extends HttpServlet {
                         Long musicID = Long.parseLong(request.getParameter("id"));
                         Music music = musicManagementBean.getMusic(musicID);
                         session.setAttribute("musicLyrics", music);
-                        response.sendRedirect("lyrics.jsp");
+                        response.sendRedirect("/lyrics.jsp");
                         return;
                     }
 

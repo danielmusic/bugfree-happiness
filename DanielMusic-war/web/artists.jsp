@@ -156,19 +156,19 @@
                     <!-- Details Share -->
                     <div class="details-social-box">
                         <%if (artist.getFacebookURL() != null && !artist.getFacebookURL().isEmpty()) {%>
-                        <a href="<%=artist.getFacebookURL()%>"><i class="icon icon-facebook"></i></a>
+                        <a href="<%=artist.getFacebookURL()%>" target="_blank"><i class="icon icon-facebook"></i></a>
                             <%}%>
 
                         <%if (artist.getTwitterURL() != null && !artist.getTwitterURL().isEmpty()) {%>
-                        <a href="<%=artist.getTwitterURL()%>"><i class="icon icon-twitter"></i></a>
+                        <a href="<%=artist.getTwitterURL()%>" target="_blank"><i class="icon icon-twitter"></i></a>
                             <%}%>
 
                         <%if (artist.getInstagramURL() != null && !artist.getInstagramURL().isEmpty()) {%>
-                        <a href="<%=artist.getInstagramURL()%>"><i class="fa fa-instagram "></i></a>
+                        <a href="<%=artist.getInstagramURL()%>" target="_blank"><i class="fa fa-instagram "></i></a>
                             <%}%>
 
                         <%if (artist.getWebsiteURL() != null && !artist.getWebsiteURL().isEmpty()) {%>
-                        <a href="<%=artist.getWebsiteURL()%>"><i class="icon icon-IE"></i></a>
+                        <a href="<%=artist.getWebsiteURL()%>" target="_blank"><i class="icon icon-IE"></i></a>
                             <%}%>
                     </div>
                 </div>
