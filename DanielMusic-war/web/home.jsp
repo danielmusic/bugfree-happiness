@@ -5,29 +5,25 @@
 
         <!-- Slide No1 -->
         <li class="anim-slide">
-
+            Slide 11111
         </li>
 
         <!-- Slide No2 -->
         <li class="anim-slide">
-            <div style="background:#fff url('placeholders/Terrestrea1.jpg') 100%/cover;"></div>
-            <div style="background:#fff url('placeholders/Terrestrea2.jpg') 100%/cover;"></div>
-            <div style="background:#fff url('placeholders/Terrestrea3.jpg') 100%/cover;"></div>
+            <div id="img1"></div>
+            <div id="img2"></div>
+            <div id="img3"></div>
         </li>
 
         <!-- Slide No3 -->
         <li class="anim-slide">
-            <h1 id="slide1">Slide 3</h1>
+            Slide 3333
         </li>
 
         <!-- Arrows -->
         <nav class="anim-arrows">
-            <span class="anim-arrows-prev">
-                <i class="fa fa-angle-left fa-3x"></i>
-            </span>
-            <span class="anim-arrows-next">
-                <i class="fa fa-angle-right fa-3x"></i>
-            </span>
+            <span class="anim-arrows-prev"></span>
+            <span class="anim-arrows-next"></span>
         </nav>
         <!-- Dynamically created dots -->
 
@@ -51,8 +47,6 @@
 </script>
 
 <link rel="stylesheet" href="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.css"/>
-<link rel="stylesheet" href="css/demo2.css">
-
 <script src="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.min.js" type="text/javascript"></script>
 <script>
     //Slider
@@ -75,7 +69,7 @@
                                     {
                                         li:
                                                 {
-                                                    show: "fadeInLeft",
+                                                    show: "fadeIn",
                                                     hide: "fadeOutLeftBig",
                                                     delayShow: "delay0-5s"
                                                 }
@@ -84,8 +78,8 @@
                                     {
                                         li:
                                                 {
-                                                    show: "fadeInUp",
-                                                    hide: "fadeOutDownBig",
+                                                    show: "fadeIn",
+                                                    hide: "fadeOutLeftBig",
                                                     delayShow: "delay0-5s"
                                                 }
                                     }
