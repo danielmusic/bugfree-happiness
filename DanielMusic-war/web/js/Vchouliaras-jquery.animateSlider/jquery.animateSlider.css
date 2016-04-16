@@ -11,7 +11,7 @@
 
 /******Slider****/
 .anim-slider {
-    background: #225A86;
+    background: #1E1E1E;
     list-style-type: none;
     position: relative;
     overflow: hidden;
@@ -19,7 +19,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 400px;
+    height: 850px;
     padding:0;
     margin:0;
 }
@@ -29,7 +29,7 @@
 .anim-slide {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 850px;
     top: 0;
     left: 0;
 }

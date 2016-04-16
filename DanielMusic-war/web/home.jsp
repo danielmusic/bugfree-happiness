@@ -28,6 +28,13 @@
         <!-- Dynamically created dots -->
 
     </ul>
+
+    <div id="main" class="release main-right main-medium" style="margin-bottom: 0px;">
+        <article style="margin-bottom: 0px;">
+            <h1>Terrestrea</h1>
+        </article>
+    </div>
+
 </section>
 
 <script type="text/javascript">
@@ -47,6 +54,7 @@
 </script>
 
 <link rel="stylesheet" href="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.css"/>
+<link rel="stylesheet" href="../js/Vchouliaras-jquery.animateSlider/demo2.css">
 <script src="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.min.js" type="text/javascript"></script>
 <script>
     //Slider
