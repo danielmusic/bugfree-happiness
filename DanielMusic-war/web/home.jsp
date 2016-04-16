@@ -5,12 +5,14 @@
 
         <!-- Slide No1 -->
         <li class="anim-slide">
-            <img src="placeholders/Terrestrea1.jpg">
+
         </li>
 
         <!-- Slide No2 -->
         <li class="anim-slide">
-            <h1 id="slide1">Slide 2</h1>
+            <div style="background:#fff url('placeholders/Terrestrea1.jpg') 100%/cover;"></div>
+            <div style="background:#fff url('placeholders/Terrestrea2.jpg') 100%/cover;"></div>
+            <div style="background:#fff url('placeholders/Terrestrea3.jpg') 100%/cover;"></div>
         </li>
 
         <!-- Slide No3 -->
@@ -49,6 +51,8 @@
 </script>
 
 <link rel="stylesheet" href="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.css"/>
+<link rel="stylesheet" href="css/demo2.css">
+
 <script src="../js/Vchouliaras-jquery.animateSlider/jquery.animateSlider.min.js" type="text/javascript"></script>
 <script>
     //Slider
