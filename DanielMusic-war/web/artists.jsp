@@ -223,10 +223,9 @@
                             <h2>Contact Email</h2>
                             <p> <%out.print(repl);%></p>
                             <%}%>
-
-
                         </div>
                         <!-- /tab content -->
+
                         <!-- play all tracks content/add all tracks to playlist button-->
                         <ul id="release-list" class="tracklist" style="display:none;">
                             <%
@@ -269,6 +268,9 @@
                                 }
                             %>
                         </ul>
+                        <!--end play all tracks content/add all tracks to playlist button-->
+
+
                         <!-- tab content -->
                         <div id="tab-releases" class="tab-content">
                             <%
@@ -396,7 +398,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="toggle-content">
+                                        <div class="toggle-content" style="margin-left: 20px;margin-right: 20px;">
                                             <%
                                                 if (music.getLyrics() != null) {
                                                     String repl = music.getLyrics().replaceAll("\\r", "<br>");

@@ -151,23 +151,23 @@
                                         </i>
                                     </a>
 
-                                    <span id='btnPlay<%=artistFeaturedMusic.getId()%>'>
-                                        <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                           data-artist="<%=artist.getName()%>"
-                                           data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
-                                           data-artist_target="_self"
-                                           data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
-                                           data-shop_target="_self"
-                                           style="margin-left: 0px;"
-                                           >
-                                            <i class="icon icon-play2">
-                                                <span style="display: none;">
-                                                    <span class="track-title"><%=artistFeaturedMusic.getName()%></span>
-                                                    <span class="track-artists"><%=artist.getName()%></span>
-                                                </span>
-                                            </i>
-                                        </a>
-                                    </span>
+
+                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                       data-artist="<%=artist.getName()%>"
+                                       data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
+                                       data-artist_target="_self"
+                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
+                                       data-shop_target="_self"
+                                       style="margin-left: 0px;"
+                                       >
+                                        <i class="icon icon-play2">
+                                            <span style="display: none;">
+                                                <span class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                <span class="track-artists"><%=artist.getName()%></span>
+                                            </span>
+                                        </i>
+                                    </a>
+
 
                                     <%}%>
                                 </div>

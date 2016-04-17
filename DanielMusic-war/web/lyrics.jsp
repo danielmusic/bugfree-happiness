@@ -11,7 +11,7 @@
 <%@page import="EntityManager.Artist"%>
 <%@page import="EntityManager.Account"%>
 <%@page import="java.text.NumberFormat"%>
-<html class="no-js" lang="en-US"><!--<![endif]-->
+<html lang="en-US"><!--<![endif]-->
     <head>
         <title>sounds.sg</title>
         <meta charset="utf-8">
@@ -33,7 +33,7 @@
 
         <article>
             <div class="container">
-                <h2 class="heading-l"><%=music.getName()%></h2>
+                <h2 class="heading-l" style="line-height: 1em; margin-bottom: 10px; font-size: 32px;"><%=music.getName()%></h2>
 
                 <%
                     if (music.getLyrics() != null) {
