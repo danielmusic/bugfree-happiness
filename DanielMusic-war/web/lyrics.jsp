@@ -5,12 +5,7 @@
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!--> 
-<%@page import="java.util.List"%>
-<%@page import="EntityManager.Album"%>
 <%@page import="EntityManager.Music"%>
-<%@page import="EntityManager.Artist"%>
-<%@page import="EntityManager.Account"%>
-<%@page import="java.text.NumberFormat"%>
 <html lang="en-US"><!--<![endif]-->
     <head>
         <title>sounds.sg</title>
@@ -24,31 +19,36 @@
         <script src="js/jquery.min.js" type="text/javascript"></script>
         <link rel="stylesheet" href="css/style.css" media="screen" />
         <link rel="stylesheet" href="css/media-queries.css" media="screen" />
+        <script src="js/modernizr.custom.js"></script>
+        <style>
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                overflow-y: scroll;
+            }
+        </style>
     </head>
     <body>
         <%
             Music music = (Music) session.getAttribute("musicLyrics");
             if (music != null) {
         %>
-
-        <article>
-            <div class="container">
-                <h2 class="heading-l" style="line-height: 1em; margin-bottom: 10px; font-size: 32px;"><%=music.getName()%></h2>
-
-                <%
-                    if (music.getLyrics() != null) {
-                        String lyrics = music.getLyrics().replaceAll("\\r", "<br>");
-                        out.print(lyrics);
-                    }
-                %>
-            </div>
-            <br/><br/><br/>
-        </article>
-
+        <div class="container" style="margin-bottom: 50px;">
+            <h2 class="heading-l" style="line-height: 1em; margin-bottom: 10px; font-size: 32px;"><%=music.getName()%></h2>
+            <%
+                if (music.getLyrics() != null) {
+                    String lyrics = music.getLyrics().replaceAll("\\r", "<br>");
+                    out.print(lyrics);
+                }
+            %>
+        </div>
         <%} else {%>
         <p class='warning'>No music was specified or the lyrics for the specified music is no longer available.</p>
         <%}%>
-        
+
         <!-- ############################# Footer ############################# -->
         <footer id="footer" style="margin-bottom: 0px;">
             <!-- Footer Bottom -->

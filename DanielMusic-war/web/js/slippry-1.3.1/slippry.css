@@ -283,7 +283,7 @@
     -webkit-border-radius: 1.2em;
     border-radius: 1.2em; }
     .sy-caption-wrap .sy-caption a:link, .sy-caption-wrap .sy-caption a:visited {
-      color: #e24b70;
+      color: #ea4233;
       font-weight: 600;
       text-decoration: none; }
     .sy-caption-wrap .sy-caption a:hover, .sy-caption-wrap .sy-caption a:focus {
@@ -319,7 +319,7 @@
     -webkit-border-radius: 50%;
     border-radius: 50%; }
     .sy-pager li.sy-active a {
-      background-color: #e24b70; }
+      background-color: #ea4233; }
     .sy-pager li a {
       width: 100%;
       height: 100%;

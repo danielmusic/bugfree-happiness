@@ -285,7 +285,7 @@
 
     $(function () {
         var demo1 = $("#demo1").slippry({
-            pager: false,
+            pager: true,
             controls: false
                     // transition: 'fade',
                     // useCSS: true,
