@@ -80,8 +80,8 @@
                                             <td><%=genres.get(i).getName()%></td>
                                             <td><%=genres.get(i).getListOfMusics().size()%></td>
                                             <td>
-                                                <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove">Delete</button>
-                                                <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                                                <button type="button" class="modal-with-move-anim btn btn-default btn-block"  href="#modalRemove<%=genres.get(i).getId()%>">Delete</button>
+                                                <div id="modalRemove<%=genres.get(i).getId()%>" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
                                                             <h2 class="panel-title">Are you sure?</h2>
