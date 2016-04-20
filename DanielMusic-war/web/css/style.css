@@ -3142,6 +3142,8 @@ h4.active-toggle:before {
 .select_style .niceselect .value_wrapper {
     border-radius:3px;
     background: #444;
+    height: 300px;
+    overflow-y: auto;
 }
 
 /* Selected text style */
@@ -3215,7 +3217,7 @@ h4.active-toggle:before {
 }
 .niceselect  {
     position:relative;
-    width:  250px;
+    /*width:  250px;*/
 }
 .niceselect p {
     border: none;

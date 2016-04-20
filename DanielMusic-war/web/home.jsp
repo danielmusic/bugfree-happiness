@@ -198,7 +198,7 @@
 
 
                                 <div class="track-buttons">
-                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" data-cover="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" 
+                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/music/902/906/907/128/Sunset Memory - Final Mix.mp3" data-cover="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" 
                                        data-artist="Terrestrea" 
                                        data-artist_url="javascript:loadArtist2(902);" 
                                        data-artist_target="_self" 
@@ -285,7 +285,7 @@
 
     $(function () {
         var demo1 = $("#demo1").slippry({
-            pager: false,
+            pager: true,
             controls: false
                     // transition: 'fade',
                     // useCSS: true,
