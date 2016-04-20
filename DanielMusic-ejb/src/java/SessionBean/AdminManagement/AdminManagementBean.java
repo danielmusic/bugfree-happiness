@@ -1,6 +1,7 @@
 package SessionBean.AdminManagement;
 
 import EntityManager.Account;
+import EntityManager.Album;
 import EntityManager.Artist;
 import EntityManager.Genre;
 import EntityManager.Member;
@@ -277,6 +278,20 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 genres.remove(genre);
                 music.setListOfGenres(genres);
                 em.merge(music);
+            }
+            //Remove genre from the genre list stored in the albums beloning to this genre
+            List<Album> albums = genre.getListOfAlbums();
+            for (Album album : albums) {
+                List<Genre> genres = album.getListOfGenres();
+                genres.remove(genre);
+                album.setListOfGenres(genres);
+                em.merge(album);
+            }
+             //Remove genre from the genre list stored in the artist beloning to this genre
+            List<Artist> artists = genre.getListOfArtists();
+            for (Artist artist : artists) {
+                artist.setGenre(null);
+                em.merge(artist);
             }
             em.remove(genre);
             result.setResult(true);
