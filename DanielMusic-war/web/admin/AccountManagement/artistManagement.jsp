@@ -125,9 +125,9 @@
                                                 <% if (!artists.get(i).getIsDisabled()) {%>
                                                 <div class='btn-group'>
                                                     <button type="button" class="btn btn-default" onclick="viewArtist(<%=artists.get(i).getId()%>)">View</button>
-                                                    <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove">Disable</button>
+                                                    <button type="button" class="modal-with-move-anim btn btn-default"  href="#modalRemove<%=artists.get(i).getId()%>">Disable</button>
                                                 </div>
-                                                <div id="modalRemove" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+                                                <div id="modalRemove<%=artists.get(i).getId()%>" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
                                                     <section class="panel">
                                                         <header class="panel-heading">
                                                             <h2 class="panel-title">Are you sure?</h2>
