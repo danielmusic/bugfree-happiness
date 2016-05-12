@@ -390,8 +390,12 @@ public class MusicManagementController extends HttpServlet {
                         String strAlbumIDs = request.getParameter("deleteAlbum");
                         Scanner sc = new Scanner(strAlbumIDs);
                         ArrayList<String> albumIDs = new ArrayList<>();
-                        while (sc.hasNext()) {
-                            albumIDs.add(sc.next());
+
+                        while (sc.hasNextLine()) {
+                            String[] temp = sc.nextLine().split(",");
+                            for (int i = 0; i < temp.length; i++) {
+                                albumIDs.add(temp[i]);
+                            }
                         }
 
                         int deleteCounter = 0;
@@ -403,6 +407,7 @@ public class MusicManagementController extends HttpServlet {
                                 }
                             }
                             shoppingCart = clientManagementBean.getShoppingCart(account.getId());
+
                         } else {
                             shoppingCart = (ShoppingCart) session.getAttribute("ShoppingCart");
                             for (String s : albumIDs) {
@@ -435,8 +440,12 @@ public class MusicManagementController extends HttpServlet {
                         String strTrackIDs = request.getParameter("deleteTrack");
                         Scanner sc2 = new Scanner(strTrackIDs);
                         ArrayList<String> trackIDs = new ArrayList<>();
-                        while (sc2.hasNext()) {
-                            trackIDs.add(sc2.next());
+
+                        while (sc2.hasNextLine()) {
+                            String[] temp = sc2.nextLine().split(",");
+                            for (int i = 0; i < temp.length; i++) {
+                                trackIDs.add(temp[i]);
+                            }
                         }
 
                         int deleteCounter = 0;
