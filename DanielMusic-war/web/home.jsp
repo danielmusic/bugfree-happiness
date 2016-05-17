@@ -103,7 +103,7 @@
             <article style="margin-bottom: 0px;">
                 <p class="error" id="errMsg" style="display:none;"></p>
                 <p class="success" id="goodMsg" style="display:none;"></p>
-                <p>Featured Artist of The Month</p>
+                <p style="margin-bottom: 0px;">Featured Artist of The Month</p>
                 <h1>Terrestrea</h1>
             </article>
         </div>
@@ -252,7 +252,7 @@
 
                 <p>The band's first original, post-rock ballad Sunset Memory, grew out of a guitar riff by Imran. Building on that riff with Jared, the duo worked it into the song that it is now, roping in friends from school: Ben, Kenny, and Irsyad. While they play in the same band, Imran is quick to point out that they listen to a variety of music, and in this manner the band is a confluence of their diverse influences. Citing giants from the post-hardcore era such as Underoath and Funeral For A Friend as their roots, they subsequently got into more experimental acts like Periphery and Toe, and are currently building elements such as poly-rhythmic patterns into their own sound.</p>
 
-                <p>&quot;The funny thing is that none of our songs have turned out the way we imagined. Let's say I write some lyrics or have an idea. Once we jam it out it becomes something completely different, and that's one of the best things about being in a band.&quot;</p>
+                <p style="font-size: 24pt; color: rgb(234,66,51);">&quot;The funny thing is that none of our songs have turned out the way we imagined. Let's say I write some lyrics or have an idea. Once we jam it out it becomes something completely different, and that's one of the best things about being in a band.&quot;</p>
 
                 <p>The band is busy refining existing material and has a new song in the works. Titled Furnace, they describe this second single as less reflective but more melodic. Where Sunset Memory drew on personal experience, this new track poses a challenge to the listener. Key songwriter Jared says it's about reaching a point where a decision must be made.</p>
 

@@ -36,7 +36,7 @@
             Music music = (Music) session.getAttribute("musicLyrics");
             if (music != null) {
         %>
-        <div class="container" style="margin-bottom: 50px;">
+        <div class="container" style="margin-top: 25px; margin-bottom: 50px;">
             <h2 class="heading-l" style="line-height: 1em; margin-bottom: 10px; font-size: 32px;"><%=music.getName()%></h2>
             <%
                 if (music.getLyrics() != null) {
