@@ -24,6 +24,7 @@ import it.sauronsoftware.jave.MultimediaInfo;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -193,7 +194,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     }
 
     @Override
-    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, Integer yearReleased) {
+    public ReturnHelper createMusic(Part musicPart, Long albumID, Integer trackNumber, String name, Double price, String lyrics, String credits, Integer yearReleased) {
         ReturnHelper helper = new ReturnHelper();
         helper.setResult(false);
         try {
@@ -223,6 +224,8 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_" + fileName + ".wav";
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
+            //Encode filename
+            fileName = URLEncoder.encode(fileName,"UTF-8");
 
             int nextByte;
             while ((nextByte = fileInputStream.read()) != -1) {
@@ -317,6 +320,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             Genre genre = album.getListOfGenres().get(0);
             listOfGenres.add(genre);
             music.setLyrics(StringEscapeUtils.escapeHtml4(lyrics));
+            music.setCredits(StringEscapeUtils.escapeHtml4(credits));
             music.setListOfGenres(listOfGenres);
             music.setName(StringEscapeUtils.escapeHtml4(name));
             music.setPrice(price);

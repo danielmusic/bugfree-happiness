@@ -150,6 +150,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
 
     private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
         String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expirationInSeconds) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
+        System.out.println("/" + BUCKET_NAME + "/" + filename);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
                 + "?GoogleAccessId=" + SERVICE_ACCOUNT_EMAIL
                 + "&Expires=" + (System.currentTimeMillis() / 1000 + expirationInSeconds)

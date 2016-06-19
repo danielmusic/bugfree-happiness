@@ -33,6 +33,36 @@
                     </div>
                 </div>
                 <script>
+                    var musicFileSize;
+                    var form = document.forms.namedItem("uploadform");
+                    form.addEventListener('submit', function (ev) {
+                        upload(musicFileSize);
+                        var oData = new FormData(form);
+
+                        var oReq = new XMLHttpRequest();
+                        oReq.open("POST", "MusicManagementController?target=AddTrack", true);
+                        oReq.onload = function (oEvent) {
+                            if (oReq.status == 200) {
+                                progressBar(Math.round(100), $('#progressBar'));
+                                clearInterval(progress);
+                                progress = null;
+                                setTimeout(function () {
+                                    window.location.href = "#!/artist/albums";
+                                }, 1000);
+                            } else {
+                                progressBar(Math.round(100), $('#progressBar'));
+                                clearInterval(progress);
+                                progress = null;
+                                setTimeout(function () {
+                                    window.location.href = "#!/artist/albums";
+                                }, 1000);
+                            }
+                        };
+
+                        oReq.send(oData);
+                        ev.preventDefault();
+                    }, false);
+                    
                     var progress;
                     function upload(musicFileSize) {
                         var secs = musicFileSize / 25000;
@@ -110,7 +140,7 @@
                         $('form').submit(function () {
                             if (window.File && window.FileReader && window.FileList && window.Blob) {
                                 var musicFile = $('#music');
-                                var musicFileSize = $('#music')[0].files[0].size;
+                                musicFileSize = $('#music')[0].files[0].size;
 
                                 if (!isMusic(musicFile.val())) {
                                     document.getElementById("errMsg").style.display = "block";
@@ -124,9 +154,6 @@
                                     window.scrollTo(0, 0);
                                     return false;
                                 }
-
-                                upload(musicFileSize);
-
                             } else {
                                 document.getElementById("errMsg").style.display = "block";
                                 document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
@@ -148,7 +175,7 @@
                     if (artist != null && genres != null) {
                 %>
 
-                <form method="POST" enctype="multipart/form-data" action="MusicManagementController" class="form">
+                <form method="POST" enctype="multipart/form-data" name="uploadform" class="form">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
                     <p class="error" id="errMsg" style="display:none;"></p>
 
