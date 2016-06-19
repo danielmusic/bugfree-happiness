@@ -46,7 +46,7 @@
                 <jsp:include page="../jspIncludePages/sidebar.jsp" />
                 <section role="main" class="content-body">
                     <header class="page-header">
-                        <h2><%=tracks.get(0).getAlbum().getName()%> : Tracks</h2>
+                        <h2>Tracks</h2>
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li><a href="admin/workspace.jsp"><i class="fa fa-home"></i></a></li>
@@ -61,7 +61,7 @@
                     <!-- start: page -->
                     <section class="panel">
                         <header class="panel-heading">
-                            <h2><%=tracks.get(0).getAlbum().getName()%> : Tracks</h2>
+                            <h2>Tracks</h2>
                         </header>
                         <div class="panel-body">
                             <div class="row">
