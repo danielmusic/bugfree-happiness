@@ -63,6 +63,23 @@ public class AccountManagementController extends HttpServlet {
                     nextPage = "/admin/login.jsp?goodMsg=Logout Successful";
                     break;
 
+                case "ChangePassword":
+                    String oldPassword = request.getParameter("oldPwd");
+                    returnHelper = accountManagementBean.updateAccountPassword(Long.parseLong(id), oldPassword, password);
+
+                    if (returnHelper.getResult()) {
+                        Account account = accountManagementBean.getAccount(email);
+                        if (account instanceof Admin) {
+                            session.setAttribute("admin", (Admin) accountManagementBean.getAccount(email));
+                            nextPage = "/admin/changePassword.jsp?goodMsg=" + returnHelper.getDescription();
+                        } else {
+                            nextPage = "/admin/changePassword.jsp?errMsg=Access Denied";
+                        }
+                    } else {
+                        nextPage = "/admin/changePassword.jsp?errMsg=" + returnHelper.getDescription();
+                    }
+                    break;
+
                 case "ListAllArtist":
                     if (checkLogin(response)) {
                         List<Artist> artists = adminManagementBean.listAllArtists(true);
@@ -117,12 +134,10 @@ public class AccountManagementController extends HttpServlet {
                             } else if (source.equals("artist")) {
                                 nextPage = "/admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                             }
-                        } else {
-                            if (source.equals("band")) {
-                                nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
-                            } else if (source.equals("artist")) {
-                                nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
-                            }
+                        } else if (source.equals("band")) {
+                            nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
+                        } else if (source.equals("artist")) {
+                            nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                         }
                     } else {
                         response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");
@@ -139,12 +154,10 @@ public class AccountManagementController extends HttpServlet {
                             } else {
                                 nextPage = "/admin/AccountManagement/artist.jsp?goodMsg=" + returnHelper.getDescription();
                             }
+                        } else if (source.equals("band")) {
+                            nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
                         } else {
-                            if (source.equals("band")) {
-                                nextPage = "/admin/AccountManagement/band.jsp?goodMsg=" + returnHelper.getDescription();
-                            } else {
-                                nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
-                            }
+                            nextPage = "/admin/AccountManagement/artist.jsp?errMsg=" + returnHelper.getDescription();
                         }
                     } else {
                         response.sendRedirect("/admin/login.jsp?errMsg=Session Expired.");

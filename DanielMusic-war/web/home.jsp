@@ -230,7 +230,7 @@
                                         <span style="display: none;"></span>
                                     </i>
 
-                                    <a style="cursor: pointer;" onclick="addTrackToCart(906)">
+                                    <a style="cursor: pointer;" onclick="addAlbumToCart(906)">
                                         <i class="icon icon-cart"></i>
                                     </a>
 
