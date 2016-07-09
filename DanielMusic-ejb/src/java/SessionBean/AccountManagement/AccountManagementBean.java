@@ -330,10 +330,11 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (account.getIsDeleted()== true) {
+            if (account.getIsDeleted()== true && account.getIsDisabled()==true) {
                 result.setDescription("Account is already deleted.");
             } else {
                 account.setIsDeleted(true);
+                account.setIsDisabled(true);
                 em.merge(account);
                 result.setResult(true);
                 result.setDescription("Account deleted successfully.");

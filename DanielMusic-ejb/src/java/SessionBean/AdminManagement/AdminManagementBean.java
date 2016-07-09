@@ -148,7 +148,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             if (isAdmin) {
                 q = em.createQuery("select a from Artist a");
             } else {
-                q = em.createQuery("select a from Artist a where a.isBand=true AND a.isDisabled=false and a.emailIsVerified=true and a.isApproved=true");
+                q = em.createQuery("select a from Artist a where a.isBand=true AND a.isDisabled=false AND a.isDeleted=false AND a.emailIsVerified=true and a.isApproved=true");
             }
             List<Artist> listOfArtists = q.getResultList();
             log.info("AdminManagementBean: listAllArtists() called successfully");
@@ -168,7 +168,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             if (isAdmin) {
                 q = em.createQuery("select b from Artist b");
             } else {
-                q = em.createQuery("select b from Artist b where b.isBand=true AND b.isDisabled=false and b.emailIsVerified=true and b.isApproved=true");
+                q = em.createQuery("select b from Artist b where b.isBand=true AND b.isDisabled=false and b.isDeleted=false a and b.emailIsVerified=true and b.isApproved=true");
             }
             List<Artist> listOfBands = q.getResultList();
             log.info("AdminManagementBean: listAllBands() called successfully");
@@ -188,7 +188,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
             if (isAdmin) {
                 q = em.createQuery("select m from Member m");
             } else {
-                q = em.createQuery("select m from Member m where m.isDisabled=false and m.emailIsVerified=true");
+                q = em.createQuery("select m from Member m where m.isDisabled=false and m.isDeleted=false and m.emailIsVerified=true");
             }
             List<Member> listOfMembers = q.getResultList();
             log.info("AdminManagementBean: listAllMembers() called successfully");
