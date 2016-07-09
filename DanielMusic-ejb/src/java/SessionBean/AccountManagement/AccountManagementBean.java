@@ -322,6 +322,31 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
     }
 
     @Override
+    public ReturnHelper deleteAccount(Long accountID) {
+        log.info("AccountManagementBean: deleteAccount() called");
+        ReturnHelper result = new ReturnHelper();
+        result.setResult(false);
+        Query q = em.createQuery("SELECT s FROM Account s where s.id=:id");
+        q.setParameter("id", accountID);
+        try {
+            Account account = (Account) q.getSingleResult();
+            if (account.getIsDeleted()== true) {
+                result.setDescription("Account is already deleted.");
+            } else {
+                account.setIsDeleted(true);
+                em.merge(account);
+                result.setResult(true);
+                result.setDescription("Account deleted successfully.");
+            }
+        } catch (Exception ex) {
+            log.info("AccountManagementBean: deleteAccount() failed");
+            result.setDescription("Failed to disable account. Internal server error.");
+            log.info(ex.getMessage());
+        }
+        return result;
+    }
+    
+    @Override
     public ReturnHelper disableAccount(Long accountID) {
         log.info("AccountManagementBean: disableAccount() called");
         ReturnHelper result = new ReturnHelper();
@@ -339,7 +364,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setDescription("Account disabled successfully.");
             }
         } catch (Exception ex) {
-            log.info("AccountManagementBean: enableAccount() failed");
+            log.info("AccountManagementBean: disableAccount() failed");
             result.setDescription("Failed to disable account. Internal server error.");
             log.info(ex.getMessage());
         }

@@ -34,6 +34,7 @@ public abstract class Account implements Serializable {
     @Lob
     private String name;
     private Boolean isDisabled;
+    private Boolean isDeleted;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Music> listOfPurchasedMusics;
     private Boolean forgetPassword;
@@ -59,6 +60,7 @@ public abstract class Account implements Serializable {
 
     public Account() {
         isDisabled = false;
+        isDeleted = false;
         emailIsVerified = false;
         forgetPassword = false;
         newEmailIsVerified = false;
@@ -170,6 +172,14 @@ public abstract class Account implements Serializable {
 
     public void setIsDisabled(Boolean isDisabled) {
         this.isDisabled = isDisabled;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public String getEmail() {

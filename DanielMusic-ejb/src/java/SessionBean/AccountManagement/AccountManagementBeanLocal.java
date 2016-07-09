@@ -13,6 +13,7 @@ public interface AccountManagementBeanLocal {
     public Account getAccount(String email);
     public Account getAccount(Long accountID);
     
+    public ReturnHelper deleteAccount(Long accountID);
     public ReturnHelper disableAccount(Long accountID);
     public ReturnHelper enableAccount(Long accountID);
     
