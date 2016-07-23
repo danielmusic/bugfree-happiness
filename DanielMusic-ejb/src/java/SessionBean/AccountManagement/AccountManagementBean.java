@@ -803,7 +803,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 fileInputStream.close();
                 //Upload to GCS
                 String imageLocation = "images/member/profile/profilepictures_" + account.getId();
-                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, null, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);
                 file.delete();
@@ -955,7 +955,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 }
                 //Upload to GCS
                 String imageLocation = "images/artist/profile/profilepicture_" + account.getId() + "_" + new Date();
-                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, true, true);
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempFileLocation, null, true, true);
                 //Delete away local file
                 File file = new File(tempFileLocation);
                 file.delete();

@@ -40,7 +40,8 @@ import org.apache.commons.codec.binary.Base64;
 
 @Stateless
 public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
-    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
+
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName());
 
     @PersistenceContext
     private EntityManager em;
@@ -60,7 +61,7 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     //Linux is /home/admin/...
 
     @Override
-    public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, Boolean isImage, Boolean publiclyReadable) {
+    public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, String downloadFilename, Boolean isImage, Boolean publiclyReadable) {
         ReturnHelper result = new ReturnHelper();
         result.setResult(false);
         log.info("CommonInfrastructureBean: uploadFileToGoogleCloudStorage() called");
@@ -90,6 +91,10 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
                 //accessControl.set
                 objectMetadata.setAcl(accessControls);
             }
+            //Set the filename that the user gets when they download the file
+            if (downloadFilename != null) {
+                objectMetadata.setContentDisposition("filename=" + downloadFilename);
+            }
             Storage.Objects.Insert insertObject = client.objects().insert(BUCKET_NAME, objectMetadata, mediaContent);
             insertObject.setName(remoteDestinationFile);
             if (mediaContent.getLength() > 0 && mediaContent.getLength() <= 2 * 1000 * 1000 /* 2MB */) {
@@ -117,6 +122,8 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
         log.info("CommonInfrastructureBean: getMusicFileURLFromGoogleCloudStorage() called");
         try {
             PrivateKey pk = loadKeyFromPkcs12(SERVICE_ACCOUNT_PKCS12_FILE_PATH, "notasecret".toCharArray());
+            //Encode filename
+            filename = URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
             String get_url = this.getSigningURL("GET", filename, pk, expirationInSeconds);
             URL url = new URL(get_url);
             HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -150,7 +157,6 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
 
     private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
         String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expirationInSeconds) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
-        System.out.println("/" + BUCKET_NAME + "/" + filename);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
                 + "?GoogleAccessId=" + SERVICE_ACCOUNT_EMAIL
                 + "&Expires=" + (System.currentTimeMillis() / 1000 + expirationInSeconds)

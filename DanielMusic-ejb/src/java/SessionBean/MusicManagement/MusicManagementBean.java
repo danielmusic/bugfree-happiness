@@ -24,9 +24,7 @@ import it.sauronsoftware.jave.MultimediaInfo;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -224,8 +222,6 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String tempMusicURL = "temp/musicUpload_" + cibl.generateUUID() + "_" + fileName + ".wav";
             InputStream fileInputStream = musicPart.getInputStream();
             OutputStream fileOutputStream = new FileOutputStream(tempMusicURL);
-            //Encode filename
-            fileName = URLEncoder.encode(fileName,"UTF-8");
 
             int nextByte;
             while ((nextByte = fileInputStream.read()) != -1) {
@@ -346,9 +342,9 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             music.setFileLocationWAV(musicURLwav);
 
             //upload music to storage
-            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128tagged.mp3", false, true);
-            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "_320tagged.mp3", false, false);
-            ReturnHelper result3 = cibl.uploadFileToGoogleCloudStorage(musicURLwav, tempMusicURL, false, false);
+            ReturnHelper result1 = cibl.uploadFileToGoogleCloudStorage(musicURL128, tempMusicURL + "_128tagged.mp3", fileName + ".mp3", false, true);
+            ReturnHelper result2 = cibl.uploadFileToGoogleCloudStorage(musicURL320, tempMusicURL + "_320tagged.mp3", fileName + ".mp3", false, false);
+            ReturnHelper result3 = cibl.uploadFileToGoogleCloudStorage(musicURLwav, tempMusicURL, fileName + ".wav", false, false);
 
             if (result1.getResult() && result2.getResult() && result3.getResult()) {
                 helper.setDescription("Track has been uploaded successfully.");
@@ -523,7 +519,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     return result;
                 }
                 imageLocation = "images/album/" + album.getId() + "/albumart/" + name + ".jpg";
-                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
+                result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, null, true, true);
 
                 File file = new File(tempImageURL);
                 file.delete();
@@ -745,7 +741,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     }
 
                     imageLocation = "image/album/" + album.getId() + "/albumart/" + name + ".jpg";
-                    result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, true, true);
+                    result = cibl.uploadFileToGoogleCloudStorage(imageLocation, tempImageURL, null, true, true);
 
                     File file = new File(tempImageURL);
                     file.delete();

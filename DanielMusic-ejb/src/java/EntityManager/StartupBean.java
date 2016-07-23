@@ -60,7 +60,7 @@ public class StartupBean {
             System.out.print("Initiating Google Cloud Storage authorization...");
             File file = new File("GCS Test File");
             file.createNewFile();
-            commonInfrastructureBeanLocal.uploadFileToGoogleCloudStorage("temp/GCS Test File", "GCS Test File", false, false);
+            commonInfrastructureBeanLocal.uploadFileToGoogleCloudStorage("temp/GCS Test File", "GCS Test File", null, false, false);
             file.delete();
             // =========== DO NOT DISABLE THIS END   ============
             Query q = em.createQuery("SELECT s FROM Account s");

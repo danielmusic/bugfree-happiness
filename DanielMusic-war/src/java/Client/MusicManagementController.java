@@ -704,7 +704,7 @@ public class MusicManagementController extends HttpServlet {
                         session.setAttribute("checkoutHelper", checkoutHelper);
                         if (checkoutHelper.getPayKey() == null) {
                             jsObj.put("result", false);
-                            if (checkoutHelper.getMessage().isEmpty()) {
+                            if (checkoutHelper.getMessage()==null || checkoutHelper.getMessage().isEmpty()) {
                                 session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
                                 jsObj.put("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
                             } else {
