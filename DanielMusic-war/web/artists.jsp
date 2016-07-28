@@ -353,23 +353,22 @@
                                                     </i>
                                                 </a>
 
-                                                <span id='btnPlay<%=music.getId()%>'>
-                                                    <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
-                                                       data-artist="<%=music.getArtistName()%>"
-                                                       data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
-                                                       data-artist_target="_self"
-                                                       data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
-                                                       data-shop_target="__self"
-                                                       style="margin-left: 6px;margin-right: 6px;"
-                                                       >
-                                                        <i class="icon icon-play2">
-                                                            <span style="display: none;">
-                                                                <span  class="track-title"><%=music.getName()%></span>
-                                                                <span class="track-artists"><%=artist.getName()%></span>
-                                                            </span>
-                                                        </i>
-                                                    </a>
-                                                </span>
+                                                <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/<%=music.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                                   data-artist="<%=music.getArtistName()%>"
+                                                   data-artist_url="javascript:loadArtist2(<%=music.getAlbum().getArtist().getId()%>);"
+                                                   data-artist_target="_self"
+                                                   data-shop_url="javascript:addTrackToCart(<%=music.getId()%>);"
+                                                   data-shop_target="_self"
+                                                   style="margin-left: 6px;margin-right: 6px;"
+                                                   >
+                                                    <i class="icon icon-play2">
+                                                        <span style="display: none;">
+                                                            <span  class="track-title"><%=music.getName()%></span>
+                                                            <span class="track-artists"><%=artist.getName()%></span>
+                                                        </span>
+                                                    </i>
+                                                </a>
+
 
                                                 <i style="cursor: pointer;" class="icon icon-menu2 toggle-title">
                                                     <span style='display: none;'></span>
