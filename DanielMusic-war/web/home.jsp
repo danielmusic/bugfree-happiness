@@ -110,9 +110,11 @@
 
         <div class="sidebar main-right main-medium">
             <div class="widget details-widget">
-                <a href="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" title="Terrestrea" data-lightbox="lightboximages/artist/profile/profilepictures_25">
+                <a href="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg" 
+                   title="Terrestrea" 
+                   data-lightbox="lightboximages/artist/profile/profilepictures_25">
                     <span class="img">
-                        <img src="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg">
+                        <img src="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg">
                     </span>
                 </a>
                 <div class="details-meta">
@@ -149,11 +151,17 @@
 
                 <!--start of hidden playlist-->
                 <ul id="release-list" class="tracklist" style="display:none;">
-
                     <li>
                         <div class="track-details">
                             <div class="track-buttons">
-                                <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/music/902/906/907/128/Sunset Memory - Final Mix.mp3" data-cover="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" data-artist="Terrestrea" data-artist_url="javascript:loadArtist2(902);" data-artist_target="_self" data-shop_url="javascript:addTrackToCart(907);" data-shop_target="_self">
+                                <a class="track sp-add-track" 
+                                   href="http://sounds.sg.storage.googleapis.com/music/902/1651/1652/128/Terrestrea - Sunset Memory.mp3" 
+                                   data-cover="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg" 
+                                   data-artist="Terrestrea" 
+                                   data-artist_url="javascript:loadArtist2(902);" 
+                                   data-artist_target="_self" 
+                                   data-shop_url="javascript:addTrackToCart(1652);" 
+                                   data-shop_target="_self">
                                     <i class="icon icon-plus">
                                         <span style="display: none;">
                                             <span class="track-title">Sunset Memory</span>
@@ -168,7 +176,12 @@
                     <li>
                         <div class="track-details">
                             <div class="track-buttons">
-                                <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/music/902/915/916/128/Furnace.mp3" data-cover="http://sounds.sg.storage.googleapis.com/images/album/915/albumart/Furnace.jpg" data-artist="Terrestrea" data-artist_url="javascript:loadArtist2(902);" data-artist_target="_self" data-shop_url="javascript:addTrackToCart(916);" data-shop_target="_self">
+                                <a class="track sp-add-track" 
+                                   href="http://sounds.sg.storage.googleapis.com/music/902/1651/1652/128/Terrestrea - Sunset Memory.mp3" 
+                                   data-cover="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg" 
+                                   data-artist="Terrestrea" data-artist_url="javascript:loadArtist2(902);" 
+                                   data-artist_target="_self" data-shop_url="javascript:addTrackToCart(1652);" 
+                                   data-shop_target="_self">
                                     <i class="icon icon-plus">
                                         <span style="display: none;">
                                             <span class="track-title">Furnace</span>
@@ -186,8 +199,11 @@
                     <div class="toggle">
                         <li>
                             <div class="track-details">
-                                <a class="track" href="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" title="Terrestrea" data-lightbox="lightboxTerrestrea">
-                                    <img class="track-cover" title="Terrestrea" alt="Track Cover" src="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg">
+                                <a class="track" 
+                                   href="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg" 
+                                   title="Terrestrea" 
+                                   data-lightbox="lightboxTerrestrea">
+                                    <img class="track-cover" title="Terrestrea" alt="Track Cover" src="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg">
                                     <span>&nbsp;&nbsp;</span>
                                 </a>
 
@@ -198,11 +214,13 @@
 
 
                                 <div class="track-buttons">
-                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/music/902/906/907/128/Sunset Memory - Final Mix.mp3" data-cover="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" 
+                                    <a class="track sp-add-track" 
+                                       href="http://sounds.sg.storage.googleapis.com/music/902/1651/1652/128/Terrestrea - Sunset Memory.mp3" 
+                                       data-cover="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg" 
                                        data-artist="Terrestrea" 
                                        data-artist_url="javascript:loadArtist2(902);" 
                                        data-artist_target="_self" 
-                                       data-shop_url="javascript:addTrackToCart(907);" 
+                                       data-shop_url="javascript:addTrackToCart(1652);" 
                                        data-shop_target="_self">
                                         <i class="icon icon-plus">
                                             <span style="display: none;">
@@ -212,11 +230,13 @@
                                         </i>
                                     </a>
 
-                                    <a class="track sp-play-track" style="margin-left: 6px;" href="http://sounds.sg.storage.googleapis.com/music/902/906/907/128/Sunset Memory - Final Mix.mp3" data-cover="http://sounds.sg.storage.googleapis.com/images/album/906/albumart/Sunset Memory.jpg" 
+                                    <a class="track sp-play-track" style="margin-left: 6px;" 
+                                       href="http://sounds.sg.storage.googleapis.com/music/902/1651/1652/128/Terrestrea - Sunset Memory.mp3" 
+                                       data-cover="http://sounds.sg.storage.googleapis.com/images/album/1651/albumart/Sunset Memory.jpg" 
                                        data-artist="Terrestrea" 
                                        data-artist_url="javascript:loadArtist2(902);" 
                                        data-artist_target="_self" 
-                                       data-shop_url="javascript:addTrackToCart(907);" 
+                                       data-shop_url="javascript:addTrackToCart(1652);" 
                                        data-shop_target="_self">
                                         <i class="icon icon-play2">
                                             <span style="display: none;">
@@ -230,7 +250,7 @@
                                         <span style="display: none;"></span>
                                     </i>
 
-                                    <a style="cursor: pointer;" onclick="addAlbumToCart(906)">
+                                    <a style="cursor: pointer;" onclick="addAlbumToCart(1651)">
                                         <i class="icon icon-cart"></i>
                                     </a>
 
@@ -242,7 +262,7 @@
 
                             <div class="toggle-content" style="margin-left: 20px;margin-right: 20px;">
                                 <p>As I listen to the birds<br>  In the peace of the evening<br>  I remember<br>  A face I used to know <br>  How she would tremble<br>  When I held my fingers to her lips<br>  A breeze cuts through the quiet<br>  Safety is so cold, it&rsquo;s so cold<br>  <br>  I can&rsquo;t see the wounds I&rsquo;ve caused<br>  But you know I&rsquo;d try to heal them<br>  Cause without you it&rsquo;s paradise lost<br>  With no one to share it&rsquo;s secrets<br>  The spaces of this place we shared<br>  And the faces of you<br>  I&rsquo;d never see again<br>  <br>  The fading light is soft<br>  And the heat it makes me tingle<br>  I try to force a smile<br>  But the night is coming<br>  Why is there still an ember?<br>  Why can&rsquo;t I just kill the flames?<br>  My hand is steady<br>  But I&rsquo;m just not ready yet<br>  <br>  I can&rsquo;t see the wounds I&rsquo;ve caused<br>  But you know I&rsquo;d try to heal them<br>  Cause without you it&rsquo;s paradise lost<br>  With no one to share it&rsquo;s secrets<br>  The spaces of this place we shared<br>  And the faces of you<br>  I&rsquo;d never see again<br>  <br>  My heart is an open grave<br>  And everybody misbehaves<br>  But my soul,<br>  It grows with every word that I proclaim!<br>  <br>  I can&rsquo;t see the wounds I&rsquo;ve caused<br>  But you know I&rsquo;d try to heal them<br>  Cause without you it&rsquo;s paradise lost<br>  With no one to share it&rsquo;s secrets<br>  The spaces of this place we shared<br>  And the faces of you<br>  I&rsquo;d never see again</p>
-                                <a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=907', '_blank', 'width=600,height=760')">
+                                <a style="cursor: pointer" onclick="window.open('./MusicController?target=Lyrics&id=1652', '_blank', 'width=600,height=760')">
                                     Open in new window
                                 </a>
                             </div>
