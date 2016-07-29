@@ -99,9 +99,14 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 
             Map<String, String> sdkConfig = new HashMap<String, String>();
             sdkConfig.put("mode", "sandbox");
-            sdkConfig.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
-            sdkConfig.put("acct1.Password", "WX4WTU3S8MY44S7F");
-            sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
+//            sdkConfig.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
+//            sdkConfig.put("acct1.Password", "WX4WTU3S8MY44S7F");
+//            sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
+//            sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
+
+            sdkConfig.put("acct1.UserName", "admin_api2.sounds.sg");
+            sdkConfig.put("acct1.Password", "HHPY7E2L5PSPXXPB");
+            sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31AnFFn0o9OOq7PrTE0l.RWx3ZgAsB");
             sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
 
             AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);

@@ -417,6 +417,8 @@ public class MusicManagementController extends HttpServlet {
                             }
                         }
 
+                        session.setAttribute("redirectPage", "#!/cart");
+                        session.setAttribute("ShoppingCart", shoppingCart);
                         if (deleteCounter > 0) {
                             jsObj.put("result", true);
                             jsObj.put("goodMsg", "Deleted " + deleteCounter + " records successfully.");
@@ -426,8 +428,6 @@ public class MusicManagementController extends HttpServlet {
                             jsObj.put("errMsg", "No records were deleted.");
                             response.getWriter().write(jsObj.toString());
                         }
-                        session.setAttribute("redirectPage", "#!/cart");
-                        session.setAttribute("ShoppingCart", shoppingCart);
                     }
                     return;
 
@@ -704,7 +704,7 @@ public class MusicManagementController extends HttpServlet {
                         session.setAttribute("checkoutHelper", checkoutHelper);
                         if (checkoutHelper.getPayKey() == null) {
                             jsObj.put("result", false);
-                            if (checkoutHelper.getMessage()==null || checkoutHelper.getMessage().isEmpty()) {
+                            if (checkoutHelper.getMessage() == null || checkoutHelper.getMessage().isEmpty()) {
                                 session.setAttribute("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
                                 jsObj.put("errMsg", "Your cart contains items that are ineligible for checkout as one or more of the artist has not verified their PayPal account yet, please try again later.");
                             } else {
