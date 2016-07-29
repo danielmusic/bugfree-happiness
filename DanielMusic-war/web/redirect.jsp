@@ -11,16 +11,12 @@
                 window.location.href = "/<%=nextPage%>";
             })();
         </script>
-        <%
-        } else {
-        %>
+        <%} else {%>
         <script>
             (function () {
                 window.location.href = "/#!/index";
             })();
         </script>
-        <%
-            }
-        %>
+        <%}%>
     </div>
 </section>

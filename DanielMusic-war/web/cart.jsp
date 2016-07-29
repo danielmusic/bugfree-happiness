@@ -39,7 +39,7 @@
             var stringArr = "";
             for (var i = 0; i < arr.length; i++) {
                 if (i != (arr.length - 1)) {
-                    stringArr += arr[i] + " ";
+                    stringArr += arr[i] + ",";
                 } else {
                     stringArr += arr[i];
                 }
@@ -65,7 +65,6 @@
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
                         document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
                         ajaxResultsError(xhr, status, error);
                     }
                 });
@@ -102,13 +101,12 @@
                     async: false,
                     url: url,
                     data: {'deleteAlbum': stringArr},
-                    success: function (val) {
-                        window.location.href = "#!/redirect";
+                    success: function () {
+                        window.location.href = "/#!/redirect";
                     },
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
                         document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
                         ajaxResultsError(xhr, status, error);
                     }
                 });
@@ -128,7 +126,6 @@
                 error: function (xhr, status, error) {
                     document.getElementById("errMsg").style.display = "block";
                     document.getElementById('errMsg').innerHTML = error;
-                    hideLoader();
                     ajaxResultsError(xhr, status, error);
                 }
             });
@@ -150,7 +147,6 @@
                 error: function (xhr, status, error) {
                     document.getElementById("errMsg").style.display = "block";
                     document.getElementById('errMsg').innerHTML = error;
-                    hideLoader();
                     ajaxResultsError(xhr, status, error);
                 }
             });
@@ -172,7 +168,6 @@
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
                         document.getElementById('errMsg').innerHTML = error;
-                        hideLoader();
                         ajaxResultsError(xhr, status, error);
                     }
                 });
