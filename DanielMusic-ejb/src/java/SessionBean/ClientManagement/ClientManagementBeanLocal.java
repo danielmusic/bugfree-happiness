@@ -25,6 +25,6 @@ public interface ClientManagementBeanLocal {
     
     public ReturnHelper notifyArtistsOfCustomerPurchase(Long paymentID);
     public ReturnHelper sendDownloadLinkToBuyer(Long paymentID);
-    public Boolean testPayment(Double totalAmount, Double amount2, Double amount3);
+//    public Boolean testPayment(Double totalAmount, Double amount2, Double amount3);
     public Boolean checkArtistPayPalEmailExists(Long trackOrAlbumID, Boolean isTrack);
 }
