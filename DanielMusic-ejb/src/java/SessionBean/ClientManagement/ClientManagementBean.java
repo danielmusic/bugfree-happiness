@@ -103,7 +103,6 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
 //            sdkConfig.put("acct1.Password", "HHPY7E2L5PSPXXPB");
 //            sdkConfig.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31AnFFn0o9OOq7PrTE0l.RWx3ZgAsB");
 //            sdkConfig.put("acct1.AppId", "APP-80W284485P519543T");
-
 //
 //            AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(sdkConfig);
 //            PayResponse payResponse = adaptivePaymentsService.pay(payRequest);
@@ -251,20 +250,22 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             List<Receiver> receivers = new ArrayList<Receiver>();
             for (int i = 0; i < partiesReceivingPayments.size(); i++) {
                 //Artist (partial of the total)
-                Receiver primaryReceiver = new Receiver();
-                primaryReceiver.setAmount(Math.round(partiesReceivingPayments.get(i).getTotalPaymentAmount() * ARTISTBAND_CUT_PERCENTAGE * 100.0) / 100.0);
-                primaryReceiver.setEmail(partiesReceivingPayments.get(i).getArtistOrBandPaypalEmail());
-                primaryReceiver.setPaymentType("DIGITALGOODS");
-                primaryReceiver.setPrimary(Boolean.TRUE);
-                receivers.add(primaryReceiver);
+                Receiver secondaryReceivers = new Receiver();
+                secondaryReceivers.setAmount(Math.round(partiesReceivingPayments.get(i).getTotalPaymentAmount() * ARTISTBAND_CUT_PERCENTAGE * 100.0) / 100.0);
+                secondaryReceivers.setEmail(partiesReceivingPayments.get(i).getArtistOrBandPaypalEmail());
+                secondaryReceivers.setPaymentType("DIGITALGOODS");
+//                secondaryReceivers.setPrimary(Boolean.TRUE);
+                receivers.add(secondaryReceivers);
             }
 
-            //Daniel (total amount)
-            Receiver secondaryReceiver = new Receiver();
-            secondaryReceiver.setAmount(Math.round(totalPaymentAmount * (1 - ARTISTBAND_CUT_PERCENTAGE) * 100.0)/100.0);
-            secondaryReceiver.setEmail(MAIN_PAYPAL_RECIVING_ACCOUNT);
-            secondaryReceiver.setPaymentType("DIGITALGOODS");
-            receivers.add(secondaryReceiver);
+            //Daniel (full total amount)
+            Receiver primaryReceiver = new Receiver();
+//            secondaryReceiver.setAmount(Math.round(totalPaymentAmount * (1 - ARTISTBAND_CUT_PERCENTAGE) * 100.0)/100.0);
+            primaryReceiver.setAmount(totalPaymentAmount);
+            primaryReceiver.setEmail(MAIN_PAYPAL_RECIVING_ACCOUNT);
+            primaryReceiver.setPrimary(Boolean.TRUE);
+            primaryReceiver.setPaymentType("DIGITALGOODS");
+            receivers.add(primaryReceiver);
 
             ReceiverList receiverList = new ReceiverList(receivers);
             payRequest.setReceiverList(receiverList);
@@ -272,7 +273,7 @@ public class ClientManagementBean implements ClientManagementBeanLocal {
             RequestEnvelope requestEnvelope = new RequestEnvelope("en_US");
             payRequest.setRequestEnvelope(requestEnvelope);
             payRequest.setActionType("PAY");
-            payRequest.setFeesPayer("SECONDARYONLY");
+            payRequest.setFeesPayer("PRIMARYRECEIVER");
             payRequest.setCancelUrl("http://sounds.sg/payment-cancelled.jsp");//Return if payment cancelled
             payRequest.setReturnUrl("http://sounds.sg/MusicManagementController?target=CompletePayment&paymentID=" + payment.getId() + "&UUID=" + payment.getUUID());//Return after payment complete
 //            payRequest.setCancelUrl("http://localhost:8080/DanielMusic-war/payment-cancelled.jsp");//Return if payment cancelled
