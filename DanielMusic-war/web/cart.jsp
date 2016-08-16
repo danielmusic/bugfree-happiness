@@ -121,7 +121,7 @@
                 url: url,
                 data: {},
                 success: function () {
-                    window.location.href = "#!/login";
+                    window.location.href = "/#!/login";
                 },
                 error: function (xhr, status, error) {
                     document.getElementById("errMsg").style.display = "block";
@@ -142,7 +142,7 @@
                 url: url,
                 data: {},
                 success: function () {
-                    window.location.href = "#!/redirect";
+                    window.location.href = "/#!/redirect";
                 },
                 error: function (xhr, status, error) {
                     document.getElementById("errMsg").style.display = "block";
@@ -163,7 +163,7 @@
                     url: url,
                     data: {'email': email},
                     success: function () {
-                        window.location.href = "#!/redirect";
+                        window.location.href = "/#!/redirect";
                     },
                     error: function (xhr, status, error) {
                         document.getElementById("errMsg").style.display = "block";
@@ -332,8 +332,10 @@
                             %>
                         </tbody>
                     </table>
+
                     <button type="button" class="medium invert" onclick="removeTrack()">Remove selected track(s)</button>
                     <hr class="divider2" style="margin-right: 0px;">
+
                     <%
                         }
                         Set<Album> setOfAlbums = shoppingCart.getListOfAlbums();
@@ -386,8 +388,6 @@
                     <%}%>
                 </form>
                 <p>
-                    <button type="button" class="medium invert" onclick="javascript:window.history.back();" style="margin-right: 10px;">Back</button>
-                    <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
                     <strong style="float: right;">
                         Total:                                    
                         <%
@@ -398,6 +398,8 @@
                             out.print(formatter.format(totalPrice));
                         %>
                     </strong>
+                    <button type="button" class="medium invert" onclick="javascript:window.history.back();" style="margin-right: 10px;">Back</button>
+                    <button type="button" class="md-trigger medium invert" data-modal="checkout-confirm">Checkout</button>
                 </p>                
                 <%} else {%>
                 <h2>The cart is empty.</h2>
@@ -410,18 +412,3 @@
         </div>
     </section>
 </section>
-<script type="text/javascript">
-                        var _gaq = _gaq || [];
-                        _gaq.push(['_setAccount', 'UA-66150326-1']);
-                        var d = document.location.pathname + document.location.search + document.location.hash;
-                        _gaq.push(['_trackPageview', d]);
-
-                        (function () {
-                            var ga = document.createElement('script');
-                            ga.type = 'text/javascript';
-                            ga.async = true;
-                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                            var s = document.getElementsByTagName('script')[0];
-                            s.parentNode.insertBefore(ga, s);
-                        })();
-</script>

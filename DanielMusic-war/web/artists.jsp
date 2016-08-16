@@ -41,7 +41,7 @@
                         success: function (val) {
                             var json = JSON.parse(val);
                             if (json.result) {
-                                window.location.href = "#!/artists";
+                                window.location.href = "/#!/artists";
                             }
                         },
                         error: function (xhr, status, error) {
@@ -61,7 +61,7 @@
                         url: url,
                         data: {'trackID': trackID},
                         success: function () {
-                            window.location.href = "#!/cart";
+                            window.location.href = "/#!/cart";
                         },
                         error: function (xhr, status, error) {
                             document.getElementById("errMsg").style.display = "block";
@@ -80,7 +80,7 @@
                         url: url,
                         data: {'albumID': albumID},
                         success: function () {
-                            window.location.href = "#!/cart";
+                            window.location.href = "/#!/cart";
                         },
                         error: function (xhr, status, error) {
                             document.getElementById("errMsg").style.display = "block";
