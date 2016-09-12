@@ -98,13 +98,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String downloadLink = null;
             switch (type) {
                 case "wav":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), expiryInSeconds);
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), expiryInSeconds, music.getName()+".wav");
                     break;
                 case "320":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), expiryInSeconds);
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), expiryInSeconds, music.getName()+".mp3");
                     break;
                 case "128":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), expiryInSeconds);
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), expiryInSeconds, music.getName()+".mp3");
                     break;
             }
             //generate download link for user

@@ -118,13 +118,13 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
     }
 
     @Override
-    public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds) {
+    public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds, String downloadFilename) {
         log.info("CommonInfrastructureBean: getMusicFileURLFromGoogleCloudStorage() called");
         try {
             PrivateKey pk = loadKeyFromPkcs12(SERVICE_ACCOUNT_PKCS12_FILE_PATH, "notasecret".toCharArray());
             //Encode filename
             filename = URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
-            String get_url = this.getSigningURL("GET", filename, pk, expirationInSeconds);
+            String get_url = this.getSigningURL("GET", filename, pk, expirationInSeconds, downloadFilename);
             URL url = new URL(get_url);
             HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
             httpCon.setRequestMethod("GET");
@@ -155,12 +155,13 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
 
     }
 
-    private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds) throws Exception {
+    private String getSigningURL(String verb, String filename, PrivateKey privateKey, Long expirationInSeconds, String downloadFilename) throws Exception {
         String url_signature = this.signString(verb + "\n\n\n" + (System.currentTimeMillis() / 1000 + expirationInSeconds) + "\n" + "/" + BUCKET_NAME + "/" + filename, privateKey);
         String signed_url = "https://storage.googleapis.com/" + BUCKET_NAME + "/" + filename
                 + "?GoogleAccessId=" + SERVICE_ACCOUNT_EMAIL
                 + "&Expires=" + (System.currentTimeMillis() / 1000 + expirationInSeconds)
-                + "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
+                + "&Signature=" + URLEncoder.encode(url_signature, "UTF-8")
+                + "&response-content-disposition=attachment;filename=\""+ downloadFilename +"\"";
         return signed_url;
     }
 

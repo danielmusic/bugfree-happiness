@@ -775,6 +775,9 @@ public class MusicManagementController extends HttpServlet {
                     String bitrateType = request.getParameter("bitrateType");
                     String musicID = request.getParameter("musicID");
                     String downloadLink = musicManagementBean.generateDownloadLink(Long.parseLong(musicID), bitrateType, true, 300L);
+                    response.setContentType("application/force-download");
+                    response.setHeader("Content-Transfer-Encoding", "binary");
+                    response.setHeader("Content-Disposition", "attachment;");
                     response.sendRedirect(downloadLink);
                     return;
             }

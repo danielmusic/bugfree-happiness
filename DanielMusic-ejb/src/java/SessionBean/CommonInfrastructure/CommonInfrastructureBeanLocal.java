@@ -8,7 +8,7 @@ import javax.servlet.http.Part;
 public interface CommonInfrastructureBeanLocal {
     public ReturnHelper uploadFileToGoogleCloudStorage(String remoteDestinationFile, String localSourceFile, String downloadFilename, Boolean isImage, Boolean publiclyReadable);
     public ReturnHelper deleteFileFromGoogleCloudStorage(String remoteDestinationFile);
-    public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds); //filename: eg music/artistID/albumID/musicName.mp3
+    public String getFileURLFromGoogleCloudStorage(String filename, Long expirationInSeconds, String downloadFilename); //filename: eg music/artistID/albumID/musicName.mp3
     public String generateUUID();
     
     public ReturnHelper checkIfImageFitsRequirement(String filename);
