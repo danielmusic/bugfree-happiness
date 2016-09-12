@@ -92,7 +92,7 @@
 
                     var progress;
                     function upload(musicFileSize) {
-                        var secs = musicFileSize / 25000;
+                        var secs = musicFileSize / 15000;
                         var space = 100 / secs;
                         if (space > 100) {
                             space = 100;
