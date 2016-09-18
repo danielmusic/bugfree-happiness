@@ -88,10 +88,12 @@
                                         zoomable: false,
                                         minContainerWidth: 300,
                                         minContainerHeight: 300,
+                                        maxContainerWidth: 300,
+                                        maxContainerHeight: 300,
                                         minCanvasWidth: 300,
                                         minCanvasHeight: 300,
                                         minCropBoxWidth: 300,
-                                        minCropBoxHeight: 300,
+                                        minCropBoxHeight: 300
                                     });
                                 }
                                 if (cropper && files && files.length) {
