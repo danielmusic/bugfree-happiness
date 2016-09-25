@@ -6,10 +6,15 @@
     <%@page import="EntityManager.Account"%>
     <%@page import="java.text.SimpleDateFormat"%>
     <section class="content section">
-        <link rel="stylesheet" href="js/crop/crop.css" type="text/css" />
-        <script src="js/crop/crop.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="js/crop/cropper.min.css" type="text/css" />
+        <script src="js/crop/cropper.min.js" type="text/javascript"></script>
         <div class="container">
             <article>
+                <style>
+                    img {
+                        max-height: 150px!important;
+                    }
+                </style>
                 <script type="text/javascript">
                     var fd = new FormData();
                     var dataURL;
@@ -71,7 +76,6 @@
                         dataURL = canvas.toDataURL();
                     }
 
-
                     (function ($) {
                         var inputImage = document.getElementById('inputImage');
                         var URL = window.URL || window.webkitURL;
@@ -88,12 +92,10 @@
                                         zoomable: false,
                                         minContainerWidth: 300,
                                         minContainerHeight: 300,
-                                        maxContainerWidth: 300,
-                                        maxContainerHeight: 300,
                                         minCanvasWidth: 300,
                                         minCanvasHeight: 300,
-                                        minCropBoxWidth: 300,
-                                        minCropBoxHeight: 300
+                                        minCropBoxWidth: 125,
+                                        minCropBoxHeight: 125
                                     });
                                 }
                                 if (cropper && files && files.length) {
@@ -101,7 +103,8 @@
                                     img = new Image();
                                     img.src = URL.createObjectURL(file);
                                     img.onload = function () {
-                                        if (this.width >= 300 && this.height >= 300) {
+
+                                        if (this.width >= 500 && this.height >= 500) {
                                             if (/^image\/\w+/.test(file.type)) {
                                                 blobURL = URL.createObjectURL(file);
                                                 cropper.reset().replace(blobURL);
@@ -112,7 +115,8 @@
                                         } else {
                                             window.alert("Image needs to be at least 300px in width and height.");
                                         }
-                                    };
+                                    }
+                                    ;
                                 }
                             };
                         } else {
@@ -173,13 +177,13 @@
                             <button class="md-close" onclick="confirm()" type="button">Confirm and Close</button>&nbsp;&nbsp;
                             <!--button onclick="cancel($('#inputImage'))" type="button">Cancel</button-->
                         </div>
-                        <div class="img-container" id="cropper-area" style="max-width:550px;min-height:600px;">
+                        <div class="img-container" id="cropper-area" style="max-width:550px;min-height:300px;">
                             <img id="image" src="../img/blank.png">
                         </div>
                     </div>
                 </div>
 
-                <div class="md-modal md-effect-1" id="modal-profilePic"><label for="music"><strong>Music * (WAV format, 44.1kHz, 16bit/24bit)</strong></label>
+                <div class="md-modal md-effect-1" id="modal-profilePic">
                     <div class="md-content">
                         <h3>Standard Requirement</h3>
                         <div>
@@ -274,19 +278,10 @@
                     <div class="sidebar main-left main-medium">
                         <div class="widget details-widget">
                             <%if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {%>
-                            <a href="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=artist.getImageURL()%>">
-                                <span class="img">
-                                    <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" />
-                                </span>
-                            </a>
+                            <img src="http://sounds.sg.storage.googleapis.com/<%=artist.getImageURL()%>" style="max-height: none!important" />
                             <%} else {%>
-                            <a href="placeholders/artist01.jpg" title="<%=artist.getName()%>" class="thumb-glitch" data-lightbox="lightbox">
-                                <span class="img">
-                                    <img src="placeholders/artist01.jpg" />
-                                </span>
-                            </a>
+                            <img src="placeholders/artist01.jpg" />
                             <%}%>
-
 
                             <div class="details-meta">
                                 <ul class="details-list">
