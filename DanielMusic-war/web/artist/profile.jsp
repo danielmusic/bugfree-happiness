@@ -94,8 +94,8 @@
                                         minContainerHeight: 300,
                                         minCanvasWidth: 300,
                                         minCanvasHeight: 300,
-                                        minCropBoxWidth: 300,
-                                        minCropBoxHeight: 300
+                                        minCropBoxWidth: 125,
+                                        minCropBoxHeight: 125
                                     });
                                 }
                                 if (cropper && files && files.length) {
@@ -183,7 +183,7 @@
                     </div>
                 </div>
 
-                <div class="md-modal md-effect-1" id="modal-profilePic"><label for="music"><strong>Music * (WAV format, 44.1kHz, 16bit/24bit)</strong></label>
+                <div class="md-modal md-effect-1" id="modal-profilePic">
                     <div class="md-content">
                         <h3>Standard Requirement</h3>
                         <div>
