@@ -9,7 +9,7 @@ public class SendGridEmail implements SendGridLocal {
     //SendGrid API Key
     private String SENDGRID_USER = "API@.sg";
     private String SENDGRID_PASSWORD = "";
-    private String SENDGRID_API_KEY = "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";
+    private String SENDGRID_API_KEY = "";
 
     @Override
     public Boolean sendEmail(String destinationEmail, String senderEmail, String subject, String message) {
