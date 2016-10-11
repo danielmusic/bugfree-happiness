@@ -95,9 +95,9 @@
                                 setTimeout(function () {
                                     // hide progress bar
                                     progressBar(100, $('#progressBar'));
-                                    $('#upload-title').text("Still Processing");
+                                    $('#upload-title').text("Converting Music");
                                     //$('#upload-spinner').show();
-                                    $('#upload-desc').text("Sorry, our music conversion is taking longer than expected, this page will automatically refresh when the upload is completed.");
+                                    $('#upload-desc').text("sounds.sg automatically converts your files into different formats for streaming and purchase");
                                     progress = null;
                                 }, 1000);
                             }
