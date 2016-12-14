@@ -494,7 +494,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 result.setResult(true);
                 result.setDescription("Verification email sent, you should receieve the email in your email inbox (or spam folder) within the next 5 minutes.");
             } else {
-                result.setDescription("Unable to send verificaiton email due to issues with our email servers. Please try again later.");
+                result.setDescription("Unable to send verification email due to issues with our email servers. Please try again later.");
             }
         } catch (Exception ex) {
             log.info("AccountManagementBean: generateAndSendVerificationEmail() failed");
