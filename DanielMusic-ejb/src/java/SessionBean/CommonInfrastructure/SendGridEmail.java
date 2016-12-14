@@ -24,6 +24,10 @@ public class SendGridEmail implements SendGridLocal {
             email.setSubject(subject);
             email.setHtml(message);
             SendGrid.Response response = sendgrid.send(email);
+            if (!response.getStatus()) {
+                System.out.println("CommonInfrastructureBean: sendEmail() failed");
+                System.out.println(response.getMessage());
+            }
             return response.getStatus();
         } catch (Exception ex) {
             System.out.println("CommonInfrastructureBean: sendEmail() failed");
