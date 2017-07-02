@@ -79,12 +79,40 @@
                         }
                     });
                 }
+
             </script>
             <article>
                 <%
+                    if (session.getAttribute("genres") == null) {
+                        session.setAttribute("redirectPage", "#!/explore");
+                %>
+                <script>
+                    (function () {
+                        url = "./MusicController?target=ListGenreArtist";
+                        $.ajax({
+                            type: "GET",
+                            async: false,
+                            url: url,
+                            dataType: "text",
+                            success: function (val) {
+                                var json = JSON.parse(val);
+                                if (json.result) {
+                                    top.location.replace("/redirect.jsp");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                document.getElementById("errMsg").style.display = "block";
+                                document.getElementById('errMsg').innerHTML = error;
+                                hideLoader();
+                                ajaxResultsError(xhr, status, error);
+                            }
+                        });
+                    })();
+                </script>
+                <% } else {%>
+                <%
                     List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
                 %>
-
                 <form name="exploreForm">
                     <div class="row clearfix filters" data-id="musicListing">
                         <select class='nice-select filter' name="genres">
@@ -118,6 +146,7 @@
                             <div class="track-details" style="border-left: none; margin-left: 0;">
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=profilePicURL%>" >
                                     <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
+<!--                                    <img class="track-cover lazy" title="<%=artist.getName()%>" alt="Track Cover" data-src="<%=profilePicURL%>">-->
                                     <span>&nbsp;&nbsp;</span>
                                 </a>
 
@@ -180,6 +209,7 @@
                         %>
                     </div>
                 </form>
+                <% }%>
             </article>
             <!-- /article -->
         </div>
@@ -188,26 +218,25 @@
     <!-- /Content -->
 </section>
 <!-- /page -->
-
 <script>
     //var new_url = $('#url').val();
     //window.history.pushState("object or string", "Title", "" + new_url);
     //window.history.replaceState("object or string", "Title", "Discover");
 </script>
 <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-66150326-1']);
-    var d = document.location.pathname + document.location.search + document.location.hash;
-    _gaq.push(['_trackPageview', d]);
-
-    (function () {
-        var ga = document.createElement('script');
-        ga.type = 'text/javascript';
-        ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(ga, s);
-    })();
+//    var _gaq = _gaq || [];
+//    _gaq.push(['_setAccount', 'UA-66150326-1']);
+//    var d = document.location.pathname + document.location.search + document.location.hash;
+//    _gaq.push(['_trackPageview', d]);
+//
+//    (function () {
+//        var ga = document.createElement('script');
+//        ga.type = 'text/javascript';
+//        ga.async = true;
+//        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//        var s = document.getElementsByTagName('script')[0];
+//        s.parentNode.insertBefore(ga, s);
+//    })();
 
     //Disable right click save as on play icon
     $('.track.sp-play-track').bind('contextmenu', function (e) {
