@@ -28,9 +28,9 @@
                                 var file = $('#picture');
                                 var fileSize = $('#picture')[0].files[0].size;
 
-                                if (fileSize > 5000000) {
+                                if (fileSize > 500000) {
                                     document.getElementById("errMsg").style.display = "block";
-                                    document.getElementById('errMsg').innerHTML = "Image size must be below 5mb.";
+                                    document.getElementById('errMsg').innerHTML = "Please select an image smaller than 500kb";
                                     window.scrollTo(0, 0);
                                     return false;
                                 }

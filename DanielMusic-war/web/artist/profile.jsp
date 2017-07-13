@@ -125,8 +125,6 @@
                         }
 
 
-
-
                         /**
                          * jQuery.textareaCounter
                          * Version 1.0

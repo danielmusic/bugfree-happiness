@@ -33,39 +33,29 @@
                     </div>
                 </div>
                 <script>
-                    var musicFileSize;
                     var form = document.forms.namedItem("uploadform");
+                    var musicFileSize;
+                    
                     form.addEventListener('submit', function (ev) {
-
                         if (window.File && window.FileReader && window.FileList && window.Blob) {
-                            var musicFile = $('#music');
-                            musicFileSize = $('#music')[0].files[0].size;
+                            document.getElementById('errMsg').innerHTML = "";
+                            var musicPass = checkMusic();
+                            var imagePass = checkImage();
 
-                            if (!isMusic(musicFile.val())) {
-                                alert("Please upload 44.1kHz 16bit .wav files.");
-                                //document.getElementById("errMsg").style.display = "block";
-                                //document.getElementById('errMsg').innerHTML = "Please upload 44.1kHz 16bit .wav files.";
-                                //window.scrollTo(0, 0);
-                                return;
-                            }
-                            if (musicFileSize > 100000000) {
-                                alert("You have exeeded the file size limit. Please try again.");
-                                //document.getElementById("errMsg").style.display = "block";
-                                //document.getElementById('errMsg').innerHTML = "Please upload 44.1kHz 16bit .wav files.";
-                                //window.scrollTo(0, 0);
-                                return;
+                            if (musicPass && imagePass) {
+                                upload(musicFileSize);
+                                asyncUpload();
                             }
                         } else {
-                            alert("Please upload 44.1kHz 16bit .wav files.");
-                            //document.getElementById("errMsg").style.display = "block";
-                            //document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
-                            //window.scrollTo(0, 0);
-                            return;
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML = "Please upgrade your browser, because your current browser lacks some new features we need!";
+                            window.scrollTo(0, 0);
                         }
+                        ev.preventDefault();
+                    }, false);
 
-                        upload(musicFileSize);
+                    function asyncUpload() {
                         var oData = new FormData(form);
-
                         var oReq = new XMLHttpRequest();
                         oReq.open("POST", "MusicManagementController?target=AddTrack", true);
                         oReq.onload = function (oEvent) {
@@ -85,10 +75,8 @@
                                 }, 1000);
                             }
                         };
-
                         oReq.send(oData);
-                        ev.preventDefault();
-                    }, false);
+                    }
 
                     var progress;
                     function upload(musicFileSize) {
@@ -140,6 +128,46 @@
                     function getExtension(filename) {
                         var parts = filename.split('.');
                         return parts[parts.length - 1];
+                    }
+
+                    function checkMusic() {
+                        var musicFile = $('#music');
+                        musicFileSize = $('#music')[0].files[0].size;
+
+                        if (!isMusic(musicFile.val())) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML += "Please upload 44.1kHz 16bit .wav files.<br>";
+                            window.scrollTo(0, 0);
+                            return false;
+                        }
+                        if (musicFileSize > 100000000) {
+                            document.getElementById("errMsg").style.display = "block";
+                            ocument.getElementById('errMsg').innerHTML += "Please upload 44.1kHz 16bit .wav files.<br>";
+                            window.scrollTo(0, 0);
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    function checkImage() {
+                        var file = $('#picture');
+                        var fileSize = $('#picture')[0].files[0].size;
+
+                        if (fileSize > 500000) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML += "Please select an image smaller than 500kb.<br>";
+                            window.scrollTo(0, 0);
+                            return false;
+                        }
+
+                        if (!isImage(file.val())) {
+                            document.getElementById("errMsg").style.display = "block";
+                            document.getElementById('errMsg').innerHTML += "Please select a valid image<br>";
+                            window.scrollTo(0, 0);
+                            return false;
+                        }
+                        return true;
                     }
 
                     function isImage(filename) {
