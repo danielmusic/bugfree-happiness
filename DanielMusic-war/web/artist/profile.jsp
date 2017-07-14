@@ -103,8 +103,11 @@
                                     img = new Image();
                                     img.src = URL.createObjectURL(file);
                                     img.onload = function () {
-
-                                        if (this.width >= 500 && this.height >= 500) {
+                                        if (file.size > 500000) {
+                                            window.alert('Please select an image smaller than 500kb.');
+                                            return;
+                                        }
+                                        if (this.width >= 300 && this.height >= 300) {
                                             if (/^image\/\w+/.test(file.type)) {
                                                 blobURL = URL.createObjectURL(file);
                                                 cropper.reset().replace(blobURL);
@@ -115,8 +118,7 @@
                                         } else {
                                             window.alert("Image needs to be at least 300px in width and height.");
                                         }
-                                    }
-                                    ;
+                                    };
                                 }
                             };
                         } else {
