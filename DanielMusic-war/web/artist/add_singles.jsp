@@ -1,14 +1,14 @@
 <!-- ############################# Ajax Page Container ############################# -->
-<section id="page" data-title="sounds.sg | albums">
+<section id="page" data-title="sounds.sg | Single">
     <section class="content section">
         <div class="container">
             <link rel="stylesheet" type="text/css" href="css/progressbar.css">
             <article>
-                <div class="md-modal md-effect-1" id="modal-profilePic">
+                <div class="md-modal md-effect-1" id="modal-addSingles">
                     <div class="md-content">
                         <h3>Standard Requirement</h3>
                         <div>
-                            <p>Profile picture file requirement:</p>
+                            <p>Artwork file requirement:</p>
                             <ul>
                                 <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
                                 <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
@@ -258,7 +258,7 @@
                         </div>
 
                         <div class="col-1-2 last">
-                            <label><strong>Artwork</strong> <a class="md-trigger" data-modal="modal-profilePic">(?)</a></label>
+                            <label><strong>Single Artwork</strong> <a class="md-trigger" data-modal="modal-addSingles">(?)</a></label>
                             <input type="file" id="picture" name="picture" style="width: 100%; height:42px;padding-top: 9px;">
                         </div>
                     </div>
@@ -300,6 +300,7 @@
                 <p class="warning" id="errMsg">Your Session has timed out. <a href="#!/login">Click here to login again.</a></p>
                 <%}%>
                 <div class="md-overlay"></div>
+                <script src="js/modalEffects.js"></script>
             </article>
         </div>
     </section>

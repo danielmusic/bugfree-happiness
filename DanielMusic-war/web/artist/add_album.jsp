@@ -3,11 +3,11 @@
     <section class="content section">
         <div class="container">
             <article>
-                <div class="md-modal md-effect-1" id="modal-profilePic">
+                <div class="md-modal md-effect-1" id="modal-addAlbum">
                     <div class="md-content">
                         <h3>Standard Requirement</h3>
                         <div>
-                            <p>Profile picture file requirement:</p>
+                            <p>Artwork file requirement:</p>
                             <ul>
                                 <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
                                 <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
@@ -130,7 +130,7 @@
                         </div>
 
                         <div class="col-1-2 last">
-                            <label><strong>Album Artwork</strong> <a class="md-trigger" data-modal="modal-profilePic">(?)</a></label>
+                            <label><strong>Album Artwork</strong> <a class="md-trigger" data-modal="modal-addAlbum">(?)</a></label>
                             <input type="file" id="picture" name="picture" style="width: 100%; height:42px;padding-top: 9px;">
                         </div>
                     </div>
