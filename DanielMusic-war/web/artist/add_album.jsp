@@ -11,6 +11,7 @@
                             <ul>
                                 <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
                                 <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
+                                <li><strong>Size:</strong> Image must be less than 500kb</li>
                             </ul>
                             <div style="text-align:center;">
                                 <button class="md-close" type="button">Close</button>
@@ -96,7 +97,7 @@
 
                         <div class="col-1-3">
                             <label for="yearReleased"><strong>Year Released</strong> *</label>
-                     
+
                             <select name="yearReleased" id="yearReleased" style="width: 100%; height:42px;"></select>
                             <script>
                                 var start = 1900;

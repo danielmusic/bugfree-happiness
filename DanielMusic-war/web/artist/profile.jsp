@@ -191,6 +191,7 @@
                             <ul>
                                 <li><strong>Ratio:</strong> Image must be in a ratio of 1:1</li>
                                 <li><strong>Pixel:</strong> Image must be at least 500px x 500px</li>
+                                <li><strong>Size:</strong> Image must be less than 500kb</li>
                             </ul>
                             <div style="text-align:center;">
                                 <button class="md-close" type="button">Close</button>

@@ -12,6 +12,7 @@
                             <ul>
                                 <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
                                 <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
+                                <li><strong>Size:</strong> Image must be less than 500kb</li>
                             </ul>
                             <div style="text-align:center;">
                                 <button class="md-close" type="button">Close</button>
@@ -35,7 +36,7 @@
                 <script>
                     var form = document.forms.namedItem("uploadform");
                     var musicFileSize;
-                    
+
                     form.addEventListener('submit', function (ev) {
                         if (window.File && window.FileReader && window.FileList && window.Blob) {
                             document.getElementById('errMsg').innerHTML = "";
