@@ -4,6 +4,22 @@
     <section class="content section">
         <div class="container">
             <article>
+                <div class="md-modal md-effect-1" id="modal-editAlbum">
+                    <div class="md-content">
+                        <h3>Standard Requirement</h3>
+                        <div>
+                            <p>Artwork file requirement:</p>
+                            <ul>
+                                <li><strong>Ratio:</strong> Image must be in a ratio of 1:1 (ie 400px x 400px)</li>
+                                <li><strong>Pixel:</strong> Image must be at least 300px x 300px</li>
+                                <li><strong>Size:</strong> Image must be less than 500kb</li>
+                            </ul>
+                            <div style="text-align:center;">
+                                <button class="md-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <script>
                     function getExtension(filename) {
                         var parts = filename.split('.');
@@ -131,8 +147,8 @@
                                 }
                                 document.getElementById("yearReleased").innerHTML = options;
                             </script>
-                            
-                            
+
+
                         </div>
 
                         <div class="col-1-3 last">
@@ -161,7 +177,7 @@
                         </div>
 
                         <div class="col-1-2 last">  
-                            <label><strong>Album Artwork</strong> <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%><a class="md-trigger" data-modal="modal-albumArt">(Click here to view album art)</a><%}%></label> 
+                            <label><strong>Album Artwork</strong> <%if (album.getImageLocation() != null && !album.getImageLocation().isEmpty()) {%><a class="md-trigger" data-modal="modal-albumArt">(Click here to view album art)</a><%}%> <a class="md-trigger" data-modal="modal-editAlbum">(?)</a></label>
                             <input type="file" id="picture" name="picture" <%=disableFlag%> style="width: 100%; height:40px;padding-top: 9px;">
                         </div>
                     </div>
