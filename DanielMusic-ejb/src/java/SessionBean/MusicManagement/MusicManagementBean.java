@@ -43,7 +43,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
-    private static final Logger log = Logger.getLogger(StartupBean.class.getName() );
+    private static final Logger log = Logger.getLogger(StartupBean.class.getName());
 
     private static final String approvalRequestEmailSubject = "sounds.sg - New Artist Approval Request";
     private static final String approvalRequestEmailMsg = "Hi there!<br/><br/>There's a new artist pending your approval. Please login to <a href='http://sounds.sg/admin/login.jsp'>admin console</a> to view the full details. <br/><br/><b>Request Details</b><br/>";
@@ -98,13 +98,13 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             String downloadLink = null;
             switch (type) {
                 case "wav":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), expiryInSeconds, music.getName()+".wav");
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocationWAV(), expiryInSeconds, music.getName() + ".wav");
                     break;
                 case "320":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), expiryInSeconds, music.getName()+".mp3");
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation320(), expiryInSeconds, music.getName() + ".mp3");
                     break;
                 case "128":
-                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), expiryInSeconds, music.getName()+".mp3");
+                    downloadLink = cibl.getFileURLFromGoogleCloudStorage(music.getFileLocation128(), expiryInSeconds, music.getName() + ".mp3");
                     break;
             }
             //generate download link for user
@@ -1048,24 +1048,26 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public List<ExploreHelper> listAllGenreArtist() {
         log.info("MusicManagement: listAllGenreArtist() called");
         try {
-            Query q;
-            q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
-            List<Genre> genres = q.getResultList();
-            List<ExploreHelper> exploreHelpers = new ArrayList();
-            for (Genre genre : genres) {
-                ExploreHelper exploreHelper = new ExploreHelper();
-                exploreHelper.setGenre(genre);
-                List<Artist> artists = listAllArtistBandInGenre(genre.getId());
-                exploreHelper.setArtists(artists);
-                List<Music> musics = new ArrayList();
-                for (Artist artist : artists) {
-                    Music music = getFeaturedMusic(artist.getId());
-                    musics.add(music);
-                }
-                exploreHelper.setFeaturedMusic(musics);
-                exploreHelpers.add(exploreHelper);
-            }
-            return exploreHelpers;
+            System.out.println("Test: " + StartupBean.exploreTemp.size());
+            return StartupBean.exploreTemp;
+//            Query q;
+//            q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
+//            List<Genre> genres = q.getResultList();
+//            List<ExploreHelper> exploreHelpers = new ArrayList();
+//            for (Genre genre : genres) {
+//                ExploreHelper exploreHelper = new ExploreHelper();
+//                exploreHelper.setGenre(genre);
+//                List<Artist> artists = listAllArtistBandInGenre(genre.getId());
+//                exploreHelper.setArtists(artists);
+//                List<Music> musics = new ArrayList();
+//                for (Artist artist : artists) {
+//                    Music music = getFeaturedMusic(artist.getId());
+//                    musics.add(music);
+//                }
+//                exploreHelper.setFeaturedMusic(musics);
+//                exploreHelpers.add(exploreHelper);
+//            }
+//            return exploreHelpers;
         } catch (Exception e) {
             log.info("MusicManagement: Error while calling listAllGenreArtist()");
             log.info(e.getMessage());
