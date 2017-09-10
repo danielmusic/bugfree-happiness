@@ -1,3 +1,4 @@
+<%@page import="javax.swing.JOptionPane"%>
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | explore">
     <!-- ############################# Intro ############################# -->
@@ -118,9 +119,19 @@
                         <select class='nice-select filter' name="genres">
                             <option value="placeholder">All Genres</option>
                             <option value="*">All Genres</option>
-                            <%for (ExploreHelper artists : exploreHelpers) {%>
+                            <%for (ExploreHelper artists : exploreHelpers) {
+                                    //System.out.println(artists.getGenre().getName());
+                                    if (artists.getGenre().getName().equals("R&amp;B")) {
+                            %>
+                            <option value="rnb" data-text="R&B"><%=artists.getGenre().getName()%></option>
+                            <%
+                            } else {
+                            %>
                             <option value="<%=artists.getGenre().getName()%>"><%=artists.getGenre().getName()%></option>
-                            <%}%>
+                            <%
+                                    }
+                                }
+                            %>
                         </select>
                     </div>
 
@@ -139,10 +150,15 @@
                                     } else {
                                         profilePicURL = "placeholders/SilhouetteProfilePicture-01.jpg";
                                     }
+
+                                    String genre = artists.getGenre().getName();
+                                    if (genre.equals("R&amp;B")) {
+                                        genre = "rnb";
+                                    }
                         %>
                         <!-- Release -->
 
-                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>" style="margin-bottom: 20px;">
+                        <div class="col-1-1 item tracklist <%=genre%>" data-genres="<%=genre%>" style="margin-bottom: 20px;">
                             <div class="track-details" style="border-left: none; margin-left: 0;">
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=profilePicURL%>" >
                                     <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
@@ -196,8 +212,6 @@
                                             </span>
                                         </i>
                                     </a>
-
-
                                     <%}%>
                                 </div>
                             </div>
