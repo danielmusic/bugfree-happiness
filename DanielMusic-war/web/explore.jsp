@@ -83,7 +83,7 @@
             </script>
             <article>
                 <%
-                    if (session.getAttribute("genres") == null) {
+                    if (session.getAttribute("genres") == null || session.getAttribute("exploreHelpers") == null) {
                         session.setAttribute("redirectPage", "#!/explore");
                 %>
                 <script>
@@ -109,17 +109,15 @@
                         });
                     })();
                 </script>
-                <% } else {%>
-                <%
-                    List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("genres"));
-                %>
+                <% } else { %>
                 <form name="exploreForm">
                     <div class="row clearfix filters" data-id="musicListing">
                         <select class='nice-select filter' name="genres">
                             <option value="placeholder">All Genres</option>
                             <option value="*">All Genres</option>
-                            <%for (ExploreHelper artists : exploreHelpers) {%>
-                            <option value="<%=artists.getGenre().getName()%>"><%=artists.getGenre().getName()%></option>
+                            <% List<Genre> uniqueGenres = (List<Genre>) (session.getAttribute("genres"));
+                                for (Genre uniqueGenre : uniqueGenres) {%>
+                            <option value="<%=uniqueGenre.getName()%>"><%=uniqueGenre.getName()%></option>
                             <%}%>
                         </select>
                     </div>
@@ -127,12 +125,10 @@
                     <!-- Releases -->
                     <div id="musicListing" class="masonry clearfix" style="margin-right: 0px;">
                         <%
-                            for (int i = 0; i < exploreHelpers.size(); i++) {
-                                ExploreHelper artists = exploreHelpers.get(i);
-                                for (int j = 0; j < artists.getArtists().size(); j++) {
-                                    Artist artist = artists.getArtists().get(j);
-                                    Music artistFeaturedMusic = artists.getFeaturedMusic().get(j);
-
+                            List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("exploreHelpers"));
+                            for (ExploreHelper exploreHelper:exploreHelpers) {
+                                Artist artist = exploreHelper.getArtist();
+                                Music featuredMusic = exploreHelper.getFeaturedMusic();
                                     String profilePicURL;
                                     if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {
                                         profilePicURL = "http://sounds.sg.storage.googleapis.com/" + artist.getImageURL();
@@ -142,7 +138,7 @@
                         %>
                         <!-- Release -->
 
-                        <div class="col-1-1 item tracklist" data-genres="<%=artists.getGenre().getName()%>" style="margin-bottom: 20px;">
+                        <div class="col-1-1 item tracklist" data-genres="<%=artist.getGenre().getName()%>" style="margin-bottom: 20px;">
                             <div class="track-details" style="border-left: none; margin-left: 0;">
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=profilePicURL%>" >
                                     <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
@@ -152,46 +148,46 @@
 
                                 <a class="track" onclick="javascript:loadAjaxExplore(<%=artist.getId()%>)" style="cursor: pointer;">
                                     <span class="track-title" style="margin-left: 40px;"><%=artist.getName()%></span>
-                                    <span class="track-artists" style="margin-left: 40px;"><%=artists.getGenre().getName()%></span>
+                                    <span class="track-artists" style="margin-left: 40px;"><%=artist.getGenre().getName()%></span>
                                 </a> 
 
                                 <div class="track-buttons">
                                     <%
-                                        if (artistFeaturedMusic != null) {
-                                            String albumArt = artistFeaturedMusic.getAlbum().getImageLocation();
+                                        if (featuredMusic != null) {
+                                            String albumArt = featuredMusic.getAlbum().getImageLocation();
                                             if (albumArt == null || albumArt.isEmpty()) {
                                                 albumArt = "img/cover.png";
                                             } else {
                                                 albumArt = "http://sounds.sg.storage.googleapis.com/" + albumArt;
                                             }
                                     %>
-                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                    <a class="track sp-add-track" href="http://sounds.sg.storage.googleapis.com/<%=featuredMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                        data-artist="<%=artist.getName()%>"
                                        data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                        data-artist_target="_self"
-                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
+                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=featuredMusic.getId()%>);"
                                        data-shop_target="_self"
                                        >
                                         <i class="icon icon-plus">
                                             <span style="display: none;">
-                                                <span  class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                <span  class="track-title"><%=featuredMusic.getName()%></span>
                                                 <span class="track-artists"><%=artist.getName()%></span>
                                             </span>
                                         </i>
                                     </a>
 
 
-                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=artistFeaturedMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
+                                    <a class="track sp-play-track" href="http://sounds.sg.storage.googleapis.com/<%=featuredMusic.getFileLocation128()%>" data-cover="<%=albumArt%>"
                                        data-artist="<%=artist.getName()%>"
                                        data-artist_url="javascript:loadArtistFromExplore(<%=artist.getId()%>);"
                                        data-artist_target="_self"
-                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=artistFeaturedMusic.getId()%>);"
+                                       data-shop_url="javascript:addTrackToCartFromExplore(<%=featuredMusic.getId()%>);"
                                        data-shop_target="_self"
                                        style="margin-left: 0px;"
                                        >
                                         <i class="icon icon-play2">
                                             <span style="display: none;">
-                                                <span class="track-title"><%=artistFeaturedMusic.getName()%></span>
+                                                <span class="track-title"><%=featuredMusic.getName()%></span>
                                                 <span class="track-artists"><%=artist.getName()%></span>
                                             </span>
                                         </i>
@@ -209,7 +205,6 @@
                         %>
                     </div>
                 </form>
-                <% }%>
             </article>
             <!-- /article -->
         </div>

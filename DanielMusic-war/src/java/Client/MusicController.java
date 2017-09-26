@@ -61,8 +61,10 @@ public class MusicController extends HttpServlet {
 
                 case "ListGenreArtist":
                     if (true) {
-                        List<ExploreHelper> genres = musicManagementBean.listAllGenreArtist();
+                        List<ExploreHelper> genres = musicManagementBean.listAllActiveGenres();
                         session.setAttribute("genres", genres);
+                        List<ExploreHelper> exploreHelpers = musicManagementBean.listAllGenreArtist();
+                        session.setAttribute("exploreHelpers", exploreHelpers);
                         jsObj.put("result", true);
                         response.getWriter().write(jsObj.toString());
                     }
