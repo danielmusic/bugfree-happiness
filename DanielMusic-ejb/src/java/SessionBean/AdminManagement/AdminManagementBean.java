@@ -3,6 +3,7 @@ package SessionBean.AdminManagement;
 import EntityManager.Account;
 import EntityManager.Album;
 import EntityManager.Artist;
+import EntityManager.ExploreHelper;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.Music;
@@ -16,6 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -84,6 +86,23 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                     } else {
                         emailMsg += "<span style=\"font-size: 150%;\">Hey there,</span>";
                     }
+                    //Update explore helper in case genre gets changed. But only if account is approved and not disabled
+                    if (artist.getIsApproved() == 1 && !artist.getIsDisabled()) {
+                        ExploreHelper exploreHelper;
+                        try {
+                            q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                            q.setParameter("id", artistOrBandID);
+                            exploreHelper = (ExploreHelper) q.getSingleResult();
+                            em.remove(exploreHelper);
+                        } catch (NoResultException e) {
+                            //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                        }
+                        exploreHelper = new ExploreHelper();
+                        exploreHelper.setGenre(artist.getGenre());
+                        exploreHelper.setArtist(artist);
+                        exploreHelper.setFeaturedMusic(artist.getFeaturedMusic());
+                        em.persist(exploreHelper);
+                    }
                     result.setResult(true);
                     result.setDescription("Artist/Band has been approved.");
                     sgl.sendEmail(artist.getEmail(), "no-reply@sounds.sg", artistBandAccountApprovedSubject, emailMsg + artistBandAccountApprovedMsg);
@@ -125,6 +144,15 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                         emailMsg += "<span style=\"font-size: 150%;\">Hey " + account.getName() + ",</span>";
                     } else {
                         emailMsg += "<span style=\"font-size: 150%;\">Hey there,</span>";
+                    }
+                    //Update explore helper to remove
+                    try {
+                        q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                        q.setParameter("id", artistOrBandID);
+                        ExploreHelper exploreHelper = (ExploreHelper) q.getSingleResult();
+                        em.remove(exploreHelper);
+                    } catch (NoResultException e) {
+                        //Safe to ignore as the artist may not be in ExploreHelper in the first place
                     }
                     result.setResult(true);
                     result.setDescription("Artist has been rejected.");
@@ -287,7 +315,7 @@ public class AdminManagementBean implements AdminManagementBeanLocal {
                 album.setListOfGenres(genres);
                 em.merge(album);
             }
-             //Remove genre from the genre list stored in the artist beloning to this genre
+            //Remove genre from the genre list stored in the artist beloning to this genre
             List<Artist> artists = genre.getListOfArtists();
             for (Artist artist : artists) {
                 artist.setGenre(null);

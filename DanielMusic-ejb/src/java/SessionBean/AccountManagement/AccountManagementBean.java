@@ -3,6 +3,7 @@ package SessionBean.AccountManagement;
 import EntityManager.Account;
 import EntityManager.Admin;
 import EntityManager.Artist;
+import EntityManager.ExploreHelper;
 import EntityManager.Genre;
 import EntityManager.Member;
 import EntityManager.ReturnHelper;
@@ -309,6 +310,26 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             } else {
                 account.setIsDisabled(false);
                 em.merge(account);
+                q = em.createQuery("SELECT e FROM Artist e WHERE e.id=:id");
+                q.setParameter("id", accountID);
+                Artist artist = (Artist) q.getSingleResult();
+                //Update explore helper in case genre gets changed. But only if account is approved and not disabled
+                if (artist.getIsApproved() == 1 && !artist.getIsDisabled()) {
+                    ExploreHelper exploreHelper;
+                    try {
+                        q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                        q.setParameter("id", accountID);
+                        exploreHelper = (ExploreHelper) q.getSingleResult();
+                        em.remove(exploreHelper);
+                    } catch (NoResultException e) {
+                        //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                    }
+                    exploreHelper = new ExploreHelper();
+                    exploreHelper.setGenre(artist.getGenre());
+                    exploreHelper.setArtist(artist);
+                    exploreHelper.setFeaturedMusic(artist.getFeaturedMusic());
+                    em.persist(exploreHelper);
+                }
                 result.setResult(true);
                 result.setDescription("Account enabled successfully.");
             }
@@ -330,12 +351,21 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         q.setParameter("id", accountID);
         try {
             Account account = (Account) q.getSingleResult();
-            if (account.getIsDeleted()== true && account.getIsDisabled()==true) {
+            if (account.getIsDeleted() == true && account.getIsDisabled() == true) {
                 result.setDescription("Account is already deleted.");
             } else {
                 account.setIsDeleted(true);
                 account.setIsDisabled(true);
                 em.merge(account);
+                //Update explore helper to remove
+                try {
+                    q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                    q.setParameter("id", accountID);
+                    ExploreHelper exploreHelper = (ExploreHelper) q.getSingleResult();
+                    em.remove(exploreHelper);
+                } catch (NoResultException e) {
+                    //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                }
                 result.setResult(true);
                 result.setDescription("Account deleted successfully.");
             }
@@ -346,7 +376,7 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
         }
         return result;
     }
-    
+
     @Override
     public ReturnHelper disableAccount(Long accountID) {
         log.info("AccountManagementBean: disableAccount() called");
@@ -361,6 +391,15 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
             } else {
                 account.setIsDisabled(true);
                 em.merge(account);
+                //Update explore helper to remove
+                try {
+                    q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                    q.setParameter("id", accountID);
+                    ExploreHelper exploreHelper = (ExploreHelper) q.getSingleResult();
+                    em.remove(exploreHelper);
+                } catch (NoResultException e) {
+                    //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                }
                 result.setResult(true);
                 result.setDescription("Account disabled successfully.");
             }
@@ -872,6 +911,24 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                     return result;
                 }
             }
+            //Update explore helper in case genre gets changed. But only if account is approved and not disabled
+            if (artist.getIsApproved() == 1 && !artist.getIsDisabled()) {
+                ExploreHelper exploreHelper;
+                try {
+                    q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                    q.setParameter("id", artistID);
+                    exploreHelper = (ExploreHelper) q.getSingleResult();
+                    em.remove(exploreHelper);
+                } catch (NoResultException e) {
+                    //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                }
+                exploreHelper = new ExploreHelper();
+                exploreHelper.setGenre(newGenre);
+                exploreHelper.setArtist(artist);
+                exploreHelper.setFeaturedMusic(artist.getFeaturedMusic());
+                em.persist(exploreHelper);
+            }
+
             result.setResult(true);
             result.setDescription("Profile updated.");
         } catch (NoResultException ex) {
@@ -1025,6 +1082,23 @@ public class AccountManagementBean implements AccountManagementBeanLocal {
                 if (!result.getResult()) {
                     return result;
                 }
+            }
+            //Update explore helper in case genre gets changed. But only if account is approved and not disabled
+            if (band.getIsApproved() == 1 && !band.getIsDisabled()) {
+                ExploreHelper exploreHelper;
+                try {
+                    q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                    q.setParameter("id", bandID);
+                    exploreHelper = (ExploreHelper) q.getSingleResult();
+                    em.remove(exploreHelper);
+                } catch (NoResultException e) {
+                    //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                }
+                exploreHelper = new ExploreHelper();
+                exploreHelper.setGenre(newGenre);
+                exploreHelper.setArtist(band);
+                exploreHelper.setFeaturedMusic(band.getFeaturedMusic());
+                em.persist(exploreHelper);
             }
             result.setResult(true);
             result.setDescription("Profile updated.");

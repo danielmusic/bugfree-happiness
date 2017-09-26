@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -47,6 +48,8 @@ public class Artist extends Account implements Serializable {
     private String twitterURL;
     @Lob
     private String websiteURL;
+    @OneToOne
+    private Music featuredMusic;
 
     public Artist() {
         isApproved = 0;
@@ -187,6 +190,14 @@ public class Artist extends Account implements Serializable {
 
     public void setBandMembers(String bandMembers) {
         this.bandMembers = bandMembers;
+    }
+
+    public Music getFeaturedMusic() {
+        return featuredMusic;
+    }
+
+    public void setFeaturedMusic(Music featuredMusic) {
+        this.featuredMusic = featuredMusic;
     }
 
     @Override

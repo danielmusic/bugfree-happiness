@@ -43,6 +43,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @Stateless
 public class MusicManagementBean implements MusicManagementBeanLocal {
+
     private static final Logger log = Logger.getLogger(StartupBean.class.getName());
 
     private static final String approvalRequestEmailSubject = "sounds.sg - New Artist Approval Request";
@@ -859,6 +860,24 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                 }
                 music.setIsFeatured(true);
                 em.merge(music);
+                Artist artist = music.getAlbum().getArtist();
+                //Update explore helper in case featured music gets changed. But only if account is approved and not disabled
+                if (artist.getIsApproved() == 1 && !artist.getIsDisabled()) {
+                    ExploreHelper exploreHelper;
+                    try {
+                        q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                        q.setParameter("id", artist.getId());
+                        exploreHelper = (ExploreHelper) q.getSingleResult();
+                        em.remove(exploreHelper);
+                    } catch (NoResultException e) {
+                        //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                    }
+                    exploreHelper = new ExploreHelper();
+                    exploreHelper.setGenre(artist.getGenre());
+                    exploreHelper.setArtist(artist);
+                    exploreHelper.setFeaturedMusic(artist.getFeaturedMusic());
+                    em.persist(exploreHelper);
+                }
                 result.setDescription("Music featured.");
                 result.setResult(true);
             }
@@ -883,6 +902,24 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
             } else {
                 music.setIsFeatured(false);
                 em.merge(music);
+                Artist artist = music.getAlbum().getArtist();
+                //Update explore helper in case featured music gets changed. But only if account is approved and not disabled
+                if (artist.getIsApproved() == 1 && !artist.getIsDisabled()) {
+                    ExploreHelper exploreHelper;
+                    try {
+                        Query q = em.createQuery("SELECT e FROM ExploreHelper e WHERE e.artist.id=:id");
+                        q.setParameter("id", artist.getId());
+                        exploreHelper = (ExploreHelper) q.getSingleResult();
+                        em.remove(exploreHelper);
+                    } catch (NoResultException e) {
+                        //Safe to ignore as the artist may not be in ExploreHelper in the first place
+                    }
+                    exploreHelper = new ExploreHelper();
+                    exploreHelper.setGenre(artist.getGenre());
+                    exploreHelper.setArtist(artist);
+                    exploreHelper.setFeaturedMusic(null);
+                    em.persist(exploreHelper);
+                }
                 result.setDescription("Music no longer featured.");
                 result.setResult(true);
             }
@@ -1048,28 +1085,28 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
     public List<ExploreHelper> listAllGenreArtist() {
         log.info("MusicManagement: listAllGenreArtist() called");
         try {
-            System.out.println("Test: " + StartupBean.exploreTemp.size());
-            return StartupBean.exploreTemp;
-//            Query q;
-//            q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
-//            List<Genre> genres = q.getResultList();
-//            List<ExploreHelper> exploreHelpers = new ArrayList();
-//            for (Genre genre : genres) {
-//                ExploreHelper exploreHelper = new ExploreHelper();
-//                exploreHelper.setGenre(genre);
-//                List<Artist> artists = listAllArtistBandInGenre(genre.getId());
-//                exploreHelper.setArtists(artists);
-//                List<Music> musics = new ArrayList();
-//                for (Artist artist : artists) {
-//                    Music music = getFeaturedMusic(artist.getId());
-//                    musics.add(music);
-//                }
-//                exploreHelper.setFeaturedMusic(musics);
-//                exploreHelpers.add(exploreHelper);
-//            }
-//            return exploreHelpers;
+            Query q;
+            q = em.createQuery("select a from ExploreHelper a ORDER BY a.genre.name ASC");
+            List<ExploreHelper> exploreHelpers = q.getResultList();
+            return exploreHelpers;
         } catch (Exception e) {
             log.info("MusicManagement: Error while calling listAllGenreArtist()");
+            log.info(e.getMessage());
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<ExploreHelper> listAllActiveGenres() {
+        log.info("MusicManagement: listAllActiveGenres() called");
+        try {
+            Query q;
+            q = em.createQuery("select DISTINCT(a.genre) from ExploreHelper a ORDER BY a.genre.name ASC");
+            List<ExploreHelper> exploreHelpers = q.getResultList();
+            return exploreHelpers;
+        } catch (Exception e) {
+            log.info("MusicManagement: Error while calling listAllActiveGenres()");
             log.info(e.getMessage());
         }
 

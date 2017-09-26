@@ -24,7 +24,7 @@ public class StartupBean {
 
     private static final Logger log = Logger.getLogger(StartupBean.class.getName());
 
-    @PersistenceContext(unitName = "DanielMusic-ejbPU")
+    @PersistenceContext
     private EntityManager em;
 
     @EJB
@@ -36,61 +36,112 @@ public class StartupBean {
     @EJB
     private AdminManagementBeanLocal adminManagementBeanLocal;
 
-    public static List<ExploreHelper> exploreTemp; //Explore optimization
     @PostConstruct
     private void startup() {
+//        try {
+//            //Explore optimization
+//            Query q;
+//            log.info("StartupBean: generateExploreHelper() called");
+//            q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
+//            List<Genre> genres = q.getResultList();
+//            //The genre listing in explore helper is based on the artist's profile genre, not the individual album/music genre
+//            for (Genre genre : genres) {
+//                List<Artist> artists = new ArrayList();
+//                try {
+//                    q = em.createQuery("select a from Artist a where a.genre.id=:genreID");
+//                    q.setParameter("genreID", genre.getId());
+//                    System.out.println(genre.getId() + "!!!! DEBUG");
+//                    System.out.println(em.getClass().toString());
+//                    artists = q.getResultList();
+//                } catch (Exception e) {
+//                    System.out.println("StartupBean: Error while calling listAllArtistBandInGenre()");
+//                    e.printStackTrace();
+//                }
+//                if (artists.size() > 0) {
+//                    //Generate the featured music array for each artist
+//                    List<Music> musics = new ArrayList();
+//                    for (Artist artist : artists) {
+//                        musics = new ArrayList();
+//                        q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID AND E.album.isPublished=true");
+//                        q.setParameter("artistID", artist.getId());
+//                        q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+//                        List<Music> musics2 = q.getResultList();
+//                        if (musics2.size() > 0) {
+//                            musics.add((Music) q.getResultList().get(0));
+//                        } else {
+//                            musics.add(null);
+//                        }
+//                    }
+//                    genre.setListOfArtistsFeaturedMusic(musics);
+//                }
+//                em.merge(genre);
+//                System.out.println("Writing...: " + genre.getName());
+//            }
+//        } catch (Exception e) {
+//            log.info("StartupBean: Error while calling generateExploreHelper()");
+//            log.info(e.getMessage());
+//            e.printStackTrace();
+//        }
+        //Explore optimization
+
         try {
-            //Explore optimization
-            try {
-                Query q;
+            Query q;
+            q = em.createQuery("select a from ExploreHelper a");
+            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+            List<ExploreHelper> exploreHelpers = q.getResultList();
+
+//            //To regenerate featured music
+//            q = em.createQuery("select a from Artist a ORDER BY a.name ASC");
+//            List<Artist> artists = q.getResultList();
+//            for (Artist artist : artists) {
+//                q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID AND E.album.isPublished=true");
+//                q.setParameter("artistID", artist.getId());
+//                try {
+//                    Music music = (Music) q.getSingleResult();
+//                    artist.setFeaturedMusic(music);
+//                } catch (NoResultException e) {
+//                    artist.setFeaturedMusic(null);
+//                }
+//                em.merge(artist);
+//            }
+            if (exploreHelpers.isEmpty()) { //Only generate exploreHelpers if there are no existing records
+                log.info("StartupBean: generateExploreHelper() called");
                 q = em.createQuery("select a from Genre a ORDER BY a.name ASC");
+                q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
                 List<Genre> genres = q.getResultList();
-                exploreTemp = new ArrayList();
-                log.info("MusicManagement: listAllGenreArtist() called");
+                //The genre listing in explore helper is based on the artist's profile genre, not the individual album/music genre
                 for (Genre genre : genres) {
-                    ExploreHelper exploreHelper = new ExploreHelper();
-                    exploreHelper.setGenre(genre);
                     List<Artist> artists = new ArrayList();
-                    exploreHelper.setArtists(artists);
-                    List<Music> musics = new ArrayList();
-                    exploreHelper.setFeaturedMusic(musics);
                     try {
-                        q = em.createQuery("select a from Artist a where a.isApproved=true and a.isDisabled=false and a.genre.id=:genreID");
+                        q = em.createQuery("select a from Artist a where a.isApproved=1 and a.isDisabled=0 and a.genre.id=:genreID");
                         q.setParameter("genreID", genre.getId());
+                        q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
                         artists = q.getResultList();
+                        System.out.println("Debug: Artist size=" + artists.size());
                     } catch (Exception e) {
-                        System.out.println("MusicManagement: Error while calling listAllArtistBandInGenre()");
+                        System.out.println("StartupBean: Error while calling listAllArtistBandInGenre()");
                         e.printStackTrace();
                     }
                     if (artists.size() > 0) {
-                        for (int i = 0; i < 20; i++) {//100 for 500
-                            artists.add(artists.get(0));
-                        }
-                        System.out.println("Debug Artist size:" + artists.size());
-                        exploreHelper.setArtists(artists);
-                        musics = new ArrayList();
+                        //Generate the featured music array for each artist
+                        List<Music> musics = new ArrayList();
                         for (Artist artist : artists) {
-                            q = em.createQuery("SELECT E FROM Music E where E.isFeatured=true AND E.album.artist.id=:artistID AND E.album.isPublished=true");
-                            q.setParameter("artistID", artist.getId());
-                            q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-                            List<Music> musics2 = q.getResultList();
-                            if (musics2.size() > 0) {
-                                musics.add((Music) q.getResultList().get(0));
-                            } else {
-                                musics.add(null);
-                            }
+                            ExploreHelper exploreHelper = new ExploreHelper();
+                            exploreHelper.setGenre(genre);
+                            exploreHelper.setArtist(artist);
+                            exploreHelper.setFeaturedMusic(artist.getFeaturedMusic());
+                            em.persist(exploreHelper);
                         }
-                        exploreHelper.setFeaturedMusic(musics);
                     }
-                    exploreTemp.add(exploreHelper);
                 }
-            } catch (Exception e) {
-                log.info("MusicManagement: Error while calling listAllGenreArtist()");
-                log.info(e.getMessage());
-                e.printStackTrace();
             }
-            //Explore optimization
-
+        } catch (Exception e) {
+            log.info("StartupBean: Error while calling generateExploreHelper()");
+            log.info(e.getMessage());
+            e.printStackTrace();
+        }
+        //Explore optimization
+        try {
             // =========== DO NOT DISABLE THIS START ============
             File theDir = new File("temp");
             // if the directory does not exist, create it

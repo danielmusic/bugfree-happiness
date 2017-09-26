@@ -3,7 +3,6 @@ package SessionBean.AccountManagement;
 import EntityManager.Account;
 import EntityManager.ReturnHelper;
 import java.util.Date;
-import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
 
