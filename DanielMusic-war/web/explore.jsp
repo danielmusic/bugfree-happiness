@@ -1,3 +1,4 @@
+<%@page import="javax.swing.JOptionPane"%>
 <!-- ############################# Ajax Page Container ############################# -->
 <section id="page" data-title="sounds.sg | explore">
     <!-- ############################# Intro ############################# -->
@@ -116,8 +117,12 @@
                             <option value="placeholder">All Genres</option>
                             <option value="*">All Genres</option>
                             <% List<Genre> uniqueGenres = (List<Genre>) (session.getAttribute("genres"));
-                                for (Genre uniqueGenre : uniqueGenres) {%>
-                            <option value="<%=uniqueGenre.getName()%>"><%=uniqueGenre.getName()%></option>
+                                for (Genre uniqueGenre : uniqueGenres) { %>
+                                    <%if (uniqueGenre.getName().equals("R&amp;B")) {%>
+                                    <option value="rnb" data-text="R&B"><%=uniqueGenre.getName()%></option>
+                                    <% } else {%>
+                                    <option value="<%=uniqueGenre.getName()%>"><%=uniqueGenre.getName()%></option>
+                                    <%}%>
                             <%}%>
                         </select>
                     </div>
@@ -126,19 +131,24 @@
                     <div id="musicListing" class="masonry clearfix" style="margin-right: 0px;">
                         <%
                             List<ExploreHelper> exploreHelpers = (List<ExploreHelper>) (session.getAttribute("exploreHelpers"));
-                            for (ExploreHelper exploreHelper:exploreHelpers) {
+                            for (ExploreHelper exploreHelper : exploreHelpers) {
                                 Artist artist = exploreHelper.getArtist();
                                 Music featuredMusic = exploreHelper.getFeaturedMusic();
-                                    String profilePicURL;
-                                    if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {
-                                        profilePicURL = "http://sounds.sg.storage.googleapis.com/" + artist.getImageURL();
-                                    } else {
-                                        profilePicURL = "placeholders/SilhouetteProfilePicture-01.jpg";
-                                    }
+                                String profilePicURL;
+                                if (artist.getImageURL() != null && !artist.getImageURL().isEmpty()) {
+                                    profilePicURL = "http://sounds.sg.storage.googleapis.com/" + artist.getImageURL();
+                                } else {
+                                    profilePicURL = "placeholders/SilhouetteProfilePicture-01.jpg";
+                                }
+
+                                String genre = exploreHelper.getGenre().getName();
+                                if (genre.equals("R&amp;B")) {
+                                    genre = "rnb";
+                                }
                         %>
                         <!-- Release -->
 
-                        <div class="col-1-1 item tracklist" data-genres="<%=artist.getGenre().getName()%>" style="margin-bottom: 20px;">
+                        <div class="col-1-1 item tracklist" data-genres="<%=genre%>" style="margin-bottom: 20px;">
                             <div class="track-details" style="border-left: none; margin-left: 0;">
                                 <a class="track" href="<%=profilePicURL%>" title="<%=artist.getName()%>" data-lightbox="lightbox<%=profilePicURL%>" >
                                     <img class="track-cover" title="<%=artist.getName()%>" alt="Track Cover" src="<%=profilePicURL%>">
@@ -192,8 +202,6 @@
                                             </span>
                                         </i>
                                     </a>
-
-
                                     <%}%>
                                 </div>
                             </div>
