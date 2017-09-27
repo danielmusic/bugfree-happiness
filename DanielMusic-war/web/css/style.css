@@ -3142,7 +3142,7 @@ h4.active-toggle:before {
 .select_style .niceselect .value_wrapper {
     border-radius:3px;
     background: #444;
-    height: 300px;
+    /*height: 300px;*/
     overflow-y: auto;
 }
 
