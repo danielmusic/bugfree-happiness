@@ -875,7 +875,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
                     exploreHelper = new ExploreHelper();
                     exploreHelper.setGenre(artist.getGenre());
                     exploreHelper.setArtist(artist);
-                    exploreHelper.setFeaturedMusic(artist.getFeaturedMusic());
+                    exploreHelper.setFeaturedMusic(music);
                     em.persist(exploreHelper);
                 }
                 result.setDescription("Music featured.");
