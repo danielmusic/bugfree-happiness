@@ -1086,7 +1086,7 @@ public class MusicManagementBean implements MusicManagementBeanLocal {
         log.info("MusicManagement: listAllGenreArtist() called");
         try {
             Query q;
-            q = em.createQuery("select a from ExploreHelper a ORDER BY a.genre.name ASC");
+            q = em.createQuery("select a from ExploreHelper a ORDER BY a.artist.name ASC");
             List<ExploreHelper> exploreHelpers = q.getResultList();
             return exploreHelpers;
         } catch (Exception e) {
