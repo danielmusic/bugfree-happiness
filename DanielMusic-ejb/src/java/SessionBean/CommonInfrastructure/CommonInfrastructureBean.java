@@ -226,8 +226,8 @@ public class CommonInfrastructureBean implements CommonInfrastructureBeanLocal {
             int height = bimg.getHeight();
             if (width != height) {
                 result.setDescription("Please upload a square image.");
-            } else if (width < 500 || height < 500) {
-                result.setDescription("Image resolution must be at least 500x500px.");
+            } else if (width < 300 || height < 300) {
+                result.setDescription("Image resolution must be at least 300x300px.");
             } else {
                 String mimeType = Magic.getMagicMatch(file, false).getMimeType();
                 if (!mimeType.equals("image/png") && !mimeType.equals("image/jpeg")) {
