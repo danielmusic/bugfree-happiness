@@ -66,6 +66,7 @@
                             out.print("<p class='warning'>Your account is pending approval by our administrators, your profile and published albums/tracks will not appear on our website until your account is approved.</p>");
                         }
                         List<Album> albums = (List<Album>) (session.getAttribute("albums"));
+                        System.out.print(">>> " + albums.size());
                 %>
                 <form name="albumManagement">
                     <jsp:include page="../jspIncludePages/displayMessage.jsp" />
@@ -139,12 +140,15 @@
                             %>    
                             <tr>
                                 <td>
-                                    <%if (albums.get(i).getListOfMusics().get(0).getIsFeatured()) {%>
+                                    <%                                        if (albums.get(i).getListOfMusics().size() > 0) {
+                                            if (albums.get(i).getListOfMusics().get(0).getIsFeatured()) {%>
                                     <a href="javascript:setUnfeaturedTrack('<%=albums.get(i).getListOfMusics().get(0).getId()%>','<%=albums.get(i).getId()%>');"><span class="icon icon-star3"></span></a>
                                         <%} else {%>
                                     <a href="javascript:setFeaturedTrack('<%=albums.get(i).getListOfMusics().get(0).getId()%>','<%=albums.get(i).getId()%>');"><span class="icon icon-star"></span></a>
-                                        <%}%>
+                                        <%}
+                                            }%>
                                 </td>
+
                                 <td class="table-date"><%=(i + 1)%></td>
                                 <td class="table-name"><%=albums.get(i).getName()%></td>         
                                 <td class="table-date">
